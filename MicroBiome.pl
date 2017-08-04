@@ -6,7 +6,7 @@ use File::chdir;
 use File::Copy;
 # Name of file: microbiome.pl
 # Owner: Samantha Sevilla
-# Date: lastupdated_050117
+# Last Update: 061917
 # Use for GMU Lab Rotation Spring 2017
 
 ###This script takes in the Project and MR number of a program and finds the associated MB Manifest, downloaded
@@ -42,9 +42,6 @@ use File::Copy;
 		my $date = <STDIN>; chomp $date;###
 		##my $date = "061617"; chomp $date; ###Testing only
 
-
-		
-		
 #Call subroutines
 	qc_mb_dir(\$ProjName, \$MRName, \$QCpath, \$Manpath);
 		$CWD = $QCpath;
@@ -140,7 +137,7 @@ sub read_MB_Man {
         push(@$SampleID, $columns[0]);
         push(@$ExternalID, $columns[1]);
         push(@$SampleType, $columns[2]);
-		push (@$SourceMaterial, $columns[3]);
+		push(@$SourceMaterial, $columns[3]);
 		push(@$ExtractionBatchID, $columns[5]);
 		push(@$SourcePCRPlate, $columns[6]);
 		push(@$RunID,$columns[7]);
@@ -255,21 +252,21 @@ sub FastQ_File{
 
 		#Open File Directory and copy fastq files
 		opendir(DIR, $line) or die "Can't open directory $line!";
-		my @files = grep {/\.gz$/} readdir(DIR);
+		my @files = grep {/_001\.fastq\.gz$/} readdir(DIR);
 		closedir(DIR);
 
 		#Read through each file of the directory
 		for my $file (@files) {
 							
 			#If the file is an R1 FASTQ File, save
-			if ($file =~ /R1_001.fastq/) {
+			if ($file =~ /R1/) {
                 
 				#Push file names and directory locations
 				push(@filename_R1, $file);
 			}
 			
 			#If the file is an R2 FASTQ File, save
-			elsif ($file =~ /R2_001.fastq/){
+			elsif ($file =~ /R2/){
                 push(@filename_R2, $file);
 			} else{next;}
 		}
@@ -285,8 +282,8 @@ sub FastQ_File{
 		my $tempfile_R2 = $filename_R2[$c];
 	
 	#Create loop for files to be copied and pasted to nephele
-	## copy ($tempfile_R1, $Nephpath) or die;
-	## copy ($tempfile_R2, $Nephpath) or die;
+	copy ($tempfile_R1, $Nephpath) or die;
+	copy ($tempfile_R2, $Nephpath) or die;
 		$b++; $c++;
 	}
 	closedir(NDIR);
@@ -343,3 +340,9 @@ sub FastQ_Man {
 }
 
 exit;
+
+##################################################################################################################
+################################################# Updates ####################################################
+##################################################################################################################
+
+##6/19/19: Changed the file GREP from .gz to include 001.fastq.gz to eliminate incorrect files from being copied
