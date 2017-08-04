@@ -2,7 +2,7 @@
 
 # Name of file: microbiome.pl
 # Owner: Samantha Sevilla
-# Last Update: 062017
+# Last Update: 070617
 # Use for GMU Lab Rotation Spring 2017
 
 ###This script takes in the Project and MR number of a program and finds the associated MB Manifest, downloaded
@@ -126,7 +126,6 @@ sub read_MB_Man {
 	#Create database with ("Y") or without ("N") study samples
 	if ($StudyAns =~ "Y" || $StudyAns =~ "y") {
 		foreach my $line (@filedata) {
-			print "\n";
 			push (@QCdata, $line);
 			next;
 		}
@@ -158,7 +157,7 @@ sub read_MB_Man {
 			push(@$RunID,$columns[7]);
 			push(@$ProjectID,$columns[9]);
 		} else{next;}
-	} print "@SampleID \n";
+	}
 }
 
 #Creates variables needed for Neph Manifest
@@ -363,3 +362,4 @@ exit;
 ##6/19/17: Changed the file GREP from .gz to include 001.fastq.gz to eliminate incorrect files from being copied
 ##6/20/17: Added a require install of chdir
 ##6/21/17: Add sample type to description column to ensure it is not left blank; Add validation to RunID length to allow for partial runs
+##7/6/17: Modifications to print screens
