@@ -1,18 +1,31 @@
 #!/usr/bin/perl
-use warnings;
-use strict;
-use Cwd;
-use File::chdir;
-use File::Copy;
+
 # Name of file: microbiome.pl
 # Owner: Samantha Sevilla
-# Last Update: 061917
+# Last Update: 062017
 # Use for GMU Lab Rotation Spring 2017
 
 ###This script takes in the Project and MR number of a program and finds the associated MB Manifest, downloaded
 ###from LIMS. It then copies the fastq files of all QC samples and moves them to the Nephele folder. It creates
 ###the necessary txt file to input into Nephele.
 
+
+use warnings;
+use strict;
+use Cwd;
+use CPAN;
+	eval "use File::chdir" 
+	 or do { 
+	  CPAN::install("File::chdir");
+	};
+	
+	eval "use File::Copy" 
+	 or do { 
+	  CPAN::install("File::Copy");
+	};
+	
+	use File::chdir;
+	use File::Copy;
 
 #Intialize variables
 	my $QCpath; my $Manpath; my $Nephpath; 
@@ -26,7 +39,7 @@ use File::Copy;
 
 	
 #Take in Directory from Command Line and format for CWD
-	print "Have you downloaded the Microbiome manifest from LIMS (Y or N) ";
+	print "\n Have you downloaded the Microbiome manifest from LIMS (Y or N) ";
 		my $ManiAns = <STDIN>; chomp $ManiAns;
 		if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
 			exit;}
@@ -68,7 +81,6 @@ sub qc_mb_dir {
 	#Create pathway for QIIME Folder (QCPath) and Manifest (Manpath)
 	$$QCpath = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$ProjName\\QC Data";
 	$$Manpath = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$ProjName\\Analysis Manifests";
-
 }
 
 #Creates Qiime and Nephele Directory, if necessary
@@ -111,11 +123,11 @@ sub read_MB_Man {
 	@filedata= <READ_FILE>;
 	close READ_FILE;
 	
-	#Create QC database without study samples
+	#Create database with ("Y") or without ("N") study samples
 	if ($StudyAns =~ "Y" || $StudyAns =~ "y") {
 		foreach my $line (@filedata) {
 			push (@QCdata, $line);
-			next; print "YES";
+			next;
 		}
 	} else{ 
 		foreach my $line (@filedata) {
@@ -132,6 +144,7 @@ sub read_MB_Man {
 		}
 	}
 	
+	#Create arrays with sample line data
 	foreach (@QCdata) {
         my @columns = split('\t',$_);
         push(@$SampleID, $columns[0]);
@@ -143,7 +156,6 @@ sub read_MB_Man {
 		push(@$RunID,$columns[7]);
 		push(@$ProjectID,$columns[9]);
     }
-
 }
 
 #Creates variables needed for Neph Manifest
@@ -345,4 +357,5 @@ exit;
 ################################################# Updates ####################################################
 ##################################################################################################################
 
-##6/19/19: Changed the file GREP from .gz to include 001.fastq.gz to eliminate incorrect files from being copied
+##6/19/17: Changed the file GREP from .gz to include 001.fastq.gz to eliminate incorrect files from being copied
+##6/20/17: Added a require install of chdir
