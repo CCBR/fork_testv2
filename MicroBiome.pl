@@ -33,14 +33,14 @@ use File::Copy;
 	print "Do you want to include study samples (Y or N)? ";
 		my $StudyAns = <STDIN>; chomp $StudyAns;
 	print "What is the name of your project? (NP0440-MB2) ";
-		my $ProjName = <STDIN>; chomp $ProjName; 
-		#my $ProjName = "NP0440-MB2"; chomp $ProjName; 	###Testing only
+		my $ProjName = <STDIN>; chomp $ProjName; ###
+		##my $ProjName = "NP0452-MB2"; chomp $ProjName; 	###Testing only
 	print "What is the MR assoicated with the project (MR-0440)? ";
-		my $MRName = <STDIN>; chomp $MRName;
-		#my $MRName = "MR-0440"; chomp $MRName; ###Testing only
+		my $MRName = <STDIN>; chomp $MRName;###
+		##my $MRName = "MR-0452"; chomp $MRName; ###Testing only
 	print "What is the date to assoicate with analysis?(04_10_17) ";
-		my $date = <STDIN>; chomp $date;
-		#my $date = "04_26_17"; chomp $date; ###Testing only
+		my $date = <STDIN>; chomp $date;###
+		##my $date = "060617"; chomp $date; ###Testing only
 
 
 		
@@ -71,6 +71,7 @@ sub qc_mb_dir {
 	#Create pathway for QIIME Folder (QCPath) and Manifest (Manpath)
 	$$QCpath = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$ProjName\\QC Data";
 	$$Manpath = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$ProjName\\Analysis Manifests";
+
 }
 
 #Creates Qiime and Nephele Directory, if necessary
@@ -125,6 +126,8 @@ sub read_MB_Man {
 				next;
 			} elsif($line =~ m/SACCOMANNOFLUID/){
 				next;
+			} elsif($line =~ m/ORALRNS;TEBUFFER/){
+				next;
 			} else {
 				push (@QCdata, $line);
 				next;
@@ -143,6 +146,7 @@ sub read_MB_Man {
 		push(@$RunID,$columns[7]);
 		push(@$ProjectID,$columns[9]);
     }
+
 }
 
 #Creates variables needed for Neph Manifest
@@ -240,7 +244,7 @@ sub FastQ_File{
 		my $tempRun = $RunID[$n];
 		
 		#Create pathway for FastQ files, second pass
-		$FastP = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$ProjName\\$line\\"; ###FIXME
+		$FastP = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$ProjName\\$line\\";
 		$FastP =~ s/_MB/-MB/g;
 		push (@fastqpath, $FastP);
 		$n++;
