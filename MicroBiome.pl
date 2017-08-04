@@ -34,13 +34,13 @@ use File::Copy;
 		my $StudyAns = <STDIN>; chomp $StudyAns;
 	print "What is the name of your project? (NP0440-MB2) ";
 		my $ProjName = <STDIN>; chomp $ProjName; ###
-		##my $ProjName = "NP0452-MB2"; chomp $ProjName; 	###Testing only
+		##my $ProjName = "NP0452-MB3"; chomp $ProjName; 	###Testing only
 	print "What is the MR assoicated with the project (MR-0440)? ";
 		my $MRName = <STDIN>; chomp $MRName;###
 		##my $MRName = "MR-0452"; chomp $MRName; ###Testing only
 	print "What is the date to assoicate with analysis?(04_10_17) ";
 		my $date = <STDIN>; chomp $date;###
-		##my $date = "060617"; chomp $date; ###Testing only
+		##my $date = "061617"; chomp $date; ###Testing only
 
 
 		
@@ -262,16 +262,16 @@ sub FastQ_File{
 		for my $file (@files) {
 							
 			#If the file is an R1 FASTQ File, save
-			if ($file =~ /R1/) {
+			if ($file =~ /R1_001.fastq/) {
                 
 				#Push file names and directory locations
 				push(@filename_R1, $file);
 			}
 			
 			#If the file is an R2 FASTQ File, save
-			elsif ($file =~ /R2/){
+			elsif ($file =~ /R2_001.fastq/){
                 push(@filename_R2, $file);
-			} else{print "FAIL";}
+			} else{next;}
 		}
 	}
 
@@ -283,10 +283,10 @@ sub FastQ_File{
 		$CWD = $line;
 		my $tempfile_R1 = $filename_R1[$b];
 		my $tempfile_R2 = $filename_R2[$c];
-		
-		#Create loop for files to be copied and pasted to nephele
-		copy ($tempfile_R1, $Nephpath) or die;
-		copy ($tempfile_R2, $Nephpath) or die;
+	
+	#Create loop for files to be copied and pasted to nephele
+	## copy ($tempfile_R1, $Nephpath) or die;
+	## copy ($tempfile_R2, $Nephpath) or die;
 		$b++; $c++;
 	}
 	closedir(NDIR);
