@@ -47,13 +47,13 @@ use CPAN;
 		my $StudyAns = <STDIN>; chomp $StudyAns;
 	print "What is the name of your project? (NP0440-MB2) ";
 		my $ProjName = <STDIN>; chomp $ProjName; ###
-		##my $ProjName = "NP0452-MB3"; chomp $ProjName; 	###Testing only
+		### my $ProjName = "NP0452-MB3"; chomp $ProjName; 	###Testing only
 	print "What is the MR assoicated with the project (MR-0440)? ";
 		my $MRName = <STDIN>; chomp $MRName;###
-		##my $MRName = "MR-0452"; chomp $MRName; ###Testing only
+		###my $MRName = "MR-0452"; chomp $MRName; ###Testing only
 	print "What is the date to assoicate with analysis?(04_10_17) ";
 		my $date = <STDIN>; chomp $date;###
-		##my $date = "061617"; chomp $date; ###Testing only
+		###my $date = "test"; chomp $date; ###Testing only
 
 #Call subroutines
 	qc_mb_dir(\$ProjName, \$MRName, \$QCpath, \$Manpath);
@@ -126,6 +126,7 @@ sub read_MB_Man {
 	#Create database with ("Y") or without ("N") study samples
 	if ($StudyAns =~ "Y" || $StudyAns =~ "y") {
 		foreach my $line (@filedata) {
+			print "\n";
 			push (@QCdata, $line);
 			next;
 		}
@@ -143,19 +144,21 @@ sub read_MB_Man {
 			}
 		}
 	}
-	
+
 	#Create arrays with sample line data
 	foreach (@QCdata) {
         my @columns = split('\t',$_);
-        push(@$SampleID, $columns[0]);
-        push(@$ExternalID, $columns[1]);
-        push(@$SampleType, $columns[2]);
-		push(@$SourceMaterial, $columns[3]);
-		push(@$ExtractionBatchID, $columns[5]);
-		push(@$SourcePCRPlate, $columns[6]);
-		push(@$RunID,$columns[7]);
-		push(@$ProjectID,$columns[9]);
-    }
+        if(length $columns[7]>0){
+			push(@$SampleID, $columns[0]);
+			push(@$ExternalID, $columns[1]);
+			push(@$SampleType, $columns[2]);
+			push(@$SourceMaterial, $columns[3]);
+			push(@$ExtractionBatchID, $columns[5]);
+			push(@$SourcePCRPlate, $columns[6]);
+			push(@$RunID,$columns[7]);
+			push(@$ProjectID,$columns[9]);
+		} else{next;}
+	} print "@SampleID \n";
 }
 
 #Creates variables needed for Neph Manifest
@@ -211,7 +214,7 @@ sub neph_variables{
 		push (@Treatment_Neph, $line);
 	}
 
-	#Set External ID as Vial Label - format with ".", remove "_"
+	#Set External ID as Vial Label and format with ".", remove "_"
 	foreach my $line (@ExternalID){
 		$line =~ s/_/./g;
 		push (@VialLab_Neph, $line);
@@ -241,13 +244,13 @@ sub FastQ_File{
 	#Remove first arraye element
 	shift (@SampleID);
 
-	#Create Folder Names from Sample ID's
+	#Create Folder Names from Sample ID's IF RunID is not blank (allows partial runs)
 	foreach my $line(@SampleID) {
 		my $Sample = "Sample_";
 		$Sample .=$line;
 		push (@foldernames, $Sample);
 	}
-
+	
 	#Create Directory paths for all samples
 	foreach my $line (@foldernames) {
 		my $tempRun = $RunID[$n];
@@ -332,7 +335,7 @@ sub FastQ_Man {
 		#Print headers to file
 		print FILE join ("\t", @headers), "\n";
 		
-		#Print sample data to file
+		#Print sample data to file for completed file lines only
 		foreach my $sample (@SampleID_Neph) {
 			my @temparray;
 			push(@temparray, $SampleID_Neph[$a]);
@@ -344,7 +347,7 @@ sub FastQ_Man {
 			push(@temparray, $VialLab_Neph[$a]);
 			push(@temparray, $AssayPlate_Neph[$a]);
 			push(@temparray, $ExtractBatch_Neph[$a]);
-			push(@temparray, $Descrip_Neph[$a]);
+			push(@temparray, $Descrip_Neph[0]);
 			print FILE join("\t",@temparray), "\n";
 			$a++;
 		}
@@ -359,3 +362,4 @@ exit;
 
 ##6/19/17: Changed the file GREP from .gz to include 001.fastq.gz to eliminate incorrect files from being copied
 ##6/20/17: Added a require install of chdir
+##6/21/17: Add sample type to description column to ensure it is not left blank; Add validation to RunID length to allow for partial runs
