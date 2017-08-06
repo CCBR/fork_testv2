@@ -1,7 +1,22 @@
 #!/usr/bin/perl
 
-use strict;
 use warnings;
+use strict;
+use Cwd;
+use CPAN;
+	eval "use File::chdir" 
+	 or do { 
+	  CPAN::install("File::chdir");
+	};
+	
+	eval "use File::Copy" 
+	 or do { 
+	  CPAN::install("File::Copy");
+	};
+	
+	use File::chdir;
+	use File::Copy;
+
 use CGI qw(:standard);
 use CGI::Carp qw/fatalsToBrowser/;
 
@@ -14,10 +29,10 @@ print start_html('Microbiome Nephele Input');
 print h1('Microbiome Nephele Input');
 print h4('This program will take in the Microbime Manifest, and create a Nephele Manifest, as well as move sequencing files');
 
-#Create form for users to interface with on the web
+#Select Location for Microbiome Manifest
 print start_multipart_form;
 print p;
-print "Click the button to choose a FASTA file:";
+print "Click the button to choose a Manifest file:";
 print br;
 
 #Same the filename as a paramter
@@ -30,106 +45,52 @@ print endform;
 
 #If a file has been submitted, read in the file, and perform statistic count
 if (param()) {
-	#Initialize variables for code
-	my $file_name = upload('file_name');
-	my @fastadata = ();
-	my @header;
-	my @sequence;
-	my $n = 0;
-	my $seqlength = '';
-	my @seqarray = ();
-	my @sort =();
-	my $line = '';
-	my $statsdata = '';
-	my $A = 0, my $afq =0;
-	my $C = 0, my $cfq=0;
-	my $G = 0, my $gfq=0;
-	my $T = 0, my $tfq=0;
-	my $CG = 0, my $CGfq=0;
-
-	#Call Sub-Routes
-	read_file(\@fastadata, $file_name);
-
-	#Take data file and initialize into headers and sequences
-	foreach $line (@fastadata) {
-		if ($line =~ /^>/) {
-		  $n++;
-		  $header[$n] = $line;
-		  $sequence[$n] = "";
-		} else {
-		  $line =~ s/\s//g;
-		  $sequence[$n] .= $line
-		}
-	}
-
-	#Create Loop to determine all sequences
-	for (my $i = 1; $i < $n+1; $i++) {
-		$seqlength = length($sequence[$i]);
-		push(@seqarray, $seqlength);
-	}
-
-	#Sort data in length order
-	@sort = sort {$a <=> $b} @seqarray;
-
-	#Add all lengths together for overall sum and average
-	my $sum = eval join '+', @sort;
-	my $average = $sum / $n;
-
-	#Print all overall report figures
-	print "Report for file $file_name"; print p;
-	print "There are $n sequence(s) in this file"; print p;
-	print "Total Sequence Length = $sum"; print p;
-	print "Maximum Sequence Length = $sort[$n-1]"; print p;
-	print "Minimum Sequence Length = $sort[0]"; print p;
-	print "Average Sequence Length = $average"; print p;
-
-	#Create Loop for Sequence Specific Reporting
-	for (my $i = 1; $i < $n+1; $i++) {
-		print $header[$i]; print p;
-		my $statsdata = $sequence[$i];
-		my $lengthfile = length($statsdata);
-		
-		#Determine Counts for sequences
-		while($statsdata=~/a/ig)  {$A++}; while($statsdata=~/c/ig)  {$C++};
-		while($statsdata=~/g/ig)  {$G++}; while($statsdata=~/t/ig)  {$T++};
-		while($statsdata=~/CG/ig) {$CG++};
-					
-		#Determine frequencies
-		$afq = $A / $lengthfile; $cfq = $C / $lengthfile;
-		$gfq = $G / $lengthfile; $tfq = $T / $lengthfile;
-		$CGfq = $CG / $lengthfile;
-				
-		#Print all statements
-		print "Length: $lengthfile"; print p;
-		print "A: $A----";
-		printf("%.2f", $afq); print p;
-		print "C: $C----";
-		printf("%.2f", $cfq); print p;
-		print "G: $G----";
-		printf("%.2f", $gfq); print p;
-		print "T: $T----";
-		printf("%.2f", $tfq); print p;
-		print "CpG: $CG----";
-		printf("%.2f", $CGfq); print p;
-		print "$line";
-				
-		#Reset all counts to Zero
-		$A =0, $T=0, $C=0, $G=0, $CG =0, $statsdata =0;
-	}
 	
-	#################################################################################################################################
-	#Called Subroutes below
-	#################################################################################################################################
-	sub read_file {
-		
-		#Initialize variables
-		my($fastadata, $file_name)=@_;
-		
-		#Read in the file, and close
-		@$fastadata= <$file_name>;
-		close $file_name;	
-	}
+	#Intialize variables
+	my $QCpath; my $Manpath; my $Nephpath; 
+	my @SampleID; my @ExternalID; my @SourceMaterial;
+	my @SampleType;	my @ExtractionBatchID; my @RunID; 
+	my @SourcePCRPlate; my @ProjectID;
+	my @AssayPlate_Neph; my @SampleID_Neph; 
+	my @Treatment_Neph;	my @VialLab_Neph; 
+	my @ExtractBatch_Neph; my @Descrip_Neph;
+	my @filename_R1; my @filename_R2;
+
 	
+	#Take in Directory from Command Line and format for CWD
+	print "Do you want to include study samples (Y or N)? ";
+		my $StudyAns = <STDIN>; chomp $StudyAns;
+	print "What is the name of your project? (NP0440-MB2) ";
+		my $ProjName = <STDIN>; chomp $ProjName; ###
+		### my $ProjName = "NP0452-MB3"; chomp $ProjName; 	###Testing only
+	print "What is the MR assoicated with the project (MR-0440)? ";
+		my $MRName = <STDIN>; chomp $MRName;###
+		###my $MRName = "MR-0452"; chomp $MRName; ###Testing only
+	print "What is the date to assoicate with analysis?(04_10_17) ";
+		my $date = <STDIN>; chomp $date;###
+		###my $date = "test"; chomp $date; ###Testing only
+
+#Call subroutines
+	qc_mb_dir(\$ProjName, \$MRName, \$QCpath, \$Manpath);
+		$CWD = $QCpath;
+
+	
+	##################################################################################################################
+################################################# SUBROUTINES ####################################################
+##################################################################################################################
+
+	#Creates variables of directories
+	sub qc_mb_dir {
+		
+		#Initiate variables
+		my ($ProjName, $MRName, $QCpath, $Manpath)=@_;
+		
+		#Create pathway for QIIME Folder (QCPath) and Manifest (Manpath)
+		$$QCpath = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$ProjName\\QC Data";
+		$$Manpath = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$ProjName\\Analysis Manifests";
+	}
+
+
 	#Add a button to reset the webpage
 	print address( a({href=>$url},"Click here to submit another file."));
 }
