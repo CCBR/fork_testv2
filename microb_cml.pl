@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # Name of file: microbiome.pl
 # Owner: Samantha Sevilla
-# Last Update: 070617
+# Last Update: 080617
 # Use for GMU Lab Rotation Spring 2017
 
 ###This script takes in the Project and MR number of a program and finds the associated MB Manifest, downloaded
@@ -37,53 +37,56 @@ use CPAN;
 	
 #Take in Directory from Command Line and format for CWD
 	print "\n Have you downloaded the Microbiome manifest from LIMS (Y or N) ";
-		### my $ManiAns = <STDIN>; chomp $ManiAns;
-		#if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
-		#	exit;}
+		my $ManiAns = <STDIN>; chomp $ManiAns;
+		if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
+			exit;}
 	print "Do you want to include study samples (Y or N)? ";
-		### my $StudyAns = <STDIN>; chomp $StudyAns;
+		my $StudyAns = <STDIN>; chomp $StudyAns;
 	print "What is the date to assoicate with analysis?(04_10_17) ";
-		#my $date = <STDIN>; chomp $date;
+		my $date = <STDIN>; chomp $date;
 	print "How many projects would you like to include?";
-		#my $Proj_Num = <STDIN>; chomp $Proj_Num;
-	#until($Proj_Num == 0){
-	#	print "What is the name of your project? (NP0452-MB3)";
-	#		my $ProjName = <STDIN>; chomp $ProjName;
-	#		push(@Proj_List,$ProjName);
-	#	$Proj_Num = $Proj_Num - 1;
-	#}		
-	
+		my $Proj_Num = <STDIN>; chomp $Proj_Num;
+	until($Proj_Num == 0){
+		print "What is the name of your project? (NP0452-MB3)";
+			my $ProjName = <STDIN>; chomp $ProjName;
+			push(@Proj_List,$ProjName);
+		$Proj_Num = $Proj_Num - 1;
+	}		
 
 ###Testing input
-	my $ManiAns = "Y";	
-	my $StudyAns = "Y";
-	my $date = "test"; chomp $date;
-	my $Proj_Num = 2;
-	@Proj_List = ("NP0452-MB3", "NP0452-MB2");
+	#my $ManiAns = "Y";	
+	#my $StudyAns = "N";
+	#my $date = "test"; chomp $date;
+	#my $Proj_Num = 2;
+	#@Proj_List = ("NP0452-MB3", "NP0452-MB2");
+	#@Proj_List = ("NP0452-MB3");
 
 #Call subroutines
 	qc_mb_dir(\@Proj_List, \$MRName, \$Proj_Num, \@QCPath, \@ManPath);
 		$CWD = $QCPath[0];
 	Qiime_Neph_Dir(\$Nephpath, $date); 
 		$CWD = $ManPath[0];
-	read_MB_Man(@Proj_List, @ManPath, $StudyAns, \@SampleID, \@ExternalID, \@SampleType, \@SourceMaterial, \@ExtractionBatchID, \@SourcePCRPlate, 
+	read_MB_Man($StudyAns, @Proj_List, @ManPath, \@SampleID, \@ExternalID, \@SampleType, \@SourceMaterial, \@ExtractionBatchID, \@SourcePCRPlate, 
 		\@RunID, \@ProjectID);
-#	neph_variables(@SampleID, @ExternalID, @SampleType, @SourceMaterial, @ExtractionBatchID, 
-#		@SourcePCRPlate, \@AssayPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph, \@ExtractBatch_Neph, \@Descrip_Neph);
-#	FastQ_File($Nephpath, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2);
-#	FastQ_Man($Nephpath, $ProjName, $date, @SampleID_Neph, @Treatment_Neph, @SourceMaterial, @VialLab_Neph, @AssayPlate_Neph, 
-#		@ExtractBatch_Neph, @Descrip_Neph, @filename_R1, @filename_R2);
+	neph_variables(@SampleID, @ExternalID, @SampleType, @SourceMaterial, @ExtractionBatchID, 
+		@SourcePCRPlate, \@AssayPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph, \@ExtractBatch_Neph, \@Descrip_Neph);
+	FastQ_File($Nephpath, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2);
+	FastQ_Man($Nephpath, $date, @Proj_List, @SampleID_Neph, @Treatment_Neph, @SourceMaterial, @VialLab_Neph, @AssayPlate_Neph, 
+		@ExtractBatch_Neph, @Descrip_Neph, @filename_R1, @filename_R2);
 
 ##################################################################################################################
 ################################################# SUBROUTINES ####################################################
 ##################################################################################################################
 
-#Creates variables of directories
+#Creates variables with directory names of the Manifest file location, and QIIME directory location
 sub qc_mb_dir {
-	my $n=0; my $tempQC; my $tempMan;
-	
+
 	#Initiate variables
 	my ($Proj_List, $MRName, $Proj_Num, $QCPath, $ManPath)=@_;
+	my $n=0; my $tempQC; my $tempMan;
+	
+	
+
 	foreach (@Proj_List){
 		$$MRName = $Proj_List[$n];
 		$$MRName =~ s/NP//g;
@@ -99,7 +102,7 @@ sub qc_mb_dir {
 	}
 }
 
-#Creates Qiime and Nephele Directory, if necessary
+#Creates Qiime and Nephele Directory, if necessary using variables created in QC_MB_DIR
 sub Qiime_Neph_Dir {
 	
 	#Initialize variables
@@ -119,19 +122,21 @@ sub Qiime_Neph_Dir {
 
 #Reads in Microbiome Manifest, and parses for data
 sub read_MB_Man {
+	
 	#Initialize Variables
-	my ($Proj_List, $ManPath, $StudyAns, $SampleID, $ExternalID, $SampleType, $SourceMaterial, $ExtractionBatchID, $SourcePCRPlate, 
-		$RunID, $ProjectID) =@_;
-	my $manifile; my $n=0;
+	my ($StudyAns, $Proj_List, $ManPath, $SampleID, $ExternalID, $SampleType, $SourceMaterial, 
+		$ExtractionBatchID, $SourcePCRPlate, $RunID, $ProjectID) =@_;
+	my $manifile=""; my $n=0;
 	my @filedata; my @QCdata;
 
+	#Create a loop for each Study included, to read in manifest and save data into array variables
 	foreach (@Proj_List){
-		#$CWD = @$ManPath[$n];
-		#print $CWD;
+		$CWD = $ManPath[$n];
+		
 		#Create Manifest File name from Project Info;
 		$manifile = $Proj_List[$n]; $manifile =~ s/\\//g;
 		$manifile .= "-manifest.txt";
-
+		
 		#If filename not provided, give error message and close
 		unless (open(READ_FILE, $manifile)) {
 			print "Cannot open file $manifile provided\n\n";
@@ -142,11 +147,12 @@ sub read_MB_Man {
 		@filedata= <READ_FILE>;
 		close READ_FILE;
 		
+		
 		#Create database with ("Y") or without ("N") study samples
-		if ($StudyAns =~ "Y" || $StudyAns =~ "y") {
+		if (lc $StudyAns eq lc "Y") {
 			foreach my $line (@filedata) {
 				push (@QCdata, $line);
-				next;
+				next; 
 			}
 		} else{ 
 			foreach my $line (@filedata) {
@@ -154,30 +160,33 @@ sub read_MB_Man {
 					next;
 				} elsif($line =~ m/SACCOMANNOFLUID/){
 					next;
-				} elsif($line =~ m/ORALRNS;TEBUFFER/){
+				} elsif($line =~ m/ORALRNS_TEBUFFER/){
 					next;
 				} else {
 					push (@QCdata, $line);
 					next;
 				}
 			}
-		}
+		} 
+		shift @QCdata;
 
-		#Create arrays with sample line data
+		#Create arrays with sample line data separated by tabs
 		foreach (@QCdata) {
 			my @columns = split('\t',$_);
 			if(length $columns[7]>0){
-				push(@$SampleID, $columns[0]);
-				push(@$ExternalID, $columns[1]);
-				push(@$SampleType, $columns[2]);
-				push(@$SourceMaterial, $columns[3]);
-				push(@$ExtractionBatchID, $columns[5]);
-				push(@$SourcePCRPlate, $columns[6]);
-				push(@$RunID,$columns[7]);
-				push(@$ProjectID,$columns[9]);
-			} else{next;}
+				push(@SampleID, $columns[0]);
+				push(@ExternalID, $columns[1]);
+				push(@SampleType, $columns[2]);
+				push(@SourceMaterial, $columns[3]);
+				push(@ExtractionBatchID, $columns[5]);
+				push(@SourcePCRPlate, $columns[6]);
+				push(@RunID,$columns[7]);
+				push(@ProjectID,$columns[9]);
+			} else {next;}
 		}
-		$n++;
+		
+		#Move through studys, clearing QC data to avoid repeats
+		$n++; @QCdata=();
 	}
 }
 
@@ -185,8 +194,7 @@ sub read_MB_Man {
 sub neph_variables{
 	
 	#Initialize variables
-	my ($SampleID, $ExternalID, $SampleType, $SourceMaterial, $ExtractionBatchID, $SourcePCRPlate, 
-		$AssayPlate_Neph, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $ExtractBatch_Neph, $Descrip_Neph)=@_;
+	my ($SampleID, $ExternalID, $SampleType, $SourceMaterial, $ExtractionBatchID, $SourcePCRPlate, $AssayPlate_Neph, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $ExtractBatch_Neph, $Descrip_Neph)=@_;
  	my @tempSampleID; my $n = 0;
 	
 	#Replace _ with . in Source PCR Plate and concatonate to Sample ID
@@ -217,7 +225,7 @@ sub neph_variables{
 		push (@AssayPlate_Neph, $line);
 	}	
 
-	#Assign Sample Type as treatment group
+	#Format treatment groups and assign
 	foreach my $line (@SampleType){
 		if($line =~ /ExtractionReplicate/){
 			$line = "Extraction.Replicate";
@@ -229,9 +237,7 @@ sub neph_variables{
 			$line = "PCRWATER";
 		} elsif($line=~/artificialcolony/){
 			$line = "artificial.colony";
-		}
-		
-		push (@Treatment_Neph, $line);
+		} push (@Treatment_Neph, $line);
 	}
 
 	#Set External ID as Vial Label and format with ".", remove "_"
@@ -245,11 +251,6 @@ sub neph_variables{
 
 	#Set SourceMaterial as Description
 	@Descrip_Neph = @SourceMaterial;
-	
-	#Remove the first headers from each array
-	shift @SampleID_Neph;     shift @AssayPlate_Neph;
-	shift @Treatment_Neph;	  shift @VialLab_Neph;
-	shift @ExtractBatch_Neph; shift @Descrip_Neph;
 }
 
 #Creates paths for the FastQfiles and copies them into Nephele folder
@@ -258,11 +259,7 @@ sub FastQ_File{
 	#Initialize Variables
 	my ($Nephpath, $RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2) =@_;
 	my @foldernames; my @fastqpath;
-	my $b = 0; my $c=0; my $n=1;
-	my $FastP;
-
-	#Remove first arraye element
-	shift (@SampleID);
+	my $b = 0; my $c=0; my $n=0; my $FastP;
 
 	#Create Folder Names from Sample ID's IF RunID is not blank (allows partial runs)
 	foreach my $line(@SampleID) {
@@ -270,13 +267,13 @@ sub FastQ_File{
 		$Sample .=$line;
 		push (@foldernames, $Sample);
 	}
-	
+
 	#Create Directory paths for all samples
 	foreach my $line (@foldernames) {
 		my $tempRun = $RunID[$n];
 		my $tempProj= $ProjectID[$n];
 		chomp $tempProj;
-		
+
 		#Create pathway for FastQ files, second pass
 		$FastP = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$tempProj\\$line\\";
 		$FastP =~ s/_MB/-MB/g;
@@ -319,8 +316,8 @@ sub FastQ_File{
 		my $tempfile_R2 = $filename_R2[$c];
 	
 	#Create loop for files to be copied and pasted to nephele
-	#### copy ($tempfile_R1, $Nephpath) or die;
-	#### copy ($tempfile_R2, $Nephpath) or die;
+	### copy ($tempfile_R1, $Nephpath) or die;
+	### copy ($tempfile_R2, $Nephpath) or die;
 	####	$b++; $c++;
 	}
 	closedir(NDIR);
@@ -329,18 +326,17 @@ sub FastQ_File{
 
 sub FastQ_Man {
 	#Initialize Variables
-	my ($Nephpath, $ProjName, $date, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $AssayPlate_Neph, 
+	my ($Nephpath, $date, @Proj_List, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $AssayPlate_Neph, 
 		$ExtractBatch_Neph, $Descrip_Neph, $filename_R1, $filename_R2)= @_;
-	my $a =0;
+	my $n =0; 	my @placeholder=("");
 	my @clean_R1; my @clean_R2;
-	my @placeholder=("");
 	
 	#Create headers for text file
 	my @headers = ("\#SampleID", "BarcodeSequence", "LinkerPrimerSequence", "ForwardFastqFile",
 		"ReverseFastqFile", "TreatmentGroup", "VialLabel", "AssayPlate", "ExtractionBatch", "Description");
 	
 	#Create Nephele txt file in Nephele Directory
-	$CWD = $Nephpath; my $newfile= "$ProjName\_Nephele_Input\_$date.txt";
+	$CWD = $Nephpath; my $newfile= "$Proj_List[1]\_Nephele_Input\_$date.txt";
 	
 	#Remove .gz from all FastQ files
 	foreach my $file (@filename_R1) {
@@ -360,18 +356,18 @@ sub FastQ_Man {
 		#Print sample data to file for completed file lines only
 		foreach my $sample (@SampleID_Neph) {
 			my @temparray;
-			push(@temparray, $SampleID_Neph[$a]);
+			push(@temparray, $SampleID_Neph[$n]);
 			push(@temparray, $placeholder[0]);
 			push(@temparray, $placeholder[0]);
-			push(@temparray, $clean_R1[$a]);
-			push(@temparray, $clean_R2[$a]);			
-			push(@temparray, $Treatment_Neph[$a]);
-			push(@temparray, $VialLab_Neph[$a]);
-			push(@temparray, $AssayPlate_Neph[$a]);
-			push(@temparray, $ExtractBatch_Neph[$a]);
+			push(@temparray, $clean_R1[$n]);
+			push(@temparray, $clean_R2[$n]);			
+			push(@temparray, $Treatment_Neph[$n]);
+			push(@temparray, $VialLab_Neph[$n]);
+			push(@temparray, $AssayPlate_Neph[$n]);
+			push(@temparray, $ExtractBatch_Neph[$n]);
 			push(@temparray, $Descrip_Neph[0]);
 			print FILE join("\t",@temparray), "\n";
-			$a++;
+			$n++;
 		}
 	print "\nFinished generating TXT file\n";
 }
@@ -387,3 +383,4 @@ exit;
 ##6/21/17: Add sample type to description column to ensure it is not left blank; Add validation to RunID length to allow for partial runs
 ##7/6/17: Modifications to print screens
 ##8/4/17: Changed MR input to search, allowed for second study input
+##8/6/17: Continued with 8/4 changes, fixed bugs for second and third study input
