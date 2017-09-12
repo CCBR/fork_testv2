@@ -44,10 +44,10 @@ use CPAN;
 		my $StudyAns = <STDIN>; chomp $StudyAns;
 	print "What is the date to assoicate with analysis?(04_10_17) ";
 		my $date = <STDIN>; chomp $date;
-	print "How many projects would you like to include?";
+	print "How many projects would you like to include? ";
 		my $Proj_Num = <STDIN>; chomp $Proj_Num;
 	until($Proj_Num == 0){
-		print "What is the name of your project? (NP0452-MB3)";
+		print "What is the name of your project? (NP0452-MB3) ";
 			my $ProjName = <STDIN>; chomp $ProjName;
 			push(@Proj_List,$ProjName);
 		$Proj_Num = $Proj_Num - 1;
@@ -85,8 +85,6 @@ sub qc_mb_dir {
 	my ($Proj_List, $MRName, $Proj_Num, $QCPath, $ManPath)=@_;
 	my $n=0; my $tempQC; my $tempMan;
 	
-	
-
 	foreach (@Proj_List){
 		$$MRName = $Proj_List[$n];
 		$$MRName =~ s/NP//g;
@@ -155,15 +153,18 @@ sub read_MB_Man {
 				next; 
 			}
 		} else{ 
-			foreach my $line (@filedata) {
-				if ($line =~ m/Study/) {
+			for(my $i=0; $i < @filedata; $i++) {
+				if ($filedata[$i] =~ m/Study/) {
 					next;
-				} elsif($line =~ m/SACCOMANNOFLUID/){
+				} elsif($filedata[$i] =~ m/SACCOMANNOFLUID/){
 					next;
-				} elsif($line =~ m/ORALRNS_TEBUFFER/){
+				} elsif($filedata[$i] =~ m/ORALRNS_TEBUFFER/){
 					next;
+				} elsif($filedata[$i] =~ m/ExtractionReplicate/){
+					push(@QCdata,$filedata[$i-1]); ##To include the study matches for replicate sample
+					push(@QCdata,$filedata[$i]);
 				} else {
-					push (@QCdata, $line);
+					push (@QCdata, $filedata[$i]);
 					next;
 				}
 			}
@@ -316,9 +317,9 @@ sub FastQ_File{
 		my $tempfile_R2 = $filename_R2[$c];
 	
 	#Create loop for files to be copied and pasted to nephele
-	### copy ($tempfile_R1, $Nephpath) or die;
-	### copy ($tempfile_R2, $Nephpath) or die;
-	####	$b++; $c++;
+		copy ($tempfile_R1, $Nephpath) or die;
+		copy ($tempfile_R2, $Nephpath) or die;
+		$b++; $c++;
 	}
 	closedir(NDIR);
 	print "\nCompleted moving FastQ files";
@@ -336,7 +337,7 @@ sub FastQ_Man {
 		"ReverseFastqFile", "TreatmentGroup", "VialLabel", "AssayPlate", "ExtractionBatch", "Description");
 	
 	#Create Nephele txt file in Nephele Directory
-	$CWD = $Nephpath; my $newfile= "$Proj_List[1]\_Nephele_Input\_$date.txt";
+	$CWD = $Nephpath; my $newfile= "$Proj_List[0]\_Nephele_Input\_$date.txt";
 	
 	#Remove .gz from all FastQ files
 	foreach my $file (@filename_R1) {
@@ -384,3 +385,4 @@ exit;
 ##7/6/17: Modifications to print screens
 ##8/4/17: Changed MR input to search, allowed for second study input
 ##8/6/17: Continued with 8/4 changes, fixed bugs for second and third study input
+##9/11/17: Added feature to compare Study sample that pairs with Extraction Replicate
