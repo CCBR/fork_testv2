@@ -1,0 +1,12 @@
+name: trial
+title: Trial
+username:
+account: samantha-sevilla
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 217293
+bundleId: 991784
+url: https://samantha-sevilla.shinyapps.io/trial/
+when: 1506037059.98748
+asMultiple: FALSE
+asStatic: FALSE

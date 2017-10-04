@@ -1,0 +1,12 @@
+name: pcoa2
+title: pCOA
+username:
+account: samantha-sevilla
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 221994
+bundleId: 1010767
+url: https://samantha-sevilla.shinyapps.io/pcoa2/
+when: 1507135301.34619
+asMultiple: FALSE
+asStatic: FALSE

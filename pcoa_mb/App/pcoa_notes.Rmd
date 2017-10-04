@@ -1,0 +1,148 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Creates two pages, with diferent sidebars
+
+```{r}
+fluidPage(
+  navbarPage("App Title",
+             tabPanel("Input",
+             sidebarLayout(
+               sidebarPanel(
+                 fileInput("file","Upload the file", multiple=TRUE),
+                 helpText("Default max. file size is 5MB"),
+                 tags$hr(),
+                 h5(helpText("Select the read.table parameters below")),
+                 checkboxInput(inputId = 'header', label = 'Header', value = FALSE),
+                 checkboxInput(inputId = "stringAsFactors", "stringAsFactors", FALSE),
+                 br(),
+                 radioButtons(inputId = 'sep', label = 'Separator', choices = c(Comma=',',Tab='\t', Space=''), selected = ',')
+               ),
+               mainPanel(
+                 uiOutput("tb")
+              )
+             )
+            ),
+            tabPanel("Analysis",
+            sidebarLayout(
+              sidebarPanel(
+                fileInput("file","Upload the file", multiple=TRUE),
+                helpText("Default max. file size is 5MB"),
+                tags$hr(),
+                h5(helpText("DO THINGS the read.table parameters below")),
+                checkboxInput(inputId = 'header', label = 'Header', value = FALSE),
+                checkboxInput(inputId = "stringAsFactors", "stringAsFactors", FALSE),
+                br(),
+                radioButtons(inputId = 'sep', label = 'Separator', choices = c(Comma=',',Tab='\t', Space=''), selected = ',')
+              ),
+              mainPanel(
+                uiOutput("tb")
+              )
+            )
+            ) 
+ 
+  )
+)
+```
+
+3d interactive pcoa plot for shiny
+
+```{r}
+library(rgl)
+library(car)
+library(shiny)
+
+cars$time <- cars$dist/cars$speed
+
+fluidPage(
+  
+  rglwidgetOutput("plot",  width = 800, height = 600)
+)
+
+
+library(rgl)
+library(car)
+library(shiny)
+
+cars$time <- cars$dist/cars$speed
+
+function(input, output) {
+  
+  output$plot <- renderRglwidget({
+    open3d(useNULL=TRUE)
+    scatter3d(x=cars$speed, y=cars$dist, z=cars$time, surface=FALSE, ellipsoid = TRUE)
+    par3d(mouseMode = "trackball")
+    rglwidget()
+  })
+}   
+
+```
+
+functioning single file input
+
+```{r}
+library(rgl)
+library(car)
+library(shiny)
+
+fluidPage(
+  titlePanel("File Input"),
+  sidebarLayout(
+    sidebarPanel(
+      fileInput("file","Upload the file", multiple=TRUE),
+      helpText("Default max. file size is 5MB"),
+      tags$hr(),
+      h5(helpText("Select the read.table parameters below")),
+      checkboxInput(inputId = 'header', label = 'Header', value = FALSE),
+      checkboxInput(inputId = "stringAsFactors", "stringAsFactors", FALSE),
+      br(),
+      radioButtons(inputId = 'sep', label = 'Separator', choices = c(Comma=',',Tab='\t', Space=''), selected = ',')
+    ),
+    mainPanel(
+      uiOutput("tb")
+      
+    )
+  )
+)
+
+
+
+
+library(rgl)
+library(car)
+library(shiny)
+
+function(input,output){
+  
+  # This reactive function will take the inputs from UI.R and use them for read.table() to read the data from the file. It returns the dataset in the form of a dataframe.
+  # file$datapath -> gives the path of the file
+  data <- reactive({
+    file1 <- input$file
+    if(is.null(file1)){return()} 
+    read.table(file=file1$datapath, sep=input$sep, header = input$header, stringsAsFactors = input$stringAsFactors)
+    
+  })
+  
+  # this reactive output contains the summary of the dataset and display the summary in table format
+  output$filedf <- renderTable({
+    if(is.null(data())){return ()}
+    input$file
+  })
+  
+  # This reactive output contains the dataset and display the dataset in table format
+  output$table <- renderTable({
+    if(is.null(data())){return ()}
+    data()
+  })
+  
+  # the following renderUI is used to dynamically generate the tabsets when the file is loaded. Until the file is loaded, app will not show the tabset.
+  output$tb <- renderUI({
+    if(is.null(data())){return()}
+    else
+      tabsetPanel(tabPanel("File Summary", tableOutput("filedf")), tabPanel("Data", tableOutput("table")))
+  })
+}
+```
+
