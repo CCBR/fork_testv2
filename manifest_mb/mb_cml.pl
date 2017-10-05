@@ -4,27 +4,34 @@
 # Last Update: 080617
 # Use for GMU Lab Rotation Spring 2017
 
+######################################################################################
+								##NOTES##
+######################################################################################
 ###This script takes in the Project and MR number of a program and finds the associated MB Manifest, downloaded
 ###from LIMS. It then copies the fastq files of all QC samples and moves them to the Nephele folder. It creates
 ###the necessary txt file to input into Nephele.
 
+######################################################################################
+								##Main Code##
+######################################################################################
 use warnings;
 use strict;
 use Cwd;
 use CPAN;
-	eval "use File::chdir" 
-	 or do { 
-	  CPAN::install("File::chdir");
-	};
-	
-	eval "use File::Copy" 
-	 or do { 
-	  CPAN::install("File::Copy");
-	};
-	
-	use File::chdir;
-	use File::Copy;
+use File::chdir;
+use File::Copy;
 
+#Determine if the modules are up to date for user
+eval "use File::chdir" 
+	or do { 
+		CPAN::install("File::chdir");
+	};
+	
+eval "use File::Copy" 
+	or do { 
+		CPAN::install("File::Copy");
+	};
+	
 #Intialize variables
 	my @QCPath; my @ManPath; my $Nephpath; my $MRName;
 	my @SampleID; my @ExternalID; my @SourceMaterial;
@@ -74,9 +81,9 @@ use CPAN;
 	FastQ_Man($Nephpath, $date, @Proj_List, @SampleID_Neph, @Treatment_Neph, @SourceMaterial, @VialLab_Neph, @AssayPlate_Neph, 
 		@ExtractBatch_Neph, @Descrip_Neph, @filename_R1, @filename_R2);
 
-##################################################################################################################
-################################################# SUBROUTINES ####################################################
-##################################################################################################################
+######################################################################################
+								##Subroutines##
+######################################################################################
 
 #Creates variables with directory names of the Manifest file location, and QIIME directory location
 sub qc_mb_dir {
