@@ -16,30 +16,28 @@ fluidPage(
   
   ##Create two navigation pages, 1) Input files | 2) pCOA Plots
   navbarPage("Microbime QC Testing",
-             tabPanel("Input Files",
-             
-                #Sidebar to include the input file generator, which updates wil fil information
-                #and file summary, once upload is completed. Action button generates pCOA plot
-                sidebarLayout(
-                  sidebarPanel(
-                    fileInput("file","Upload the file", multiple=TRUE),
-                    helpText("Default max. file size is 5MB"),
-                    tags$hr(),
-                    h5(helpText("Select the read.table parameters below")),
-                    checkboxInput(inputId = 'header', label = 'Header', value = FALSE),
-                    checkboxInput(inputId = "stringAsFactors", "stringAsFactors", FALSE),
-                    br(),
-                    radioButtons(inputId = 'sep', label = 'Separator', choices = c(Comma=',',Tab='\t', Space=''), 
-                                selected = ','),
-                    actionButton("goButton", "Generate pCOA Plot")
-                  ),
-                  mainPanel(
-                    uiOutput("tb")
-                  )
-              )
-            ),
-            tabPanel("pCOA Plots",
-                     rglwidgetOutput("plot",  width = 800, height = 600)
-            )
+    tabPanel("Input Files",
+                  
+      #Sidebar to include the input files (data and labels) and generate a file summary. 
+      #Once upload is completed summary is displayed and pCOA plot generated upon selection
+      #of the action button.
+      sidebarLayout(
+        sidebarPanel(
+          helpText("NOTE: File should be a txt file"),
+          fileInput("file","Upload the pCOA_data_file"),
+          
+          helpText("NOTE: File should be a txt file with headers"),
+          fileInput("file2","Upload the labels_file"),
+          
+          actionButton("goButton", "Generate pCOA Plot")
+        ),
+        mainPanel(
+          uiOutput("tb")
+          )
+      )
+    ),
+    tabPanel("pCOA Plots",
+      rglwidgetOutput("plot",  width = 800, height = 600)
+    )
   ) 
 )
