@@ -40,19 +40,30 @@ fluidPage(
     tabPanel("pCOA Plots",
       fluidRow(
         column(3,
-          actionButton("goButton", "Color by Treatment Groups"), 
+          actionButton("Button_Groups", "Color by Treatment Groups"), 
           br(),     
-          actionButton("Button_AssayPlate", "Color by AssayPlate")
+          actionButton("Button_AssayPlate", "Color by AssayPlate"),
+          br(),
+          actionButton("Button_Row", "Color by Row"),
+          br(),
+          actionButton("Button_QS", "Color by QS")
         ),
         column(4, offset=1,
           actionButton("Button_ExtractionBatch", "Color by ExtractionBatch"),
           br(),
-          actionButton("Button_Row", "Color by Row")       
+          actionButton("Button_Row", "Color by Row"),
+          br(),
+          actionButton("Button_QS", "Color by QS"),
+          br(),
+          actionButton("Button_Row", "Color by Row"),
+          br(),
+          actionButton("Button_QS", "Color by QS")
         ),
         column(4,
-          actionButton("Button_QS", "Color by QS")       
+          plotOutput("legend", width=300, height=300)     
         ),
-      rglwidgetOutput("plot",  width = 800, height = 600)  
+      rglwidgetOutput("plot",  width = 1000, height = 800)
+          
       )
     )
   )
