@@ -52,21 +52,21 @@ function(input,output){
   #When the active button has been selected, generates a pCOA plot for the user to manipulate
     observeEvent(input$goButton, {
       
-      #Assign colors for the categories
-      colors <- c("red", "green", "white", "yellow")
+      #Create palette of colors
+      palette(c(brewer.pal(n=12, name = "Set3"),brewer.pal(n=12, name = "Paired"),brewer.pal(n=11, name = "Spectral")))
       
       #Assign top three pCOA values to plot
       pc1 <- data()[,2]
       pc2 <- data()[,3]
       pc3 <- data()[,4]
       
+      #Assign labels to the plot, from input
       pcoa_labs <- datafull()
-      
       
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = pcoa_labs$V14, pch=15, surface.col = colors, cex=10,
-                  labels = pcoa_labs$V14, id.n=nrow(pcoa_labs), axis.col = c("white", "white", "white"), bg="black")
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = pcoa_labs$V5, pch=5, surface.col = palette(), cex=5,
+                  labels = pcoa_labs$V5, id.n=nrow(pcoa_labs), axis.col = c("white", "white", "white"), bg="black")
         par3d(mouseMode = "trackball")
         rglwidget()
       })

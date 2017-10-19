@@ -31,13 +31,30 @@ fluidPage(
           
           actionButton("goButton", "Generate pCOA Plot")
         ),
-        mainPanel(
+        mainPanel = (
           uiOutput("tb")
           )
       )
     ),
     tabPanel("pCOA Plots",
-      rglwidgetOutput("plot",  width = 800, height = 600)
+      fluidRow(
+        column(3,
+          actionButton("Button_treatement", "Color by Treatment Groups"), 
+          br(),     
+          actionButton("Button_AssayPlate", "Color by AssayPlate")
+        ),
+        column(4, offset=1,
+          actionButton("Button_ExtractionBatch", "Color by ExtractionBatch"),
+          br(),
+          actionButton("Button_Row", "Color by Row")       
+        ),
+        column(4,
+          actionButton("Button_Column", "Color by Column"),
+          br(),
+          actionButton("Button_ReagentLot", "Color by Reagent Lot")       
+        ),
+      rglwidgetOutput("plot",  width = 800, height = 600)  
+      )
     )
-  ) 
+  )
 )
