@@ -1,6 +1,7 @@
 library(rgl)
 library(car)
 library(shiny)
+library("RColorBrewer")
 
 #######################################################################################
 ###                                      NOTES                                      ###
@@ -39,7 +40,7 @@ fluidPage(
     tabPanel("pCOA Plots",
       fluidRow(
         column(3,
-          actionButton("Button_treatement", "Color by Treatment Groups"), 
+          actionButton("goButton", "Color by Treatment Groups"), 
           br(),     
           actionButton("Button_AssayPlate", "Color by AssayPlate")
         ),
@@ -49,9 +50,7 @@ fluidPage(
           actionButton("Button_Row", "Color by Row")       
         ),
         column(4,
-          actionButton("Button_Column", "Color by Column"),
-          br(),
-          actionButton("Button_ReagentLot", "Color by Reagent Lot")       
+          actionButton("Button_QS", "Color by QS")       
         ),
       rglwidgetOutput("plot",  width = 800, height = 600)  
       )

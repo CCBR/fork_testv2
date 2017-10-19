@@ -1,6 +1,7 @@
 library(rgl)
 library(car)
 library(shiny)
+library("RColorBrewer")
 
 #######################################################################################
 ###                                      NOTES                                      ###
@@ -53,7 +54,7 @@ function(input,output){
     observeEvent(input$goButton, {
       
       #Create palette of colors
-      palette(c(brewer.pal(n=12, name = "Set3"),brewer.pal(n=12, name = "Paired"),brewer.pal(n=11, name = "Spectral")))
+      palette(c(brewer.pal(n=12, name = "Paired"),brewer.pal(n=12, name = "Set3"),brewer.pal(n=11, name = "Spectral")))
       
       #Assign top three pCOA values to plot
       pc1 <- data()[,2]
@@ -65,8 +66,52 @@ function(input,output){
       
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = pcoa_labs$V3, pch=5, surface.col = palette(), cex=5,
+                  labels = pcoa_labs$V3, id.n=nrow(pcoa_labs), axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+    })
+    #When the active button has been selected, generates a pCOA plot for the user to manipulate
+    observeEvent(input$Button_AssayPlate, {
+   
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = pcoa_labs$V5, pch=5, surface.col = palette(), cex=5,
                   labels = pcoa_labs$V5, id.n=nrow(pcoa_labs), axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+    })
+    #When the active button has been selected, generates a pCOA plot for the user to manipulate
+    observeEvent(input$Button_ExtractionBatch, {
+      
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = pcoa_labs$V6, pch=5, surface.col = palette(), cex=5,
+                  labels = pcoa_labs$V6, id.n=nrow(pcoa_labs), axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+    })
+    #When the active button has been selected, generates a pCOA plot for the user to manipulate
+    observeEvent(input$Button_Row, {
+      
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = pcoa_labs$V8, pch=5, surface.col = palette(), cex=5,
+                  labels = pcoa_labs$V8, id.n=nrow(pcoa_labs), axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+    })
+    #When the active button has been selected, generates a pCOA plot for the user to manipulate
+    observeEvent(input$Button_QS, {
+      
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = pcoa_labs$V16, pch=5, surface.col = palette(), cex=5,
+                  labels = pcoa_labs$V16, id.n=nrow(pcoa_labs), axis.col = c("white", "white", "white"), bg="black")
         par3d(mouseMode = "trackball")
         rglwidget()
       })
