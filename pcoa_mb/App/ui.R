@@ -76,7 +76,7 @@ fluidPage(
       ),
       fluidRow(
         column(6,
-          rglwidgetOutput("plot",  width = 900, height = 800)
+          rglwidgetOutput("plot",  width = 800, height = 800)
         ),
         column(5,
           plotOutput("legend", height=800)

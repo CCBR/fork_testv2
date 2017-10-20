@@ -59,7 +59,7 @@ function(input,output){
     
     ##Treatement Groups
     observeEvent(input$Button_TreatmentGroup, {
-      group_select = pcoa_labs$TreatmentGroup
+      group_select = data_labels()[,"TreatmentGroup"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -75,7 +75,7 @@ function(input,output){
     })
     ##Extraction Date
     observeEvent(input$Button_ExtDate, {
-      group_select = pcoa_labs$ExtDate
+      group_select = data_labels()[,"ExtDate"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -92,7 +92,7 @@ function(input,output){
     
     ##Library Prep Date
     observeEvent(input$Button_LibDate, {
-      group_select = pcoa_labs$LibDate
+      group_select = data_labels()[,"LibDate"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -109,7 +109,7 @@ function(input,output){
     
     ##Extraction Batch
     observeEvent(input$Button_ExtractionBatch, {
-      group_select = pcoa_labs$ExtractionBatch
+      group_select = data_labels()[,"ExtractionBatch"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -126,7 +126,7 @@ function(input,output){
     
     #QIAsymphony
     observeEvent(input$Button_QIAsymph, {
-      group_select = pcoa_labs$QIAsymph
+      group_select = data_labels()[,"QIAsymph"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -143,7 +143,7 @@ function(input,output){
     
     ##AssayPlate
     observeEvent(input$Button_AssayPlate, {
-      group_select = pcoa_labs$AssayPlate
+      group_select = data_labels()[,"AssayPlate"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -160,7 +160,7 @@ function(input,output){
     
     #Sequence Run ID
     observeEvent(input$Button_SeqRunID, {
-      group_select = pcoa_labs$SeqRunID
+      group_select = data_labels()[,"SeqRunID"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -177,7 +177,7 @@ function(input,output){
     
     #Row
     observeEvent(input$Button_Row, {
-      group_select = pcoa_labs$Row
+      group_select = data_labels()[,"Row"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -194,7 +194,7 @@ function(input,output){
     
     ##Column
     observeEvent(input$Button_Column, {
-      group_select = pcoa_labs$Column
+      group_select = data_labels()[,"Column"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -211,7 +211,7 @@ function(input,output){
     
     ##Reagent Lot
     observeEvent(input$Button_LotReag, {
-      group_select = pcoa_labs$Lot_Reag
+      group_select = data_labels()[,"Lot_Reag"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -228,7 +228,7 @@ function(input,output){
     
     ##Enzyme Lot
     observeEvent(input$Button_LotEnz, {
-      group_select = pcoa_labs$Lot_Enz
+      group_select = data_labels()[,"Lot_Enz"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -245,7 +245,7 @@ function(input,output){
     
     ##LotATL
     observeEvent(input$Button_LotATL, {
-      group_select = pcoa_labs$LotATL
+      group_select = data_labels()[,"Lot_ATL"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -262,7 +262,7 @@ function(input,output){
     
     ##MGB Lot
     observeEvent(input$Button_LotMGB, {
-      group_select = pcoa_labs$Lot_MGB
+      group_select = data_labels()[,"Lot_MGB"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -279,7 +279,7 @@ function(input,output){
     
     ##Master Mix Lot
     observeEvent(input$Button_LotMM, {
-      group_select = pcoa_labs$Lot_MM
+      group_select = data_labels()[,"Lot_MM"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
@@ -296,7 +296,7 @@ function(input,output){
     
     ##Primer Lot
     observeEvent(input$Button_LotPrimer, {
-      group_select = pcoa_labs$Lot_Primer
+      group_select = data_labels()[,"Lot_Primer"]
       output$plot <- renderRglwidget({
         open3d(useNULL=TRUE)
         scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
