@@ -23,16 +23,16 @@ fluidPage(
              tabPanel("Input Files",
                       ###Sidebar includes the NOTE that files must be txt,
                       ###input files (data and labels), and exectuion button
-                      sidebarLayout(
-                        sidebarPanel(
-                          helpText("NOTE: File should be a txt file"),
+                      fluidRow(
+                        column(4,
+                               helpText("NOTE: File should be a txt file"),
                           fileInput("file","Upload the pCOA_data_file"),
                           fileInput("file2","Upload the labels_file"),
                           actionButton("goButton", "Generate pCOA Plot")
                         ),
                         ###Main panel include summary of data files accepted
-                        mainPanel = (
-                          uiOutput("tb")
+                        column(8,
+                               uiOutput("table")
                         )
                       )
              ),
@@ -42,7 +42,7 @@ fluidPage(
                       ###from data_labels file
                       fluidRow(
                         column(2,
-                               uiOutput("choose_dataset")
+                               uiOutput("choose_grouplabels")
                         ),
                         column(3,
                                checkboxGroupInput("inCheckboxGroup",
@@ -52,9 +52,8 @@ fluidPage(
                                                     "EB" = "Extraction.Blank",
                                                     "Study" = "Study",
                                                     "Replicate" = "ExtractionReplicate"),
-                                                  selected = c("artificial.colony", "robogut", "Extraction.Blank",
-                                                               "Study", "ExtractionReplicate"))
-                              # uiOutput("choose_sampletype")
+                                                 )
+                              #,uiOutput("choose_sampletype")
                         )
                       ),
                       ###Second Row contains the pCOA plot and legend of colors
@@ -63,7 +62,7 @@ fluidPage(
                                rglwidgetOutput("plot",  width = 800, height = 800)
                         ),
                         column(5,
-                               plotOutput("legend", width = 400, height=800)
+                               plotOutput("legend", width = 400, height=1000)
                         )
                       )
              )
