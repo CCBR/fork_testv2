@@ -15,301 +15,88 @@ library(leaflet)
 ###                                      Code                                      ###
 #######################################################################################
 
-function(input,output){
+function(input,output, session){
   
-  # Takes the input file of pCOA data, saving it to the data_vals matrix AND an input file of categories
-  # saving it to the data_labels matrix
+  ########################################################################
+  #############################Input Files Page###########################
+  
+  # Takes the input file of pCOA data, saving it to the data_vals matrix 
   data_vals <- reactive({
-      file <- input$file
-      if (is.null(file))
-        return(NULL)
-      pcoa_full <- read.table(file=input$file$datapath)
-  }) 
+    file <- input$file
+    if (is.null(file))
+      return(NULL)
+    pcoa_full <- read.table(file=input$file$datapath)
+  })
+  
+  # Takes the input file of categories labels, saving it to the data_labels matrix
   data_labels <- reactive({
     file2 <- input$file2
     if (is.null(file2))
       return(NULL)
-      pcoa_labs <- read.table(file=input$file2$datapath, header=TRUE, colClasses = "factor")
+    pcoa_labs <- read.table(file=input$file2$datapath, header=TRUE, colClasses = "factor")
   })  
   
-  #Display the summary for the file information provided by the user
+  #Display the summary for the PCOA and Lables files provided by the user
   output$filepcoa <- renderTable({
-      if(is.null(data_vals())){return ()}
-      input$file
+    if(is.null(data_vals())){return ()}
+    input$file
+  })
+  output$filelabels <- renderTable({
+    if(is.null(data_vals())){return ()}
+    input$file2
   })
   output$tb <- renderUI({
     if(is.null(data_vals())){return()}
     else
-      tabsetPanel(tabPanel("File Summary", tableOutput("filepcoa")))
+      tabsetPanel(
+        tabPanel("File Input Summary", tableOutput("filepcoa"),tableOutput("filelabels"))
+      )
   })
-
-  #When the active button has been selected, generates a pCOA plot for the user to manipulate
-  observeEvent(input$goButton, {
-      
-    #Create palette of colors
-    palette(c(brewer.pal(n=12, name = "Paired"),brewer.pal(n=12, name = "Set3"),brewer.pal(n=11, name = "Spectral")))
-      
+  
+  ########################################################################
+  #############################pCOA Plots Page###########################
+  
+  #Create dropdown list from the column names of the data_lables file, shown to user
+  observe({
+    req(input$file2)
+    dsnames <- names(data_labels())
+    cb_options <- list()
+    cb_options[dsnames] <- dsnames
+    output$choose_dataset<- renderUI({
+      selectInput("datalabels", "Data set",cb_options )
+    })
+  })
+  
+  #Create palette of colors
+  palette(c(brewer.pal(n=12, name = "Paired"),brewer.pal(n=12, name = "Set3"),brewer.pal(n=11, name = "Spectral")))
+  
+  #Generate the data and labels for generate of the PCOA plot
+  observe({
     #Assign top three pCOA values to plot
     pc1 <- data_vals()[,2]
     pc2 <- data_vals()[,3]
     pc3 <- data_vals()[,4]
-      
-    #Change Output based on User Action Button initiation. Groups by chosen characteristic, sorts and colors unique
-    #factors and print outs legend to webbrowser
     
-    ##Treatement Groups
-    observeEvent(input$Button_TreatmentGroup, {
-      group_select = data_labels()[,"TreatmentGroup"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })
-    ##Extraction Date
-    observeEvent(input$Button_ExtDate, {
-      group_select = data_labels()[,"ExtDate"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })  
+    #Create the color grouping by the label selected. If none are selected return TreatmentGroup    
+    if(is.null(input$datalabels)) return("TreatmentGroup")
+    else{
+      group_select <- data_labels()[,input$datalabels]
+    }
     
-    ##Library Prep Date
-    observeEvent(input$Button_LibDate, {
-      group_select = data_labels()[,"LibDate"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
+    #Return the PCOA plot when label has been selected
+    output$plot <- renderRglwidget({
+      scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                axis.col = c("white", "white", "white"), bg="black")
+      par3d(mouseMode = "trackball")
+      rglwidget()
     })
     
-    ##Extraction Batch
-    observeEvent(input$Button_ExtractionBatch, {
-      group_select = data_labels()[,"ExtractionBatch"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
+    #Return the PCOA legend when label has been selected
+    output$legend <- renderPlot({
+      unilabs <- sort(unique(group_select))
+      plot.new()
+      legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
     })
-    
-    #QIAsymphony
-    observeEvent(input$Button_QIAsymph, {
-      group_select = data_labels()[,"QIAsymph"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })  
-    })
-    
-    ##AssayPlate
-    observeEvent(input$Button_AssayPlate, {
-      group_select = data_labels()[,"AssayPlate"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })
-    
-    #Sequence Run ID
-    observeEvent(input$Button_SeqRunID, {
-      group_select = data_labels()[,"SeqRunID"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })
-    
-    #Row
-    observeEvent(input$Button_Row, {
-      group_select = data_labels()[,"Row"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })
-    
-    ##Column
-    observeEvent(input$Button_Column, {
-      group_select = data_labels()[,"Column"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })  
-    
-    ##Reagent Lot
-    observeEvent(input$Button_LotReag, {
-      group_select = data_labels()[,"Lot_Reag"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })  
-    
-    ##Enzyme Lot
-    observeEvent(input$Button_LotEnz, {
-      group_select = data_labels()[,"Lot_Enz"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })  
-    
-    ##LotATL
-    observeEvent(input$Button_LotATL, {
-      group_select = data_labels()[,"Lot_ATL"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })
-    
-    ##MGB Lot
-    observeEvent(input$Button_LotMGB, {
-      group_select = data_labels()[,"Lot_MGB"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })
-    
-    ##Master Mix Lot
-    observeEvent(input$Button_LotMM, {
-      group_select = data_labels()[,"Lot_MM"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })
-    
-    ##Primer Lot
-    observeEvent(input$Button_LotPrimer, {
-      group_select = data_labels()[,"Lot_Primer"]
-      output$plot <- renderRglwidget({
-        open3d(useNULL=TRUE)
-        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                  axis.col = c("white", "white", "white"), bg="black")
-        par3d(mouseMode = "trackball")
-        rglwidget()
-      })
-      output$legend <- renderPlot({
-        unilabs <- sort(unique(group_select))
-        plot.new()
-        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
-      })
-    })
-
   })
+  
 }
