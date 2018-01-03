@@ -64,23 +64,43 @@ function(input,output, session){
     cb_options[dsnames] <- dsnames
     output$choose_dataset<- renderUI({
       selectInput("datalabels", "Data set",cb_options )
+      
     })
+       
   })
+  
+  observe({
+      updateCheckboxGroupInput(session, "inCheckboxGroup", "Treatment Selection:",
+                               c("AC" = "artificial.colony", "RG" = "robogut", "EB" = "Extraction.Blank",
+                                 "Study" = "Study", "Replicate" = "Extraction.Replicate"),
+                               selected = c("artificial.colony", "robogut", "Extraction.Blank",
+                                            "Study", "Extraction.Replicate"))
+   })
   
   #Create palette of colors
   palette(c(brewer.pal(n=12, name = "Paired"),brewer.pal(n=12, name = "Set3"),brewer.pal(n=11, name = "Spectral")))
   
   #Generate the data and labels for generate of the PCOA plot
   observe({
+    
+    #Create a full dataset of labels and pCOA values
+    if(is.null(input$datalabels)) return()
+    newdata <- cbind(data_vals(), data_labels())
+    
+    #Create a subset of the full dataset, based on the checkbox chosen
+    #if(is.null(input$inCheckboxGroup)) return()
+      full_data<-subset(newdata, TreatmentGroup==input$inCheckboxGroup)
+
+    
     #Assign top three pCOA values to plot
-    pc1 <- data_vals()[,2]
-    pc2 <- data_vals()[,3]
-    pc3 <- data_vals()[,4]
+    pc1 <- full_data[,2]
+    pc2 <- full_data[,3]
+    pc3 <- full_data[,4]
     
     #Create the color grouping by the label selected. If none are selected return TreatmentGroup    
     if(is.null(input$datalabels)) return("TreatmentGroup")
     else{
-      group_select <- data_labels()[,input$datalabels]
+      group_select <- full_data[,input$datalabels]
     }
     
     #Return the PCOA plot when label has been selected

@@ -153,7 +153,9 @@ function(input,output){
 
 ###########################################################################
 functioning Labels as checkboxes
-
+https://shiny.rstudio.com/reference/shiny/latest/selectInput.html
+https://stackoverflow.com/questions/34596286/create-selection-list-based-on-the-column-names-of-a-csv-file-for-plotting-in-sh
+https://gist.github.com/wch/4211337
 ```{r}
 
 library(rgl)

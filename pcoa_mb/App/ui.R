@@ -43,6 +43,18 @@ fluidPage(
                       fluidRow(
                         column(2,
                                uiOutput("choose_dataset")
+                        ),
+                        column(3,
+                               checkboxGroupInput("inCheckboxGroup",
+                                                  "Treatment Selection:",
+                                                  c("AC" = "artificial.colony",
+                                                    "RG" = "robogut",
+                                                    "EB" = "Extraction.Blank",
+                                                    "Study" = "Study",
+                                                    "Replicate" = "ExtractionReplicate"),
+                                                  selected = c("artificial.colony", "robogut", "Extraction.Blank",
+                                                               "Study", "ExtractionReplicate"))
+                              # uiOutput("choose_sampletype")
                         )
                       ),
                       ###Second Row contains the pCOA plot and legend of colors
