@@ -43,7 +43,7 @@ fluidPage(
                       fluidRow(
                         column(2,
                                uiOutput("choose_grouplabels")
-                        ),
+                               ),
                         column(3,
                                checkboxGroupInput("inCheckboxGroup",
                                                   "Treatment Selection:",
@@ -51,21 +51,26 @@ fluidPage(
                                                     "RG" = "robogut",
                                                     "EB" = "Extraction.Blank",
                                                     "Study" = "Study",
-                                                    "Replicate" = "ExtractionReplicate"),
+                                                    "Replicate" = "ExtractionReplicate")
                                                  )
-                              #,uiOutput("choose_sampletype")
-                        )
+                               ),
+                        column(4,
+                               radioButtons("radiolabelselect", label = h3("Sample ID Labels"),
+                                            choices = list("No" = 1, "Yes" = 2), 
+                                            selected = 1)
+                               )
                       ),
                       ###Second Row contains the pCOA plot and legend of colors
                       fluidRow(
                         column(6,
                                rglwidgetOutput("plot",  width = 800, height = 800)
-                        ),
+                               #rglwidgetOutput("labels",  width = 800, height = 800)
+                               ),
                         column(5,
                                plotOutput("legend", width = 400, height=1000)
-                        )
+                               )
                       )
-             )
+              )
   )
 )
 

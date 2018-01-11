@@ -25,7 +25,15 @@ function(input,output, session){
     file <- input$file
     if (is.null(file))
       return(NULL)
-    read.table(file=input$file$datapath)
+
+    #Skip the first 9 lines of the PCOA data table, read in the table and then remove the last two lines that 
+    #include the Biplot and Site data. Finally, updates all col classes to numeric for evaluation
+    data_val_ori <- read.table(skip=9,fill=TRUE, file=input$file$datapath)
+    data_vals <- data_val_ori[1:(dim(data_val_ori)[1]-2),]
+    data_vals$V2 <- as.numeric(data_vals$V2)
+    names(data_vals)[1] <- "StudyID"
+    return(data_vals)
+    
   })
   
   # Takes the input file of categories labels, saving it to the data_labels matrix
@@ -33,7 +41,7 @@ function(input,output, session){
     file2 <- input$file2
     if (is.null(file2))
       return(NULL)
-    read.table(file=input$file2$datapath, header=TRUE, colClasses = "factor")
+    read.table(fill=TRUE,file=input$file2$datapath, header=TRUE, colClasses = "factor")
   })  
   
   #Display the summary for the PCOA and Lables files provided by the user
@@ -56,9 +64,11 @@ function(input,output, session){
   ########################################################################
   #############################pCOA Plots Page###########################
   #Create palette of colors
-  palette(c(brewer.pal(n=12, name = "Paired"),
-            brewer.pal(n=12, name = "Set3"),
-            brewer.pal(n=11, name = "Spectral")))
+  palette(c(brewer.pal(n=12, name = "Set3"),
+            brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"),
+            brewer.pal(n=7, name = "Accent")
+            ))
   
   #Create Treatment Group options
   treat_types <- c("AC" = "artificial.colony", 
@@ -82,6 +92,17 @@ function(input,output, session){
                                selected=treat_types)
    })
   
+  observe({
+    # Can also set the label and select items
+    updateRadioButtons(session, "radiolabelselect",
+                       label = "Sample ID Labels",
+                       choices = list("No" = 1, "Yes" = 2), 
+                       selected = 1)
+    
+  })
+    
+
+  
   #Generate the data and labels for generate of the PCOA plot
   observe({
     #If data files have been inputted correctly, create database of labels and PCOA information
@@ -90,10 +111,12 @@ function(input,output, session){
     else{
       
       #Create a subset of the full dataset
-      combined_data <- cbind(data_vals(), data_labels())
-   
+      #combined_data <- cbind(data_vals(), data_labels())
+      combined_data <- merge.data.frame(data_vals(), data_labels(), by="StudyID")
+
       #If treatment group checkboxes are chosen, select only treatment groups
       treatselect <- input$inCheckboxGroup
+      labelselect <- input$radiolabelselect
       full_data <- subset(combined_data, TreatmentGroup %in% treatselect)
      
       #Create the color grouping by the label selected. If none are selected return TreatmentGroup    
@@ -115,18 +138,41 @@ function(input,output, session){
         
         #Return the PCOA plot, with the grouping of colors by the input group labels
         output$plot <- renderRglwidget({
-          scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
-                    axis.col = c("white", "white", "white"), bg="black")
-          par3d(mouseMode = "trackball")
-          rglwidget()
+          #Checks the length of group factors to be >0; displays error message if false
+          if((length(group_select))==0) {
+            stop(print("No Samples Selected in Treatment Selection for plot"))
+          }
+          
+          else if(labelselect==1){
+            scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, 
+                      groups = group_select, pch=5, surface.col = palette(), cex=5,
+                      axis.col = c("white", "white", "white"), bg="black"
+                      )
+            par3d(mouseMode = "trackball")
+            rglwidget()
+          }
+          
+          else {
+            scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, 
+                      groups = group_select, pch=5, surface.col = palette(), cex=5,
+                      axis.col = c("white", "white", "white"), bg="black", 
+                      labels=full_data$SampleName, id.n=nrow(full_data)
+            )
+            par3d(mouseMode = "trackball")
+            rglwidget()
+          }
         })
         
         #Return the PCOA legend, with the grouping of colors by the input group labels
         output$legend <- renderPlot({
+          #Checks the length of group factors to be >0; displays error message if false
+          if((length(group_select))==0) stop(print("No Samples Selected in Treatment Selection for legend"))
           unilabs <- sort(unique(group_select))
           plot.new()
           legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
         })
+        
+        
       })
     }
   })
