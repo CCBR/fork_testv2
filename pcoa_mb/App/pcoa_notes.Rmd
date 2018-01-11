@@ -152,10 +152,8 @@ function(input,output){
 ```
 
 ###########################################################################
+
 functioning Labels as checkboxes
-https://shiny.rstudio.com/reference/shiny/latest/selectInput.html
-https://stackoverflow.com/questions/34596286/create-selection-list-based-on-the-column-names-of-a-csv-file-for-plotting-in-sh
-https://gist.github.com/wch/4211337
 ```{r}
 
 library(rgl)
@@ -325,6 +323,7 @@ fluidPage(
   )
 )
 ```
+
 ###########################################################################
 functioning action buttons for data labels
 ```{r}
@@ -732,3 +731,32 @@ fluidPage(
   )
 )
 ```
+
+###########################################################################
+viewing a printout of the data tables
+```{r}
+server
+  output$filedata <- renderTable({
+    if(is.null(data_labels())){return ()}
+    data_labels()
+  })
+  
+  output$tabledata <- renderUI({
+    if(is.null(data_labels())){return()}
+    else
+      tabsetPanel(
+        tabPanel("File Input Summary", tableOutput("filedata"))
+      )
+  })
+  
+  UI
+  
+                          column(12, uiOutput('tabledata'))
+
+```
+
+###########################################################################
+NEXT
+
+
+    

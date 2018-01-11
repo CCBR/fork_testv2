@@ -26,17 +26,23 @@ function(input,output, session){
     if (is.null(file))
       return(NULL)
 
-    #Skip the first 9 lines of the PCOA data table, read in the table and then remove the last two lines that 
-    #include the Biplot and Site data. Finally, updates all col classes to numeric for evaluation
-    data_val_ori <- read.table(skip=9,fill=TRUE, file=input$file$datapath)
-    data_vals <- data_val_ori[1:(dim(data_val_ori)[1]-2),]
-    data_vals$V2 <- as.numeric(data_vals$V2)
-    names(data_vals)[1] <- "StudyID"
-    return(data_vals)
+    #Skip the first 9 lines of the PCOA data table, read in the table. 
+    #Removes the last two lines that includes the Biplot and Site data and includes top 3 pCOA data 
+    #Updates all col classes to numeric for evaluation
+    #Renames the col1 to StudyID, col2 to pcOA1, col3 to pCOA2, col4 to pCOA3 for later matching
     
+    data_val_ori <- read.table(skip=9,fill=TRUE, file=input$file$datapath)
+    colschoose <- dim(data_val_ori)[1]-2
+      data_clean <- data_val_ori[1:colschoose,1:4]
+    data_clean$V2 <- as.numeric(data_clean$V2)
+    names(data_clean)[1] <- "StudyID"
+      names(data_clean)[2] <- "pCOA1"
+      names(data_clean)[3] <- "pCOA2"
+      names(data_clean)[4] <- "pCOA3"
+    return(data_clean)
   })
   
-  # Takes the input file of categories labels, saving it to the data_labels matrix
+  # Takes the input file, with headers, of data labels, saving it to the data_labels matrix
   data_labels <- reactive({
     file2 <- input$file2
     if (is.null(file2))
@@ -45,6 +51,7 @@ function(input,output, session){
   })  
   
   #Display the summary for the PCOA and Lables files provided by the user
+  #Each file becomes separate row of summary information to view
   output$filepcoa <- renderTable({
     if(is.null(data_vals())){return ()}
     input$file
@@ -61,6 +68,19 @@ function(input,output, session){
       )
   })
   
+  output$filedata <- renderTable({
+    if(is.null(data_labels())){return ()}
+    data_labels()
+  })
+  
+  output$tabledata <- renderUI({
+    if(is.null(data_labels())){return()}
+    else
+      tabsetPanel(
+        tabPanel("File Input Summary", tableOutput("filedata"))
+      )
+  })
+  
   ########################################################################
   #############################pCOA Plots Page###########################
   #Create palette of colors
@@ -71,10 +91,10 @@ function(input,output, session){
             ))
   
   #Create Treatment Group options
-  treat_types <- c("AC" = "artificial.colony", 
-                   "RG" = "robogut", 
-                   "EB" = "Extraction.Blank",
-                   "Study" = "Study", 
+  treat_types <- c("Artificial Colony" = "artificial.colony", 
+                   "Robogut" = "robogut", 
+                   "Blank" = "Extraction.Blank",
+                   "Study Sample" = "Study", 
                    "Replicate" = "Extraction.Replicate")
   
   #Create dropdown list from the column names of the data_lables file, shown to user
@@ -92,33 +112,48 @@ function(input,output, session){
                                selected=treat_types)
    })
   
+  #Create a radio button that updates whether or not to display the SampleID label name
   observe({
-    # Can also set the label and select items
     updateRadioButtons(session, "radiolabelselect",
                        label = "Sample ID Labels",
                        choices = list("No" = 1, "Yes" = 2), 
                        selected = 1)
-    
   })
     
-
-  
-  #Generate the data and labels for generate of the PCOA plot
+  #PCOA plot generation
   observe({
     #If data files have been inputted correctly, create database of labels and PCOA information
     if(is.null(input$file) | is.null(input$file2)) 
       return()
+    
     else{
       
       #Create a subset of the full dataset
-      #combined_data <- cbind(data_vals(), data_labels())
       combined_data <- merge.data.frame(data_vals(), data_labels(), by="StudyID")
 
-      #If treatment group checkboxes are chosen, select only treatment groups
+      #Deterine the treatment group based on the checkboxes selected
+      #Create dataset with only specified treatment groups
       treatselect <- input$inCheckboxGroup
-      labelselect <- input$radiolabelselect
       full_data <- subset(combined_data, TreatmentGroup %in% treatselect)
      
+      #Display the Combined Data Table in the Data Table tab 
+      output$filedata <- renderTable({
+        if(is.null(full_data)){return ()}
+        full_data
+      })
+      
+      output$tabledata <- renderUI({
+        if(is.null(full_data)){return()}
+        else
+          tabsetPanel(
+            tabPanel("Current Data Summary", tableOutput("filedata"))
+          )
+      })
+      
+      
+      #Determine the label status based on the radio button selected
+      labelselect <- input$radiolabelselect
+      
       #Create the color grouping by the label selected. If none are selected return TreatmentGroup    
       if(is.null(input$grouplabels)) {
         group_select <- full_data[,"TreatmentGroup"]

@@ -47,10 +47,10 @@ fluidPage(
                         column(3,
                                checkboxGroupInput("inCheckboxGroup",
                                                   "Treatment Selection:",
-                                                  c("AC" = "artificial.colony",
-                                                    "RG" = "robogut",
-                                                    "EB" = "Extraction.Blank",
-                                                    "Study" = "Study",
+                                                  c("Artificial Colony" = "artificial.colony",
+                                                    "Robogut" = "robogut",
+                                                    "Blank" = "Extraction.Blank",
+                                                    "Study Sample" = "Study",
                                                     "Replicate" = "ExtractionReplicate")
                                                  )
                                ),
@@ -64,13 +64,22 @@ fluidPage(
                       fluidRow(
                         column(6,
                                rglwidgetOutput("plot",  width = 800, height = 800)
-                               #rglwidgetOutput("labels",  width = 800, height = 800)
                                ),
                         column(5,
                                plotOutput("legend", width = 400, height=1000)
                                )
                       )
-              )
+              ),
+             ##Creat Page#3: Data Summary
+            tabPanel("Data Summary",
+                     
+                     column(12, uiOutput('tabledata'))
+                     
+                     
+                     
+                     
+                     
+                     )
   )
 )
 
