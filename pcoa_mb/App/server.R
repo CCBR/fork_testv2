@@ -84,10 +84,24 @@ function(input,output, session){
   ########################################################################
   #############################pCOA Plots Page###########################
   #Create palette of colors
-  palette(c(brewer.pal(n=12, name = "Set3"),
-            brewer.pal(n=12, name = "Paired"),
-            brewer.pal(n=11, name = "Spectral"),
-            brewer.pal(n=7, name = "Accent")
+  palette(c(brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
+            brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
+            brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
+            brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
+            brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
+            brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
+            brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
+            brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
+            brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
+            brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent")
             ))
   
   #Create Treatment Group options
