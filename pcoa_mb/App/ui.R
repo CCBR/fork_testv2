@@ -55,10 +55,8 @@ fluidPage(
                                                  )
                                ),
                         column(4,
-                               radioButtons("radiolabelselect", label = h3("Sample ID Labels"),
-                                            choices = list("No" = 1, "Yes" = 2), 
-                                            selected = 1)
-                               )
+                               uiOutput("choose_samplelabels")
+                        )
                       ),
                       ###Second Row contains the pCOA plot and legend of colors
                       fluidRow(
@@ -72,13 +70,7 @@ fluidPage(
               ),
              ##Creat Page#3: Data Summary
             tabPanel("Data Summary",
-                     
                      column(12, uiOutput('tabledata'))
-                     
-                     
-                     
-                     
-                     
                      )
   )
 )

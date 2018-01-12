@@ -42,3 +42,7 @@ plot.new()
 
 legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
 
+
+dsnames <- names(pcoa_labs)
+cb_options <- list()
+cb_options[dsnames] <- dsnames

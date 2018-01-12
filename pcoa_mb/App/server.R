@@ -110,7 +110,7 @@ function(input,output, session){
                    "Blank" = "Extraction.Blank",
                    "Study Sample" = "Study", 
                    "Replicate" = "Extraction.Replicate")
-  
+
   #Create dropdown list from the column names of the data_lables file, shown to user
   #Create checkboxes for user to select treatment type to show
   observe({
@@ -128,10 +128,14 @@ function(input,output, session){
   
   #Create a radio button that updates whether or not to display the SampleID label name
   observe({
-    updateRadioButtons(session, "radiolabelselect",
-                       label = "Sample ID Labels",
-                       choices = list("No" = 1, "Yes" = 2), 
-                       selected = 1)
+    req(input$file2)
+    dsnames <- c(names(data_labels()), "NONE")
+    cb_options <- list()
+    cb_options[dsnames] <- dsnames
+    output$choose_samplelabels<- renderUI({
+      radioButtons("samplelabels", "Add ID Labels to Data Points", cb_options, selected = NULL)
+    })
+    
   })
     
   #PCOA plot generation
@@ -192,7 +196,7 @@ function(input,output, session){
             stop(print("No Samples Selected in Treatment Selection for plot"))
           }
           
-          else if(labelselect==1){
+          else if(input$samplelabels=="NONE"){
             scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, 
                       groups = group_select, pch=5, surface.col = palette(), cex=5,
                       axis.col = c("white", "white", "white"), bg="black"
@@ -205,7 +209,7 @@ function(input,output, session){
             scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, 
                       groups = group_select, pch=5, surface.col = palette(), cex=5,
                       axis.col = c("white", "white", "white"), bg="black", 
-                      labels=full_data$SampleName, id.n=nrow(full_data)
+                      labels=full_data[,input$samplelabels], id.n=nrow(full_data)
             )
             par3d(mouseMode = "trackball")
             rglwidget()
