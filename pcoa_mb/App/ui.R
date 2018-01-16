@@ -1,8 +1,9 @@
 library(rgl)
 library(car)
 library(shiny)
+library(shinyjs)
+library(shinydashboard)
 library("RColorBrewer")
-
 #######################################################################################
 ###                                      NOTES                                      ###
 #######################################################################################
@@ -14,64 +15,152 @@ library("RColorBrewer")
 #######################################################################################
 ###                                      Code                                      ###
 #######################################################################################
-fluidPage(
-  
-  #Create two navigation pages, 1) Input files | 2) pCOA Plots
-  navbarPage("Microbime QC Testing",
-    
-             ##Create Page#1: Input File
-             tabPanel("Input Files",
-                      ###Sidebar includes the NOTE that files must be txt,
-                      ###input files (data and labels), and exectuion button
-                      fluidRow(
-                        column(4,
-                               helpText("NOTE: File should be a txt file"),
-                          fileInput("file","Upload the pCOA_data_file"),
-                          fileInput("file2","Upload the labels_file"),
-                          actionButton("goButton", "Generate pCOA Plot")
-                        ),
-                        ###Main panel include summary of data files accepted
-                        column(8,
-                               uiOutput("table")
-                        )
-                      )
-             ),
-             ##Create Page#2: PCOA PLOTS
-             tabPanel("pCOA Plots",
-                      ###First Row contains the drop down selector of column names, generated
-                      ###from data_labels file
-                      fluidRow(
-                        column(2,
-                               uiOutput("choose_grouplabels")
-                               ),
-                        column(3,
-                               checkboxGroupInput("inCheckboxGroup",
-                                                  "Treatment Selection:",
-                                                  c("Artificial Colony" = "artificial.colony",
-                                                    "Robogut" = "robogut",
-                                                    "Blank" = "Extraction.Blank",
-                                                    "Study Sample" = "Study",
-                                                    "Replicate" = "ExtractionReplicate")
-                                                 )
-                               ),
-                        column(4,
-                               uiOutput("choose_samplelabels")
-                        )
-                      ),
-                      ###Second Row contains the pCOA plot and legend of colors
-                      fluidRow(
-                        column(6,
-                               rglwidgetOutput("plot",  width = 800, height = 800)
-                               ),
-                        column(5,
-                               plotOutput("legend", width = 400, height=1000)
-                               )
-                      )
-              ),
-             ##Creat Page#3: Data Summary
-            tabPanel("Data Summary",
-                     column(12, uiOutput('tabledata'))
-                     )
+
+
+
+#######################################################################################
+#################################HEADER INFORMATION####################################
+
+#Create header to display, and disable the sidebar
+header <- dashboardHeader(title = "Microbiome QC Analysis")
+
+
+#######################################################################################
+#################################SideBar INFORMATION####################################
+
+##Create the sidebard with three items
+sidebar <- dashboardSidebar(
+ sidebarMenu(
+  menuItem("File Uploads", tabName = "fileuploads"),
+  menuItem("pCOA Plots", tabName="pcoaplots"),
+  menuItem("Table Summary", tabName="datasummary")
   )
+ )
+
+#######################################################################################
+#################################MainBody INFORMATION####################################
+
+##Create the Main body information for File Uploads
+###First data box includes all text upload information
+fcol1 <- fluidRow(
+  column(12,
+         fileInput("file","Upload the pCOA File"),
+         fileInput("file2","Upload the Labels"),
+         actionButton("goButton", "Generate pCOA Plot" 
+                      #style="color: #fff; background-color: #337ab7; border-color: #2e6da4"
+                      )
+         )
+  )
+##Second data box includes summary of file information
+fcol2 <- fluidRow(
+ column(12,
+        uiOutput("table")
+ )
 )
+##Third data box includes a confirmation that the action button has generated a plot
+fcol3 <- fluidRow(
+ column(12,
+        hidden(
+         verbatimTextOutput("text"))
+        )
+)
+
+#Generate Boxes for text submission, and data table generation
+box1 <- box(title = "Upload Text Files", width=4, status="primary", 
+            solidHeader = TRUE, fcol1)
+box2 <- box(title = "File Upload Summary", width=8, status="primary", 
+            solidHeader = TRUE, fcol2)
+box3 <- box(title = "Confirmation", width=8, status="primary", 
+            solidHeader = TRUE, fcol3)
+
+##Create the Main body information for the pCOA plot and filtering data
+##4: COlor Data by group selection, #5: ill Label data
+fcol4 <- fluidRow(
+ column(5, uiOutput("choose_grouplabels"))
+ )
+
+###5: Select the Sample labels to choose from
+fcol5 <- fluidRow(
+ column(5,uiOutput("choose_samplelabels"))
+ )
+
+###6: Determines the filters to visualize
+fcol6 <- fluidRow(
+ column(7,
+        checkboxGroupInput("inCheckboxGroup",
+                           "Treatment Selection:",
+                           c("Artificial Colony" = "artificial.colony",
+                             "Robogut" = "robogut",
+                             "Blank" = "Extraction.Blank",
+                             "Study Sample" = "Study",
+                             "Replicate" = "ExtractionReplicate"))
+        )
+ )
+###7: Creates the PCOA Plot
+fcol7 <- fluidRow(
+ column(7, rglwidgetOutput("plot", width=700))
+)
+
+###8: Creates the Legend
+fcol8 <- fluidRow(
+ column(5, plotOutput("legend", width=400, height=1000))
+ )
+
+#Generate Boxes for the filtering and plot generation tools
+box456 <- fluidRow(
+ column(5,
+        box(title = "Coloring Tools", width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol4),
+        box(title = "Labeling Tools", width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol5)
+        ),
+ column(7,
+        box(title="FIltering Tools", width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol6)
+        )
+ )
+box78 <- fluidRow(
+ column(8,
+        box(title = "pCOA Plots", width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol7)
+        ),
+ column(4,
+        box(title="Legend",width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol8)
+ )
+)
+
+##Create the Data Table Summary information
+##Will COlor Data
+fcol9 <- fluidRow(
+ column(11, uiOutput('tabledata'))
+)
+
+#Generate Boxes for text submission, and data table generation
+box9 <- fluidRow(
+ column(12,
+        box(title = "Data Summary", width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol9))
+)
+
+
+##Combine all body information, and assign outputs to each appropriate tab 
+body <- dashboardBody(
+ tabItems(
+  tabItem(tabName="fileuploads",
+          box1, 
+          box2,
+          box3
+          ),
+  tabItem(tabName="pcoaplots",
+          box456,
+          box78),
+  tabItem(tabName="datasummary",
+          box9
+          )
+ )
+)
+dashboardPage(header,sidebar,body)
+ 
+ 
 
