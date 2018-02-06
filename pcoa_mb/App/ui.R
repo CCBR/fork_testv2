@@ -66,17 +66,14 @@ fcol3 <- fluidRow(
 )
 
 #Generate Boxes for text submission, and data table generation
-box1 <- box(title = "Upload Text Files", width=4, status="primary", 
-            solidHeader = TRUE, fcol1)
-box2 <- box(title = "File Upload Summary", width=8, status="primary", 
-            solidHeader = TRUE, fcol2)
-box3 <- box(title = "Confirmation", width=8, status="primary", 
-            solidHeader = TRUE, fcol3)
+box1 <- box(title = "Upload Text Files", width=4, status="primary", solidHeader = TRUE, fcol1)
+box2 <- box(title = "File Upload Summary", width=8, status="primary", solidHeader = TRUE, fcol2)
+box3 <- box(title = "Confirmation", width=8, status="primary", solidHeader = TRUE, fcol3)
 
 ##Create the Main body information for the pCOA plot and filtering data
 ##4: COlor Data by group selection, #5: ill Label data
 fcol4 <- fluidRow(
- column(5, uiOutput("choose_grouplabels"))
+ column(5, uiOutput("choose_colorlabels"))
  )
 
 ###5: Select the Sample labels to choose from
@@ -84,49 +81,60 @@ fcol5 <- fluidRow(
  column(5,uiOutput("choose_samplelabels"))
  )
 
-###6: Determines the filters to visualize
+###6&7&8: Determines the filters to visualize
 fcol6 <- fluidRow(
- column(7,
-        checkboxGroupInput("inCheckboxGroup",
-                           "Treatment Selection:",
-                           c("Artificial Colony" = "artificial.colony",
-                             "Robogut" = "robogut",
-                             "Blank" = "Extraction.Blank",
-                             "Study Sample" = "Study",
-                             "Replicate" = "ExtractionReplicate"))
+ column(5,
+        uiOutput("choose_filt1"),
+        uiOutput("inCheckboxGroup1")
         )
  )
-###7: Creates the PCOA Plot
 fcol7 <- fluidRow(
+ column(5,
+        uiOutput("choose_filt2"),
+        uiOutput("inCheckboxGroup2")
+        
+ )
+)
+fcol8 <- fluidRow(
+ column(5,
+        uiOutput("choose_filt3"),
+        uiOutput("inCheckboxGroup3")
+        
+ )
+)
+
+###9: Creates the Legend
+fcol9 <- fluidRow(
+ column(5, plotOutput("legend", width=400, height=1000))
+)
+
+###10: Creates the PCOA Plot
+fcol10 <- fluidRow(
  column(7, rglwidgetOutput("plot", width=700))
 )
 
-###8: Creates the Legend
-fcol8 <- fluidRow(
- column(5, plotOutput("legend", width=400, height=1000))
- )
 
-#Generate Boxes for the filtering and plot generation tools
-box456 <- fluidRow(
+
+#Generate box4 for the filtering and plot generation tools
+box4 <- fluidRow(
  column(5,
+        box(title="Legend", width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol9),
         box(title = "Coloring Tools", width=NULL, status="primary", collapsible = TRUE,
             solidHeader = TRUE, fcol4),
         box(title = "Labeling Tools", width=NULL, status="primary", collapsible = TRUE,
-            solidHeader = TRUE, fcol5)
+            solidHeader = TRUE, fcol5),
+        box(title="FIltering Option 1", width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol6),
+        box(title="FIltering Option 2", width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol7),
+        box(title="FIltering Option 3", width=NULL, status="primary", collapsible = TRUE,
+            solidHeader = TRUE, fcol8)
         ),
  column(7,
-        box(title="FIltering Tools", width=NULL, status="primary", collapsible = TRUE,
-            solidHeader = TRUE, fcol6)
-        )
- )
-box78 <- fluidRow(
- column(8,
-        box(title = "pCOA Plots", width=NULL, status="primary", collapsible = TRUE,
-            solidHeader = TRUE, fcol7)
-        ),
- column(4,
-        box(title="Legend",width=NULL, status="primary", collapsible = TRUE,
-            solidHeader = TRUE, fcol8)
+        box(title = "pCOA Plots", width=NULL, status="primary",
+            solidHeader = TRUE, fcol10)
+
  )
 )
 
@@ -139,7 +147,7 @@ fcol9 <- fluidRow(
 #Generate Boxes for text submission, and data table generation
 box9 <- fluidRow(
  column(12,
-        box(title = "Data Summary", width=NULL, status="primary", collapsible = TRUE,
+        box(title = "Data Summary", width=NULL, status="primary",
             solidHeader = TRUE, fcol9))
 )
 
@@ -153,14 +161,11 @@ body <- dashboardBody(
           box3
           ),
   tabItem(tabName="pcoaplots",
-          box456,
-          box78),
+          box4
+  ),
   tabItem(tabName="datasummary",
           box9
           )
  )
 )
 dashboardPage(header,sidebar,body)
- 
- 
-

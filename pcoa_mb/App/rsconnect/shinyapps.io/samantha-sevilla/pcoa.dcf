@@ -5,8 +5,8 @@ account: samantha-sevilla
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 221988
-bundleId: 1172437
+bundleId: 1201404
 url: https://samantha-sevilla.shinyapps.io/pCOA/
-when: 1515700412.40377
+when: 1517419477.22991
 asMultiple: FALSE
 asStatic: FALSE

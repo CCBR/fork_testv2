@@ -9,7 +9,7 @@ pcoa_full <- pcoa_full[1:(nrow(pcoa_full)-2),]
 pcoa_full$V2 <- as.numeric(pcoa_full$V2)
 
 
-pcoa_labs <- read.table('./NP0440-MB3_Nephele_Labels_1300.txt',header=TRUE, colClasses = "factor")
+pcoa_labs <- read.table('./pcao_labels.txt',header=TRUE, colClasses = "factor")
 nrow(pcoa_full)
 
 full_data <- cbind(pcoa_full, pcoa_labs)
@@ -43,6 +43,6 @@ plot.new()
 legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
 
 
-dsnames <- names(pcoa_labs)
-cb_options <- list()
-cb_options[dsnames] <- dsnames
+temp <- pcoa_labs
+deleteme <- c("SC249446.PC04924.F09","SC249439.PC04924.H08")
+temp[,StudyID,drop=deleteme]
