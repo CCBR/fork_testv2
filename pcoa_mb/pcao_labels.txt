@@ -1,4 +1,4 @@
-StudyID	SampleID	Plate	Row	Column	Type	Method	Kit	Seq Name	Robots	Batch	Residual
+StudyID	SampleID	Plate	Row	Column	Type	Method	Kit	SeqName	Robots	Batch	Residual
 SC284734.PC04925.E12	SC284734	PC04925	E	12	ZymoS	0	0	D6305	0	0	0
 SC284728.PC04924.E12	SC284728	PC04924	E	12	ZymoS	0	0	D6305	0	0	0
 SC284735.PC04925.F12	SC284735	PC04925	F	12	ZymoS	0	0	D6306	0	0	0

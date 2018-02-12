@@ -27,7 +27,8 @@ function(input,output, session){
    return(NULL)
   
   #Skip the first 9 lines of the PCOA data table, read in the table. 
-  #Removes the last two lines that includes the Biplot and Site data and includes top 3 pCOA data 
+  #Removes the last two lines that includes the Biplot and Site data 
+  #Chooses the sample ID and top 3 pCOA values 
   #Updates all col classes to numeric for evaluation
   #Renames the col1 to StudyID, col2 to pcOA1, col3 to pCOA2, col4 to pCOA3 for later matching
   
@@ -36,32 +37,31 @@ function(input,output, session){
   data_clean <- data_val_ori[1:colschoose,1:4]
   data_clean$V2 <- as.numeric(data_clean$V2)
   names(data_clean)[1] <- "StudyID"
-  names(data_clean)[2] <- "pCOA1"
-  names(data_clean)[3] <- "pCOA2"
-  names(data_clean)[4] <- "pCOA3"
+   names(data_clean)[2] <- "pCOA1"
+   names(data_clean)[3] <- "pCOA2"
+   names(data_clean)[4] <- "pCOA3"
   return(data_clean)
  })
  
  #Takes the input file, with headers, of data labels, saving it to the data_labels matrix
  data_labels <- reactive({
   file2 <- input$file2
-  if (is.null(file2))
-   return(NULL)
+  if (is.null(file2)) return(NULL)
   read.table(fill=TRUE,file=input$file2$datapath, header=TRUE, colClasses = "factor")
  })  
  
  #Display the summary for the PCOA and Lables files provided by the user
  #Each file becomes separate row of summary information to view
  output$filepcoa <- renderTable({
-  if(is.null(data_vals())){return ()}
+  if(is.null(data_vals())) return ()
   input$file
  })
  output$filelabels <- renderTable({
-  if(is.null(data_vals())){return ()}
+  if(is.null(data_vals())) return ()
   input$file2
  })
  output$table <- renderUI({
-  if(is.null(data_vals())){return()}
+  if(is.null(data_vals())) return()
   else
    tabsetPanel(
     tabPanel("File Input Summary", tableOutput("filepcoa"),tableOutput("filelabels"))
@@ -132,67 +132,73 @@ function(input,output, session){
  
  #Create Filters, and subsequent radio buttons for user to filter out sample by category
  ##Filter Level 1
- observe({
-  req(input$file2)
-  dsnames <- names(data_labels())
-  cb_options <- list()
-  cb_options[dsnames] <- dsnames
-  output$choose_filt1<- renderUI({
-   selectInput("filt1", "Filter Level 1", cb_options)
+  observe({
+   req(input$file2)
+   dsnames <- names(data_labels())
+   cb_options <- list()
+   cb_options[dsnames] <- dsnames
+   output$choose_filt1<- renderUI({
+    selectInput("filt1", "Filter Level 1", cb_options)
+   })
   })
- })
- observe({
-  filt1_data <- data_labels()[,input$filt1]
-  filt1_uni <- unique(filt1_data)
-  output$inCheckboxGroup1 <- renderUI({
-   checkboxGroupInput("inCheckboxGroup1", "Filter Level 1 Options:",
-                      choices=filt1_uni, selected=filt1_uni)
+  observe({
+   filt1_data <- data_labels()[,input$filt1]
+   filt1_uni <- unique(filt1_data)
+   output$inCheckboxGroup1 <- renderUI({
+    checkboxGroupInput("inCheckboxGroup1", "Filter Level 1 Options:",
+                       choices=filt1_uni, selected=filt1_uni)
+   })
   })
- })
  
  ##Filter Level 2
- observe({
-  req(input$file2)
-  dsnames <- names(data_labels())
-  cb_options <- list()
-  cb_options[dsnames] <- dsnames
-  choice1 <- input$filt1
-  cb_options <- c(setdiff(cb_options,choice1))
-  output$choose_filt2<- renderUI({
-   selectInput("filt2", "Filter Level 2", cb_options)
+  observe({
+   req(input$file2)
+   dsnames <- names(data_labels())
+   cb_options <- list()
+   cb_options[dsnames] <- dsnames
+   choice1 <- input$filt1
+   cb_options <- c(setdiff(cb_options,choice1))
+   output$choose_filt2<- renderUI({
+    selectInput("filt2", "Filter Level 2", cb_options)
+   })
   })
- })
- observe({
-  filt2_data <- data_labels()[,input$filt2]
-  filt2_uni <- unique(filt2_data)
-  output$inCheckboxGroup2 <- renderUI({
-   checkboxGroupInput("inCheckboxGroup2", "Filter Level 2 Options:",
-                      choices=filt2_uni,selected=filt2_uni)
+  observe({
+   filt1sub <- input$inCheckboxGroup1
+   filt1_data <- data_labels()[data_labels()[,input$filt1] %in% filt1sub,]
+   filt2_data <- filt1_data[,input$filt2]
+   filt2_uni <- unique(filt2_data)
+   output$inCheckboxGroup2 <- renderUI({
+    checkboxGroupInput("inCheckboxGroup2", "Filter Level 2 Options:",
+                       choices=filt2_uni,selected=filt2_uni)
+   })
   })
- })
  
  ##Filter Level 3
- observe({
-  req(input$file2)
-  dsnames <- names(data_labels())
-  cb_options <- list()
-  cb_options[dsnames] <- dsnames
-  choice1 <- input$filt1
-  choice2 <- input$filt2
-  cb_options <- c(setdiff(cb_options,c(choice1, choice2)))
-  output$choose_filt3<- renderUI({
-   selectInput("filt3", "Filter Level 3", cb_options)
+  observe({
+   req(input$file2)
+   dsnames <- names(data_labels())
+   cb_options <- list()
+   cb_options[dsnames] <- dsnames
+   choice1 <- input$filt1
+   choice2 <- input$filt2
+   cb_options <- c(setdiff(cb_options,c(choice1, choice2)))
+   output$choose_filt3<- renderUI({
+    selectInput("filt3", "Filter Level 3", cb_options)
+   })
   })
- })
- observe({
-  filt3_data <- data_labels()[,input$filt3]
-  filt3_uni <- unique(filt3_data)
-  output$inCheckboxGroup3 <- renderUI({
-   checkboxGroupInput("inCheckboxGroup3", "Filter Level 3 Options:",
-                      choices=filt3_uni,
-                      selected=filt3_uni)
+  observe({
+   filt1sub <- input$inCheckboxGroup1
+   filt1_data <- data_labels()[data_labels()[,input$filt1] %in% filt1sub,]
+   filt2sub <- input$inCheckboxGroup2
+   filt2_data <- filt1_data[filt1_data[,input$filt2] %in% filt2sub,]
+   filt3_data <- filt2_data[,input$filt3]
+   filt3_uni <- unique(filt3_data)
+   output$inCheckboxGroup3 <- renderUI({
+    checkboxGroupInput("inCheckboxGroup3", "Filter Level 3 Options:",
+                       choices=filt3_uni,
+                       selected=filt3_uni)
+   })
   })
- })
  
  #Create PCOA plot
  observe({
@@ -213,9 +219,7 @@ function(input,output, session){
    filt3sub <- input$inCheckboxGroup3
    if(is.null(filt1sub)) {
     full_data<-combined_data
-    
-    
-   }else{
+    }else{
     full_data1 = combined_data[combined_data[,input$filt1] %in% filt1sub,]
     full_data2 = full_data1[full_data1[,input$filt2] %in% filt2sub,]
     full_data = full_data2[full_data2[,input$filt3] %in% filt3sub,]
