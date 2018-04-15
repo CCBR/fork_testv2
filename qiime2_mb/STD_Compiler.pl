@@ -12,18 +12,28 @@
 ######################################################################################
 use warnings; use strict;
 use Cwd; use File::chdir; use File::Copy;
+my $logs;
 
 #Ask user for the log file location
 print "What is the path to your Log files\n";
 my $dir_path = <STDIN>; chomp $dir_path;
 
+#Ask user for which file type
 print "\nWhich files do you want to compile\n";
 print "   1: STOUT\n";
 print "   2: STDERROR\n";
 my $type = <STDIN>; chomp $type;
 
+#Ask user if complete or parital logs
+print "\nDo you want to run complete, or partial (C or P)?\n";
+my $complete = <STDIN>; chomp $complete;
+if ($complete=~"P"){
+	print "\nHow many logs have completed (3-8)?\n";
+	$logs =<STDIN>; chomp $logs;
+	} else {$logs =9};
+
 #Call Sub-Routes
-read_file($dir_path, $type);
+read_file($dir_path, $type, $logs);
 
 #################################################################################################################################
 							##SUBROUTINES##
@@ -32,7 +42,7 @@ read_file($dir_path, $type);
 sub read_file {
 	
 	#Initialize variables
-	my($master_path, $type)=@_;
+	my($master_path, $type, $logs)=@_;
 	my @files; my @temp; my @storage;
 	my $end; my $file_path; my $new_file;
 	my $n=3; my $dir_path; my @header;
@@ -48,7 +58,7 @@ sub read_file {
 	}
 	
 	#For each of the stages (3-9), open the directory, read in all of the specified file types, and print to a text file
-	until ($n>9){
+	until ($n>$logs){
 		
 		#Create path for each stage (3-9)
 		$dir_path= $master_path;
