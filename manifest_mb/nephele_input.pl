@@ -1,8 +1,7 @@
 #!/usr/bin/perl
 # Name of file: microbiome.pl
 # Owner: Samantha Sevilla
-# Last Update: 101017
-# Use for GMU Lab Rotation Spring 2017
+# Last Update: 4/23/18
 
 ######################################################################################
 								##NOTES##
@@ -47,20 +46,23 @@ eval "use File::Copy"
 		my $ManiAns = <STDIN>; chomp $ManiAns;
 		if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
 			exit;}
+	print "Do you only need the manifest?";
+		my $man_only = <STDIN>; chomp $man_only;
 	print "Do you want to include study samples (Y or N)? ";
 		my $StudyAns = <STDIN>; chomp $StudyAns;
 	print "What is the date to assoicate with analysis?(04_10_17) ";
 		my $date = <STDIN>; chomp $date;
 	print "How many projects would you like to include? ";
 		my $Proj_Num = <STDIN>; chomp $Proj_Num;
+		
 	until($Proj_Num == 0){
 		print "What is the name of your project? (NP0452-MB3) ";
-			my $ProjName = <STDIN>; chomp $ProjName;
-			push(@Proj_List,$ProjName);
+		my $ProjName = <STDIN>; chomp $ProjName;
+		push(@Proj_List,$ProjName);
 		$Proj_Num = $Proj_Num - 1;
 	}		
 
-###Testing input
+	###Testing input
 	#my $ManiAns = "Y";	
 	#my $StudyAns = "N";
 	#my $date = "test"; chomp $date;
@@ -77,7 +79,7 @@ eval "use File::Copy"
 		\@RunID, \@ProjectID);
 	neph_variables(@SampleID, @ExternalID, @SampleType, @SourceMaterial, @ExtractionBatchID, 
 		@SourcePCRPlate, \@AssayPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph, \@ExtractBatch_Neph, \@Descrip_Neph);
-	FastQ_File($Nephpath, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2);
+	FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2);
 	FastQ_Man($Nephpath, $date, @Proj_List, @SampleID_Neph, @Treatment_Neph, @SourceMaterial, @VialLab_Neph, @AssayPlate_Neph, 
 		@ExtractBatch_Neph, @Descrip_Neph, @filename_R1, @filename_R2);
 
@@ -265,7 +267,7 @@ sub neph_variables{
 sub FastQ_File{
 	
 	#Initialize Variables
-	my ($Nephpath, $RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2) =@_;
+	my ($Nephpath, $man_only, $RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2) =@_;
 	my @foldernames; my @fastqpath;
 	my $b = 0; my $c=0; my $n=0; my $FastP;
 
@@ -315,21 +317,23 @@ sub FastQ_File{
 	}
 
 	#Create copies and move FASTQ File to Nephele Folder
-	opendir (NDIR, $Nephpath);
-	foreach my $line(@fastqpath) {
+	if($man_only=~'N'){
+		opendir (NDIR, $Nephpath);
+		foreach my $line(@fastqpath) {
+			
+			#Open directory with FastQ folders
+			$CWD = $line;
+			my $tempfile_R1 = $filename_R1[$b];
+			my $tempfile_R2 = $filename_R2[$c];
 		
-		#Open directory with FastQ folders
-		$CWD = $line;
-		my $tempfile_R1 = $filename_R1[$b];
-		my $tempfile_R2 = $filename_R2[$c];
-	
-	#Create loop for files to be copied and pasted to nephele
-		copy ($tempfile_R1, $Nephpath) or die;
-		copy ($tempfile_R2, $Nephpath) or die;
-		$b++; $c++;
+		#Create loop for files to be copied and pasted to nephele
+			copy ($tempfile_R1, $Nephpath) or die;
+			copy ($tempfile_R2, $Nephpath) or die;
+			$b++; $c++;
+		}
+		closedir(NDIR);
+		print "\nCompleted moving FastQ files";
 	}
-	closedir(NDIR);
-	print "\nCompleted moving FastQ files";
 }
 
 sub FastQ_Man {
@@ -393,3 +397,4 @@ exit;
 ##8/4/17: Changed MR input to search, allowed for second study input
 ##8/6/17: Continued with 8/4 changes, fixed bugs for second and third study input
 ##9/11/17: Added feature to compare Study sample that pairs with Extraction Replicate
+##4/23/18: Added option to only create manifest file
