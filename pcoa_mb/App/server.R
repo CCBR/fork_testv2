@@ -87,25 +87,27 @@ function(input,output, session){
  
  ########################################################################
  #############################pCOA Plots Page###########################
- #Create palette of colors
- palette(c(brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
-           brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
-           brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
-           brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
-           brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
-           brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
-           brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
-           brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
-           brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
-           brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
-           brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
-           brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
-           brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
-           brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
-           brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
-           brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent"),
-           brewer.pal(n=12, name = "Set3"), brewer.pal(n=12, name = "Paired"),
-           brewer.pal(n=11, name = "Spectral"), brewer.pal(n=7, name = "Accent")
+ #Create palette of colors (https://moderndata.plot.ly/create-colorful-graphs-in-r-with-rcolorbrewer-and-plotly/)
+ palette(c(brewer.pal(n=8, name = "Set1"), brewer.pal(n=9, name = "Dark2"), brewer.pal(n=8, name = "Accent"), 
+           brewer.pal(n=9, name = "Pastel1"), brewer.pal(n=9, name = "Greens"), brewer.pal(n=9, name = "Purples"),
+           brewer.pal(n=9, name = "YlOrBr"), brewer.pal(n=12, name = "Set3"), brewer.pal(n=9, name = "Reds"), 
+           brewer.pal(n=9, name = "Blues"), brewer.pal(n=9, name = "Oranges"), brewer.pal(n=9, name = "Greys"), 
+           brewer.pal(n=8, name = "Dark2"), brewer.pal(n=9, name = "Set1"), brewer.pal(n=8, name = "Accent"), 
+           brewer.pal(n=9, name = "Pastel1"), brewer.pal(n=9, name = "Greens"), brewer.pal(n=9, name = "Purples"),
+           brewer.pal(n=9, name = "YlOrBr"), brewer.pal(n=12, name = "Set3"), brewer.pal(n=9, name = "Reds"), 
+           brewer.pal(n=9, name = "Blues"), brewer.pal(n=9, name = "Oranges"), brewer.pal(n=9, name = "Greys"), 
+           brewer.pal(n=8, name = "Dark2"), brewer.pal(n=9, name = "Set1"), brewer.pal(n=8, name = "Accent"), 
+           brewer.pal(n=9, name = "Pastel1"), brewer.pal(n=9, name = "Greens"), brewer.pal(n=9, name = "Purples"),
+           brewer.pal(n=9, name = "YlOrBr"), brewer.pal(n=12, name = "Set3"), brewer.pal(n=9, name = "Reds"), 
+           brewer.pal(n=9, name = "Blues"), brewer.pal(n=9, name = "Oranges"), brewer.pal(n=9, name = "Greys"), 
+           brewer.pal(n=8, name = "Dark2"), brewer.pal(n=9, name = "Set1"), brewer.pal(n=8, name = "Accent"), 
+           brewer.pal(n=9, name = "Pastel1"), brewer.pal(n=9, name = "Greens"), brewer.pal(n=9, name = "Purples"),
+           brewer.pal(n=9, name = "YlOrBr"), brewer.pal(n=12, name = "Set3"), brewer.pal(n=9, name = "Reds"), 
+           brewer.pal(n=9, name = "Blues"), brewer.pal(n=9, name = "Oranges"), brewer.pal(n=9, name = "Greys"), 
+           brewer.pal(n=8, name = "Dark2"), brewer.pal(n=9, name = "Set1"), brewer.pal(n=8, name = "Accent"), 
+           brewer.pal(n=9, name = "Pastel1"), brewer.pal(n=9, name = "Greens"), brewer.pal(n=9, name = "Purples"),
+           brewer.pal(n=9, name = "YlOrBr"), brewer.pal(n=12, name = "Set3"), brewer.pal(n=9, name = "Reds"), 
+           brewer.pal(n=9, name = "Blues"), brewer.pal(n=9, name = "Oranges"), brewer.pal(n=9, name = "Greys")
  ))
  
  #Create dropdown list from the column names of the data_lables file, shown to user

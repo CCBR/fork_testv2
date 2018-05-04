@@ -14,17 +14,30 @@ use warnings; use strict;
 use Cwd; use File::chdir; use File::Copy;
 my $logs;
 
-#Ask user for the manifest file location
-print "What is the path to your manifest file (generated from LIMS)\n";
-my $dir_path = <STDIN>; chomp $dir_path;
+#Ask user if they want to create, or check a manifest
+print "Do you want to create (1), or check(2) a manifest?\n";
+my $ans = <STDIN>; chomp $ans;
 
-#Ask user for QIIME2 path folder
-print "\nWhat is the path to the QIIME analysis folder\n";
-my $anal_path = <STDIN>; chomp $anal_path;
+if ($ans==1){
+	#Ask user for the manifest file location
+	print "What is the path to your manifest file (generated from LIMS)\n";
+	my $dir_path = <STDIN>; chomp $dir_path;
 
-#Call Sub-Routes
-convertfile($dir_path, $anal_path);
+	#Ask user for QIIME2 path folder
+	print "\nWhat is the path to the QIIME analysis folder\n";
+	my $anal_path = <STDIN>; chomp $anal_path;
 
+	#Call Sub-Routes
+	convertfile($dir_path, $anal_path);
+} else {
+	#Ask user for QIIME2 path folder
+	print "\nWhat is the path to the QIIME analysis folder\n";
+	my $anal_path = <STDIN>; chomp $anal_path;
+
+	#Call Sub-Routes
+	checkfile($anal_path);
+
+}
 #################################################################################################################################
 							##SUBROUTINES##
 #################################################################################################################################
@@ -49,10 +62,9 @@ sub convertfile {
 
 	#Read through each line of the directory
 	for my $line (@temp) {
-
 		#Remove carriage return
-		$line =~ s/\r$//g;
-		
+		$line =~ s/\\r$//g;		
+
 		#Store each files data
 		push(@storage, $line);
 	}
@@ -70,4 +82,28 @@ sub convertfile {
 		
 	print "\n***Manifest conversion complete***\n";
 	print "File stored: $anal_path\n";
+}
+
+sub checkfile{
+
+	#Initialize variables
+	my($anal_path)=@_;
+	my @manifest; my @storage;
+	
+	#Change directory to the manifest location
+	$CWD=$anal_path;
+	
+	#Store the manifest file
+	opendir(DIR, $anal_path) or die "Can't open directory $anal_path!";
+	@manifest = grep (-f, <*.txt>);
+	closedir(DIR);
+	
+	#Read in manifest file
+	open(READ_FILE, $manifest[0]);
+	my @temp = <READ_FILE>;
+
+	#Read through each line of the directory
+	for my $line (@temp) {
+		print "$line";
+	}
 }

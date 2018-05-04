@@ -1,8 +1,6 @@
 ---
 title: "R Notebook"
-output: 
-  html_notebook: 
-    highlight: pygments
+output: pdf_document
 ---
 
 ###########################################################################
