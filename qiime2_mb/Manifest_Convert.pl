@@ -21,12 +21,14 @@ my $ans = <STDIN>; chomp $ans;
 if ($ans==1){
 	#Ask user for the manifest file location
 	print "What is the path to your manifest file (generated from LIMS)\n";
-	my $dir_path = <STDIN>; chomp $dir_path;
-
+	#my $dir_path = <STDIN>; chomp $dir_path;
+		my $dir_path="T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis"; ##Testing
+	
 	#Ask user for QIIME2 path folder
 	print "\nWhat is the path to the QIIME analysis folder\n";
-	my $anal_path = <STDIN>; chomp $anal_path;
-
+	#my $anal_path = <STDIN>; chomp $anal_path;
+		my $anal_path = "T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084_MB4and5"; ##Testing
+		
 	#Call Sub-Routes
 	convertfile($dir_path, $anal_path);
 } else {
@@ -59,24 +61,25 @@ sub convertfile {
 	#Read in manifest file
 	open(READ_FILE, $manifest[0]);
 	my @temp = <READ_FILE>;
-
+	close (READ_FILE);
+	
 	#Read through each line of the directory
 	for my $line (@temp) {
 		#Remove carriage return
-		$line =~ s/\\r$//g;		
+		$line =~  s/\r\n$/\n/;		
 
 		#Store each files data
 		push(@storage, $line);
 	}
-	
+
 	#Change directory to the final file location
 	$CWD=$anal_path;
-	
+
 	#Name the new file
 	my $new_file="manifest.txt";
 		
 	#Print the compiled log to a new file
-	open (FILE, ">$new_file") or die;
+	open (FILE, ">$new_file") or die "Error creating new file";
 		print (FILE @storage);
 		close (FILE);
 		

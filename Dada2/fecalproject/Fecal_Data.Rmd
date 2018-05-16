@@ -1,0 +1,317 @@
+---
+title: "Fecal Extractions"
+output: word_document
+editor_options: 
+  chunk_output_type: console
+---
+Based on vigenette
+-https://benjjneb.github.io/dada2/bigdata_paired.html
+
+Install packages and load librarys
+```{r}
+.cran_packages <- c("ggplot2", "gridExtra", "survival")
+.bioc_packages <- c("dada2", "phyloseq", "DECIPHER", "phangorn")
+.inst <- .cran_packages %in% installed.packages()
+if(any(!.inst)) {
+   install.packages(.cran_packages[!.inst])
+}
+.inst <- .bioc_packages %in% installed.packages()
+if(any(!.inst)) {
+   source("http://bioconductor.org/biocLite.R")
+   biocLite(.bioc_packages[!.inst], ask = F)
+}
+sapply(c(.cran_packages, .bioc_packages), require, character.only = TRUE)
+source("http://bioconductor.org/biocLite.R")
+biocLite("phyloseq")
+library("knitr")
+library(dada2); packageVersion("dada2")
+library(phangorn)
+library("phyloseq")
+library("gridExtra")
+library("ggplot2")
+opts_chunk$set(cache = FALSE,fig.path="dadafigure/")
+```
+
+Perform Filtering of data of Run 3
+```{r}
+# Set path of samples
+pathF <- "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run3/forward"
+pathR <- "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run3/reverse"
+
+#Set path of filtered samples
+filtpathF <- file.path(pathF, "filtered") # Filtered forward files go into the pathF/filtered/ subdirectory
+filtpathR <- file.path(pathR, "filtered") # ...
+fastqFs <- sort(list.files(pathF, pattern="fastq.gz"))
+fastqRs <- sort(list.files(pathR, pattern="fastq.gz"))
+
+#QC check to make sure fastq forward and reverse are the same
+if(length(fastqFs) != length(fastqRs)) stop("Forward and reverse files do not match.")
+
+
+# Filt and trim the data, store new files in filtered path
+filterAndTrim(fwd=file.path(pathF, fastqFs), filt=file.path(filtpathF, fastqFs),
+              rev=file.path(pathR, fastqRs), filt.rev=file.path(filtpathR, fastqRs),
+              truncLen=c(240,200), maxEE=2, truncQ=11, maxN=0, rm.phix=TRUE,
+              compress=TRUE, verbose=TRUE, multithread=TRUE)
+```
+
+Construct Matrix for Run 3
+```{r}
+# File parsing of filtered FastQ files
+filtpathF <- "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run3/forward/filtered" 
+filtpathR <- "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run3/reverse"
+filtFs <- list.files(filtpathF, pattern="fastq.gz", full.names = TRUE)
+filtRs <- list.files(filtpathR, pattern="fastq.gz", full.names = TRUE)
+
+#Parse sample names
+sample.names <- sapply(strsplit(basename(filtFs), "_"), `[`, 1) # Assumes filename = samplename_primer.fastq.gz
+sample.namesR <- sapply(strsplit(basename(filtRs), "_"), `[`, 1) # Assumes filename = samplename_primer.fastq.gz
+if(!identical(sample.names, sample.namesR)) stop("Forward and reverse files do not match.")
+names(filtFs) <- sample.names
+names(filtRs) <- sample.names
+
+
+# Learn error rates
+set.seed(100)
+errF <- learnErrors(filtFs, nbases=1e8, multithread=TRUE)
+errR <- learnErrors(filtRs, nbases=1e8, multithread=TRUE)
+
+# Sample inference and merger of paired-end reads
+mergers <- vector("list", length(sample.names))
+names(mergers) <- sample.names
+for(sam in sample.names) {
+  cat("Processing:", sam, "\n")
+    derepF <- derepFastq(filtFs[[sam]])
+    ddF <- dada(derepF, err=errF, multithread=TRUE)
+    derepR <- derepFastq(filtRs[[sam]])
+    ddR <- dada(derepR, err=errR, multithread=TRUE)
+    merger <- mergePairs(ddF, derepF, ddR, derepR)
+    mergers[[sam]] <- merger
+}
+#Remove unneeded files
+rm(derepF); rm(derepR)
+
+# Construct sequence table and write
+seqtab <- makeSequenceTable(mergers)
+saveRDS(seqtab, "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run3/Output/seqtabrun3.rds")
+```
+
+Chimeras and Taxonomy - Merge both runs
+```{r}
+# Merge multiple runs 
+st1 <- readRDS("C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/seqtab073.rds")
+st2 <- readRDS("C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/seqtab074.rds")
+st.all <- mergeSequenceTables(st1, st2)
+
+# Remove chimeras
+seqtab <- removeBimeraDenovo(st.all, method="consensus", multithread=TRUE)
+
+# Assign taxonomy
+taxtab <- assignTaxonomy(seqtab, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/References", multithread=TRUE)
+
+# Write to disk
+saveRDS(seqtab, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/seqtab_final.rds") 
+saveRDS(tax, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/tax_final.rds")
+```
+
+Construct Phylo Tree
+```{r}
+#Pull all the sequence data
+seqs <- getSequences(seqtab)
+names(seqs) <- seqs 
+alignment <- AlignSeqs(DNAStringSet(seqs), anchor=NA)
+
+#Allign the tree
+phang.align <- phyDat(as(alignment, "matrix"), type="DNA")
+dm <- dist.ml(phang.align)
+treeNJ <- NJ(dm) 
+fit = pml(treeNJ, data=phang.align)
+
+fitGTR <- update(fit, k=4, inv=0.2)
+fitGTR <- optim.pml(fitGTR, model="GTR", optInv=TRUE, optGamma=TRUE,
+                      rearrangement = "stochastic", control = pml.control(trace = 0))
+detach("package:phangorn", unload=TRUE)
+```
+
+Create PhyloSeq Object
+```{r}
+#Set path of metadata of sample information
+mimarks_path <- file.path("C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Input_PhyloSeq.csv")
+samdf <- read.csv(mimarks_path, header=TRUE)
+all(rownames(seqtab) %in% samdf$SampleID) 
+# Verificattion - TRUE - if false check sample names - they must match
+
+#Create phylo object for conversion - includes tax data and metadata
+rownames(samdf) <- samdf$SampleID
+samdf <- samdf[rownames(seqtab), ]
+ps <- phyloseq(tax_table(taxtab),
+                 sample_data(samdf),
+                 otu_table(seqtab, taxa_are_rows = FALSE),
+                 phy_tree(fitGTR$tree))
+saveRDS(ps, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/ps_ori.rds")
+```
+
+Load Phylo Data
+```{r}
+#load the phylo object
+ps = readRDS("C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/ps_ori.rds")
+```
+
+PhyloSeq Filtering - Supervised
+```{r}
+#Determine if anything needs to be filtered
+table(tax_table(ps)[, "Phylum"], exclude = NULL) 
+
+#Remove all NA from set
+ps0 <- subset_taxa(ps, !is.na(Phylum) & !Phylum %in% c("", "uncharacterized")) 
+
+# Compute prevalence of each feature, store as data.frame
+prevdf = apply(X = otu_table(ps0),
+                 MARGIN = ifelse(taxa_are_rows(ps0), yes = 1, no = 2),
+                 FUN = function(x){sum(x > 0)})
+# Add taxonomy and total read counts to this data.frame
+prevdf = data.frame(Prevalence = prevdf,
+                      TotalAbundance = taxa_sums(ps0),
+                      tax_table(ps0))
+plyr::ddply(prevdf, "Phylum", function(df1){cbind(mean(df1$Prevalence),sum(df1$Prevalence))})
+
+#Filter species foud in one one sample - Parcubacteria, Saccharibacteria
+filterPhyla = c("Parcubacteria", "Saccharibacteria")
+
+# Filter entries with unidentified Phylum.
+ps1 = subset_taxa(ps0, !Phylum %in% filterPhyla)
+
+#Review diversity (richness)
+plot_richness(ps1,x="Timepoint",measures=c("Shannon","Simpson", "Fisher"), color="Timepoint") + theme_bw() + geom_boxplot()
+
+plot_richness(ps1,x="Diet",measures=c("Shannon","Simpson", "Fisher"), color="Diet") + theme_bw() + geom_boxplot()
+
+plot_richness(ps1,x="SampleType",measures=c("Shannon","Simpson", "Fisher"), color="Diet") + theme_bw() + geom_boxplot()
+
+
+```
+
+PhyloSeq Filtering - Unsupervised
+```{r}
+#Review dataset for phylum that are under represented
+prevdf1 = subset(prevdf, Phylum %in% get_taxa_unique(ps1, "Phylum"))
+ggplot(prevdf1, aes(TotalAbundance, Prevalence / nsamples(ps0),color=Phylum)) + geom_hline(yintercept = 0.05, alpha = 0.5, linetype = 2) + geom_point(size = 2, alpha = 0.7) + scale_x_log10() +  xlab("Total Abundance") + ylab("Prevalence [Frac. Samples]") + facet_wrap(~Phylum) + theme(legend.position="none")
+```
+
+Define New thresholds
+```{r}
+#  Define prevalence threshold as 5% of total samples
+prevalenceThreshold = 0.05 * nsamples(ps0)
+prevalenceThreshold
+
+# Execute prevalence filter, using `prune_taxa()` function
+keepTaxa = rownames(prevdf1)[(prevdf1$Prevalence >= prevalenceThreshold)]
+ps2 = prune_taxa(keepTaxa, ps0)
+```
+
+Aggregate the data
+```{r}
+# How many genera would be present after filtering?
+length(get_taxa_unique(ps2, taxonomic.rank = "Genus"))
+
+#Rank on Genus for set - compare
+ps3 = tax_glom(ps2, "Genus", NArm = TRUE)
+h1 = 0.4
+ps4 = tip_glom(ps2, h = h1)
+multiPlotTitleTextSize = 8
+p2tree = plot_tree(ps2, method = "treeonly",
+                     ladderize = "left",
+                     title = "Before Agglomeration") +
+  theme(plot.title = element_text(size = multiPlotTitleTextSize))
+p3tree = plot_tree(ps3, method = "treeonly",
+                     ladderize = "left", title = "By Genus") +
+  theme(plot.title = element_text(size = multiPlotTitleTextSize))
+p4tree = plot_tree(ps4, method = "treeonly",
+                     ladderize = "left", title = "By Height") +
+  theme(plot.title = element_text(size = multiPlotTitleTextSize))
+
+# group plots together
+plot(grid.arrange(nrow = 1, p2tree, p3tree, p4tree))
+```
+
+Transform data for abundances
+```{r}
+plot_abundance = function(physeq,title = "",
+			     Facet = "Order", Color = "Phylum"){
+  # Arbitrary subset, based on Phylum, for plotting
+  p1f = subset_taxa(physeq, Phylum %in% c("Firmicutes"))
+  mphyseq = psmelt(p1f)
+  mphyseq <- subset(mphyseq, Abundance > 0)
+  ggplot(data = mphyseq, mapping = aes_string(x = "Diet",y = "Abundance",
+                                 color = Color, fill = Color)) +
+    geom_violin(fill = NA) +
+    geom_point(size = 1, alpha = 0.3,
+                position = position_jitter(width = 0.3)) +
+    facet_wrap(facets = Facet) + scale_y_log10()+
+    theme(legend.position="none")
+}
+
+#Transform and plot the before and after
+ps3ra = transform_sample_counts(ps3, function(x){x / sum(x)})
+plotBefore = plot_abundance(ps3,"")
+plotAfter = plot_abundance(ps3ra,"Genus")
+
+# Combine each plot into one graphic.
+grid.arrange(nrow = 2, plotBefore, plotAfter)
+
+#Subset further based on taxa findings, if necessary
+psOrd = subset_taxa(ps3, Order == "Lactobacillales")
+plot_abundance(psOrd, Facet = "Genus", Color = NULL)
+```
+Create Phylogeny Trees
+```{r}
+#Remove decimals from tree for labels
+phy_tree(ps3ra)$node.label = substr(phy_tree(ps3ra)$node.label, 1, 4)
+
+#Plot by Variables
+plot_tree(ps3ra, nodelabf=nodeplotboot(), ladderize="left", color="Timepoint")
+plot_tree(ps3ra, nodelabf=nodeplotboot(), ladderize="left", color="Diet")
+plot_tree(ps3ra, nodelabf=nodeplotboot(), ladderize="left", color="SampleType")
+plot_tree(ps3ra, nodelabf=nodeplotboot(), ladderize="left", color="Timepoint", shape="Diet")
+
+
+#Plot by Phylum
+plot_tree(ps3ra,color="Phylum", shape="Timepoint")
+plot_tree(ps3ra,color="Phylum", shape="Diet")
+plot_tree(ps3ra,color="Phylum", shape="SampleType")
+
+#Plot by Class
+plot_tree(ps3ra,color="Class", shape="Timepoint")
+plot_tree(ps3ra,color="Class", shape="Diet")
+plot_tree(ps3ra,color="Class", shape="SampleType")
+
+#Plot by Genus
+plot_tree(ps3ra,color="Genus", shape="Timepoint")
+plot_tree(ps3ra,color="Genus", shape="Diet")
+plot_tree(ps3ra,color="Genus", shape="SampleType")
+
+#Create spirl plots
+plot_tree(ps3ra, color="Diet", ladderize="left") + coord_polar(theta="y")
+
+```
+
+Create Barplots by Phylum and Class
+```{r}
+ps4 <- prune_taxa(taxa_sums(ps3ra) > 0, ps3ra)
+
+plot_bar(ps4,fill="Phylum",x="Worm")
+plot_bar(ps4,fill="Phylum",x="Timepoint")
+plot_bar(ps4,fill="Phylum",x="SampleType")
+plot_bar(ps4,fill="Phylum",x="Diet")
+plot_bar(ps4,fill="Class",x="Diet")
+plot_bar(ps4,fill="Class",x="SampleType")
+plot_bar(ps4,fill="Class",x="Timepoint")
+
+```
+
+Save ps
+```{r}
+ps_pruned <-saveRDS(ps3ra, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/ps_pruned.rds")
+ps_filt <- saveRDS(ps2, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/ps_filt.rds")
+```
+
