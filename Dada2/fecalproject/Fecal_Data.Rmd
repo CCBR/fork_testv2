@@ -5,9 +5,10 @@ editor_options:
   chunk_output_type: console
 ---
 Based on vigenette
--https://benjjneb.github.io/dada2/bigdata_paired.html
+https://benjjneb.github.io/dada2/bigdata_paired.html
+https://bioconductor.org/packages/devel/bioc/vignettes/dada2/inst/doc/dada2-intro.html
 
-Install packages and load librarys
+Install packages
 ```{r}
 .cran_packages <- c("ggplot2", "gridExtra", "survival")
 .bioc_packages <- c("dada2", "phyloseq", "DECIPHER", "phangorn")
@@ -23,13 +24,17 @@ if(any(!.inst)) {
 sapply(c(.cran_packages, .bioc_packages), require, character.only = TRUE)
 source("http://bioconductor.org/biocLite.R")
 biocLite("phyloseq")
+```
+
+
+Load Library's
+```{r}
 library("knitr")
 library(dada2); packageVersion("dada2")
 library(phangorn)
 library("phyloseq")
 library("gridExtra")
 library("ggplot2")
-opts_chunk$set(cache = FALSE,fig.path="dadafigure/")
 ```
 
 Perform Filtering of data of Run 3
@@ -47,8 +52,12 @@ fastqRs <- sort(list.files(pathR, pattern="fastq.gz"))
 #QC check to make sure fastq forward and reverse are the same
 if(length(fastqFs) != length(fastqRs)) stop("Forward and reverse files do not match.")
 
+#Review Quality Profiles of any file
+plotQualityProfile(filtpathF[1])
+plotQualityProfile(filtpathR)
 
-# Filt and trim the data, store new files in filtered path
+
+# Filt and trim the data, store new files in filtered path- forward trimmed LESS than reverse
 filterAndTrim(fwd=file.path(pathF, fastqFs), filt=file.path(filtpathF, fastqFs),
               rev=file.path(pathR, fastqRs), filt.rev=file.path(filtpathR, fastqRs),
               truncLen=c(240,200), maxEE=2, truncQ=11, maxN=0, rm.phix=TRUE,
@@ -59,17 +68,19 @@ Construct Matrix for Run 3
 ```{r}
 # File parsing of filtered FastQ files
 filtpathF <- "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run3/forward/filtered" 
-filtpathR <- "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run3/reverse"
+filtpathR <- "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run3/reverse/filtered"
 filtFs <- list.files(filtpathF, pattern="fastq.gz", full.names = TRUE)
 filtRs <- list.files(filtpathR, pattern="fastq.gz", full.names = TRUE)
 
 #Parse sample names
-sample.names <- sapply(strsplit(basename(filtFs), "_"), `[`, 1) # Assumes filename = samplename_primer.fastq.gz
+sample.namesF <- sapply(strsplit(basename(filtFs), "_"), `[`, 1) # Assumes filename = samplename_primer.fastq.gz
 sample.namesR <- sapply(strsplit(basename(filtRs), "_"), `[`, 1) # Assumes filename = samplename_primer.fastq.gz
-if(!identical(sample.names, sample.namesR)) stop("Forward and reverse files do not match.")
-names(filtFs) <- sample.names
-names(filtRs) <- sample.names
+if(!identical(sample.namesF, sample.namesR)) stop("Forward and reverse files do not match.")
 
+#Remove unneeded files
+#Apply names - are the same, so apply F to both - to the filtered files
+names(filtFs) <- sample.namesF
+names(filtRs) <- sample.namesF
 
 # Learn error rates
 set.seed(100)
@@ -77,9 +88,9 @@ errF <- learnErrors(filtFs, nbases=1e8, multithread=TRUE)
 errR <- learnErrors(filtRs, nbases=1e8, multithread=TRUE)
 
 # Sample inference and merger of paired-end reads
-mergers <- vector("list", length(sample.names))
-names(mergers) <- sample.names
-for(sam in sample.names) {
+mergers <- vector("list", length(sample.namesF))
+names(mergers) <- sample.namesF
+for(sam in sample.namesF) {
   cat("Processing:", sam, "\n")
     derepF <- derepFastq(filtFs[[sam]])
     ddF <- dada(derepF, err=errF, multithread=TRUE)
@@ -88,7 +99,9 @@ for(sam in sample.names) {
     merger <- mergePairs(ddF, derepF, ddR, derepR)
     mergers[[sam]] <- merger
 }
-#Remove unneeded files
+
+#Stopped at SC304924-PC07578-A-11
+
 rm(derepF); rm(derepR)
 
 # Construct sequence table and write
