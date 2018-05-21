@@ -87,10 +87,13 @@ set.seed(100)
 errF <- learnErrors(filtFs, nbases=1e8, multithread=TRUE)
 errR <- learnErrors(filtRs, nbases=1e8, multithread=TRUE)
 
+#Create list of names partially completed runs
+sample.names.partial <- sample.namesF[86:96]
+
 # Sample inference and merger of paired-end reads
 mergers <- vector("list", length(sample.namesF))
 names(mergers) <- sample.namesF
-for(sam in sample.namesF) {
+for(sam in sample.names.partial) {
   cat("Processing:", sam, "\n")
     derepF <- derepFastq(filtFs[[sam]])
     ddF <- dada(derepF, err=errF, multithread=TRUE)
@@ -99,8 +102,6 @@ for(sam in sample.namesF) {
     merger <- mergePairs(ddF, derepF, ddR, derepR)
     mergers[[sam]] <- merger
 }
-
-#Stopped at SC304924-PC07578-A-11
 
 rm(derepF); rm(derepR)
 
@@ -112,23 +113,34 @@ saveRDS(seqtab, "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiim
 Chimeras and Taxonomy - Merge both runs
 ```{r}
 # Merge multiple runs 
-st1 <- readRDS("C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/seqtab073.rds")
-st2 <- readRDS("C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/seqtab074.rds")
-st.all <- mergeSequenceTables(st1, st2)
+st1 <- readRDS("T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run1/Output/seqtabrun1.rds")
+st2 <- readRDS("T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run2/Output/seqtabrun2.rds")
+st3 <- readRDS("T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Run3/Output/seqtabrun3.rds")
+st.all <- mergeSequenceTables(st1, st2, st3)
 
 # Remove chimeras
-seqtab <- removeBimeraDenovo(st.all, method="consensus", multithread=TRUE)
+#seqtab <- removeBimeraDenovo(st.all, method="consensus", multithread=TRUE)
+seqtab <- removeBimeraDenovo(st3, method="consensus", multithread=TRUE) ###Only run 3 used
 
-# Assign taxonomy
-taxtab <- assignTaxonomy(seqtab, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/References", multithread=TRUE)
+#Percent remaining
+sum(seqtab)/sum(st3)
+
+# Assign taxonomy using Silva reference
+taxtab <- assignTaxonomy(seqtab, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/References/silva_nr_v128_train_set.fa.gz", multithread=TRUE)
+taxtab <- addSpecies(seqtab, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/References/silva_species_assignment_v128.fa.gz")
 
 # Write to disk
-saveRDS(seqtab, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/seqtab_final.rds") 
-saveRDS(tax, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/Output/tax_final.rds")
+saveRDS(seqtab, "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Output/sextab_final_3only.rds") 
+saveRDS(taxtab, "T:/DCEG/CGF/Laboratory/Projects/MR-0084/NP0084-MB5/QC Data/qiime/Combo with NP0084-MB4/04_23_18_input_combo/Output/tax_final_3only.rds")
 ```
 
 Construct Phylo Tree
 ```{r}
+taxa <- assignTaxonomy(seqtab.nochim, "C:/Users/sevillas2/Google Drive/My Documents/Education/George Mason University/BINF703/2018_Spring_BaranovaGillevet/Analysis/DADA2/References/silva_nr_v128_train_set.fa.gz", multithread=TRUE)
+taxa.print <- taxa # Removing sequence rownames for display only
+rownames(taxa.print) <- NULL
+head(taxa.print)
+
 #Pull all the sequence data
 seqs <- getSequences(seqtab)
 names(seqs) <- seqs 
