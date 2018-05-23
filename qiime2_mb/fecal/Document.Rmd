@@ -1,0 +1,109 @@
+---
+title: "R Notebook"
+output: word_document
+---
+
+#Controls Overview
+Two types of controls (extraction and sequencing) were used in this experiment, for a total of 10 different controls:
+ Extraction Controls (Artificial Colony, Robogut, Zymobiomics Control 1, Zymobiomics Control2, Extraction Blank)
+ Sequencing Controls (ATTC 1-4, Zymobiomics Seq Control)
+ 
+#Libraries
+```{r}
+#Load required libraries
+library("biom")
+library(data.table)
+```
+
+#Control Makeup
+Read in each of the controls composition files
+```{r}
+control_full <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Compositions\\MasterSpeciesList.txt",sep="\t",header=TRUE)
+
+#Separate database by control colonies
+art.col <- subset(control_full, !(Art.Col=='A'))
+zymo.ext200 <- subset(control_full, !(Zymo.Ext=='A'))
+zymo.ext2000 <-subset(control_full, !(Zymo.Ext=='A'))
+msa1000 <-subset(control_full, !(MSA1000=='A'))
+msa1001 <- subset(control_full, !(MSA1001=='A'))
+msa1002 <- subset(control_full, !(MSA1002=='A'))
+msa1003 <- subset(control_full, !(MSA1003=='A'))
+zymo.seq <-subset(control_full, !(zymo.seq=='A'))
+
+#Create list of all the species to review
+species_list_controls <- as.character(unique(control_full$Species))
+species_list_controls
+```
+
+#Sample Data
+Read in the entire sample and OTU databses, then merge the databases. Finally filter for controls only
+```{r}
+#Read in database with variable information and list of samples that did not meet the sequencing threshold
+complete_info <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\sampledata.txt",sep="\t",header=TRUE)
+complete_removed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\samples_being_ignored.txt",sep="\t")
+
+#Remove failed samples from info database
+filtered_info <-subset(complete_info, !(NephID %in% complete_removed$V1))
+
+#Verify the numbers are the same
+nrow(complete_info) - nrow(complete_removed)
+nrow(filtered_info)
+
+#Remove Study samples from database
+control_info <- subset(filtered_info,!Type=='Study')
+
+#Verify the subsetting
+nrow(filtered_info) - sum(filtered_info$Type=='Study')
+nrow(control_info)
+```
+
+Nephele OTU Table
+```{r}
+#Read in BIOM database output from Nephele and convert it to a data frame
+dat <- read_biom("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\otu_table_mc2_w_tax.biom")
+otu_table  <- as.data.frame(as.matrix(biom_data(dat)))
+
+#Transpose the otu_table so same names are in the rows, and species are in the columns
+otu_table_flipped <- transpose(otu_table)
+colnames(otu_table_flipped) <- rownames(otu_table)
+rownames(otu_table_flipped) <- colnames(otu_table)
+
+#Subset the OTU table to include only passed control samples by finding selecting only the rows with names that 
+#match the SeqID names of the control_info database
+otu_controls <- subset(otu_table_flipped, rownames(otu_table_flipped) %in% control_info$NephID)
+
+#Review database
+head(otu_controls)
+
+#Samples in the BIOM database must have representative species with higher than 2 OTU sequences, otherwise they are dropped. In this instance 1 sample was lost - Sample SC326763.PC07578.A12
+nrow(otu_controls)
+```
+
+Update species names to reference database
+```{r}
+#Read in reference file
+references_complete <- observation_metadata(dat)
+head(references_complete)
+
+#Create a list of unique reference species, then remove D_6__
+species_list_reference<- unique(references_complete$taxonomy7)
+species_list_reference<- gsub("D_6__","",species_list_reference)
+
+#Determine which control species are not included in reference database
+missing_species <- species_list_controls[!(species_list_controls %in% species_list_reference)]
+missing_species
+
+#Subset the taxonomy in question
+temp <- subset(references_complete, taxonomy7=='D_6__Acinetobacter baumannii')
+temp
+unique(temp$taxonomy7)
+```
+
+Generate info and otu table with selected controls
+```{r}
+#Subset info database with only control information
+control_removed 
+control_otu 
+
+
+```
