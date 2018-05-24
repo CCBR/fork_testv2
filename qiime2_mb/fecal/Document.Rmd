@@ -20,7 +20,7 @@ Read in each of the controls composition files
 ```{r}
 control_full <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Compositions\\MasterSpeciesList.txt",sep="\t",header=TRUE)
 
-#Separate database by control colonies
+#Create Control Composition Database
 art.col <- subset(control_full, !(Art.Col=='A'))
 zymo.ext200 <- subset(control_full, !(Zymo.Ext=='A'))
 zymo.ext2000 <-subset(control_full, !(Zymo.Ext=='A'))
@@ -28,7 +28,7 @@ msa1000 <-subset(control_full, !(MSA1000=='A'))
 msa1001 <- subset(control_full, !(MSA1001=='A'))
 msa1002 <- subset(control_full, !(MSA1002=='A'))
 msa1003 <- subset(control_full, !(MSA1003=='A'))
-zymo.seq <-subset(control_full, !(zymo.seq=='A'))
+zymo.seq <-subset(control_full, !(Zymo.Seq=='A'))
 
 #Create list of all the species to review
 species_list_controls <- as.character(unique(control_full$Species))
@@ -66,70 +66,117 @@ Nephele OTU Table
 #Read in BIOM database output from Nephele and convert it to a data frame
 dat <- read_biom("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\otu_table_mc2_w_tax.biom")
 otu_table  <- as.data.frame(as.matrix(biom_data(dat)))
-
-#Transpose the otu_table so same names are in the rows, and species are in the columns
-otu_table_flipped <- transpose(otu_table)
-colnames(otu_table_flipped) <- rownames(otu_table)
-rownames(otu_table_flipped) <- colnames(otu_table)
+nrow(otu_table)
 
 #Subset the OTU table to include only passed control samples by finding selecting only the rows with names that 
 #match the SeqID names of the control_info database
-otu_controls <- subset(otu_table_flipped, rownames(otu_table_flipped) %in% control_info$NephID)
-
-#Review database
-head(otu_controls)
-
-#Samples in the BIOM database must have representative species with higher than 2 OTU sequences, otherwise they are dropped. In this instance 1 sample was lost - Sample SC326763.PC07578.A12
-nrow(otu_controls)
+otu_table <- otu_table[,colnames(otu_table) %in% control_info$NephID]
+head(otu_table)
+nrow(otu_table)
 ```
 
-Generate OTU/info database at the species level
+Generate OTU reference database at the species level
 ```{r}
 #Read in reference file
 references_complete <- observation_metadata(dat)
 head(references_complete)
+nrow(references_complete)
+
+#Remove dat file
+remove(dat)
 
 #Create a list of unique reference species
 species_list_reference<- unique(references_complete$taxonomy7)
 species_list_reference
 
-#Crete lists of species that match both databases, and a list of species not included
-missing_species <- species_list_controls[!(species_list_controls %in% species_list_reference)]
-missing_species
-
+#Crete lists of species that match both databases, calculate species missing
 included_species <- species_list_controls[(species_list_controls %in% species_list_reference)]
-included_species
+length(species_list_controls) - length(included_species) #Number not included
 
 #Create taxonomy database of only the included species
 references_included_species <- subset(references_complete, taxonomy7 %in% included_species)
-references_included_species 
+references_included_species
+```
+Create database of all otus for control type
+```{r}
+#Filter otu database (columns) by art.col.samples list (rows) to include only samples in question
+art.col.complete.otu <- otu_table[,colnames(otu_table) %in% art.col.samples]
+head(art.col.complete.otu)
+nrow(art.col.complete.otu)
 
-#Transpose controls database so that row names are the species ID and merge the data
-otu_table_flipped <- transpose(otu_controls)
-colnames(otu_table_flipped) <- rownames(otu_controls)
-rownames(otu_table_flipped) <- colnames(otu_controls)
-refandinfo_species <- merge.data.frame(otu_table_flipped,references_included_species)
+head(references_complete)
+nrow(references_complete)
+
+#Merge control otu database (rows taxonomy IDS) with control reference database (rows taxonomy IDS)
+#Add rownames back to database, and remove column of rownames
+art.col.complete.final.otu <- merge(art.col.complete.otu,references_complete, by="row.names")
+rownames(art.col.complete.final.otu) <- art.col.complete.final.otu$Row.names
+art.col.complete.final.otu <- art.col.complete.final.otu[, -which(names(art.col.complete.final.otu) %in% c("Row.names"))]
+head(art.col.complete.final.otu)
+nrow(art.col.complete.final.otu)
 
 ```
 
-Generate OTU/info database at the genus level
+Create merged reference, otu, info, sample databases for species
 ```{r}
-#Create a list of unique reference genus, then remove D_5__
-genus_list_reference<- unique(references_complete$taxonom6)
-genus_list_reference<- gsub("D_5_","",genus_list_reference)
+#Filter reference species list (found in column named Taxonomy 7) on control composition (Species column of art.col databse) to create taxonomy database containing only the species related to the control
+art.col.ref <- subset(references_included_species, taxonomy7 %in% art.col$Species)
+head(art.col.ref)
+nrow(art.col.ref)
+
+#Filter otu database by taxonomy row names (taxonomy IDS) found in each control (taxonomy IDS)
+art.col.otu <- subset(otu_table, rownames(otu_table) %in% rownames(art.col.ref))
+head(art.col.otu)
+nrow(art.col.otu)
+
+#Create list of controls by sample name
+art.col.samples <- subset(control_info, Type=='AC')
+art.col.samples <- art.col.samples$NephID
+
+#Filter otu database (columns) by art.col.samples list (rows) to include only samples in question
+art.col.otu <- art.col.otu[,colnames(art.col.otu) %in% art.col.samples]
+head(art.col.otu)
+nrow(art.col.otu)
+
+#Filter otu database to include only samples within control type
+art.col.species <- subset(art.col.otu, rownames(art.col.otu) %in% rownames(art.col.ref))
+head(art.col.species)
+nrow(art.col.species)
+
+#Merge control otu database (rows taxonomy IDS) with control reference database (rows taxonomy IDS)
+#Add rownames back to database, and remove column of rownames
+art.col.final <- merge(art.col.species,art.col.ref, by="row.names")
+rownames(art.col.final) <- art.col.final$Row.names
+art.col.final <- art.col.final[, -which(names(art.col.final) %in% c("Row.names"))]
+head(art.col.final)
+nrow(art.col.final)
+```
+
+
+Save Species files 
+```{r}
+write.csv(art.col.final, file="artifical.colony.species.csv")
+write.csv(art.col.complete.final.otu, file="artificial.colony.allotu.csv")
+
+
+```
+
+Generate OTU reference database at the genus level
+```{r}
+#Create a list of unique reference genus
+genus_list_reference<- unique(references_complete$taxonomy7)
 genus_list_reference
 
-#Determine which control genus are not included in reference database
+#Crete lists of genus that match both databases, and a list of genus not included
 missing_genus <- genus_list_controls[!(genus_list_controls %in% genus_list_reference)]
 missing_genus
 
-included_genus <- genus_list_controls[!(genus_list_controls %in% genus_list_reference)]
+included_genus <- genus_list_controls[(genus_list_controls %in% genus_list_reference)]
 included_genus
 
-#Subset the taxonomy in question
-temp <- subset(references_complete, taxonomy7=='D_6__Acinetobacter baumannii')
-temp
-unique(temp$taxonomy7)
+#Create taxonomy database of only the included genus
+references_included_genus <- subset(references_complete, taxonomy7 %in% included_genus)
+references_included_genus
 ```
 
 Not Used
@@ -142,7 +189,17 @@ control_otu
 #references_complete <- gsub("D_6__","",references_complete)
 #references_complete <- gsub("D_5__","",references_complete)
 
+#Transpose the otu_table so same names are in the rows, and species are in the columns
+otu_table_flipped <- transpose(otu_table)
+colnames(otu_table_flipped) <- rownames(otu_table)
+rownames(otu_table_flipped) <- colnames(otu_table)
 
+
+#Review database
+head(otu_table)
+
+#Samples in the BIOM database must have representative species with higher than 2 OTU sequences, otherwise they are dropped. In this instance 1 sample was lost - Sample SC326763.PC07578.A12
+nrow(otu_controls)
 
 
 ```
