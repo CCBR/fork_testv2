@@ -33,6 +33,10 @@ zymo.seq <-subset(control_full, !(zymo.seq=='A'))
 #Create list of all the species to review
 species_list_controls <- as.character(unique(control_full$Species))
 species_list_controls
+
+#Create list of all the genus to review
+genus_list_controls <- as.character(unique(control_full$Genus))
+genus_list_controls
 ```
 
 #Sample Data
@@ -79,19 +83,48 @@ head(otu_controls)
 nrow(otu_controls)
 ```
 
-Update species names to reference database
+Generate OTU/info database at the species level
 ```{r}
 #Read in reference file
 references_complete <- observation_metadata(dat)
 head(references_complete)
 
-#Create a list of unique reference species, then remove D_6__
+#Create a list of unique reference species
 species_list_reference<- unique(references_complete$taxonomy7)
-species_list_reference<- gsub("D_6__","",species_list_reference)
+species_list_reference
 
-#Determine which control species are not included in reference database
+#Crete lists of species that match both databases, and a list of species not included
 missing_species <- species_list_controls[!(species_list_controls %in% species_list_reference)]
 missing_species
+
+included_species <- species_list_controls[(species_list_controls %in% species_list_reference)]
+included_species
+
+#Create taxonomy database of only the included species
+references_included_species <- subset(references_complete, taxonomy7 %in% included_species)
+references_included_species 
+
+#Transpose controls database so that row names are the species ID and merge the data
+otu_table_flipped <- transpose(otu_controls)
+colnames(otu_table_flipped) <- rownames(otu_controls)
+rownames(otu_table_flipped) <- colnames(otu_controls)
+refandinfo_species <- merge.data.frame(otu_table_flipped,references_included_species)
+
+```
+
+Generate OTU/info database at the genus level
+```{r}
+#Create a list of unique reference genus, then remove D_5__
+genus_list_reference<- unique(references_complete$taxonom6)
+genus_list_reference<- gsub("D_5_","",genus_list_reference)
+genus_list_reference
+
+#Determine which control genus are not included in reference database
+missing_genus <- genus_list_controls[!(genus_list_controls %in% genus_list_reference)]
+missing_genus
+
+included_genus <- genus_list_controls[!(genus_list_controls %in% genus_list_reference)]
+included_genus
 
 #Subset the taxonomy in question
 temp <- subset(references_complete, taxonomy7=='D_6__Acinetobacter baumannii')
@@ -99,11 +132,17 @@ temp
 unique(temp$taxonomy7)
 ```
 
-Generate info and otu table with selected controls
+Not Used
 ```{r}
 #Subset info database with only control information
 control_removed 
 control_otu 
+
+#Remove the D's
+#references_complete <- gsub("D_6__","",references_complete)
+#references_complete <- gsub("D_5__","",references_complete)
+
+
 
 
 ```
