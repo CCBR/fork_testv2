@@ -1,0 +1,221 @@
+---
+title: "R Notebook"
+output: word_document
+---
+#Control Makeup
+Read in each of the controls composition files
+```{r}
+control_full <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Compositions\\MasterSpeciesList.txt",sep="\t",header=TRUE)
+
+#Create Control Composition Database, removing rows of species not in samples, followed by samples not of specified control type
+##Artifical Colony
+art.col.con <- subset(control_full, !(Art.Col=='A'))
+art.col.con <- art.col.con[,1:10]
+
+##Two concentrations of zymo extraction controls
+zymo.seq200.con <- subset(control_full, !(Zymo.Ext=='A'))
+zymo.seq200.con <- zymo.seq200.con[,c(1:9,15)]
+zymo.seq2000.con <- zymo.seq200.con
+
+#Zymo Sequencing Control
+zymo.ext.con <-subset(control_full, !(Zymo.Seq=='A'))
+zymo.ext.con <- zymo.ext.con[,c(1:9,16)]
+
+#ATTC Controls
+msa1000.con <-subset(control_full, !(MSA1000=='A'))
+msa1000.con <- msa1000.con[,c(1:9,11)]
+
+msa1001.con <- subset(control_full, !(MSA1001=='A'))
+msa1001.con <- msa1001.con[,c(1:9,12)]
+
+msa1002.con <- subset(control_full, !(MSA1002=='A'))
+msa1002.con <- msa1002.con[,c(1:9,13)]
+
+msa1003.con <- subset(control_full, !(MSA1003=='A'))
+msa1003.con <- msa1003.con[,c(1:9,14)]
+
+#Create list of all the species to review
+species_list_controls <- as.character(unique(control_full$Species))
+species_list_controls
+
+#Create list of all the genus to review
+genus_list_controls <- as.character(unique(control_full$Genus))
+genus_list_controls
+```
+
+#Sample Data
+Read in the entire sample databses, then merge the databases. Finally filter for controls only
+```{r}
+#Read in database with variable information and list of samples that did not meet the sequencing threshold
+complete_info <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\sampledata.txt",sep="\t",header=TRUE)
+complete_removed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\samples_being_ignored.txt",sep="\t")
+
+#Remove failed samples from info database
+filtered_info <-subset(complete_info, !(NephID %in% complete_removed$V1))
+
+#Verify the numbers are the same
+nrow(complete_info) - nrow(complete_removed)
+nrow(filtered_info)
+
+#Remove Study samples from database
+control_info <- subset(filtered_info,!Type=='Study')
+control_info <- subset(control_info,!Type=='EB')
+control_info <- subset(control_info,!Type=='RG')
+
+#Verify the subsetting
+nrow(filtered_info) - sum(filtered_info$Type=='Study') - sum(filtered_info$Type=='EB') - sum(filtered_info$Type=='RG')
+nrow(control_info)
+
+#Add Row names to dataframe
+row.names(control_info) <- control_info$NephID
+
+```
+
+Read in OTU database of Class level information
+```{r}
+genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\taxa_counts_Genus_edited.csv", row.names = 1)
+```
+
+Genus OTU count by sample by type
+```{r}
+#Create sample list
+sample_list <- unique(control_info$NephID)
+sample_list <- as.character(sample_list)
+
+#Add Genus Count and Genus Expected columns to dataframe
+control_info$GenusCount <- "TBD"
+control_info$GenusExpect <- "TBD"
+control_info$Type <- as.character(control_info$Type)
+
+#Determine which genus_list to use
+##Run through each sample
+for (a in sample_list){
+ 
+ #Set count to 0
+ count = 0
+ 
+ #Create genus list of control types
+ if(control_info[a,"Type"]=="AC"){
+  genus_list <- unique(art.col.con$Genus)
+  } else if(control_info[a,"Type"]=="Zymo.Ext"){
+   genus_list <- unique(zymo.ext.con$Genus)
+  } else if(control_info[a,"Type"]=="MSA-1000"){
+    genus_list <- unique(msa1000.con$Genus)
+  } else if(control_info[a,"Type"]=="MSA-1001"){
+   genus_list <- unique(msa1001.con$Genus)
+   } else if(control_info[a,"Type"]=="MSA1002"){
+    genus_list <- unique(msa1002.con$Genus)
+    } else if(control_info[a,"Type"]=="MSA-1003"){
+     genus_list <- unique(msa1003.con$Genus)
+     } else if(control_info[a,"Type"]=="Zymo.Seq.200"){
+      genus_list <- unique(zymo.seq200.con$Genus)
+      } else if(control_info[a,"Type"]=="Zymo.Seq.2000"){
+       genus_list <- unique(zymo.seq2000.con$Genus)
+       } else {genus_list <- data.frame()}
+ 
+ #Convert to character
+ genus_list <- as.character(genus_list)
+
+ #For each genus is list, determine number of reads
+ for (b in genus_list){
+  value <- genus_otu[b,a]
+
+  #If value is NA (meaning that the genus was not found in sample), skip
+  #If reads are >0 then count increases by 1 (for presence / absence)
+
+  if(is.na(value) | is.null(value)) {
+   
+   next
+   } 
+  
+  else if (value>0) {
+   count = count +1
+  } 
+  
+  else{next}
+ }
+ 
+ #Add final count and length of the list to Control_Info dataframe
+ control_info[a,"GenusCount"] <- count
+ control_info[a,"GenusExpect"] <- length(genus_list)
+}
+```
+
+Analysis - All Controls
+```{r}
+#Convert columsn to numeric
+control_info$GenusCount <- as.numeric(control_info$GenusCount)
+control_info$GenusExpect <- as.numeric(control_info$GenusExpect)
+
+#Unique Types
+control_types <- unique(control_info$Type)
+
+#New Database
+genus_final <- data.frame()
+
+#Average ratio
+for (b in control_types){
+ genus=0
+ total=0
+ count=0
+ 
+ for(a in sample_list){
+  valid <- control_info[a,"Type"]
+  if(valid==b){
+      genus <- genus + control_info[a,"GenusCount"]
+      total <- total + control_info[a,"GenusExpect"]
+      count <- count + 1
+     } else{next}
+ }
+ 
+ 
+ genus_average <- genus/count
+ total_average <- total/count
+
+ genus_final[1,b] <- genus_average
+ genus_final[2,b] <- total_average
+
+}
+
+```
+
+Analysis - By Kit
+```{r}
+#Convert columsn to numeric
+control_info$GenusCount <- as.numeric(control_info$GenusCount)
+control_info$GenusExpect <- as.numeric(control_info$GenusExpect)
+
+#Unique Types
+control_types <- unique(control_info$Type)
+
+#Unique Kits
+kit_types <- unique(control_info$Kit)
+
+#New Database
+genus_final_kit <- data.frame()
+
+#Average ratio
+for (b in control_types){
+ genus=0
+ total=0
+ count=0
+ for (c in kit_types){
+ for(a in sample_list){
+  valid <- control_info[a,"Type"]
+  if(valid==b){
+      genus <- genus + control_info[a,"GenusCount"]
+      total <- total + control_info[a,"GenusExpect"]
+      count <- count + 1
+     } else{next}
+ }
+ 
+ 
+ genus_average <- genus/count
+ total_average <- total/count
+
+ genus_final[1,b] <- genus_average
+ genus_final[2,b] <- total_average
+
+}
+
+```

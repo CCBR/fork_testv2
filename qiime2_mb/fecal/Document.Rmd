@@ -20,15 +20,32 @@ Read in each of the controls composition files
 ```{r}
 control_full <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Compositions\\MasterSpeciesList.txt",sep="\t",header=TRUE)
 
-#Create Control Composition Database
+#Create Control Composition Database, removing rows of species not in samples, followed by samples not of specified control type
+##Artifical Colony
 art.col <- subset(control_full, !(Art.Col=='A'))
+art.col <- art.col[,1:10]
+
+##Two concentrations of zymo extraction controls
 zymo.ext200 <- subset(control_full, !(Zymo.Ext=='A'))
-zymo.ext2000 <-subset(control_full, !(Zymo.Ext=='A'))
-msa1000 <-subset(control_full, !(MSA1000=='A'))
-msa1001 <- subset(control_full, !(MSA1001=='A'))
-msa1002 <- subset(control_full, !(MSA1002=='A'))
-msa1003 <- subset(control_full, !(MSA1003=='A'))
+zymo.ext200 <- zymo.ext200[,c(1:9,15)]
+zymo.ext2000 <- zymo.ext200
+
+#Zymo Sequencing Control
 zymo.seq <-subset(control_full, !(Zymo.Seq=='A'))
+zymo.seq <- zymo.seq[,c(1:9,16)]
+
+#ATTC Controls
+msa1000 <-subset(control_full, !(MSA1000=='A'))
+msa1000 <- msa1000[,c(1:9,11)]
+
+msa1001 <- subset(control_full, !(MSA1001=='A'))
+msa1001 <- msa1001[,c(1:9,12)]
+
+msa1002 <- subset(control_full, !(MSA1002=='A'))
+msa1002 <- msa1002[,c(1:9,13)]
+
+msa1003 <- subset(control_full, !(MSA1003=='A'))
+msa1003 <- msa1003[,c(1:9,14)]
 
 #Create list of all the species to review
 species_list_controls <- as.character(unique(control_full$Species))
