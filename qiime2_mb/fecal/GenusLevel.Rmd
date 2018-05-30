@@ -82,17 +82,17 @@ Genus OTU count by sample by type
 sample_list <- unique(control_info$NephID)
 sample_list <- as.character(sample_list)
 
-#Add Genus Count and Genus Expected columns to dataframe
-control_info$GenusCount <- "TBD"
-control_info$GenusExpect <- "TBD"
+#Change the vector type
 control_info$Type <- as.character(control_info$Type)
+control_info$Kit <- as.character(control_info$Kit)
 
 #Determine which genus_list to use
 ##Run through each sample
 for (a in sample_list){
  
  #Set count to 0
- count = 0
+ count_present = 0
+ count_absent = 0
  
  #Create genus list of control types
  if(control_info[a,"Type"]=="AC"){
@@ -103,7 +103,7 @@ for (a in sample_list){
     genus_list <- unique(msa1000.con$Genus)
   } else if(control_info[a,"Type"]=="MSA-1001"){
    genus_list <- unique(msa1001.con$Genus)
-   } else if(control_info[a,"Type"]=="MSA1002"){
+   } else if(control_info[a,"Type"]=="MSA-1002"){
     genus_list <- unique(msa1002.con$Genus)
     } else if(control_info[a,"Type"]=="MSA-1003"){
      genus_list <- unique(msa1003.con$Genus)
@@ -116,106 +116,151 @@ for (a in sample_list){
  #Convert to character
  genus_list <- as.character(genus_list)
 
- #For each genus is list, determine number of reads
+  #For each genus is list, determine number of reads
  for (b in genus_list){
   value <- genus_otu[b,a]
 
   #If value is NA (meaning that the genus was not found in sample), skip
-  #If reads are >0 then count increases by 1 (for presence / absence)
+  #If reads are >0 then count_presence increases by 1
+  #If reads are =0 then count_absence increases by 1 
 
   if(is.na(value) | is.null(value)) {
-   
    next
-   } 
-  
-  else if (value>0) {
-   count = count +1
-  } 
-  
-  else{next}
+  } else if (value>0) {
+   count_present = count_present +1
+  } else if (value==0){
+   count_absent = count_absent +1
+  } else{
+   next
+   }
  }
  
  #Add final count and length of the list to Control_Info dataframe
- control_info[a,"GenusCount"] <- count
+ control_info[a,"GenusCount"] <- count_present
+ control_info[a,"GenusAbsent"] <- count_absent
  control_info[a,"GenusExpect"] <- length(genus_list)
 }
 ```
 
 Analysis - All Controls
 ```{r}
-#Convert columsn to numeric
+#Convert column to numeric
 control_info$GenusCount <- as.numeric(control_info$GenusCount)
 control_info$GenusExpect <- as.numeric(control_info$GenusExpect)
+control_info$GenusAbsent <- as.numeric(control_info$GenusAbsent)
 
-#Unique Types
+#Unique Types of controls
 control_types <- unique(control_info$Type)
 
-#New Database
+#New Database to store final Genus information
 genus_final <- data.frame()
 
-#Average ratio
+#For each of the control types
 for (b in control_types){
+ 
+ #Reset counts
  genus=0
  total=0
  count=0
  
+ #For each of the samples in the sample list
  for(a in sample_list){
+  
+  #Create control type groups
   valid <- control_info[a,"Type"]
+  
+  #If the current samples control type matches the control type of the iteration
   if(valid==b){
-      genus <- genus + control_info[a,"GenusCount"]
-      total <- total + control_info[a,"GenusExpect"]
-      count <- count + 1
-     } else{next}
+   
+   #Add the total number of genus found
+   #Add the total number of genus expected, and subtract the number missing (this is necessary as some
+   #genus are not found in the list, and not necessarily absent from the sample)
+   genus <- genus + control_info[a,"GenusCount"]
+   total <- total + control_info[a,"GenusCount"] + control_info[a,"GenusAbsent"]
+   expect <- control_info[a,"GenusExpect"]
+   count <- count + 1
+  } else{
+    next
+   }
  }
  
- 
+ #Find the average of the genus and totals
  genus_average <- genus/count
  total_average <- total/count
-
+ 
+ #Push the totals to the new database 
  genus_final[1,b] <- genus_average
  genus_final[2,b] <- total_average
+ genus_final[3,b] <- expect
 
+ #Add Row names
+ row.names(genus_final) <- c("Genus Count","Total", "Expected")
 }
 
 ```
 
 Analysis - By Kit
 ```{r}
-#Convert columsn to numeric
-control_info$GenusCount <- as.numeric(control_info$GenusCount)
-control_info$GenusExpect <- as.numeric(control_info$GenusExpect)
-
-#Unique Types
-control_types <- unique(control_info$Type)
-
-#Unique Kits
+#Unique Kits, removing "None" as a kit type
 kit_types <- unique(control_info$Kit)
+kit_types <- kit_types[!kit_types %in% "None"]
 
-#New Database
+#Control Types for Extraction only
+control_types <- c("AC", "Zymo.Ext")
+
+#New Database for genus level count information from kits
 genus_final_kit <- data.frame()
 
-#Average ratio
-for (b in control_types){
- genus=0
- total=0
- count=0
- for (c in kit_types){
- for(a in sample_list){
-  valid <- control_info[a,"Type"]
-  if(valid==b){
-      genus <- genus + control_info[a,"GenusCount"]
-      total <- total + control_info[a,"GenusExpect"]
-      count <- count + 1
-     } else{next}
+#Reset counters
+sums =0
+row_count =0
+row_count2 =0
+
+#For each of the extraction kits
+for (a in kit_types){
+ 
+ #Group by control types
+ for (b in control_types) {
+  
+  #Reset counters
+  genus =0
+  total=0
+  expect=0
+
+  #Create a list of samples that are of the specified kit and control type
+  sample_list<- subset(control_info, Kit==a & Type==b)
+  sample_list <- unique(sample_list$NephID)
+  sample_list <- as.character(sample_list)
+  
+  #For each sample in the list
+  for (c in sample_list){
+   
+   #Count the number of unique genus found
+   #Count the total number of gensus matched in reference database
+   #Count the number of expected genus for this sample
+   genus <- genus + control_info[c,"GenusCount"]
+   total <- total + control_info[c,"GenusCount"] + control_info[c,"GenusAbsent"]
+   expect <- control_info[c,"GenusExpect"]
+  }
+  
+  #Take the average of all extracted iterations of this control  with this kit of
+  genus_average <- genus/length(sample_list)
+  total_average <- total/length(sample_list)
+  
+  #Move the row counters by 1 or 2
+  row_count <- sums +1
+  row_count2 <- sums+2
+  
+  #Push information to the database
+  genus_final_kit[row_count, b] <- genus_average
+  genus_final_kit[row_count2, b] <- genus_average
+
  }
  
- 
- genus_average <- genus/count
- total_average <- total/count
-
- genus_final[1,b] <- genus_average
- genus_final[2,b] <- total_average
-
+ #Increase the row counter to skip the two filled rows
+ sums = sums+2
 }
 
+#Add row names to the database
+row.names (genus_final_kit) <- c("Qiagen DSPs_Count", "Qiagen DSP_Expected", "Zymo Mag Bead_Count", "Zymo MagBead_Expected", "PowerMag Soil_Count", "PowerMag Soil_Expected", "PowerMag MB_Count", "PowerMag MB_Expected", "Qiagen QIAmp_Count", "Qiagen QIAmp_Expected")  
 ```
