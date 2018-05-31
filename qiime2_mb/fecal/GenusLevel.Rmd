@@ -76,7 +76,7 @@ Read in OTU database of Class level information
 genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\taxa_counts_Genus_edited.csv", row.names = 1)
 ```
 
-Genus OTU count by sample by type
+Genus OTU count by sample - Add to Control_info table
 ```{r}
 #Create sample list
 sample_list <- unique(control_info$NephID)
@@ -142,7 +142,7 @@ for (a in sample_list){
 }
 ```
 
-Analysis - All Controls
+Analysis Genus OTU Count - By Control Type
 ```{r}
 #Convert column to numeric
 control_info$GenusCount <- as.numeric(control_info$GenusCount)
@@ -153,7 +153,7 @@ control_info$GenusAbsent <- as.numeric(control_info$GenusAbsent)
 control_types <- unique(control_info$Type)
 
 #New Database to store final Genus information
-genus_final <- data.frame()
+genus_otucount <- data.frame()
 
 #For each of the control types
 for (b in control_types){
@@ -189,17 +189,17 @@ for (b in control_types){
  total_average <- total/count
  
  #Push the totals to the new database 
- genus_final[1,b] <- genus_average
- genus_final[2,b] <- total_average
- genus_final[3,b] <- expect
+ genus_otucount[1,b] <- genus_average
+ genus_otucount[2,b] <- total_average
+ genus_otucount[3,b] <- expect
 
  #Add Row names
- row.names(genus_final) <- c("Genus Count","Total", "Expected")
+ row.names(genus_otucount) <- c("Genus Count","Total", "Expected")
 }
 
 ```
 
-Analysis - By Kit
+Analysis Genus OTU Count - By Kit
 ```{r}
 #Unique Kits, removing "None" as a kit type
 kit_types <- unique(control_info$Kit)
@@ -209,7 +209,7 @@ kit_types <- kit_types[!kit_types %in% "None"]
 control_types <- c("AC", "Zymo.Ext")
 
 #New Database for genus level count information from kits
-genus_final_kit <- data.frame()
+genus_otucount_kit <- data.frame()
 
 #Reset counters
 sums =0
@@ -252,8 +252,8 @@ for (a in kit_types){
   row_count2 <- sums+2
   
   #Push information to the database
-  genus_final_kit[row_count, b] <- genus_average
-  genus_final_kit[row_count2, b] <- genus_average
+  genus_otucount_kit[row_count, b] <- genus_average
+  genus_otucount_kit[row_count2, b] <- genus_average
 
  }
  
@@ -262,5 +262,133 @@ for (a in kit_types){
 }
 
 #Add row names to the database
-row.names (genus_final_kit) <- c("Qiagen DSPs_Count", "Qiagen DSP_Expected", "Zymo Mag Bead_Count", "Zymo MagBead_Expected", "PowerMag Soil_Count", "PowerMag Soil_Expected", "PowerMag MB_Count", "PowerMag MB_Expected", "Qiagen QIAmp_Count", "Qiagen QIAmp_Expected")  
+row.names (genus_otucount_kit) <- c("Qiagen DSPs_Count", "Qiagen DSP_Expected", "Zymo Mag Bead_Count", "Zymo MagBead_Expected", "PowerMag Soil_Count", "PowerMag Soil_Expected", "PowerMag MB_Count", "PowerMag MB_Expected", "Qiagen QIAmp_Count", "Qiagen QIAmp_Expected")  
+```
+
+Genus OTU % by sample
+```{r}
+#Create sample list
+sample_list <- unique(control_info$NephID)
+sample_list <- as.character(sample_list)
+
+#Change the vector type
+control_info$Type <- as.character(control_info$Type)
+control_info$Kit <- as.character(control_info$Kit)
+
+#Create new table
+genus_otupercent_sample = data.frame()
+
+#Determine which genus_list to use
+##Run through each sample
+for (a in sample_list){
+ 
+ #Set count to 0
+ percent = 0
+
+ #Create genus list of control types
+ if(control_info[a,"Type"]=="AC"){
+  genus_list <- unique(art.col.con$Genus)
+  } else if(control_info[a,"Type"]=="Zymo.Ext"){
+   genus_list <- unique(zymo.ext.con$Genus)
+  } else if(control_info[a,"Type"]=="MSA-1000"){
+    genus_list <- unique(msa1000.con$Genus)
+  } else if(control_info[a,"Type"]=="MSA-1001"){
+   genus_list <- unique(msa1001.con$Genus)
+   } else if(control_info[a,"Type"]=="MSA-1002"){
+    genus_list <- unique(msa1002.con$Genus)
+    } else if(control_info[a,"Type"]=="MSA-1003"){
+     genus_list <- unique(msa1003.con$Genus)
+     } else if(control_info[a,"Type"]=="Zymo.Seq.200"){
+      genus_list <- unique(zymo.seq200.con$Genus)
+      } else if(control_info[a,"Type"]=="Zymo.Seq.2000"){
+       genus_list <- unique(zymo.seq2000.con$Genus)
+       } else {genus_list <- data.frame()}
+ 
+ #Convert genus_list to character
+ genus_list <- as.character(genus_list)
+
+ #Sum all the read numbers
+ total <- sum(genus_otu[,a])
+
+ #For each genus is list, determine number of reads
+ for (b in genus_list){
+  value <- genus_otu[b,a]
+
+  #If value is NA (meaning that the genus was not found in sample), skip
+  #If reads are >0 then add the read count to reads_total
+
+  if(is.na(value) | is.null(value)) {
+   next
+  } else if (value>0) {
+   percent <- value/total
+   
+   #Add out count percent to the genus_otupercent_sample database
+   genus_otupercent_sample[b,a] <- percent
+  } else{
+   next
+  }
+ }
+}
+
+write.csv(genus_otupercent_sample,"output.csv")
+
+```
+
+Analysis Genus Percent - By Control Type
+```{r}
+#Unique Types of controls
+control_info$Type <- as.character(control_info$Type)
+control_types <- unique(control_info$Type)
+
+
+total = 0
+
+#New Database to store final Genus information
+genus_otupercent_control <- data.frame()
+
+#For each of the control types
+for (a in control_types){
+ 
+  #Create a list of samples that are of the specified control type
+  sample_list<- subset(control_info, Type==a)
+  sample_list <- unique(sample_list$NephID)
+  sample_list <- as.character(sample_list)
+  
+  #Create genus list of control types
+  if(a=="AC"){
+   genus_list <- unique(art.col.con$Genus)
+   } else if(a=="Zymo.Ext"){
+    genus_list <- unique(zymo.ext.con$Genus)
+   } else if(a=="MSA-1000"){
+     genus_list <- unique(msa1000.con$Genus)
+   } else if(a=="MSA-1001"){
+    genus_list <- unique(msa1001.con$Genus)
+    } else if(a=="MSA-1002"){
+     genus_list <- unique(msa1002.con$Genus)
+     } else if(a=="MSA-1003"){
+      genus_list <- unique(msa1003.con$Genus)
+      } else if(a=="Zymo.Seq.200"){
+       genus_list <- unique(zymo.seq200.con$Genus)
+       } else if(a=="Zymo.Seq.2000"){
+        genus_list <- unique(zymo.seq2000.con$Genus)
+       } else {next}
+
+  #For each Genus in list
+  for (c in genus_list){
+   total <- 0
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    
+    total <- genus_otupercent_sample [c,b] + total
+   
+   }
+    percent <- total / length(sample_list)
+    genus_otupercent_control[c,a] <- percent
+  }
+ }
+
+
+#Output to text file
+write.csv(genus_otupercent_control,"output.csv")
+
 ```
