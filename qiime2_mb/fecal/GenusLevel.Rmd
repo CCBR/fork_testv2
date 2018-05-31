@@ -34,13 +34,6 @@ msa1002.con <- msa1002.con[,c(1:9,13)]
 msa1003.con <- subset(control_full, !(MSA1003=='A'))
 msa1003.con <- msa1003.con[,c(1:9,14)]
 
-#Create list of all the species to review
-species_list_controls <- as.character(unique(control_full$Species))
-species_list_controls
-
-#Create list of all the genus to review
-genus_list_controls <- as.character(unique(control_full$Genus))
-genus_list_controls
 ```
 
 #Sample Data
@@ -142,7 +135,7 @@ for (a in sample_list){
 }
 ```
 
-Analysis Genus OTU Count - By Control Type
+Analysis Genus OTU Count - All controls by control type
 ```{r}
 #Convert column to numeric
 control_info$GenusCount <- as.numeric(control_info$GenusCount)
@@ -199,7 +192,7 @@ for (b in control_types){
 
 ```
 
-Analysis Genus OTU Count - By Kit
+Analysis Genus OTU Count - Extraction controls by control type by kit
 ```{r}
 #Unique Kits, removing "None" as a kit type
 kit_types <- unique(control_info$Kit)
@@ -334,14 +327,11 @@ write.csv(genus_otupercent_sample,"output.csv")
 
 ```
 
-Analysis Genus Percent - By Control Type
+Analysis Genus Percent - All control by control type
 ```{r}
 #Unique Types of controls
 control_info$Type <- as.character(control_info$Type)
 control_types <- unique(control_info$Type)
-
-
-total = 0
 
 #New Database to store final Genus information
 genus_otupercent_control <- data.frame()
@@ -372,23 +362,99 @@ for (a in control_types){
        } else if(a=="Zymo.Seq.2000"){
         genus_list <- unique(zymo.seq2000.con$Genus)
        } else {next}
-
+  
   #For each Genus in list
-  for (c in genus_list){
+  for (b in genus_list){
+   
+   #Reset Counter
    total <- 0
+   
    #For each of the samples in the sample list
-   for(b in sample_list){
+   for(c in sample_list){
     
-    total <- genus_otupercent_sample [c,b] + total
+    #Add up the total percentages from otupercent_sample table [genus,sampleID]
+    total <- genus_otupercent_sample [b,c] + total
    
    }
-    percent <- total / length(sample_list)
-    genus_otupercent_control[c,a] <- percent
+   
+   #average of genus level by taking total / number of samples
+   #Push value to new dataframe
+   percent <- total / length(sample_list)
+   genus_otupercent_control[b,a] <- percent
   }
  }
 
-
 #Output to text file
 write.csv(genus_otupercent_control,"output.csv")
+
+```
+
+Analysis Genus Percent - Extraction control by control type by kit
+```{r}
+#Unique Kits, removing "None" as a kit type
+kit_types <- unique(control_info$Kit)
+kit_types <- kit_types[!kit_types %in% "None"]
+
+#Control Types for Extraction only
+control_types <- c("AC", "Zymo.Ext")
+
+#New Database to store final Genus information
+genus_otupercent_kit <- data.frame()
+
+#Start Counter
+count = 0
+
+#For each kit
+for (d in kit_types){
+ 
+ #For each of the control types
+ for (a in control_types){
+  
+  #Counter
+  count = count + 1
+  print (count)
+  print (a)
+  print (d)
+  
+   #Create a list of samples that are of the specified control type
+   sample_list<- subset(control_info, Type==a & Kit==d)
+   sample_list <- unique(sample_list$NephID)
+   sample_list <- as.character(sample_list)
+   
+   #Create genus list of control types
+   if(a=="AC"){
+    genus_list <- unique(art.col.con$Genus)
+    } else if(a=="Zymo.Ext"){
+     genus_list <- unique(zymo.ext.con$Genus)
+    } else {next}
+   
+   #For each Genus in list
+   for (b in genus_list){
+    
+    #Reset Counter
+    total <- 0
+    
+    #For each of the samples in the sample list
+    for(c in sample_list){
+     
+     #Add up the total percentages from otupercent_sample table [genus,sampleID]
+     total <- genus_otupercent_sample [b,c] + total
+    
+    }
+    
+    #average of genus level by taking total / number of samples
+    #Push value to new dataframe
+    percent <- total / length(sample_list)
+    genus_otupercent_kit[b,count] <- percent
+   }
+  }
+}
+
+#Add column names
+colnames(genus_otupercent_kit) <- c("Qiagen DSP-AC", "Qiagen DSP-ZE", "Zymo MagBead-AC", "Zymo MagBead-ZE", "MagAttract PS-AC", "MagAttract PS-ZE", "MagAttract MB-AC", "MagAttract MB-ZE", "Qiagen QIAmp-AC", "Qiagen QIAMmp-ZE")
+
+#Output to text file
+write.csv(genus_otupercent_kit,"output.csv")
+
 
 ```
