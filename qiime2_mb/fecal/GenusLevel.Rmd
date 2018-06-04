@@ -2,52 +2,52 @@
 title: "R Notebook"
 output: word_document
 ---
-#Control Makeup
-Read in each of the controls composition files
+#Control Taxonomy - Genus
+Read in controls taxonomy file, grouped by Genus
 ```{r}
-control_full <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Compositions\\MasterSpeciesList.txt",sep="\t",header=TRUE)
+genus_full <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Taxonomy\\Taxonomy_Genus.txt",sep="\t",header=TRUE)
 
 #Create Control Composition Database, removing rows of species not in samples, followed by samples not of specified control type
 ##Artifical Colony
-art.col.con <- subset(control_full, !(Art.Col=='A'))
+art.col.con <- subset(genus_full, !(Art.Col=='NA'))
 art.col.con <- art.col.con[,1:10]
 
 ##Two concentrations of zymo extraction controls
-zymo.seq200.con <- subset(control_full, !(Zymo.Ext=='A'))
+zymo.seq200.con <- subset(genus_full, !(Zymo.Ext=='NA'))
 zymo.seq200.con <- zymo.seq200.con[,c(1:9,15)]
 zymo.seq2000.con <- zymo.seq200.con
 
 #Zymo Sequencing Control
-zymo.ext.con <-subset(control_full, !(Zymo.Seq=='A'))
+zymo.ext.con <-subset(genus_full, !(Zymo.Seq=='NA'))
 zymo.ext.con <- zymo.ext.con[,c(1:9,16)]
 
 #ATTC Controls
-msa1000.con <-subset(control_full, !(MSA1000=='A'))
+msa1000.con <-subset(genus_full, !(MSA1000=='NA'))
 msa1000.con <- msa1000.con[,c(1:9,11)]
 
-msa1001.con <- subset(control_full, !(MSA1001=='A'))
+msa1001.con <- subset(genus_full, !(MSA1001=='NA'))
 msa1001.con <- msa1001.con[,c(1:9,12)]
 
-msa1002.con <- subset(control_full, !(MSA1002=='A'))
+msa1002.con <- subset(genus_full, !(MSA1002=='NA'))
 msa1002.con <- msa1002.con[,c(1:9,13)]
 
-msa1003.con <- subset(control_full, !(MSA1003=='A'))
+msa1003.con <- subset(genus_full, !(MSA1003=='NA'))
 msa1003.con <- msa1003.con[,c(1:9,14)]
 
 ```
 
-#Sample Data
-Read in the entire sample databses, then merge the databases. Finally filter for controls only
+#Variable info
+Read in the entire sample/control info database, and samples/controls that failed threshold QC. Filter database by not passing, and by not control
 ```{r}
 #Read in database with variable information and list of samples that did not meet the sequencing threshold
-complete_info <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\sampledata.txt",sep="\t",header=TRUE)
-complete_removed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\samples_being_ignored.txt",sep="\t")
+variable_info <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\sampledata.txt",sep="\t",header=TRUE)
+samples_failed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\samples_being_ignored.txt",sep="\t")
 
 #Remove failed samples from info database
-filtered_info <-subset(complete_info, !(NephID %in% complete_removed$V1))
+filtered_info <-subset(variable_info, !(NephID %in% samples_failed$V1))
 
 #Verify the numbers are the same
-nrow(complete_info) - nrow(complete_removed)
+nrow(variable_info) - nrow(samples_failed)
 nrow(filtered_info)
 
 #Remove Study samples from database
@@ -63,8 +63,8 @@ nrow(control_info)
 row.names(control_info) <- control_info$NephID
 
 ```
-
-Read in OTU database of Class level information
+#OTU Info
+Read in OTU database at Genus level
 ```{r}
 genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\taxa_counts_Genus_edited.csv", row.names = 1)
 ```
@@ -108,8 +108,8 @@ for (a in sample_list){
  
  #Convert to character
  genus_list <- as.character(genus_list)
-
-  #For each genus is list, determine number of reads
+ 
+ #For each genus is list, determine number of reads
  for (b in genus_list){
   value <- genus_otu[b,a]
 
@@ -189,7 +189,6 @@ for (b in control_types){
  #Add Row names
  row.names(genus_otucount) <- c("Genus Count","Total", "Expected")
 }
-
 ```
 
 Analysis Genus OTU Count - Extraction controls by control type by kit
@@ -247,7 +246,6 @@ for (a in kit_types){
   #Push information to the database
   genus_otucount_kit[row_count, b] <- genus_average
   genus_otucount_kit[row_count2, b] <- genus_average
-
  }
  
  #Increase the row counter to skip the two filled rows
@@ -455,6 +453,86 @@ colnames(genus_otupercent_kit) <- c("Qiagen DSP-AC", "Qiagen DSP-ZE", "Zymo MagB
 
 #Output to text file
 write.csv(genus_otupercent_kit,"output.csv")
+```
 
+Add Percent Genus OTU to Control_info database
+```{r}
+genus_list <- unique(genus_full[,"Genus"])
+rownames(genus_full) <- genus_list
+
+kit_controls <- colnames(genus_otupercent_kit)
+genus_list <- rownames(genus_otupercent_kit)
+
+for (a in kit_controls){
+ 
+ for (b in genus_list){
+  
+  genus_full[b,a] <-genus_otupercent_kit[b,a]
+ }
+}
+
+write.csv(genus_full,"output.csv")
+
+```
+
+Perform AC and Zymo.Ext Comparisons
+```{r}
+
+#Create new genus databse with only AC and Zymo Columns
+genus_compare <- genus_full[,c("Art.Col", "Zymo.Ext","Qiagen DSP-AC","Qiagen DSP-ZE","Zymo MagBead-AC","Zymo MagBead-ZE","MagAttract PS-AC","MagAttract PS-ZE","MagAttract MB-AC","MagAttract MB-ZE","Qiagen QIAmp-AC","Qiagen QIAMmp-ZE")]
+
+#Remove genus groups not included in control types
+genus_compare <- subset(genus_compare, !(Art.Col=="NA" & Zymo.Ext=="NA"))
+genus_list <- unique(rownames(genus_compare))
+
+#Generate column name of kit controls
+kit_controls <- colnames(genus_compare[,3:12])
+
+#Start adding new columns after current n of columns
+count <- ncol(genus_compare)
+
+#Determine percent differences
+##For each of the kit controls
+for (a in kit_controls){
+ #Start the column is the next available position
+ count = count +1
+
+ #Move through each genus (row)
+ for (b in genus_list){
+  
+  #If the column is even, it's a Zymo.Ext
+  if(count %% 2 ==0){
+   #If there was nothing detected for the genus, count it as 0
+   if(is.na(genus_compare[b,a])){
+    value <- ((genus_compare[b,2] - 0)/(genus_compare[b,2]))*100
+    genus_compare[b,count] <- value
+   }
+   #If genus were detected, determine the percent difference from expected
+   else{
+    value <- ((genus_compare[b,2] - genus_compare[b,a])/(genus_compare[b,2]))*100
+    genus_compare[b,count] <- value
+    }
+  }
+  #If the column is odd, it's an AC
+  else{
+   #If there was nothing detected for the genus, count it as 0
+   if(is.na(genus_compare[b,a])){
+    value <- ((genus_compare[b,1] - 0)/(genus_compare[b,1]))*100
+    genus_compare[b,count] <- value
+   }
+   #If genus were detected, determine the percent difference from expected
+   else{
+   value <- ((genus_compare[b,1] - genus_compare[b,a])/(genus_compare[b,1]))*100
+   genus_compare[b,count] <- value
+   }
+  }
+ }
+}
+
+#Add column names
+colnames(genus_compare) <- c( "Art.Col","Zymo.Ext","Qiagen DSP-AC","Qiagen DSP-ZE","Zymo MagBead-AC","Zymo MagBead-ZE","MagAttract PS-AC","MagAttract PS-ZE","MagAttract MB-AC","MagAttract MB-ZE","Qiagen QIAmp-AC","Qiagen QIAMmp-ZE","Qiagen DSP-AC_Diff","Qiagen DSP-ZE_Diff","Zymo MagBead-AC_Diff","Zymo MagBead-ZE_Diff","MagAttract PS-AC_Diff","MagAttract PS-ZE_Diff","MagAttract MB-AC_Diff","MagAttract MB-ZE_Diff","Qiagen QIAmp-AC_Diff","Qiagen QIAMmp-ZE")
+
+
+write.csv(genus_compare,"output.csv")
 
 ```
