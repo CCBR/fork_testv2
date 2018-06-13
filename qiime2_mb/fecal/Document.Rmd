@@ -81,7 +81,7 @@ nrow(control_info)
 Nephele OTU Table
 ```{r}
 #Read in BIOM database output from Nephele and convert it to a data frame
-dat <- read_biom("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\otu_table_mc2_w_tax.biom")
+dat <- read_biom("T:\\DCEG\\CGF\\Laboratory\\Projects\\MR-0084\\NP0084-MB5\\QC Data\\qiime\\PipelineResults_N1O8V48GTJ74\\otus\\otu_table_mc2_w_tax.biom")
 otu_table  <- as.data.frame(as.matrix(biom_data(dat)))
 nrow(otu_table)
 

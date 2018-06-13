@@ -2,6 +2,21 @@
 title: "R Notebook"
 output: word_document
 ---
+#Load required libraries
+```{r}
+library("biom")
+library(data.table)
+```
+#Reference Silva Database
+Nephele OTU Table
+```{r}
+#Read in BIOM database output from Nephele and convert it to a data frame
+dat <- read.table("T:\\DCEG\\CGF\\Laboratory\\Projects\\MR-0084\\NP0084-MB5\\QC Data\\qiime\\PipelineResults_N1O8V48GTJ74\\otus\\sortmerna_assigned_taxonomy\\rep_set_tax_assignments.txt",
+                  sep="\t")
+otu_table  <- as.data.frame(as.matrix(biom_data(dat)))
+```
+
+
 #Control Taxonomy - Genus
 Read in controls taxonomy file, grouped by Genus
 ```{r}
@@ -321,7 +336,7 @@ for (a in sample_list){
  }
 }
 
-write.csv(genus_otupercent_sample,"output.csv")
+write.csv(genus_otupercent_sample,"genus_percent.csv")
 
 ```
 
@@ -452,7 +467,7 @@ for (d in kit_types){
 colnames(genus_otupercent_kit) <- c("Qiagen DSP-AC", "Qiagen DSP-ZE", "Zymo MagBead-AC", "Zymo MagBead-ZE", "MagAttract PS-AC", "MagAttract PS-ZE", "MagAttract MB-AC", "MagAttract MB-ZE", "Qiagen QIAmp-AC", "Qiagen QIAMmp-ZE")
 
 #Output to text file
-write.csv(genus_otupercent_kit,"output.csv")
+write.csv(genus_otupercent_kit,"genus_otupercent_kit.csv")
 ```
 
 Add Percent Genus OTU to Control_info database
@@ -499,13 +514,20 @@ for (a in kit_controls){
 
  #Move through each genus (row)
  for (b in genus_list){
-  
   #If the column is even, it's a Zymo.Ext
   if(count %% 2 ==0){
    #If there was nothing detected for the genus, count it as 0
    if(is.na(genus_compare[b,a])){
-    value <- ((genus_compare[b,2] - 0)/(genus_compare[b,2]))*100
-    genus_compare[b,count] <- value
+    #If the genus is included, but should have a count of 0, set value to 0
+    if(is.na(genus_compare[b,2]==0)){
+     value <- ((genus_compare[b,2] - 0)/(genus_compare[b,2]))*100
+     genus_compare[b,count] <- value
+    }
+    else {
+     print (b)
+     value <- 0
+     genus_compare[b,count] <- value
+     } 
    }
    #If genus were detected, determine the percent difference from expected
    else{
@@ -516,7 +538,7 @@ for (a in kit_controls){
   #If the column is odd, it's an AC
   else{
    #If there was nothing detected for the genus, count it as 0
-   if(is.na(genus_compare[b,a])){
+   if(is.na(genus_compare[b,a])|(genus_compare[b,a]==0) ){
     value <- ((genus_compare[b,1] - 0)/(genus_compare[b,1]))*100
     genus_compare[b,count] <- value
    }
@@ -532,7 +554,48 @@ for (a in kit_controls){
 #Add column names
 colnames(genus_compare) <- c( "Art.Col","Zymo.Ext","Qiagen DSP-AC","Qiagen DSP-ZE","Zymo MagBead-AC","Zymo MagBead-ZE","MagAttract PS-AC","MagAttract PS-ZE","MagAttract MB-AC","MagAttract MB-ZE","Qiagen QIAmp-AC","Qiagen QIAMmp-ZE","Qiagen DSP-AC_Diff","Qiagen DSP-ZE_Diff","Zymo MagBead-AC_Diff","Zymo MagBead-ZE_Diff","MagAttract PS-AC_Diff","MagAttract PS-ZE_Diff","MagAttract MB-AC_Diff","MagAttract MB-ZE_Diff","Qiagen QIAmp-AC_Diff","Qiagen QIAMmp-ZE")
 
-
 write.csv(genus_compare,"output.csv")
+
+```
+
+Missing Species
+```{r}
+#Determine if missing species are due to annotation problem, or simply not extracted
+genus_list <- unique(rownames(genus_compare))
+missing <- list()
+
+#For each column
+for (a in colnames(genus_compare)){
+ #For each of the genus
+ for (b in genus_list){
+  #Find the percent difference
+  tempval <- as.numeric(genus_compare[b,a])
+
+  #If there is a null value
+  if(is.na(tempval)) {next}
+  #If the value is equal to 100 or 0
+  else if(tempval==100 | tempval==0){
+   #Then search for the row which contains the complete Silva annotation name
+   row <- grep(b, genus_full$Naming)
+   #Then determine the fill name
+   temp <- as.character(genus_full[row,"Naming"])
+   #Then search for the value in the reference database
+   temp <- grep(temp,dat$V2)
+
+   if(!(length(temp)>0)){
+    missing[[b]] <- "No Annotations"
+   } else{next}
+   }
+  }
+}
+
+#Print missing annotation list
+print (missing)
+```
+
+Other Genus
+```{r}
+
+
 
 ```
