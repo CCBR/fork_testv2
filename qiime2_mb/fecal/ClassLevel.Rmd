@@ -4,30 +4,6 @@ output: word_document
 editor_options: 
   chunk_output_type: console
 ---
-Database information
-#Databases Created
--dat: table of all the taxonomy assigned within Silva used in this study
-
--genus_percent: table of the taxonomy information of all controls including expected frequencies
- -> observed percentages added for both controls and kits
---genus_percent_ext: subset including only ext controls and kits, and genus related to the kits
- 
--samples_failed: table of samples that did not meet QC thresholds
-
--variable_info: table of the variable information of all samples and controls
---filtered_info: table of all samples/controls that passed QC, filtering off of samples_failed
----control_info: subset of filtered_info, to only include all controls 
-   ->genus count information added from genus_otu
-
--genus_otu: complete table of the OTUs for passed samples/controls by Genus
---genus_otucount_controls: count of the expected number of genus, the observed number of genus, and the total number of genus found in each control
----genus_otucount_ext_kit: subsetting genus_otucount_controls to include only the extraction controls, and expanding information by kit
---missing_annot: list of all the species not annotated in the Silva database, expected in the controls
-
--genus_otuabund_sample: table of the oberved percent frequency of each Genus for all samples
---genus_otuabund_control: subset of genus_otuabund_sample, grouped by controls
----genus_otuabund_ext_kit: subset of genus_otuabund_ext_kit, to include only ext controls, grouped by kit
-
 
 #Load required libraries
 ```{r}
@@ -36,39 +12,39 @@ library(data.table)
 ```
 
 #Taxonomy Reference - Control Annotations
-Read in controls taxonomy file, grouped by Genus
+Read in controls taxonomy file, grouped by class
 ```{r}
-genus_percent <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Taxonomy\\Taxonomy_Genus.txt",sep="\t",header=TRUE)
+class_percent <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Taxonomy\\Taxonomy_class.txt",sep="\t",header=TRUE)
 
-#Add row names to genus full
-genus_list <- unique(genus_percent[,"Genus"])
-rownames(genus_percent) <- genus_list
+#Add row names to class full
+class_list <- unique(class_percent[,lass"])
+rownames(class_percent) <- class_list
 
 #Create Control Composition Database, removing rows of species not in samples, followed by samples not of specified control type
 ##Artifical Colony
-art.col.con <- subset(genus_percent, !(Art.Col=='NA'))
+art.col.con <- subset(class_percent, !(Art.Col=='NA'))
 art.col.con <- art.col.con[,1:10]
 
 ##Two concentrations of zymo extraction controls
-zymo.seq200.con <- subset(genus_percent, !(Zymo.Ext=='NA'))
+zymo.seq200.con <- subset(class_percent, !(Zymo.Ext=='NA'))
 zymo.seq200.con <- zymo.seq200.con[,c(1:9,15)]
 zymo.seq2000.con <- zymo.seq200.con
 
 #Zymo Sequencing Control
-zymo.ext.con <-subset(genus_percent, !(Zymo.Seq=='NA'))
+zymo.ext.con <-subset(class_percent, !(Zymo.Seq=='NA'))
 zymo.ext.con <- zymo.ext.con[,c(1:9,16)]
 
 #ATTC Controls
-msa1000.con <-subset(genus_percent, !(MSA1000=='NA'))
+msa1000.con <-subset(class_percent, !(MSA1000=='NA'))
 msa1000.con <- msa1000.con[,c(1:9,11)]
 
-msa1001.con <- subset(genus_percent, !(MSA1001=='NA'))
+msa1001.con <- subset(class_percent, !(MSA1001=='NA'))
 msa1001.con <- msa1001.con[,c(1:9,12)]
 
-msa1002.con <- subset(genus_percent, !(MSA1002=='NA'))
+msa1002.con <- subset(class_percent, !(MSA1002=='NA'))
 msa1002.con <- msa1002.con[,c(1:9,13)]
 
-msa1003.con <- subset(genus_percent, !(MSA1003=='NA'))
+msa1003.con <- subset(class_percent, !(MSA1003=='NA'))
 msa1003.con <- msa1003.con[,c(1:9,14)]
 
 ```
@@ -101,45 +77,45 @@ nrow(control_info)
 row.names(control_info) <- control_info$NephID
 ```
 
-#OTU Counts - OTU's by Genus (raw data)
-Read in OTU information, and determine total Genus counts
+#OTU Counts - OTU's by class (raw data)
+Read in OTU information, and determine total class counts
 ```{r}
-#Read in OTU database at Genus level
-genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\taxa_counts_Genus.csv", row.names = 1)
+#Read in OTU database at class level
+class_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\taxa_counts_class.csv", row.names = 1)
 
 #Create a total row for each sample
-sample_list <- colnames(genus_otu)
-genus_list <- rownames(genus_otu)
+sample_list <- colnames(class_otu)
+class_list <- rownames(class_otu)
 
 #For each sample
 for (a in sample_list){
  #Set sum to 0
  sum=0
  
- #For each genus
- for (b in genus_list){
+ #For each class
+ for (b in class_list){
   #Add the number of counts together
-  sum <- genus_otu[b,a] + sum
+  sum <- class_otu[b,a] + sum
  }
  
  #When complete, push to a "Total_Reads" row
- genus_otu["Total_Reads",a] <- sum
+ class_otu["Total_Reads",a] <- sum
  
  
 }
 ```
 
-#OTU Counts - Analysis Genus Expected in Controls by Control Type
-Read in OTU information, and determine Genus counts (presence/absence) for each sample
+#OTU Counts - Analysis class Expected in Controls by Control Type
+Read in OTU information, and determine class counts (presence/absence) for each sample
 ```{r}
 #Create control sample list, control type list
 sample_list <- unique(control_info$NephID)
 control_types <- unique(control_info$Type)
 
-#Create a missing list for non-annotated Genus
+#Create a missing list for non-annotated class
 missing_anno <- list()
 
-#Determine which genus_list to use
+#Determine which class_list to use
 ##Run through each sample
 for (a in sample_list){
  
@@ -147,33 +123,33 @@ for (a in sample_list){
  count_present = 0
  count_absent = 0
  
- #Create genus list of control types
+ #Create class list of control types
  if(control_info[a,"Type"]=="AC"){
-  genus_list <- unique(art.col.con$Genus)
+  class_list <- unique(art.col.con$Class)
   } else if(control_info[a,"Type"]=="Zymo.Ext"){
-   genus_list <- unique(zymo.ext.con$Genus)
+   class_list <- unique(zymo.ext.con$Class)
   } else if(control_info[a,"Type"]=="MSA-1000"){
-    genus_list <- unique(msa1000.con$Genus)
+    class_list <- unique(msa1000.con$Class)
   } else if(control_info[a,"Type"]=="MSA-1001"){
-   genus_list <- unique(msa1001.con$Genus)
+   class_list <- unique(msa1001.con$Class)
    } else if(control_info[a,"Type"]=="MSA-1002"){
-    genus_list <- unique(msa1002.con$Genus)
+    class_list <- unique(msa1002.con$Class)
     } else if(control_info[a,"Type"]=="MSA-1003"){
-     genus_list <- unique(msa1003.con$Genus)
+     class_list <- unique(msa1003.con$Class)
      } else if(control_info[a,"Type"]=="Zymo.Seq.200"){
-      genus_list <- unique(zymo.seq200.con$Genus)
+      class_list <- unique(zymo.seq200.con$Class)
       } else if(control_info[a,"Type"]=="Zymo.Seq.2000"){
-       genus_list <- unique(zymo.seq2000.con$Genus)
-       } else {genus_list <- data.frame()}
+       class_list <- unique(zymo.seq2000.con$Class)
+       } else {class_list <- data.frame()}
  
  #Convert to character
- genus_list <- as.character(genus_list)
+ class_list <- as.character(class_list)
  
- #For each genus is list, determine number of reads
- for (b in genus_list){
-  value <- genus_otu[b,a]
+ #For each class is list, determine number of reads
+ for (b in class_list){
+  value <- class_otu[b,a]
 
-  #If value is NA (meaning that the genus was not found in sample), skip
+  #If value is NA (meaning that the class was not found in sample), skip
   #If reads are >0 then count_presence increases by 1
   #If reads are =0 then count_absence increases by 1 
 
@@ -190,19 +166,19 @@ for (a in sample_list){
  }
  
  #Add final count and length of the list to Control_Info dataframe
- control_info[a,"GenusCount"] <- count_present
- control_info[a,"GenusAbsent"] <- count_absent
- control_info[a,"GenusExpect"] <- length(genus_list)
+ control_info[a,"classCount"] <- count_present
+ control_info[a,"classAbsent"] <- count_absent
+ control_info[a,"classExpect"] <- length(class_list)
 }
 
-#New Database to store final Genus information
-genus_otucount_controls <- data.frame()
+#New Database to store final class information
+class_otucount_controls <- data.frame()
 
 #For each of the control types
 for (b in control_types){
  
  #Reset counts
- genus=0
+ class=0
  total=0
  count=0
  
@@ -215,33 +191,33 @@ for (b in control_types){
   #If the current samples control type matches the control type of the iteration
   if(valid==b){
    
-   #Add the total number of genus found
-   #Add the total number of genus expected, and subtract the number missing (this is necessary as some
-   #genus are not found in the list, and not necessarily absent from the sample)
-   genus <- genus + control_info[a,"GenusCount"]
-   total <- total + control_info[a,"GenusCount"] + control_info[a,"GenusAbsent"]
-   expect <- control_info[a,"GenusExpect"]
+   #Add the total number of class found
+   #Add the total number of class expected, and subtract the number missing (this is necessary as some
+   #class are not found in the list, and not necessarily absent from the sample)
+   class <- class + control_info[a,"classCount"]
+   total <- total + control_info[a,"classCount"] + control_info[a,"classAbsent"]
+   expect <- control_info[a,"classExpect"]
    count <- count + 1
   } else{
     next
    }
  }
  
- #Find the average of the genus and totals
- genus_average <- genus/count
+ #Find the average of the class and totals
+ class_average <- class/count
  total_average <- total/count
  
  #Push the totals to the new database 
- genus_otucount_controls[1,b] <- genus_average
- genus_otucount_controls[2,b] <- total_average
- genus_otucount_controls[3,b] <- expect
+ class_otucount_controls[1,b] <- class_average
+ class_otucount_controls[2,b] <- total_average
+ class_otucount_controls[3,b] <- expect
 
  #Add Row names
- row.names(genus_otucount_controls) <- c("Genus Count","Total", "Expected")
+ row.names(class_otucount_controls) <- c("class Count","Total", "Expected")
 }
 ```
 
-#OTU Counts - Analysis Genus OTU Presence/Absence by Control Type by Kit (Ext Control Only)
+#OTU Counts - Analysis class OTU Presence/Absence by Control Type by Kit (Ext Control Only)
 Extraction controls by control type by kit
 ```{r}
 #Unique Kits, removing "None" as a kit type
@@ -251,8 +227,8 @@ kit_types <- kit_types[!kit_types %in% "None"]
 #Control Types for Extraction only - no information for Sequencing controls
 control_types <- c("AC", "Zymo.Ext")
 
-#New Database for genus level count information from kits
-genus_otucount_ext_kit <- data.frame()
+#New Database for class level count information from kits
+class_otucount_ext_kit <- data.frame()
 
 #Reset counters
 sums =0
@@ -266,7 +242,7 @@ for (a in kit_types){
  for (b in control_types) {
   
   #Reset counters
-  genus =0
+  class =0
   total=0
   expect=0
 
@@ -277,16 +253,16 @@ for (a in kit_types){
   #For each sample in the list
   for (c in sample_list){
    
-   #Count the number of unique genus found
+   #Count the number of unique class found
    #Count the total number of gensus matched in reference database
-   #Count the number of expected genus for this sample
-   genus <- genus + control_info[c,"GenusCount"]
-   total <- total + control_info[c,"GenusCount"] + control_info[c,"GenusAbsent"]
-   expect <- control_info[c,"GenusExpect"]
+   #Count the number of expected class for this sample
+   class <- class + control_info[c,"classCount"]
+   total <- total + control_info[c,"classCount"] + control_info[c,"classAbsent"]
+   expect <- control_info[c,"classExpect"]
   }
   
   #Take the average of all extracted iterations of this control  with this kit of
-  genus_average <- genus/length(sample_list)
+  class_average <- class/length(sample_list)
   total_average <- total/length(sample_list)
   
   #Move the row counters by 1 or 2
@@ -294,8 +270,8 @@ for (a in kit_types){
   row_count2 <- sums+2
   
   #Push information to the database
-  genus_otucount_ext_kit[row_count, b] <- genus_average
-  genus_otucount_ext_kit[row_count2, b] <- genus_average
+  class_otucount_ext_kit[row_count, b] <- class_average
+  class_otucount_ext_kit[row_count2, b] <- class_average
  }
  
  #Increase the row counter to skip the two filled rows
@@ -303,29 +279,29 @@ for (a in kit_types){
 }
 
 #Add row names to the database
-row.names (genus_otucount_ext_kit) <- c("Qiagen DSPs_Count", "Qiagen DSP_Expected", "Zymo Mag Bead_Count", "Zymo MagBead_Expected", "PowerMag Soil_Count", "PowerMag Soil_Expected", "PowerMag MB_Count", "PowerMag MB_Expected", "Qiagen QIAmp_Count", "Qiagen QIAmp_Expected")  
+row.names (class_otucount_ext_kit) <- c("Qiagen DSPs_Count", "Qiagen DSP_Expected", "Zymo Mag Bead_Count", "Zymo MagBead_Expected", "PowerMag Soil_Count", "PowerMag Soil_Expected", "PowerMag MB_Count", "PowerMag MB_Expected", "Qiagen QIAmp_Count", "Qiagen QIAmp_Expected")  
 ```
 
-#OTU Percent - Analysis Genus OTU Abundance (All Samples)
+#OTU Percent - Analysis class OTU Abundance (All Samples)
 ```{r}
 #Create sample list
 sample_list <- unique(control_info$NephID)
-genus_list <- rownames(genus_otu[1:nrow(genus_otu)-1,])
+class_list <- rownames(class_otu[1:nrow(class_otu)-1,])
 
 #Create new table
-genus_otuabund_sample = data.frame()
+class_otuabund_sample = data.frame()
 
-#Determine which genus_list to use
+#Determine which class_list to use
 ##Run through each sample
 for (a in sample_list){
  
- for (b in genus_list){
+ for (b in class_list){
   
-  #Determine the reads for the genus, and the total reads for the sample
-  reads <- genus_otu[b,a]
-  total <- genus_otu["Total_Reads",a]
+  #Determine the reads for the class, and the total reads for the sample
+  reads <- class_otu[b,a]
+  total <- class_otu["Total_Reads",a]
 
-  #If value is NA (meaning that the genus was not found in sample), skip
+  #If value is NA (meaning that the class was not found in sample), skip
   #If reads are >0 then add the read count to reads_total
 
   if(is.na(reads) | is.null(reads)) {
@@ -333,30 +309,30 @@ for (a in sample_list){
   } else {
    percent <- (reads/total)
    
-   #Add out count percent to the genus_otuabund_sample database
-   genus_otuabund_sample[b,a] <- percent
+   #Add out count percent to the class_otuabund_sample database
+   class_otuabund_sample[b,a] <- percent
   }
  }
 }
 
 #Output the table of all samples
-write.csv(genus_otuabund_sample,"genus_otuabund_sample.csv")
+write.csv(class_otuabund_sample,"class_otuabund_sample.csv")
 ```
 
-#OTU Percent - Analysis Genus OTU Abundance by Control Type
+#OTU Percent - Analysis class OTU Abundance by Control Type
 ```{r}
-#Unique Types of controls and all genus
+#Unique Types of controls and all class
 control_types <- unique(control_info$Type)
-genus_list <- rownames(genus_otu[1:nrow(genus_otu)-1,])
+class_list <- rownames(class_otu[1:nrow(class_otu)-1,])
 
-#New Database to store final Genus information
-genus_otuabund_control <- data.frame()
+#New Database to store final class information
+class_otuabund_control <- data.frame()
 
 #For each of the control types
 for (a in control_types){
  
-  #For each Genus in list
-  for (b in genus_list){
+  #For each class in list
+  for (b in class_list){
    
    #Reset Counter
    reads <- 0
@@ -369,38 +345,38 @@ for (a in control_types){
    #For each of the samples in the sample list
    for(c in sample_list){
     
-    #Add up the total percentages from otupercent_sample table [genus,sampleID]
-    reads <- genus_otu [b,c] + reads
-    total <- genus_otu["Total_Reads",c] + total
+    #Add up the total percentages from otupercent_sample table [class,sampleID]
+    reads <- class_otu [b,c] + reads
+    total <- class_otu["Total_Reads",c] + total
    }
    
-   #average of genus level by taking total number of reads of that genus divded by 
+   #average of class level by taking total number of reads of that class divded by 
    #total number of reads for samples included
    #Push value to new dataframe
    percent <- reads / total
-   genus_otuabund_control[b,a] <- percent
+   class_otuabund_control[b,a] <- percent
   }
  }
 
 #Output to text file
-write.csv(genus_otuabund_control,"genus_otuabund_control.csv")
+write.csv(class_otuabund_control,"class_otuabund_control.csv")
 ```
 
-#OTU Percent - Analysis Genus OTU Abundance by Control Type by Kit (Ext Control Only)
+#OTU Percent - Analysis class OTU Abundance by Control Type by Kit (Ext Control Only)
 ```{r}
-#Unique Types of controls and all genus
+#Unique Types of controls and all class
 kit_types <- unique(control_info$Kit)
 kit_types <- kit_types[-6] #Removing the None group
-genus_list <- rownames(genus_otu[1:nrow(genus_otu)-1,])
+class_list <- rownames(class_otu[1:nrow(class_otu)-1,])
 
 #Store column number
-cols <- ncol(genus_percent)
+cols <- ncol(class_percent)
 
 #For each of the kits types
 for (a in kit_types){
  
-  #For each Genus in list
-  for (b in genus_list){
+  #For each class in list
+  for (b in class_list){
    
    #Reset Counter
    reads <- 0
@@ -413,22 +389,22 @@ for (a in kit_types){
    #For each of the samples in the sample list
    for(c in sample_list){
     
-    #Add up the total percentages from otupercent_sample table [genus,sampleID]
-    reads <- genus_otu [b,c] + reads
-    total <- genus_otu["Total_Reads",c] + total
+    #Add up the total percentages from otupercent_sample table [class,sampleID]
+    reads <- class_otu [b,c] + reads
+    total <- class_otu["Total_Reads",c] + total
    }
    
-   #average of genus level by taking total number of reads of that genus divded by 
+   #average of class level by taking total number of reads of that class divded by 
    #total number of reads for samples included
    #Push value to new dataframe
    percent <- reads / total
-   genus_percent[b,a] <- percent
+   class_percent[b,a] <- percent
   }
 }
 #Repeat at the control by kit level
 control_types<-c("AC","Zymo.Ext")
 
-i = ncol(genus_percent) +1
+i = ncol(class_percent) +1
 #For each of the kits types
 for (a in kit_types){
  for(b in control_types){
@@ -436,7 +412,7 @@ for (a in kit_types){
   sample_list<- subset(control_info, Kit==a & Type==b)
   sample_list <- unique(sample_list$NephID)
   
-  for(c in genus_list){
+  for(c in class_list){
    
    #Reset Counter
    reads <- 0
@@ -445,16 +421,16 @@ for (a in kit_types){
     #For each of the samples in the sample list
    for(d in sample_list){
     
-    #Add up the total percentages from otupercent_sample table [genus,sampleID]
-    reads <- genus_otu [c,d] + reads
-    total <- genus_otu["Total_Reads",d] + total
+    #Add up the total percentages from otupercent_sample table [class,sampleID]
+    reads <- class_otu [c,d] + reads
+    total <- class_otu["Total_Reads",d] + total
    }
    
-   #average of genus level by taking total number of reads of that genus divded by 
+   #average of class level by taking total number of reads of that class divded by 
    #total number of reads for samples included
    #Push value to new dataframe
    percent <- reads / total
-   genus_percent[c,i] <- percent
+   class_percent[c,i] <- percent
   }
   i=i+1
  }
@@ -472,37 +448,37 @@ new_colnames<- c("Qiagen DSP Virus_OB", "Zymo MagBead DNone Kit_OB","MagAttract 
 
 #for each header name, apply it to the recently created columns
 for (a in new_colnames){
- colnames(genus_percent)[i]<- a
+ colnames(class_percent)[i]<- a
  i=i+1
 }
 
 #Output to text file
-write.csv(genus_percent,"genus_outabund_kit.csv")
+write.csv(class_percent,"class_outabund_kit.csv")
 ```
 
-#OTU Percent - Analysis of Genus Percent Abundance Differences, expected versus observed by kit (Ext Only)
+#OTU Percent - Analysis of class Percent Abundance Differences, expected versus observed by kit (Ext Only)
 Perform AC and Zymo.Ext Comparisons
 ```{r}
-#Create new genus databse with only AC and Zymo Columns
-#Remove genus groups not included in control types
+#Create new class databse with only AC and Zymo Columns
+#Remove class groups not included in control types
 temp <- data.frame()
-temp <- genus_percent[,c(11,16,23:32)]
+temp <- class_percent[,c(11,16,23:32)]
 temp <- subset(temp, !(Art.Col=="NA" & Zymo.Ext=="NA"))
 
 #Save the column start
-cols=ncol(genus_percent)
+cols=ncol(class_percent)
 
 #Set the counter
 i=cols+1
 
 #Create lists to compare kits
-genus_list <- unique(rownames(temp))
+class_list <- unique(rownames(temp))
 compare_list <- unique(colnames(temp[,3:12]))
 
 #For each kit 
 for (a in compare_list){
- #For each genus, within the artifical colony list
- for (b in genus_list){
+ #For each class, within the artifical colony list
+ for (b in class_list){
   #Determine abundance value
   if(i%%2==0){
    value <- temp[b,"Zymo.Ext"]
@@ -512,11 +488,11 @@ for (a in compare_list){
   
   #If the value is NA fill in NA
   if(is.na(value)){
-   genus_percent[b,i] <- "NA"
+   class_percent[b,i] <- "NA"
   }
   #Otherwise, fill in the abundance rate
   else{
-   genus_percent[b,i] <- ((value - temp[b,a])/value)*100*-1
+   class_percent[b,i] <- ((value - temp[b,a])/value)*100*-1
   }
   
  }
@@ -533,27 +509,27 @@ new_colnames <- c("Qiagen DSP-AC_Diff","Qiagen DSP-ZE_Diff",
 
 i=cols+1
 for (a in new_colnames){
- colnames(genus_percent)[i]<- a
+ colnames(class_percent)[i]<- a
  i=i+1
 }
 
-#subset table to include only relevant genus, and only control information for extraction
-temp <- genus_percent[,c(11,16,19:41)]
+#subset table to include only relevant class, and only control information for extraction
+temp <- class_percent[,c(11,16,19:41)]
 temp <- subset(temp, !(Art.Col=="NA" & Zymo.Ext=="NA"))
 
 #Output file
-write.csv(temp,"genus_otuabund_obsVSexp_ext.csv")
+write.csv(temp,"class_otuabund_obsVSexp_ext.csv")
 ```
 
-#OTU Percent - Not expected Genus by Control Type by Kit (Ext Control Only)
+#OTU Percent - Not expected class by Control Type by Kit (Ext Control Only)
 ```{r}
 
-#Create temp dataframe from genus_percent
-temp <- genus_percent[,c(11,16,23:32)]
+#Create temp dataframe from class_percent
+temp <- class_percent[,c(11,16,23:32)]
 
-#Subset by those Genus not expected to be in extraction
+#Subset by those class not expected to be in extraction
 temp <- subset(temp, is.na(Art.Col) | is.na(Zymo.Ext))
 
 #Output the unexpected percent frequency database
-write.csv(temp,"genus_other.csv")
+write.csv(temp,"class_other.csv")
 ```
