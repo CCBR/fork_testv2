@@ -12,39 +12,39 @@ library(data.table)
 ```
 
 #Taxonomy Reference - Control Annotations
-Read in controls taxonomy file, grouped by class
+Read in controls taxonomy file, grouped by order
 ```{r}
-class_percent <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Taxonomy\\Taxonomy_class.txt",sep="\t",header=TRUE)
+order_percent <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Taxonomy\\Taxonomy_order.txt",sep="\t",header=TRUE)
 
-#Add row names to class full
-class_list <- unique(class_percent[,"Class"])
-rownames(class_percent) <- class_list
+#Add row names to order full
+order_list <- unique(order_percent[,"Order"])
+rownames(order_percent) <- order_list
 
 #Create Control Composition Database, removing rows of species not in samples, followed by samples not of specified control type
 ##Artifical Colony
-art.col.con <- subset(class_percent, !(Art.Col=='NA'))
+art.col.con <- subset(order_percent, !(Art.Col=='NA'))
 art.col.con <- art.col.con[,1:10]
 
 ##Two concentrations of zymo extraction controls
-zymo.seq200.con <- subset(class_percent, !(Zymo.Seq=='NA'))
+zymo.seq200.con <- subset(order_percent, !(Zymo.Seq=='NA'))
 zymo.seq200.con <- zymo.seq200.con[,c(1:9,15)]
 zymo.seq2000.con <- zymo.seq200.con
 
 #Zymo Sequencing Control
-zymo.ext.con <-subset(class_percent, !(Zymo.Ext=='NA'))
+zymo.ext.con <-subset(order_percent, !(Zymo.Ext=='NA'))
 zymo.ext.con <- zymo.ext.con[,c(1:9,16)]
 
 #ATTC Controls
-msa1000.con <-subset(class_percent, !(MSA1000=='NA'))
+msa1000.con <-subset(order_percent, !(MSA1000=='NA'))
 msa1000.con <- msa1000.con[,c(1:9,11)]
 
-msa1001.con <- subset(class_percent, !(MSA1001=='NA'))
+msa1001.con <- subset(order_percent, !(MSA1001=='NA'))
 msa1001.con <- msa1001.con[,c(1:9,12)]
 
-msa1002.con <- subset(class_percent, !(MSA1002=='NA'))
+msa1002.con <- subset(order_percent, !(MSA1002=='NA'))
 msa1002.con <- msa1002.con[,c(1:9,13)]
 
-msa1003.con <- subset(class_percent, !(MSA1003=='NA'))
+msa1003.con <- subset(order_percent, !(MSA1003=='NA'))
 msa1003.con <- msa1003.con[,c(1:9,14)]
 
 ```
@@ -77,45 +77,45 @@ nrow(control_info)
 row.names(control_info) <- control_info$NephID
 ```
 
-#OTU Counts - OTU's by class (raw data)
-Read in OTU information, and determine total class counts
+#OTU Counts - OTU's by order (raw data)
+Read in OTU information, and determine total order counts
 ```{r}
-#Read in OTU database at class level
-class_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\taxa_counts_class.csv", row.names = 1)
+#Read in OTU database at order level
+order_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\taxa_counts_order.csv", row.names = 1)
 
 #Create a total row for each sample
-sample_list <- colnames(class_otu)
-class_list <- rownames(class_otu)
+sample_list <- colnames(order_otu)
+order_list <- rownames(order_otu)
 
 #For each sample
 for (a in sample_list){
  #Set sum to 0
  sum=0
  
- #For each class
- for (b in class_list){
+ #For each order
+ for (b in order_list){
   #Add the number of counts together
-  sum <- class_otu[b,a] + sum
+  sum <- order_otu[b,a] + sum
  }
  
  #When complete, push to a "Total_Reads" row
- class_otu["Total_Reads",a] <- sum
+ order_otu["Total_Reads",a] <- sum
  
  
 }
 ```
 
-#OTU Counts - Analysis class Expected in Controls by Control Type
-Read in OTU information, and determine class counts (presence/absence) for each sample
+#OTU Counts - Analysis order Expected in Controls by Control Type
+Read in OTU information, and determine order counts (presence/absence) for each sample
 ```{r}
 #Create control sample list, control type list
 sample_list <- unique(control_info$NephID)
 control_types <- unique(control_info$Type)
 
-#Create a missing list for non-annotated class
+#Create a missing list for non-annotated order
 missing_anno <- list()
 
-#Determine which class_list to use
+#Determine which order_list to use
 ##Run through each sample
 for (a in sample_list){
  
@@ -123,33 +123,33 @@ for (a in sample_list){
  count_present = 0
  count_absent = 0
  
- #Create class list of control types
+ #Create order list of control types
  if(control_info[a,"Type"]=="AC"){
-  class_list <- unique(art.col.con$Class)
+  order_list <- unique(art.col.con$Order)
   } else if(control_info[a,"Type"]=="Zymo.Ext"){
-   class_list <- unique(zymo.ext.con$Class)
+   order_list <- unique(zymo.ext.con$Order)
   } else if(control_info[a,"Type"]=="MSA-1000"){
-    class_list <- unique(msa1000.con$Class)
+    order_list <- unique(msa1000.con$Order)
   } else if(control_info[a,"Type"]=="MSA-1001"){
-   class_list <- unique(msa1001.con$Class)
+   order_list <- unique(msa1001.con$Order)
    } else if(control_info[a,"Type"]=="MSA-1002"){
-    class_list <- unique(msa1002.con$Class)
+    order_list <- unique(msa1002.con$Order)
     } else if(control_info[a,"Type"]=="MSA-1003"){
-     class_list <- unique(msa1003.con$Class)
+     order_list <- unique(msa1003.con$Order)
      } else if(control_info[a,"Type"]=="Zymo.Seq.200"){
-      class_list <- unique(zymo.seq200.con$Class)
+      order_list <- unique(zymo.seq200.con$Order)
       } else if(control_info[a,"Type"]=="Zymo.Seq.2000"){
-       class_list <- unique(zymo.seq2000.con$Class)
-       } else {class_list <- data.frame()}
+       order_list <- unique(zymo.seq2000.con$Order)
+       } else {order_list <- data.frame()}
  
  #Convert to character
- class_list <- as.character(class_list)
+ order_list <- as.character(order_list)
  
- #For each class is list, determine number of reads
- for (b in class_list){
-  value <- class_otu[b,a]
+ #For each order is list, determine number of reads
+ for (b in order_list){
+  value <- order_otu[b,a]
 
-  #If value is NA (meaning that the class was not found in sample), skip
+  #If value is NA (meaning that the order was not found in sample), skip
   #If reads are >0 then count_presence increases by 1
   #If reads are =0 then count_absence increases by 1 
 
@@ -166,19 +166,19 @@ for (a in sample_list){
  }
  
  #Add final count and length of the list to Control_Info dataframe
- control_info[a,"classCount"] <- count_present
- control_info[a,"classAbsent"] <- count_absent
- control_info[a,"classExpect"] <- length(class_list)
+ control_info[a,"orderCount"] <- count_present
+ control_info[a,"orderAbsent"] <- count_absent
+ control_info[a,"orderExpect"] <- length(order_list)
 }
 
-#New Database to store final class information
-class_otucount_controls <- data.frame()
+#New Database to store final order information
+order_otucount_controls <- data.frame()
 
 #For each of the control types
 for (b in control_types){
  
  #Reset counts
- class=0
+ order=0
  total=0
  count=0
  
@@ -191,33 +191,33 @@ for (b in control_types){
   #If the current samples control type matches the control type of the iteration
   if(valid==b){
    
-   #Add the total number of class found
-   #Add the total number of class expected, and subtract the number missing (this is necessary as some
-   #class are not found in the list, and not necessarily absent from the sample)
-   class <- class + control_info[a,"classCount"]
-   total <- total + control_info[a,"classCount"] + control_info[a,"classAbsent"]
-   expect <- control_info[a,"classExpect"]
+   #Add the total number of order found
+   #Add the total number of order expected, and subtract the number missing (this is necessary as some
+   #order are not found in the list, and not necessarily absent from the sample)
+   order <- order + control_info[a,"orderCount"]
+   total <- total + control_info[a,"orderCount"] + control_info[a,"orderAbsent"]
+   expect <- control_info[a,"orderExpect"]
    count <- count + 1
   } else{
     next
    }
  }
  
- #Find the average of the class and totals
- class_average <- class/count
+ #Find the average of the order and totals
+ order_average <- order/count
  total_average <- total/count
  
  #Push the totals to the new database 
- class_otucount_controls[1,b] <- class_average
- class_otucount_controls[2,b] <- total_average
- class_otucount_controls[3,b] <- expect
+ order_otucount_controls[1,b] <- order_average
+ order_otucount_controls[2,b] <- total_average
+ order_otucount_controls[3,b] <- expect
 
  #Add Row names
- row.names(class_otucount_controls) <- c("class Count","Total", "Expected")
+ row.names(order_otucount_controls) <- c("order Count","Total", "Expected")
 }
 ```
 
-#OTU Counts - Analysis class OTU Presence/Absence by Control Type by Kit (Ext Control Only)
+#OTU Counts - Analysis order OTU Presence/Absence by Control Type by Kit (Ext Control Only)
 Extraction controls by control type by kit
 ```{r}
 #Unique Kits, removing "None" as a kit type
@@ -227,8 +227,8 @@ kit_types <- kit_types[!kit_types %in% "None"]
 #Control Types for Extraction only - no information for Sequencing controls
 control_types <- c("AC", "Zymo.Ext")
 
-#New Database for class level count information from kits
-class_otucount_ext_kit <- data.frame()
+#New Database for order level count information from kits
+order_otucount_ext_kit <- data.frame()
 
 #Reset counters
 sums =0
@@ -242,7 +242,7 @@ for (a in kit_types){
  for (b in control_types) {
   
   #Reset counters
-  class =0
+  order =0
   total=0
   expect=0
 
@@ -253,16 +253,16 @@ for (a in kit_types){
   #For each sample in the list
   for (c in sample_list){
    
-   #Count the number of unique class found
+   #Count the number of unique order found
    #Count the total number of gensus matched in reference database
-   #Count the number of expected class for this sample
-   class <- class + control_info[c,"classCount"]
-   total <- total + control_info[c,"classCount"] + control_info[c,"classAbsent"]
-   expect <- control_info[c,"classExpect"]
+   #Count the number of expected order for this sample
+   order <- order + control_info[c,"orderCount"]
+   total <- total + control_info[c,"orderCount"] + control_info[c,"orderAbsent"]
+   expect <- control_info[c,"orderExpect"]
   }
   
   #Take the average of all extracted iterations of this control  with this kit of
-  class_average <- class/length(sample_list)
+  order_average <- order/length(sample_list)
   total_average <- total/length(sample_list)
   
   #Move the row counters by 1 or 2
@@ -270,8 +270,8 @@ for (a in kit_types){
   row_count2 <- sums+2
   
   #Push information to the database
-  class_otucount_ext_kit[row_count, b] <- class_average
-  class_otucount_ext_kit[row_count2, b] <- class_average
+  order_otucount_ext_kit[row_count, b] <- order_average
+  order_otucount_ext_kit[row_count2, b] <- order_average
  }
  
  #Increase the row counter to skip the two filled rows
@@ -279,29 +279,29 @@ for (a in kit_types){
 }
 
 #Add row names to the database
-row.names (class_otucount_ext_kit) <- c("Qiagen DSPs_Count", "Qiagen DSP_Expected", "Zymo Mag Bead_Count", "Zymo MagBead_Expected", "PowerMag Soil_Count", "PowerMag Soil_Expected", "PowerMag MB_Count", "PowerMag MB_Expected", "Qiagen QIAmp_Count", "Qiagen QIAmp_Expected")  
+row.names (order_otucount_ext_kit) <- c("Qiagen DSPs_Count", "Qiagen DSP_Expected", "Zymo Mag Bead_Count", "Zymo MagBead_Expected", "PowerMag Soil_Count", "PowerMag Soil_Expected", "PowerMag MB_Count", "PowerMag MB_Expected", "Qiagen QIAmp_Count", "Qiagen QIAmp_Expected")  
 ```
 
-#OTU Percent - Analysis class OTU Abundance (All Samples)
+#OTU Percent - Analysis order OTU Abundance (All Samples)
 ```{r}
 #Create sample list
 sample_list <- unique(control_info$NephID)
-class_list <- rownames(class_otu[1:nrow(class_otu)-1,])
+order_list <- rownames(order_otu[1:nrow(order_otu)-1,])
 
 #Create new table
-class_otuabund_sample = data.frame()
+order_otuabund_sample = data.frame()
 
-#Determine which class_list to use
+#Determine which order_list to use
 ##Run through each sample
 for (a in sample_list){
  
- for (b in class_list){
+ for (b in order_list){
   
-  #Determine the reads for the class, and the total reads for the sample
-  reads <- class_otu[b,a]
-  total <- class_otu["Total_Reads",a]
+  #Determine the reads for the order, and the total reads for the sample
+  reads <- order_otu[b,a]
+  total <- order_otu["Total_Reads",a]
 
-  #If value is NA (meaning that the class was not found in sample), skip
+  #If value is NA (meaning that the order was not found in sample), skip
   #If reads are >0 then add the read count to reads_total
 
   if(is.na(reads) | is.null(reads)) {
@@ -309,30 +309,30 @@ for (a in sample_list){
   } else {
    percent <- (reads/total)
    
-   #Add out count percent to the class_otuabund_sample database
-   class_otuabund_sample[b,a] <- percent
+   #Add out count percent to the order_otuabund_sample database
+   order_otuabund_sample[b,a] <- percent
   }
  }
 }
 
 #Output the table of all samples
-write.csv(class_otuabund_sample,"class_otuabund_sample.csv")
+write.csv(order_otuabund_sample,"order_otuabund_sample.csv")
 ```
 
-#OTU Percent - Analysis class OTU Abundance by Control Type
+#OTU Percent - Analysis order OTU Abundance by Control Type
 ```{r}
-#Unique Types of controls and all class
+#Unique Types of controls and all order
 control_types <- unique(control_info$Type)
-class_list <- rownames(class_otu[1:nrow(class_otu)-1,])
+order_list <- rownames(order_otu[1:nrow(order_otu)-1,])
 
-#New Database to store final class information
-class_otuabund_control <- data.frame()
+#New Database to store final order information
+order_otuabund_control <- data.frame()
 
 #For each of the control types
 for (a in control_types){
  
-  #For each class in list
-  for (b in class_list){
+  #For each order in list
+  for (b in order_list){
    
    #Reset Counter
    reads <- 0
@@ -345,38 +345,38 @@ for (a in control_types){
    #For each of the samples in the sample list
    for(c in sample_list){
     
-    #Add up the total percentages from otupercent_sample table [class,sampleID]
-    reads <- class_otu [b,c] + reads
-    total <- class_otu["Total_Reads",c] + total
+    #Add up the total percentages from otupercent_sample table [order,sampleID]
+    reads <- order_otu [b,c] + reads
+    total <- order_otu["Total_Reads",c] + total
    }
    
-   #average of class level by taking total number of reads of that class divded by 
+   #average of order level by taking total number of reads of that order divded by 
    #total number of reads for samples included
    #Push value to new dataframe
    percent <- reads / total
-   class_otuabund_control[b,a] <- percent
+   order_otuabund_control[b,a] <- percent
   }
  }
 
 #Output to text file
-write.csv(class_otuabund_control,"class_otuabund_control.csv")
+write.csv(order_otuabund_control,"order_otuabund_control.csv")
 ```
 
-#OTU Percent - Analysis class OTU Abundance by Control Type by Kit (Ext Control Only)
+#OTU Percent - Analysis order OTU Abundance by Control Type by Kit (Ext Control Only)
 ```{r}
-#Unique Types of controls and all class
+#Unique Types of controls and all order
 kit_types <- unique(control_info$Kit)
 kit_types <- kit_types[-6] #Removing the None group
-class_list <- rownames(class_otu[1:nrow(class_otu)-1,])
+order_list <- rownames(order_otu[1:nrow(order_otu)-1,])
 
 #Store column number
-cols <- ncol(class_percent)
+cols <- ncol(order_percent)
 
 #For each of the kits types
 for (a in kit_types){
  
-  #For each class in list
-  for (b in class_list){
+  #For each order in list
+  for (b in order_list){
    
    #Reset Counter
    reads <- 0
@@ -389,22 +389,22 @@ for (a in kit_types){
    #For each of the samples in the sample list
    for(c in sample_list){
     
-    #Add up the total percentages from otupercent_sample table [class,sampleID]
-    reads <- class_otu [b,c] + reads
-    total <- class_otu["Total_Reads",c] + total
+    #Add up the total percentages from otupercent_sample table [order,sampleID]
+    reads <- order_otu [b,c] + reads
+    total <- order_otu["Total_Reads",c] + total
    }
    
-   #average of class level by taking total number of reads of that class divded by 
+   #average of order level by taking total number of reads of that order divded by 
    #total number of reads for samples included
    #Push value to new dataframe
    percent <- reads / total
-   class_percent[b,a] <- percent
+   order_percent[b,a] <- percent
   }
 }
 #Repeat at the control by kit level
 control_types<-c("AC","Zymo.Ext")
 
-i = ncol(class_percent) +1
+i = ncol(order_percent) +1
 #For each of the kits types
 for (a in kit_types){
  for(b in control_types){
@@ -412,7 +412,7 @@ for (a in kit_types){
   sample_list<- subset(control_info, Kit==a & Type==b)
   sample_list <- unique(sample_list$NephID)
   
-  for(c in class_list){
+  for(c in order_list){
    
    #Reset Counter
    reads <- 0
@@ -421,16 +421,16 @@ for (a in kit_types){
     #For each of the samples in the sample list
    for(d in sample_list){
     
-    #Add up the total percentages from otupercent_sample table [class,sampleID]
-    reads <- class_otu [c,d] + reads
-    total <- class_otu["Total_Reads",d] + total
+    #Add up the total percentages from otupercent_sample table [order,sampleID]
+    reads <- order_otu [c,d] + reads
+    total <- order_otu["Total_Reads",d] + total
    }
    
-   #average of class level by taking total number of reads of that class divded by 
+   #average of order level by taking total number of reads of that order divded by 
    #total number of reads for samples included
    #Push value to new dataframe
    percent <- reads / total
-   class_percent[c,i] <- percent
+   order_percent[c,i] <- percent
   }
   i=i+1
  }
@@ -448,37 +448,37 @@ new_colnames<- c("Qiagen DSP Virus_OB", "Zymo MagBead DNone Kit_OB","MagAttract 
 
 #for each header name, apply it to the recently created columns
 for (a in new_colnames){
- colnames(class_percent)[i]<- a
+ colnames(order_percent)[i]<- a
  i=i+1
 }
 
 #Output to text file
-write.csv(class_percent,"class_outabund_kit.csv")
+write.csv(order_percent,"order_outabund_kit.csv")
 ```
 
-#OTU Percent - Analysis of class Percent Abundance Differences, expected versus observed by kit (Ext Only)
+#OTU Percent - Analysis of order Percent Abundance Differences, expected versus observed by kit (Ext Only)
 Perform AC and Zymo.Ext Comparisons
 ```{r}
-#Create new class databse with only AC and Zymo Columns
-#Remove class groups not included in control types
+#Create new order databse with only AC and Zymo Columns
+#Remove order groups not included in control types
 temp <- data.frame()
-temp <- class_percent[,c(11,16,23:32)]
+temp <- order_percent[,c(11,16,23:32)]
 temp <- subset(temp, !(Art.Col=="NA" & Zymo.Ext=="NA"))
 
 #Save the column start
-cols=ncol(class_percent)
+cols=ncol(order_percent)
 
 #Set the counter
 i=cols+1
 
 #Create lists to compare kits
-class_list <- unique(rownames(temp))
+order_list <- unique(rownames(temp))
 compare_list <- unique(colnames(temp[,3:12]))
 
 #For each kit 
 for (a in compare_list){
- #For each class, within the artifical colony list
- for (b in class_list){
+ #For each order, within the artifical colony list
+ for (b in order_list){
   #Determine abundance value
   if(i%%2==0){
    value <- temp[b,"Zymo.Ext"]
@@ -488,11 +488,11 @@ for (a in compare_list){
   
   #If the value is NA fill in NA
   if(is.na(value)){
-   class_percent[b,i] <- "NA"
+   order_percent[b,i] <- "NA"
   }
   #Otherwise, fill in the abundance rate
   else{
-   class_percent[b,i] <- ((value - temp[b,a])/value)*100*-1
+   order_percent[b,i] <- ((value - temp[b,a])/value)*100*-1
   }
   
  }
@@ -509,27 +509,27 @@ new_colnames <- c("Qiagen DSP-AC_Diff","Qiagen DSP-ZE_Diff",
 
 i=cols+1
 for (a in new_colnames){
- colnames(class_percent)[i]<- a
+ colnames(order_percent)[i]<- a
  i=i+1
 }
 
-#subset table to include only relevant class, and only control information for extraction
-temp <- class_percent[,c(11,16,19:42)]
+#subset table to include only relevant order, and only control information for extraction
+temp <- order_percent[,c(11,16,18:42)]
 temp <- subset(temp, !(Art.Col=="NA" & Zymo.Ext=="NA"))
 
 #Output file
-write.csv(temp,"class_otuabund_obsVSexp_ext.csv")
+write.csv(temp,"order_otuabund_obsVSexp_ext.csv")
 ```
 
-#OTU Percent - Not expected class by Control Type by Kit (Ext Control Only)
+#OTU Percent - Not expected order by Control Type by Kit (Ext Control Only)
 ```{r}
 
-#Create temp dataframe from class_percent
-temp <- class_percent[,c(11,16,23:32)]
+#Create temp dataframe from order_percent
+temp <- order_percent[,c(11,16,23:32)]
 
-#Subset by those class not expected to be in extraction
+#Subset by those order not expected to be in extraction
 temp <- subset(temp, is.na(Art.Col) | is.na(Zymo.Ext))
 
 #Output the unexpected percent frequency database
-write.csv(temp,"class_other.csv")
+write.csv(temp,"order_other.csv")
 ```

@@ -50,12 +50,12 @@ art.col.con <- subset(genus_percent, !(Art.Col=='NA'))
 art.col.con <- art.col.con[,1:10]
 
 ##Two concentrations of zymo extraction controls
-zymo.seq200.con <- subset(genus_percent, !(Zymo.Ext=='NA'))
+zymo.seq200.con <- subset(genus_percent, !(Zymo.Seq=='NA'))
 zymo.seq200.con <- zymo.seq200.con[,c(1:9,15)]
 zymo.seq2000.con <- zymo.seq200.con
 
 #Zymo Sequencing Control
-zymo.ext.con <-subset(genus_percent, !(Zymo.Seq=='NA'))
+zymo.ext.con <-subset(genus_percent, !(Zymo.Ext=='NA'))
 zymo.ext.con <- zymo.ext.con[,c(1:9,16)]
 
 #ATTC Controls
@@ -538,7 +538,7 @@ for (a in new_colnames){
 }
 
 #subset table to include only relevant genus, and only control information for extraction
-temp <- genus_percent[,c(11,16,19:41)]
+temp <- genus_percent[,c(11,16,19:42)]
 temp <- subset(temp, !(Art.Col=="NA" & Zymo.Ext=="NA"))
 
 #Output file
