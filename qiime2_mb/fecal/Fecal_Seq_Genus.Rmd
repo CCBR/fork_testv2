@@ -421,6 +421,7 @@ for (a in plates){
 }
 #Repeat at the control by plate level
 control_types<-c("MSA-1000", "MSA-1001", "MSA-1002", "MSA-1003", "Zymo.Seq.200", "Zymo.Seq.2000")
+hide <- genus_percent
 
 i = ncol(genus_percent) +1
 #For each of the kits types
@@ -458,7 +459,7 @@ for (a in plates){
 i=cols+1
 #Add column names
 new_colnames<- c("PC04924_OB", "PC04925_OB","PC07578_OB",
-                 "PC04924_MS1000", "PC04924_MS1001","PC04924_MS1002","PC04924_MS1003", 
+                 "PC04924_MS1000", "PC04924_MS1001", "PC04924_MS1002", "PC04924_MS1003", 
                  "PC04924_Seq.200", "PC04924_Seq2000",
                  "PC04925_MS1000", "PC04925_MS1001","PC04925_MS1002","PC04925_MS1003", 
                  "PC04925_Seq.200", "PC04925_Seq2000",
@@ -474,18 +475,22 @@ for (a in new_colnames){
 write.csv(genus_percent,"genus_outabund_seq.csv")
 ```
 
-#OTU Percent - Analysis of Genus Percent Abundance Differences, expected versus observed by kit (Ext Only)
-Create new genus databse with only MSA and Zymo Seq Columns
+#10.OTU Percent - Analysis of Genus Percent Abundance Differences
+Expected versus observed by plate (Seq Only) - Create new genus databse with only MSA and Zymo Seq Columns
 ```{r}
 #Remove genus groups not included in control types
 hide<-genus_percent
 temp <- data.frame()
+colnames(genus_percent)
 temp <- genus_percent[,c(12:15,17,21:38)]
 temp <- subset(temp, !('MSA-1000'=="NA" & 'MSA-1001'=="NA"& 'MSA-1002'=="NA"& 'MSA-1003'=="NA"& 
                        'Zymo.Seq.200'=="NA"& 'Zymo.Seq.2000'=="NA"))
-head(temp)
+temp2 <- temp[,c(1:5,5)]
+head(temp2)
+
 #Save the column start
 cols=ncol(genus_percent)
+cols
 
 #Set the counter
 i=cols+1
@@ -501,11 +506,11 @@ for (a in compare_list){
   counter==1
  } else{counter=counter+1}
  
- #For each genus, within the artifical colony list
+ #For each genus, within the specific colony list
  for (b in genus_list){
   
   #Determine abundance value
-  value <- temp[b,counter]
+  value <- temp2[b,counter]
   
   #If the value is NA fill in NA
   if(is.na(value)){
@@ -522,10 +527,12 @@ for (a in compare_list){
 }
 
 #Add column names
-new_colnames <- c("Qiagen DSP-AC_Diff","Qiagen DSP-ZE_Diff",
-                  "Zymo MagBead-AC_Diff","Zymo MagBead-ZE_Diff", "MagAttract PS-AC_Diff",
-                  "MagAttract PS-ZE_Diff", "MagAttract MB-AC_Diff","MagAttract MB-ZE_Diff", 
-                  "Qiagen QIAmp-AC_Diff", "Qiagen QIAMmp-ZE_Diff")
+new_colnames <- c("PC04924-MSA1000_Diff", "PC04924-MSA1001_Diff", "PC04924-MSA1002_Diff",
+                  "PC04924-MSA1003_Diff", "PC04924-Seq.200_Diff", "PC04924-Seq.2000_Diff",
+                  "PC04925-MSA1000_Diff", "PC04925-MSA1000_Diff", "PC04925-MSA1001_Diff",
+                  "PC04925-MSA1002_Diff", "PC049254-Seq.200_Diff", "PC04925-Seq.2000_Diff",
+                  "PC07578-MSA1000_Diff", "PC07578-MSA1000_Diff", "PC07578-MSA1001_Diff",
+                  "PC07578-MSA1002_Diff", "PC07578-Seq.200_Diff", "PC07578-Seq.2000_Diff")
 
 i=cols+1
 for (a in new_colnames){
@@ -534,22 +541,24 @@ for (a in new_colnames){
 }
 
 #subset table to include only relevant genus, and only seq control information
-temp <- genus_percent[,c(11,16,19:42)]
-temp <- subset(temp, !(Art.Col=="NA" & Zymo.Ext=="NA"))
+colnames(genus_percent)
+temp <- genus_percent[,c(12:15,17,21:56)]
+temp <- subset(temp, !('MSA-1000'=="NA" & 'MSA-1001'=="NA"& 'MSA-1002'=="NA"& 'MSA-1003'=="NA"& 
+                       'Zymo.Seq.200'=="NA"& 'Zymo.Seq.2000'=="NA"))
 
 #Output file
-write.csv(temp,"genus_otuabund_obsVSexp_ext.csv")
+write.csv(temp,"genus_otuabund_obsVSexp_seq.csv")
 ```
 
-#OTU Percent - Not expected Genus by Control Type by Kit (Ext Control Only)
+#11.OTU Percent - Not expected Genus by Control Type by Kit (Seq Only)
 ```{r}
-
 #Create temp dataframe from genus_percent
-temp <- genus_percent[,c(11,16,23:32)]
+colnames(temp)
+temp <- genus_percent[,c(12:15,17,24:41)]
 
 #Subset by those Genus not expected to be in extraction
-temp <- subset(temp, is.na(Art.Col) | is.na(Zymo.Ext))
-
+temp <- subset(temp, is.na(MSA1000) | is.na(MSA1001) | is.na(MSA1002) | 
+                is.na(MSA1003) | is.na(Zymo.Seq))
 #Output the unexpected percent frequency database
-write.csv(temp,"genus_other.csv")
+write.csv(temp,"genus_other_seq.csv")
 ```
