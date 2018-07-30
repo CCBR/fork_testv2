@@ -49,27 +49,9 @@ rownames(genus_percent) <- genus_list
 art.col.con <- subset(genus_percent, !(Art.Col=='NA'))
 art.col.con <- art.col.con[,1:10]
 
-##Two concentrations of zymo extraction controls
-zymo.seq200.con <- subset(genus_percent, !(Zymo.Seq=='NA'))
-zymo.seq200.con <- zymo.seq200.con[,c(1:9,15)]
-zymo.seq2000.con <- zymo.seq200.con
-
 #Zymo Sequencing Control
 zymo.ext.con <-subset(genus_percent, !(Zymo.Ext=='NA'))
 zymo.ext.con <- zymo.ext.con[,c(1:9,16)]
-
-#ATTC Controls
-msa1000.con <-subset(genus_percent, !(MSA1000=='NA'))
-msa1000.con <- msa1000.con[,c(1:9,11)]
-
-msa1001.con <- subset(genus_percent, !(MSA1001=='NA'))
-msa1001.con <- msa1001.con[,c(1:9,12)]
-
-msa1002.con <- subset(genus_percent, !(MSA1002=='NA'))
-msa1002.con <- msa1002.con[,c(1:9,13)]
-
-msa1003.con <- subset(genus_percent, !(MSA1003=='NA'))
-msa1003.con <- msa1003.con[,c(1:9,14)]
 
 ```
 
@@ -152,19 +134,7 @@ for (a in sample_list){
   genus_list <- unique(art.col.con$Genus)
   } else if(control_info[a,"Type"]=="Zymo.Ext"){
    genus_list <- unique(zymo.ext.con$Genus)
-  } else if(control_info[a,"Type"]=="MSA-1000"){
-    genus_list <- unique(msa1000.con$Genus)
-  } else if(control_info[a,"Type"]=="MSA-1001"){
-   genus_list <- unique(msa1001.con$Genus)
-   } else if(control_info[a,"Type"]=="MSA-1002"){
-    genus_list <- unique(msa1002.con$Genus)
-    } else if(control_info[a,"Type"]=="MSA-1003"){
-     genus_list <- unique(msa1003.con$Genus)
-     } else if(control_info[a,"Type"]=="Zymo.Seq.200"){
-      genus_list <- unique(zymo.seq200.con$Genus)
-      } else if(control_info[a,"Type"]=="Zymo.Seq.2000"){
-       genus_list <- unique(zymo.seq2000.con$Genus)
-       } else {genus_list <- data.frame()}
+  } else {genus_list <- data.frame()}
  
  #Convert to character
  genus_list <- as.character(genus_list)
@@ -422,6 +392,7 @@ for (a in kit_types){
    #total number of reads for samples included
    #Push value to new dataframe
    percent <- reads / total
+   print(a)
    genus_percent[b,a] <- percent
   }
 }
@@ -497,7 +468,7 @@ i=cols+1
 
 #Create lists to compare kits
 genus_list <- unique(rownames(temp))
-compare_list <- unique(colnames(temp[,3:12]))
+compare_list <- colnames(temp[,3:12])
 
 #For each kit 
 for (a in compare_list){
