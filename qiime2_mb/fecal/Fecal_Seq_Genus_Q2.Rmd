@@ -56,21 +56,21 @@ rownames(genus_percent) <- genus_list
 #Create Control Composition Database, removing rows of species not in samples, followed by samples not of specified control type
 ##Two concentrations of zymo sequencing controls
 zymo.seq200.con <- subset(genus_percent, !(Zymo.Seq=='NA'))
-zymo.seq200.con <- zymo.seq200.con[,c(1:9,15)]
+zymo.seq200.con <- zymo.seq200.con[,c(1:9,17)]
 zymo.seq2000.con <- zymo.seq200.con
 
 #ATTC Controls
 msa1000.con <-subset(genus_percent, !(MSA1000=='NA'))
-msa1000.con <- msa1000.con[,c(1:9,11)]
+msa1000.con <- msa1000.con[,c(1:9,12)]
 
 msa1001.con <- subset(genus_percent, !(MSA1001=='NA'))
-msa1001.con <- msa1001.con[,c(1:9,12)]
+msa1001.con <- msa1001.con[,c(1:9,13)]
 
 msa1002.con <- subset(genus_percent, !(MSA1002=='NA'))
-msa1002.con <- msa1002.con[,c(1:9,13)]
+msa1002.con <- msa1002.con[,c(1:9,14)]
 
 msa1003.con <- subset(genus_percent, !(MSA1003=='NA'))
-msa1003.con <- msa1003.con[,c(1:9,14)]
+msa1003.con <- msa1003.con[,c(1:9,15)]
 
 ```
 
@@ -461,11 +461,11 @@ for (a in plates){
 i=cols+1
 #Add column names
 new_colnames<- c("PC04924_OB", "PC04925_OB","PC07578_OB",
-                 "PC04924_MS1000", "PC04924_MS1001", "PC04924_MS1002", "PC04924_MS1003", 
+                 "PC04924_MSA1000", "PC04924_MSA1001", "PC04924_MSA1002", "PC04924_MSA1003", 
                  "PC04924_Seq200", "PC04924_Seq2000",
-                 "PC04925_MS1000", "PC04925_MS1001","PC04925_MS1002","PC04925_MS1003", 
-                 "PC04925_Seq200", "PC049252000",
-                 "PC07578_MS1000", "PC07578_MS1001","PC07578_MS1002","PC07578_MS1003", 
+                 "PC04925_MSA1000", "PC04925_MSA1001","PC04925_MSA1002","PC04925_MSA1003", 
+                 "PC04925_Seq200", "PC04925_Seq2000",
+                 "PC07578_MSA1000", "PC07578_MSA1001","PC07578_MSA1002","PC07578_MSA1003", 
                  "PC07578_Seq200", "PC07578_Seq2000")
 #for each header name, apply it to the recently created columns
 for (a in new_colnames){
@@ -544,7 +544,7 @@ for (a in new_colnames){
 }
 
 #Fix bug
-#genus_percent["Staphylococcus","PC07578_MS1000"]<-0
+#genus_percent["Staphylococcus","PC07578_MSA1000"]<-0
 
 
 #subset table to include only relevant genus, and only seq control information
@@ -557,8 +557,8 @@ temp <- subset(temp, !('MSA-1000'=="NA" & 'MSA-1001'=="NA"& 'MSA-1002'=="NA"& 'M
 write.csv(temp,"genus_otuabund_seq_q2_obsVSexp.csv")
 
 #Create tableau file
-temp2<-data.frame(1:1)
-count=0
+temp2<-data.frame()
+count=1
 for (a in 24:ncol(temp)){
  for(b in 1:nrow(temp)){
   temp2[count,"Genus"] <- rownames(temp[b,])
@@ -572,15 +572,354 @@ write.csv(temp2,"genus_otuabund_seq_q2_obsVexp_tab.csv")
 
 ```
 
-#11.OTU Percent - Not expected Genus by Control Type by Kit (Seq Only)
+#11.OTU Percent - Not expected Genus by Control Type by Plate (Seq Only)
 ```{r}
 #Create temp dataframe from genus_percent
-colnames
-temp <- genus_percent[,c(12:15,17,24:41)]
+colnames(temp)
+temp <- genus_percent[,c(12:15,17,21:56)]
 
 #Subset by those Genus not expected to be in extraction
 temp <- subset(temp, is.na(MSA1000) | is.na(MSA1001) | is.na(MSA1002) | 
                 is.na(MSA1003) | is.na(Zymo.Seq))
 #Output the unexpected percent frequency database
 write.csv(temp,"genus_otuabund_seq_q2_other.csv")
+
+#Create tableau file
+temp2<-data.frame()
+count=1
+for (a in 24:ncol(temp)){
+ for(b in 1:nrow(temp)){
+  temp2[count,"Genus"] <- rownames(temp[b,])
+  temp2[count,"value"] <- temp[b,a]
+  temp2[count,"Type"] <- colnames(temp[a])
+  count=count+1
+ }
+}
+head(temp2)
+write.csv(temp2,"genus_otuabund_seq_q2_other_tab.csv")
+```
+
+#12 Plot graph
+Add slope
+```{r}
+###############
+#MSA1000
+###############
+#Create dataframe
+colnames(genus_percent)
+msa1000.plates <- genus_percent[,c("MSA1000","Genus","PC04924_MSA1000","PC04925_MSA1000","PC07578_MSA1000")]
+msa1000.plates <- subset(msa1000.plates,!(is.na(MSA1000)))
+rownames(msa1000.plates)
+colnames(msa1000.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(msa1000.plates)){
+  temp3[count,"Expected"]<- msa1000.plates[count2,"MSA1000"]
+  temp3[count,"Genus"] <- rownames(msa1000.plates[b,])
+  temp3[count,"value"] <- msa1000.plates[b,a]
+  temp3[count,"Type"] <- colnames(msa1000.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+unique(temp3$Expected)
+unique(temp3$value)
+
+
+#Expand the plot
+temp4 <- subset(temp3,value>.05)
+temp4
+
+temp5 <- subset(temp3,value<.05)
+temp5
+
+#Plot graph
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1000-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1000-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1000-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+###############
+#MSA1001
+###############
+#Create dataframe
+colnames(genus_percent)
+msa1001.plates <- genus_percent[,c("MSA1001","Genus","PC04924_MSA1001","PC04925_MSA1001","PC07578_MSA1001")]
+msa1001.plates <- subset(msa1001.plates,!(is.na(MSA1001)))
+rownames(msa1001.plates)
+colnames(msa1001.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(msa1001.plates)){
+  temp3[count,"Expected"]<- msa1001.plates[count2,"MSA1001"]
+  temp3[count,"Genus"] <- rownames(msa1001.plates[b,])
+  temp3[count,"value"] <- msa1001.plates[b,a]
+  temp3[count,"Type"] <- colnames(msa1001.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+temp3
+unique(temp3$Expected)
+unique(temp3$value)
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,Expected>.04)
+temp4
+
+temp5 <- subset(temp3,Expected<.04)
+temp5
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1001-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Uppers
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1001-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Lowers
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1001-QIIME2-Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+
+###############
+#MSA1002
+###############
+#Create dataframe
+colnames(genus_percent)
+msa1002.plates <- genus_percent[,c("MSA1002","Genus","PC04924_MSA1002","PC04925_MSA1002","PC07578_MSA1002")]
+msa1002.plates <- subset(msa1002.plates,!(is.na(MSA1002)))
+rownames(msa1002.plates)
+colnames(msa1002.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(msa1002.plates)){
+  temp3[count,"Expected"]<- msa1002.plates[count2,"MSA1002"]
+  temp3[count,"Genus"] <- rownames(msa1002.plates[b,])
+  temp3[count,"value"] <- msa1002.plates[b,a]
+  temp3[count,"Type"] <- colnames(msa1002.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+temp3
+unique(temp3$Expected)
+unique(temp3$value)
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,value>.07)
+temp4
+
+temp5 <- subset(temp3,value<.07)
+temp5
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1002-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Uppers
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1002-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Lowers
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1002-QIIME2-Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+
+###############
+#MSA1003
+###############
+#Create dataframe
+colnames(genus_percent)
+msa1003.plates <- genus_percent[,c("MSA1003","Genus","PC04924_MSA1003","PC04925_MSA1003","PC07578_MSA1003")]
+msa1003.plates <- subset(msa1003.plates,!(is.na(MSA1003)))
+rownames(msa1003.plates)
+colnames(msa1003.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(msa1003.plates)){
+  temp3[count,"Expected"]<- msa1003.plates[count2,"MSA1003"]
+  temp3[count,"Genus"] <- rownames(msa1003.plates[b,])
+  temp3[count,"value"] <- msa1003.plates[b,a]
+  temp3[count,"Type"] <- colnames(msa1003.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+unique(temp3$Expected)
+temp3
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,Expected>.1)
+temp4
+
+temp5 <- subset(temp3,Expected<.2)
+temp5
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1003-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Uppers
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1003-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Lowers
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1003-QIIME2-Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+
+
+###############
+#SEQ200
+###############
+#Create dataframe
+colnames(genus_percent)
+seq200.plates <- genus_percent[,c("Zymo.Seq","Genus","PC04924_Seq200","PC04925_Seq200","PC07578_Seq200")]
+seq200.plates <- subset(seq200.plates,!(is.na(Zymo.Seq)))
+rownames(seq200.plates)
+colnames(seq200.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(seq200.plates)){
+  temp3[count,"Expected"]<- seq200.plates[count2,"Zymo.Seq"]
+  temp3[count,"Genus"] <- rownames(seq200.plates[b,])
+  temp3[count,"value"] <- seq200.plates[b,a]
+  temp3[count,"Type"] <- colnames(seq200.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+unique(temp3$Expected)
+temp3
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,value>.15)
+temp4
+
+temp5 <- subset(temp3,value<.15)
+temp5
+
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 200-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 200-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 200-QIIME2_Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+###############
+#SEQ2000
+###############
+#Create dataframe
+colnames(genus_percent)
+seq2000.plates <- genus_percent[,c("Zymo.Seq","Genus","PC04924_Seq2000","PC04925_Seq2000","PC07578_Seq2000")]
+seq2000.plates <- subset(seq2000.plates,!(is.na(Zymo.Seq)))
+rownames(seq2000.plates)
+colnames(seq2000.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(seq2000.plates)){
+  temp3[count,"Expected"]<- seq2000.plates[count2,"Zymo.Seq"]
+  temp3[count,"Genus"] <- rownames(seq2000.plates[b,])
+  temp3[count,"value"] <- seq2000.plates[b,a]
+  temp3[count,"Type"] <- colnames(seq2000.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+unique(temp3$Expected)
+temp3
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,value>.15)
+temp4
+
+temp5 <- subset(temp3,value<.15)
+temp5
+
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 2000-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 2000-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 2000-QIIME2_Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
 ```
