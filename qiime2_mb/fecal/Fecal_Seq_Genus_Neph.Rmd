@@ -1,5 +1,5 @@
 ---
-title: "Fecal_Seq_Genus"
+title: "Fecal_Genus"
 author: "NHI"
 date: "July 3, 2018"
 output: word_document
@@ -80,7 +80,7 @@ Filter database removing all failed samples, and any that are not a control
 ```{r}
 #Read in database with variable information and list of samples that did not meet the sequencing #threshold
 variable_info <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\sampledata.txt",sep="\t",header=TRUE)
-samples_failed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\samples_being_ignored.txt",sep="\t")
+samples_failed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\samplesfailed_nephele1.txt",sep="\t")
 
 #Remove failed samples from info database
 filtered_info <-subset(variable_info, !(NephID %in% samples_failed$V1))
@@ -106,7 +106,7 @@ row.names(control_info) <- control_info$NephID
 Read in OTU information, and determine total Genus counts
 ```{r}
 #Read in OTU database at Genus level
-genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\taxa_counts_Genus.csv", row.names = 1)
+genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\nephele1_taxa_counts_Genus.csv", row.names = 1)
 
 #Create a total row for each sample
 sample_list <- colnames(genus_otu)
@@ -247,7 +247,7 @@ plates <- unique(control_info$Seq.Plate)
 control_types <- c("MSA-1000","MSA-1001", "MSA-1002","MSA-1003", "Zymo.Seq.200","Zymo.Seq.2000")
 
 #New Database for genus level count information from seq plates
-genus_otucount_seq <- data.frame()
+genus_otucount <- data.frame()
 
 #Reset counters
 sums =0
@@ -289,16 +289,16 @@ for (a in plates){
   row_count2 <- sums+2
   
   #Push information to the database
-  genus_otucount_seq[row_count, b] <- genus_average
-  genus_otucount_seq[row_count2, b] <- genus_average
+  genus_otucount[row_count, b] <- genus_average
+  genus_otucount[row_count2, b] <- genus_average
  }
  
  #Increase the row counter to skip the two filled rows
  sums = sums+2
 }
-
+genus_otucount
 #Add row names to the database
-row.names (genus_otucount_seq) <- c("PC04924_Count", "PC04924_Expected", "PC04925_Count", "PC04925_Expected", "PC07578_Count", "PC07578_Expected")  
+row.names (genus_otucount) <- c("PC04924_Count", "PC04924_Expected", "PC04925_Count", "PC04925_Expected", "PC07578_Count", "PC07578_Expected")  
 ```
 
 #7. OTU Percent - Analysis Genus OTU Abundance (All Samples)
@@ -336,7 +336,7 @@ for (a in sample_list){
 }
 
 #Output the table of all samples
-write.csv(genus_otuabund_sample,"genus_otuabund_sample.csv")
+write.csv(genus_otuabund_sample,"genus_otuabund_seq_neph_sample.csv")
 ```
 
 #8, OTU Percent - Analysis Genus OTU Abundance by Control Type
@@ -380,7 +380,7 @@ for (a in control_types){
  }
 
 #Output to text file
-write.csv(genus_otuabund_control,"genus_otuabund_control.csv")
+write.csv(genus_otuabund_control,"genus_otuabund_seq_neph_control.csv")
 ```
 
 #9. OTU Percent - Analysis Genus OTU Abundance by Control Type by Plate (Seq only)
@@ -460,11 +460,11 @@ i=cols+1
 #Add column names
 new_colnames<- c("PC04924_OB", "PC04925_OB","PC07578_OB",
                  "PC04924_MS1000", "PC04924_MS1001", "PC04924_MS1002", "PC04924_MS1003", 
-                 "PC04924_Seq.200", "PC04924_Seq2000",
+                 "PC04924.200", "PC049242000",
                  "PC04925_MS1000", "PC04925_MS1001","PC04925_MS1002","PC04925_MS1003", 
-                 "PC04925_Seq.200", "PC04925_Seq2000",
+                 "PC04925.200", "PC049252000",
                  "PC07578_MS1000", "PC07578_MS1001","PC07578_MS1002","PC07578_MS1003", 
-                 "PC07578_Seq.200", "PC07578_Seq2000")
+                 "PC07578.200", "PC075782000")
 #for each header name, apply it to the recently created columns
 for (a in new_colnames){
  colnames(genus_percent)[i]<- a
@@ -472,7 +472,7 @@ for (a in new_colnames){
 }
 
 #Output to text file
-write.csv(genus_percent,"genus_outabund_seq.csv")
+write.csv(genus_percent,"genus_outabund_seq_neph.csv")
 ```
 
 #10.OTU Percent - Analysis of Genus Percent Abundance Differences
@@ -529,10 +529,10 @@ for (a in compare_list){
 #Add column names
 new_colnames <- c("PC04924-MSA1000_Diff", "PC04924-MSA1001_Diff", "PC04924-MSA1002_Diff",
                   "PC04924-MSA1003_Diff", "PC04924-Seq.200_Diff", "PC04924-Seq.2000_Diff",
-                  "PC04925-MSA1000_Diff", "PC04925-MSA1000_Diff", "PC04925-MSA1001_Diff",
-                  "PC04925-MSA1002_Diff", "PC049254-Seq.200_Diff", "PC04925-Seq.2000_Diff",
-                  "PC07578-MSA1000_Diff", "PC07578-MSA1000_Diff", "PC07578-MSA1001_Diff",
-                  "PC07578-MSA1002_Diff", "PC07578-Seq.200_Diff", "PC07578-Seq.2000_Diff")
+                  "PC04925-MSA1000_Diff", "PC04925-MSA1001_Diff", "PC04925-MSA1002_Diff",
+                  "PC04925-MSA1003_Diff", "PC04925-Seq.200_Diff", "PC04925-Seq.2000_Diff",
+                  "PC07578-MSA1000_Diff", "PC07578-MSA1001_Diff", "PC07578-MSA1002_Diff",
+                  "PC07578-MSA1003_Diff", "PC07578-Seq.200_Diff", "PC07578-Seq.2000_Diff")
 
 i=cols+1
 for (a in new_colnames){
@@ -547,7 +547,22 @@ temp <- subset(temp, !('MSA-1000'=="NA" & 'MSA-1001'=="NA"& 'MSA-1002'=="NA"& 'M
                        'Zymo.Seq.200'=="NA"& 'Zymo.Seq.2000'=="NA"))
 
 #Output file
-write.csv(temp,"genus_otuabund_obsVSexp_seq.csv")
+write.csv(temp,"genus_otuabund_seq_neph_obsVSexp.csv")
+
+#Create tableau file
+temp2<-data.frame(1:1)
+count=0
+for (a in 24:ncol(temp)){
+ for(b in 1:nrow(temp)){
+  temp2[count,"Genus"] <- rownames(temp[b,])
+  temp2[count,"value"] <- temp[b,a]
+  temp2[count,"Type"] <- colnames(temp[a])
+  count=count+1
+ }
+}
+head(temp2)
+write.csv(temp2,"genus_otuabund_seq_neph_obsVexp_tab.csv")
+
 ```
 
 #11.OTU Percent - Not expected Genus by Control Type by Kit (Seq Only)
@@ -560,5 +575,7 @@ temp <- genus_percent[,c(12:15,17,24:41)]
 temp <- subset(temp, is.na(MSA1000) | is.na(MSA1001) | is.na(MSA1002) | 
                 is.na(MSA1003) | is.na(Zymo.Seq))
 #Output the unexpected percent frequency database
-write.csv(temp,"genus_other_seq.csv")
+write.csv(temp,"genus_otuabund_seq_neph_other.csv")
 ```
+
+#12
