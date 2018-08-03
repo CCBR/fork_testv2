@@ -575,7 +575,7 @@ write.csv(temp2,"genus_otuabund_seq_q2_obsVexp_tab.csv")
 #11.OTU Percent - Not expected Genus by Control Type by Plate (Seq Only)
 ```{r}
 #Create temp dataframe from genus_percent
-colnames(temp)
+colnames(genus_percent)
 temp <- genus_percent[,c(12:15,17,21:56)]
 
 #Subset by those Genus not expected to be in extraction
@@ -583,11 +583,13 @@ temp <- subset(temp, is.na(MSA1000) | is.na(MSA1001) | is.na(MSA1002) |
                 is.na(MSA1003) | is.na(Zymo.Seq))
 #Output the unexpected percent frequency database
 write.csv(temp,"genus_otuabund_seq_q2_other.csv")
+colnames(temp)
+head(temp)
 
 #Create tableau file
 temp2<-data.frame()
 count=1
-for (a in 24:ncol(temp)){
+for (a in 6:23){
  for(b in 1:nrow(temp)){
   temp2[count,"Genus"] <- rownames(temp[b,])
   temp2[count,"value"] <- temp[b,a]
@@ -599,7 +601,7 @@ head(temp2)
 write.csv(temp2,"genus_otuabund_seq_q2_other_tab.csv")
 ```
 
-#12 Plot graph
+#12 Plot graphs of expected to actual
 Add slope
 ```{r}
 ###############

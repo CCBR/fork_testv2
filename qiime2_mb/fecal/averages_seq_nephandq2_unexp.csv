@@ -1,0 +1,183 @@
+"","Genus","ValueQ200","ValueN200","ValueQ2000","ValueN2000"
+"Acinetobacter","Acinetobacter",NA,7.12e-06,NA,NA
+"Actinomyces","Actinomyces",NA,NA,NA,NA
+"Alistipes","Alistipes",8.75e-05,5.86666666666667e-05,NA,0.000105943
+"Anaerostipes","Anaerostipes",NA,7.12e-06,NA,2.08e-05
+"Bacteroides","Bacteroides",0.000349918,0.000223069,NA,0.000234999333333333
+"Bifidobacterium","Bifidobacterium",NA,8.03e-06,NA,NA
+"Bilophila","Bilophila",NA,1.2865e-05,NA,2.5e-05
+"Clostridium","Clostridium",NA,NA,NA,NA
+"Lachnoclostridium","Lachnoclostridium",NA,3.17666666666667e-05,NA,3.73666666666667e-05
+"Collinsella","Collinsella",NA,8.03e-06,NA,2.51e-05
+"Coprobacillus","Coprobacillus",NA,NA,NA,NA
+"Deinococcus","Deinococcus",NA,NA,NA,NA
+"Fusobacterium","Fusobacterium",NA,5.08096666666667e-05,NA,6.03523333333333e-05
+"Helicobacter","Helicobacter",NA,NA,NA,NA
+"Neisseria","Neisseria",NA,8.87e-06,NA,NA
+"Paenibacillus","Paenibacillus",NA,2.4535e-05,NA,1.29533333333333e-05
+"Parabacteroides","Parabacteroides",NA,2.67e-05,NA,3.51666666666667e-05
+"Pediococcus","Pediococcus",NA,1.161e-05,NA,1.52e-05
+"Porphyromonadaceae","Porphyromonadaceae",NA,NA,NA,NA
+"Propionibacterium","Propionibacterium",NA,NA,NA,NA
+"Pyramidobacter","Pyramidobacter",NA,NA,NA,NA
+"Ralstonia","Ralstonia",NA,1.69e-05,NA,8.315e-06
+"Rhodobacter","Rhodobacter",NA,NA,NA,8.37e-06
+"Streptococcus","Streptococcus",NA,2.131e-05,NA,1.339e-05
+"Subdoligranulum","Subdoligranulum",0.000481137,2.86833333333333e-05,NA,0.000376843
+"Clostridium innocuum group","Clostridium innocuum group",NA,NA,NA,NA
+"Eubacterium coprostanoligenes group","Eubacterium coprostanoligenes group",NA,3.55e-05,NA,2.0235e-05
+"Eubacterium eligens group","Eubacterium eligens group",NA,NA,NA,8.37e-06
+"Eubacterium hallii group","Eubacterium hallii group",NA,1.515e-05,NA,2.508e-05
+"Eubacterium rectale group","Eubacterium rectale group",NA,4.534e-05,NA,8.22523333333333e-05
+"Eubacterium ventriosum group","Eubacterium ventriosum group",NA,8.87e-06,NA,6.97e-06
+"Eubacterium xylanophilum group","Eubacterium xylanophilum group",NA,NA,NA,8.37e-06
+"Ruminococcus gauvreauii group","Ruminococcus gauvreauii group",NA,8.87e-06,NA,1.06133333333333e-05
+"Ruminococcus torques group","Ruminococcus torques group",NA,8.03e-06,NA,8.37e-06
+"Adlercreutzia","Adlercreutzia",NA,NA,NA,NA
+"Akkermansia","Akkermansia",0.000251504,7.85666666666667e-05,NA,0.000149874333333333
+"Ambiguous_taxa","Ambiguous_taxa",NA,4.57e-05,NA,8.0376e-05
+"Anaerofilum","Anaerofilum",NA,NA,NA,NA
+"Anaerotruncus","Anaerotruncus",NA,7.995e-06,NA,NA
+"Blautia","Blautia",NA,4.85243333333333e-05,NA,4.69033333333333e-05
+"Butyricicoccus","Butyricicoccus",NA,8.03e-06,NA,5.3731e-05
+"Candidatus Stoquefichus","Candidatus Stoquefichus",NA,7.575e-06,NA,1.1735e-05
+"Carnobacterium","Carnobacterium",NA,0.000935136666666667,NA,0.000926109666666667
+"Christensenellaceae R-7 group","Christensenellaceae R-7 group",NA,8.03e-06,NA,1.67e-05
+"Clostridium sensu stricto 1","Clostridium sensu stricto 1",NA,1.095e-05,NA,2.088e-05
+"Coprococcus 1","Coprococcus 1",NA,NA,NA,8.37e-06
+"Coprococcus 2","Coprococcus 2",NA,3.465e-05,NA,6.22543333333333e-05
+"Coprococcus 3","Coprococcus 3",NA,NA,NA,NA
+"Defluviitaleaceae UCG-011","Defluviitaleaceae UCG-011",NA,NA,NA,NA
+"Dialister","Dialister",3.28e-05,8.45e-06,NA,3.35e-05
+"Dorea","Dorea",0.000109349,8.87e-06,NA,8.37e-05
+"Eisenbergiella","Eisenbergiella",NA,NA,NA,NA
+"Enterobacter","Enterobacter",NA,0.00441215333333333,NA,0.00400718166666667
+"Erwinia","Erwinia",NA,0.000590238,NA,0.000624283666666667
+"Erysipelatoclostridium","Erysipelatoclostridium",NA,7.12e-06,NA,NA
+"Erysipelotrichaceae UCG-003","Erysipelotrichaceae UCG-003",NA,8.87e-06,NA,4.19e-05
+"Faecalibacterium","Faecalibacterium",0.000721706,2.99333333333333e-05,NA,0.000208709666666667
+"Family XIII AD3011 group","Family XIII AD3011 group",NA,8.87e-06,NA,NA
+"Flavonifractor","Flavonifractor",NA,NA,NA,NA
+"Fusicatenibacter","Fusicatenibacter",NA,3.0615e-05,NA,3.335e-05
+"Gordonibacter","Gordonibacter",NA,NA,NA,NA
+"Gossypium arboreum","Gossypium arboreum",NA,NA,NA,NA
+"Holdemania","Holdemania",NA,NA,NA,8.26e-06
+"Hungatella","Hungatella",NA,NA,NA,6.97e-06
+"Intestinibacter","Intestinibacter",NA,NA,NA,NA
+"Intestinimonas","Intestinimonas",NA,NA,NA,NA
+"Kluyvera","Kluyvera",NA,0.00194931133333333,NA,0.002039912
+"Lachnospira","Lachnospira",NA,2.04e-05,NA,2.51e-05
+"Lachnospiraceae FCS020 group","Lachnospiraceae FCS020 group",NA,NA,NA,NA
+"Lachnospiraceae ND3007 group","Lachnospiraceae ND3007 group",NA,2.66e-05,NA,1.67e-05
+"Lachnospiraceae NK4A136 group","Lachnospiraceae NK4A136 group",NA,1.92733333333333e-05,NA,2.92533333333333e-05
+"Lachnospiraceae UCG-001","Lachnospiraceae UCG-001",NA,NA,NA,4.1185e-05
+"Lachnospiraceae UCG-004","Lachnospiraceae UCG-004",NA,7.12e-06,NA,NA
+"Lachnospiraceae UCG-008","Lachnospiraceae UCG-008",NA,8.87e-06,NA,NA
+"Lactonifactor","Lactonifactor",NA,NA,NA,NA
+"Marvinbryantia","Marvinbryantia",NA,NA,NA,NA
+"Odoribacter","Odoribacter",NA,NA,NA,NA
+"Oryza sativa Indica Group (long-grained rice)","Oryza sativa Indica Group (long-grained rice)",NA,NA,NA,NA
+"Other","Other",0.163706077,0.001056509,0.174262797,0.001321034
+"Oxalobacter","Oxalobacter",NA,7.12e-06,NA,8.37e-06
+"Parasutterella","Parasutterella",NA,NA,NA,NA
+"Phascolarctobacterium","Phascolarctobacterium",NA,8.45e-06,NA,2.088e-05
+"Porphyromonas","Porphyromonas",NA,NA,NA,NA
+"Raoultella","Raoultella",NA,0.107643956666667,NA,0.0919482126666667
+"Roseburia","Roseburia",NA,2.48666666666667e-05,NA,0.0001169915
+"Ruminiclostridium","Ruminiclostridium",NA,8.03e-06,NA,8.37e-06
+"Ruminiclostridium 5","Ruminiclostridium 5",NA,7.995e-06,NA,3.335e-05
+"Ruminiclostridium 9","Ruminiclostridium 9",NA,NA,NA,6.97e-06
+"Ruminococcaceae NK4A214 group","Ruminococcaceae NK4A214 group",NA,4.35e-05,NA,6.9757e-05
+"Ruminococcaceae UCG-002","Ruminococcaceae UCG-002",NA,4.08666666666667e-05,NA,8.72696666666667e-05
+"Ruminococcaceae UCG-003","Ruminococcaceae UCG-003",NA,8.87e-06,NA,2.08e-05
+"Ruminococcaceae UCG-004","Ruminococcaceae UCG-004",NA,8.87e-06,NA,8.37e-06
+"Ruminococcaceae UCG-005","Ruminococcaceae UCG-005",NA,1.95733333333333e-05,NA,2.95333333333333e-05
+"Ruminococcaceae UCG-013","Ruminococcaceae UCG-013",NA,NA,NA,3.35e-05
+"Ruminococcaceae UCG-014","Ruminococcaceae UCG-014",NA,2.535e-05,NA,2.461e-05
+"Ruminococcus 1","Ruminococcus 1",NA,8.5968e-05,NA,7.52373333333333e-05
+"Ruminococcus 2","Ruminococcus 2",NA,9.0347e-05,NA,0.000134509666666667
+"Sellimonas","Sellimonas",NA,8.03e-06,NA,6.97e-06
+"Serratia","Serratia",NA,0.0102051386666667,NA,0.00891765566666666
+"Succiniclasticum","Succiniclasticum",NA,NA,NA,1.1735e-05
+"Tyzzerella","Tyzzerella",NA,NA,NA,1.67e-05
+"Tyzzerella 3","Tyzzerella 3",NA,7.12e-06,NA,NA
+"Abiotrophia","Abiotrophia",NA,NA,NA,NA
+"Acetanaerobacterium","Acetanaerobacterium",NA,NA,NA,NA
+"Acidaminococcus","Acidaminococcus",NA,NA,NA,NA
+"Actinobacillus","Actinobacillus",NA,NA,NA,NA
+"Alcaligenes","Alcaligenes",NA,NA,NA,NA
+"Alkanindiges","Alkanindiges",NA,NA,NA,NA
+"Alloprevotella","Alloprevotella",NA,NA,NA,NA
+"Anaerococcus","Anaerococcus",NA,NA,NA,NA
+"Anaerofustis","Anaerofustis",NA,NA,NA,NA
+"Anaeromyxobacter","Anaeromyxobacter",NA,NA,NA,NA
+"Anaerosporobacter","Anaerosporobacter",NA,NA,NA,NA
+"Arthrobacter","Arthrobacter",NA,NA,NA,NA
+"Atopobium","Atopobium",NA,NA,NA,NA
+"Azospirillum","Azospirillum",NA,NA,NA,NA
+"Bergeyella","Bergeyella",NA,NA,NA,NA
+"Bradyrhizobium","Bradyrhizobium",NA,NA,NA,NA
+"Brevundimonas","Brevundimonas",NA,NA,NA,NA
+"Bryobacter","Bryobacter",NA,NA,NA,NA
+"Butyricimonas","Butyricimonas",NA,NA,NA,NA
+"Campylobacter","Campylobacter",NA,NA,NA,NA
+"Candidatus Planktophila","Candidatus Planktophila",NA,NA,NA,NA
+"Capnocytophaga","Capnocytophaga",NA,NA,NA,NA
+"Christensenella","Christensenella",NA,NA,NA,NA
+"Coprococcus","Coprococcus",0.000174959,NA,NA,NA
+"Corynebacterium","Corynebacterium",NA,NA,NA,NA
+"Desulfovibrio","Desulfovibrio",NA,NA,NA,NA
+"Devosia","Devosia",NA,NA,NA,NA
+"Dolosigranulum","Dolosigranulum",NA,NA,NA,NA
+"Eggerthella","Eggerthella",NA,NA,NA,NA
+"Eggerthia","Eggerthia",NA,NA,NA,NA
+"Enterorhabdus","Enterorhabdus",NA,NA,NA,NA
+"Finegoldia","Finegoldia",NA,NA,NA,NA
+"Gemella","Gemella",NA,NA,NA,NA
+"Granulicatella","Granulicatella",NA,NA,NA,NA
+"Haemophilus","Haemophilus",NA,NA,NA,NA
+"Incertae Sedis","Incertae Sedis",9.84e-05,NA,NA,NA
+"Lachnoanaerobaculum","Lachnoanaerobaculum",NA,NA,NA,NA
+"Lactococcus","Lactococcus",NA,NA,NA,NA
+"Lautropia","Lautropia",NA,NA,NA,NA
+"Leptotrichia","Leptotrichia",NA,NA,NA,NA
+"Leuconostoc","Leuconostoc",NA,NA,NA,NA
+"Lysobacter","Lysobacter",NA,NA,NA,NA
+"Massilia","Massilia",NA,NA,NA,NA
+"Megasphaera","Megasphaera",NA,NA,NA,NA
+"Methylobacterium","Methylobacterium",NA,NA,NA,NA
+"Mogibacterium","Mogibacterium",NA,NA,NA,NA
+"Moraxella","Moraxella",NA,NA,NA,NA
+"Mycobacterium","Mycobacterium",NA,NA,NA,NA
+"Nevskia","Nevskia",NA,NA,NA,NA
+"Nocardioides","Nocardioides",NA,NA,NA,NA
+"Nosocomiicoccus","Nosocomiicoccus",NA,NA,NA,NA
+"Oribacterium","Oribacterium",NA,NA,NA,NA
+"Oscillibacter","Oscillibacter",NA,NA,NA,NA
+"Oscillospira","Oscillospira",NA,NA,NA,NA
+"Papillibacter","Papillibacter",NA,NA,NA,NA
+"Paracoccus","Paracoccus",NA,NA,NA,NA
+"Pedobacter","Pedobacter",NA,NA,NA,NA
+"Peptoniphilus","Peptoniphilus",NA,NA,NA,NA
+"Phenylobacterium","Phenylobacterium",NA,NA,NA,NA
+"Prevotella","Prevotella",NA,NA,NA,NA
+"Pseudobutyrivibrio","Pseudobutyrivibrio",0.000623291,NA,NA,NA
+"Rhizobium","Rhizobium",NA,NA,NA,NA
+"Rothia","Rothia",NA,NA,NA,NA
+"Rubellimicrobium","Rubellimicrobium",NA,NA,NA,NA
+"Ruminococcus","Ruminococcus",0.000699836,NA,NA,NA
+"Salinarimonas","Salinarimonas",NA,NA,NA,NA
+"Scardovia","Scardovia",NA,NA,NA,NA
+"Sediminibacterium","Sediminibacterium",NA,NA,NA,NA
+"Solobacterium","Solobacterium",NA,NA,NA,NA
+"Sphingomonas","Sphingomonas",NA,NA,NA,NA
+"Stomatobaculum","Stomatobaculum",NA,NA,NA,NA
+"Sutterella","Sutterella",NA,NA,NA,NA
+"Synergistes","Synergistes",NA,NA,NA,NA
+"Thalassospira","Thalassospira",NA,NA,NA,NA
+"Treponema","Treponema",NA,NA,NA,NA
+"Turicibacter","Turicibacter",NA,NA,NA,NA
+"uncultured","uncultured",0.000535812,NA,NA,NA
+"Veillonella","Veillonella",NA,NA,NA,NA
+"Weissella","Weissella",NA,NA,NA,NA
+"Basidiomycota","Basidiomycota",0.000951534666666667,NA,0.000955616333333333,NA
