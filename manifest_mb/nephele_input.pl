@@ -332,24 +332,13 @@ sub FastQ_Man {
 	#Initialize Variables
 	my ($Nephpath, $date, @Proj_List, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $AssayPlate_Neph, 
 		$ExtractBatch_Neph, $Descrip_Neph, $filename_R1, $filename_R2)= @_;
-	my $n =0; 	my @placeholder=("");
-	my @clean_R1; my @clean_R2;
+	my $n =0; 
 	
 	#Create headers for text file
-	my @headers = ("\#SampleID", "BarcodeSequence", "LinkerPrimerSequence", "ForwardFastqFile",
-		"ReverseFastqFile", "TreatmentGroup", "VialLabel", "AssayPlate", "ExtractionBatch", "Description");
+	my @headers = ("\#SampleID", "ForwardFastqFile", "ReverseFastqFile", "TreatmentGroup", "VialLabel", "AssayPlate", "ExtractionBatch", "Description");
 	
 	#Create Nephele txt file in Nephele Directory
 	$CWD = $Nephpath; my $newfile= "$Proj_List[0]\_Nephele_Input\_$date.txt";
-	
-	#Remove .gz from all FastQ files
-	foreach my $file (@filename_R1) {
-		$file =~ s/.gz//g;
-		push  (@clean_R1, $file);
-	} foreach my $file (@filename_R2) {
-		$file =~ s/.gz//g;
-		push  (@clean_R2, $file);
-	}
 	
 	#Print data to Nephele txt file
 	open (FILE, ">$newfile") or die;
@@ -360,11 +349,15 @@ sub FastQ_Man {
 		#Print sample data to file for completed file lines only
 		foreach my $sample (@SampleID_Neph) {
 			my @temparray;
-			push(@temparray, $SampleID_Neph[$n]);
-			push(@temparray, $placeholder[0]);
-			push(@temparray, $placeholder[0]);
-			push(@temparray, $clean_R1[$n]);
-			push(@temparray, $clean_R2[$n]);			
+			
+			#Convert "-" in sample ID to "."
+			my $temp = $SampleID_Neph[$n];
+			$temp =~ s/-/./g;
+			push(@temparray, $temp);
+			
+			#Add remaining columns
+			push(@temparray, $filename_R1[$n]);
+			push(@temparray, $filename_R2[$n]);
 			push(@temparray, $Treatment_Neph[$n]);
 			push(@temparray, $VialLab_Neph[$n]);
 			push(@temparray, $AssayPlate_Neph[$n]);
@@ -398,3 +391,7 @@ exit;
 ##4/23/18: Added option to only create manifest file
 ##12/4/18: Formatting edits to initial questions, remove testing information
 ##12/6/18: Disable eval of File::Copy until new perl module downloaded, add confirmations to file moving, and final file count
+		# Updated Manifest subroutine to match new Nephele file parameters 
+		## 1)remove Barcode and Linker Seq columns
+		## 2) change all "-" in sample ID to "."
+		## 3) remove code that previously removed .gz from file name of FastQ - required now
