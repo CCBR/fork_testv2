@@ -26,10 +26,10 @@ eval "use File::chdir"
 		CPAN::install("File::chdir");
 	};
 	
-eval "use File::Copy" 
-	or do { 
-		CPAN::install("File::Copy");
-	};
+#eval "use File::Copy" 
+#	or do { 
+#		CPAN::install("File::Copy");
+#	};
 	
 #Intialize variables
 	my @QCPath; my @ManPath; my $Nephpath; my $MRName;
@@ -42,33 +42,24 @@ eval "use File::Copy"
 	my @filename_R1; my @filename_R2;
 	
 #Take in Directory from Command Line and format for CWD
-	print "\n Have you downloaded the Microbiome manifest from LIMS (Y or N) ";
+	print "\nHave you downloaded the Microbiome manifest from LIMS (Y or N) ";
 		my $ManiAns = <STDIN>; chomp $ManiAns;
 		if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
 			exit;}
-	print "Do you only need the manifest?";
+	print "Do you only need the manifest? (Y or N) ";
 		my $man_only = <STDIN>; chomp $man_only;
 	print "Do you want to include study samples (Y or N)? ";
 		my $StudyAns = <STDIN>; chomp $StudyAns;
-	print "What is the date to assoicate with analysis?(04_10_17) ";
+	print "What is the date to assoicate with analysis(04_10_17)? ";
 		my $date = <STDIN>; chomp $date;
 	print "How many projects would you like to include? ";
 		my $Proj_Num = <STDIN>; chomp $Proj_Num;
-		
-	until($Proj_Num == 0){
-		print "What is the name of your project? (NP0452-MB3) ";
-		my $ProjName = <STDIN>; chomp $ProjName;
-		push(@Proj_List,$ProjName);
-		$Proj_Num = $Proj_Num - 1;
-	}		
-
-	###Testing input
-	#my $ManiAns = "Y";	
-	#my $StudyAns = "N";
-	#my $date = "test"; chomp $date;
-	#my $Proj_Num = 2;
-	#@Proj_List = ("NP0452-MB3", "NP0452-MB2");
-	#@Proj_List = ("NP0452-MB3");
+		until($Proj_Num == 0){
+			print "What is the name of your project? (NP0452-MB3) ";
+			my $ProjName = <STDIN>; chomp $ProjName;
+			push(@Proj_List,$ProjName);
+			$Proj_Num = $Proj_Num - 1;
+		}
 
 #Call subroutines
 	qc_mb_dir(\@Proj_List, \$MRName, \$Proj_Num, \@QCPath, \@ManPath);
@@ -119,7 +110,6 @@ sub Qiime_Neph_Dir {
 	#Make Directories for qiime (unless already created)
 	mkdir $qiime unless -d $qiime;
 
-
 	#Create new Nephele directory
 	my $nephele = "$date\_input";
 	$CWD .= "\\$qiime";
@@ -153,7 +143,6 @@ sub read_MB_Man {
 		#Read in the file, and close
 		@filedata= <READ_FILE>;
 		close READ_FILE;
-		
 		
 		#Create database with ("Y") or without ("N") study samples
 		if (lc $StudyAns eq lc "Y") {
@@ -290,10 +279,12 @@ sub FastQ_File{
 		push (@fastqpath, $FastP);
 		$n++;
 	}
+	print "\n******************************"; 
+	print "\nMoving Files";
 	
 	#Run through each directory, find paths for FASTQ Files
-    foreach my $line (@fastqpath){
-
+	foreach my $line (@fastqpath){
+	
 		#Open File Directory and copy fastq files
 		opendir(DIR, $line) or die "Can't open directory $line!";
 		my @files = grep {/_001\.fastq\.gz$/} readdir(DIR);
@@ -336,6 +327,7 @@ sub FastQ_File{
 	}
 }
 
+#Creates the Manifest for Nephele input
 sub FastQ_Man {
 	#Initialize Variables
 	my ($Nephpath, $date, @Proj_List, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $AssayPlate_Neph, 
@@ -381,7 +373,13 @@ sub FastQ_Man {
 			print FILE join("\t",@temparray), "\n";
 			$n++;
 		}
+	#Confirmations
+	print "\n\n******************************";
 	print "\nFinished generating TXT file\n";
+	
+	my $total = scalar @SampleID_Neph*2;
+	print "\n******************************"; 
+	print "\nThere should be $total FASTQ files in the folder\n\n";
 }
 
 exit;
@@ -398,3 +396,5 @@ exit;
 ##8/6/17: Continued with 8/4 changes, fixed bugs for second and third study input
 ##9/11/17: Added feature to compare Study sample that pairs with Extraction Replicate
 ##4/23/18: Added option to only create manifest file
+##12/4/18: Formatting edits to initial questions, remove testing information
+##12/6/18: Disable eval of File::Copy until new perl module downloaded, add confirmations to file moving, and final file count

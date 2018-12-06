@@ -53,24 +53,21 @@ for (i in 1:nrow(q2)){
  complete[rows,"BINF"]<-q2[i,5]
  rows=rows+1
 }
-
 #Add in the expected values to each column
 for (i in 1:nrow(complete)){
  type <- complete[i,"Type"]
  genus <- complete[i,"Genus"]
- 
+
  #Account for Seq controls being identicallllll
  if(type=="Seq.200" | type=="Seq.2000"){
   type= "Zymo.Seq"
  }
- 
+
  complete[i,"Expected"]<- genus_percent[genus,type]
 }
-
 #Preview data
 head(complete)
 tail(complete)
-
 ```
 
 #Create averaged dataset - Seq200 and Seq2000
@@ -131,7 +128,7 @@ ggplot(data=average_seq,mapping=aes(x=ValueQ,y=ValueN,jitter(Expected,factor=1))
  geom_text(mapping=aes(label=Genus))
 
 #Write file
-write.csv(average_seq,"averages_seq_nephandq2.csv")
+write.csv(average_seq,"Data/averages_seq_nephandq2.csv")
 ```
 
 #Create averaged dataset - Seq200 ONLY
@@ -191,7 +188,7 @@ ggplot(data=average_seq,mapping=aes(x=ValueQ,y=ValueN,jitter(Expected,factor=1))
  geom_text(mapping=aes(label=Genus))
 
 #Write file
-write.csv(average_seq,"averages_seq_200zymo_nephandq2.csv")
+write.csv(average_seq,"Data/averages_seq_200zymo_nephandq2.csv")
 ```
 
 #Create averaged dataset - Seq2000 ONLY
@@ -251,7 +248,7 @@ ggplot(data=average_seq,mapping=aes(x=ValueQ,y=ValueN,jitter(Expected,factor=1))
  geom_text(mapping=aes(label=Genus))
 
 #Write file
-write.csv(average_seq,"averages_seq_2000zymo_nephandq2.csv")
+write.csv(average_seq,"Data/averages_seq_2000zymo_nephandq2.csv")
 
 ```
 
@@ -372,8 +369,26 @@ for (a in genus_list){
  average_seq[a,"ValueN2000"]<-neph_val2000/count_neph2000
 }
 
-write.csv(average_seq,"averages_seq_nephandq2_unexp.csv")
+colnames(average_seq)
 
+#Create tableau file
+temp<-data.frame()
+binf <- c("","QIIME2","Nephele","QIIME2","Nephele")
+control <- c("","Zymo.200","Zymo.200","Zymo.2000","Zymo.2000")
+count=1
+
+for (a in 2:5){
+ for(b in 1:nrow(average_seq)){
+  temp[count,"Genus"] <- rownames(average_seq[b,])
+  temp[count,"value"] <- average_seq[b,a]
+  temp[count,"Control"] <- control[a]
+  temp[count,"BINF"] <- binf[a]
+  count=count+1
+ }
+}
+head(temp)
+
+write.csv(temp,"Data/averages_seq_nephandq2_unexp_tab.csv")
 ```
 
 #Create averaged dataset - Seq200 and Seq2000 Complete
@@ -444,6 +459,5 @@ ggplot(data=average_seq2,mapping=aes(x=ValueQ,y=ValueN,jitter(Expected,factor=1)
  geom_text(mapping=aes(label=Genus))
 
 #Write file
-write.csv(average_seq,"averages_seq_nephandq2_unexp_complete.csv")
+write.csv(average_seq,"Data/averages_seq_nephandq2_unexp_complete.csv")
 ```
-

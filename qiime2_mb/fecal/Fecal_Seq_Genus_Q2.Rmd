@@ -337,7 +337,7 @@ for (a in sample_list){
 }
 
 #Output the table of all samples
-write.csv(genus_otuabund_sample,"genus_otuabund_seq_q2_sample.csv")
+write.csv(genus_otuabund_sample,"Data/genus_otuabund_seq_q2_sample.csv")
 ```
 
 #8, OTU Percent - Analysis Genus OTU Abundance by Control Type
@@ -381,7 +381,7 @@ for (a in control_types){
  }
 
 #Output to text file
-write.csv(genus_otuabund_control,"genus_otuabund_seq_q2_control.csv")
+write.csv(genus_otuabund_control,"Data/genus_otuabund_seq_q2_control.csv")
 ```
 
 #9. OTU Percent - Analysis Genus OTU Abundance by Control Type by Plate (Seq only)
@@ -474,7 +474,7 @@ for (a in new_colnames){
 }
 
 #Output to text file
-write.csv(genus_percent,"genus_outabund_seq_q2.csv")
+write.csv(genus_percent,"Data/genus_outabund_seq_q2.csv")
 ```
 
 #10.OTU Percent - Analysis of Genus Percent Abundance Differences
@@ -554,7 +554,7 @@ temp <- subset(temp, !('MSA-1000'=="NA" & 'MSA-1001'=="NA"& 'MSA-1002'=="NA"& 'M
                        'Zymo.Seq.200'=="NA"& 'Zymo.Seq.2000'=="NA"))
 
 #Output file
-write.csv(temp,"genus_otuabund_seq_q2_obsVSexp.csv")
+write.csv(temp,"Data/genus_otuabund_seq_q2_obsVSexp.csv")
 
 #Create tableau file
 temp2<-data.frame()
@@ -568,7 +568,7 @@ for (a in 24:ncol(temp)){
  }
 }
 head(temp2)
-write.csv(temp2,"genus_otuabund_seq_q2_obsVexp_tab.csv")
+write.csv(temp2,"Data/genus_otuabund_seq_q2_obsVexp_tab.csv")
 
 ```
 
@@ -582,7 +582,7 @@ temp <- genus_percent[,c(12:15,17,21:56)]
 temp <- subset(temp, is.na(MSA1000) | is.na(MSA1001) | is.na(MSA1002) | 
                 is.na(MSA1003) | is.na(Zymo.Seq))
 #Output the unexpected percent frequency database
-write.csv(temp,"genus_otuabund_seq_q2_other.csv")
+write.csv(temp,"Data/genus_otuabund_seq_q2_other.csv")
 colnames(temp)
 head(temp)
 
@@ -598,7 +598,7 @@ for (a in 6:23){
  }
 }
 head(temp2)
-write.csv(temp2,"genus_otuabund_seq_q2_other_tab.csv")
+write.csv(temp2,"Data/genus_otuabund_seq_q2_other_tab.csv")
 ```
 
 #12 Plot graphs of expected to actual

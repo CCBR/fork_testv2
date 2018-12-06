@@ -316,7 +316,7 @@ for (a in sample_list){
 }
 
 #Output the table of all samples
-write.csv(order_otuabund_sample,"order_otuabund_sample.csv")
+write.csv(order_otuabund_sample,"Data/order_otuabund_sample.csv")
 ```
 
 #OTU Percent - Analysis order OTU Abundance by Control Type
@@ -359,7 +359,7 @@ for (a in control_types){
  }
 
 #Output to text file
-write.csv(order_otuabund_control,"order_otuabund_control.csv")
+write.csv(order_otuabund_control,"Data/order_otuabund_control.csv")
 ```
 
 #OTU Percent - Analysis order OTU Abundance by Control Type by Kit (Ext Control Only)
@@ -453,7 +453,7 @@ for (a in new_colnames){
 }
 
 #Output to text file
-write.csv(order_percent,"order_outabund_kit.csv")
+write.csv(order_percent,"Data/order_outabund_kit.csv")
 ```
 
 #OTU Percent - Analysis of order Percent Abundance Differences, expected versus observed by kit (Ext Only)
@@ -518,7 +518,7 @@ temp <- order_percent[,c(11,16,18:42)]
 temp <- subset(temp, !(Art.Col=="NA" & Zymo.Ext=="NA"))
 
 #Output file
-write.csv(temp,"order_otuabund_obsVSexp_ext.csv")
+write.csv(temp,"Data/order_otuabund_obsVSexp_ext.csv")
 ```
 
 #OTU Percent - Not expected order by Control Type by Kit (Ext Control Only)
@@ -531,5 +531,5 @@ temp <- order_percent[,c(11,16,23:32)]
 temp <- subset(temp, is.na(Art.Col) | is.na(Zymo.Ext))
 
 #Output the unexpected percent frequency database
-write.csv(temp,"order_other.csv")
+write.csv(temp,"Data/order_other.csv")
 ```

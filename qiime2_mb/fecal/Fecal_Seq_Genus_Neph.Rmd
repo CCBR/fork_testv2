@@ -13,35 +13,12 @@ output: word_document
 editor_options: 
   chunk_output_type: console
 ---
-Database information
-#Databases Created
--dat: table of all the taxonomy assigned within Silva used in this study
-
--genus_percent: table of the taxonomy information of all controls including expected frequencies
- -> observed percentages added for both controls and kits
---genus_percent_ext: subset including only ext controls and kits, and genus related to the kits
- 
--samples_failed: table of samples that did not meet QC thresholds
-
--variable_info: table of the variable information of all samples and controls
---filtered_info: table of all samples/controls that passed QC, filtering off of samples_failed
----control_info: subset of filtered_info, to only include all controls 
-   ->genus count information added from genus_otu
-
--genus_otu: complete table of the OTUs for passed samples/controls by Genus
---genus_otucount_controls: count of the expected number of genus, the observed number of genus, and the total number of genus found in each control
----genus_otucount_ext_kit: subsetting genus_otucount_controls to include only the extraction controls, and expanding information by kit
---missing_annot: list of all the species not annotated in the Silva database, expected in the controls
-
--genus_otuabund_sample: table of the oberved percent frequency of each Genus for all samples
---genus_otuabund_control: subset of genus_otuabund_sample, grouped by controls
----genus_otuabund_ext_kit: subset of genus_otuabund_ext_kit, to include only ext controls, grouped by kit
-
 
 #1. Load required libraries
 ```{r}
 library("biom")
 library(data.table)
+library(ggplot2)
 ```
 
 #2. Taxonomy Reference - Control Annotations
@@ -336,7 +313,7 @@ for (a in sample_list){
 }
 
 #Output the table of all samples
-write.csv(genus_otuabund_sample,"genus_otuabund_seq_neph_sample.csv")
+write.csv(genus_otuabund_sample,"Data/genus_otuabund_seq_neph_sample.csv")
 ```
 
 #8, OTU Percent - Analysis Genus OTU Abundance by Control Type
@@ -380,7 +357,7 @@ for (a in control_types){
  }
 
 #Output to text file
-write.csv(genus_otuabund_control,"genus_otuabund_seq_neph_control.csv")
+write.csv(genus_otuabund_control,"Data/genus_otuabund_seq_neph_control.csv")
 ```
 
 #9. OTU Percent - Analysis Genus OTU Abundance by Control Type by Plate (Seq only)
@@ -472,7 +449,7 @@ for (a in new_colnames){
 }
 
 #Output to text file
-write.csv(genus_percent,"genus_outabund_seq_neph.csv")
+write.csv(genus_percent,"Data/genus_outabund_seq_neph.csv")
 ```
 
 #10.OTU Percent - Analysis of Genus Percent Abundance Differences
@@ -547,7 +524,7 @@ temp <- subset(temp, !('MSA-1000'=="NA" & 'MSA-1001'=="NA"& 'MSA-1002'=="NA"& 'M
                        'Zymo.Seq.200'=="NA"& 'Zymo.Seq.2000'=="NA"))
 
 #Output file
-write.csv(temp,"genus_otuabund_seq_neph_obsVSexp.csv")
+write.csv(temp,"Data/genus_otuabund_seq_neph_obsVSexp.csv")
 
 #Create tableau file
 temp2<-data.frame()
@@ -561,7 +538,7 @@ for (a in 24:ncol(temp)){
  }
 }
 head(temp2)
-write.csv(temp2,"genus_otuabund_seq_neph_obsVexp_tab.csv")
+write.csv(temp2,"Data/genus_otuabund_seq_neph_obsVexp_tab.csv")
 ```
 
 #11.OTU Percent - Not expected Genus by Control Type by Plate (Seq Only)
@@ -574,7 +551,7 @@ temp <- genus_percent[,c(12:15,17,21:56)]
 temp <- subset(temp, is.na(MSA1000) | is.na(MSA1001) | is.na(MSA1002) | 
                 is.na(MSA1003) | is.na(Zymo.Seq))
 #Output the unexpected percent frequency database
-write.csv(temp,"genus_otuabund_seq_neph_other.csv")
+write.csv(temp,"Data/genus_otuabund_seq_neph_other.csv")
 colnames(temp)
 head(temp)
 
@@ -590,7 +567,7 @@ for (a in 6:23){
  }
 }
 head(temp2)
-write.csv(temp2,"genus_otuabund_seq_neph_other_tab.csv")
+write.csv(temp2,"Data/genus_otuabund_seq_neph_other_tab.csv")
 ```
 
 #12 Plot graph - Actual to Expected

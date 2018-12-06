@@ -1,0 +1,2017 @@
+,Genus,value,Plate,Type
+1,Acinetobacter,NA,PC04924,MSA1000
+2,Actinomyces,NA,PC04924,MSA1000
+3,Alistipes,NA,PC04924,MSA1000
+4,Anaerostipes,NA,PC04924,MSA1000
+5,Bacillus,-99.87857837,PC04924,MSA1000
+6,Bacteroides,NA,PC04924,MSA1000
+7,Bifidobacterium,-33.90377693,PC04924,MSA1000
+8,Bilophila,NA,PC04924,MSA1000
+9,Clostridium,NA,PC04924,MSA1000
+10,Lachnoclostridium,NA,PC04924,MSA1000
+11,Collinsella,NA,PC04924,MSA1000
+12,Coprobacillus,NA,PC04924,MSA1000
+13,Cryptococcus,NA,PC04924,MSA1000
+14,Deinococcus,-83.02954117,PC04924,MSA1000
+15,Enterococcus,-60.02371293,PC04924,MSA1000
+16,Escherichia-Shigella,-29.96114508,PC04924,MSA1000
+17,Fusobacterium,NA,PC04924,MSA1000
+18,Helicobacter,NA,PC04924,MSA1000
+19,Lactobacillus,-42.48900063,PC04924,MSA1000
+20,Listeria,NA,PC04924,MSA1000
+21,Neisseria,NA,PC04924,MSA1000
+22,Paenibacillus,NA,PC04924,MSA1000
+23,Parabacteroides,NA,PC04924,MSA1000
+24,Pediococcus,NA,PC04924,MSA1000
+25,Porphyromonadaceae,NA,PC04924,MSA1000
+26,Propionibacterium,NA,PC04924,MSA1000
+27,Pseudomonas,NA,PC04924,MSA1000
+28,Pyramidobacter,NA,PC04924,MSA1000
+29,Ralstonia,NA,PC04924,MSA1000
+30,Rhodobacter,-95.61453631,PC04924,MSA1000
+31,Saccharomyces,NA,PC04924,MSA1000
+32,Salmonella,NA,PC04924,MSA1000
+33,Staphylococcus,-12.06931033,PC04924,MSA1000
+34,Streptococcus,-14.7762985,PC04924,MSA1000
+35,Subdoligranulum,NA,PC04924,MSA1000
+36,Clostridium innocuum group,NA,PC04924,MSA1000
+37,Eubacterium coprostanoligenes group,NA,PC04924,MSA1000
+38,Eubacterium eligens group,NA,PC04924,MSA1000
+39,Eubacterium hallii group,NA,PC04924,MSA1000
+40,Eubacterium rectale group,NA,PC04924,MSA1000
+41,Eubacterium ventriosum group,NA,PC04924,MSA1000
+42,Eubacterium xylanophilum group,NA,PC04924,MSA1000
+43,Ruminococcus gauvreauii group,NA,PC04924,MSA1000
+44,Ruminococcus torques group,NA,PC04924,MSA1000
+45,Adlercreutzia,NA,PC04924,MSA1000
+46,Akkermansia,NA,PC04924,MSA1000
+47,Ambiguous_taxa,NA,PC04924,MSA1000
+48,Anaerofilum,NA,PC04924,MSA1000
+49,Anaerotruncus,NA,PC04924,MSA1000
+50,Blautia,NA,PC04924,MSA1000
+51,Butyricicoccus,NA,PC04924,MSA1000
+52,Candidatus Stoquefichus,NA,PC04924,MSA1000
+53,Carnobacterium,NA,PC04924,MSA1000
+54,Christensenellaceae R-7 group,NA,PC04924,MSA1000
+55,Clostridium sensu stricto 1,NA,PC04924,MSA1000
+56,Coprococcus 1,NA,PC04924,MSA1000
+57,Coprococcus 2,NA,PC04924,MSA1000
+58,Coprococcus 3,NA,PC04924,MSA1000
+59,Defluviitaleaceae UCG-011,NA,PC04924,MSA1000
+60,Dialister,NA,PC04924,MSA1000
+61,Dorea,NA,PC04924,MSA1000
+62,Eisenbergiella,NA,PC04924,MSA1000
+63,Enterobacter,NA,PC04924,MSA1000
+64,Erwinia,NA,PC04924,MSA1000
+65,Erysipelatoclostridium,NA,PC04924,MSA1000
+66,Erysipelotrichaceae UCG-003,NA,PC04924,MSA1000
+67,Faecalibacterium,NA,PC04924,MSA1000
+68,Family XIII AD3011 group,NA,PC04924,MSA1000
+69,Flavonifractor,NA,PC04924,MSA1000
+70,Fusicatenibacter,NA,PC04924,MSA1000
+71,Gordonibacter,NA,PC04924,MSA1000
+72,Gossypium arboreum,NA,PC04924,MSA1000
+73,Holdemania,NA,PC04924,MSA1000
+74,Hungatella,NA,PC04924,MSA1000
+75,Intestinibacter,NA,PC04924,MSA1000
+76,Intestinimonas,NA,PC04924,MSA1000
+77,Kluyvera,NA,PC04924,MSA1000
+78,Lachnospira,NA,PC04924,MSA1000
+79,Lachnospiraceae FCS020 group,NA,PC04924,MSA1000
+80,Lachnospiraceae ND3007 group,NA,PC04924,MSA1000
+81,Lachnospiraceae NK4A136 group,NA,PC04924,MSA1000
+82,Lachnospiraceae UCG-001,NA,PC04924,MSA1000
+83,Lachnospiraceae UCG-004,NA,PC04924,MSA1000
+84,Lachnospiraceae UCG-008,NA,PC04924,MSA1000
+85,Lactonifactor,NA,PC04924,MSA1000
+86,Marvinbryantia,NA,PC04924,MSA1000
+87,Odoribacter,NA,PC04924,MSA1000
+88,Oryza sativa Indica Group (long-grained rice),NA,PC04924,MSA1000
+89,Other,NA,PC04924,MSA1000
+90,Oxalobacter,NA,PC04924,MSA1000
+91,Parasutterella,NA,PC04924,MSA1000
+92,Phascolarctobacterium,NA,PC04924,MSA1000
+93,Porphyromonas,NA,PC04924,MSA1000
+94,Raoultella,NA,PC04924,MSA1000
+95,Roseburia,NA,PC04924,MSA1000
+96,Ruminiclostridium,NA,PC04924,MSA1000
+97,Ruminiclostridium 5,NA,PC04924,MSA1000
+98,Ruminiclostridium 9,NA,PC04924,MSA1000
+99,Ruminococcaceae NK4A214 group,NA,PC04924,MSA1000
+100,Ruminococcaceae UCG-002,NA,PC04924,MSA1000
+101,Ruminococcaceae UCG-003,NA,PC04924,MSA1000
+102,Ruminococcaceae UCG-004,NA,PC04924,MSA1000
+103,Ruminococcaceae UCG-005,NA,PC04924,MSA1000
+104,Ruminococcaceae UCG-013,NA,PC04924,MSA1000
+105,Ruminococcaceae UCG-014,NA,PC04924,MSA1000
+106,Ruminococcus 1,NA,PC04924,MSA1000
+107,Ruminococcus 2,NA,PC04924,MSA1000
+108,Sellimonas,NA,PC04924,MSA1000
+109,Serratia,NA,PC04924,MSA1000
+110,Succiniclasticum,NA,PC04924,MSA1000
+111,Tyzzerella,NA,PC04924,MSA1000
+112,Tyzzerella 3,NA,PC04924,MSA1000
+113,Acinetobacter,NA,PC04924,MSA1001
+114,Actinomyces,NA,PC04924,MSA1001
+115,Alistipes,NA,PC04924,MSA1001
+116,Anaerostipes,NA,PC04924,MSA1001
+117,Bacillus,-99.73528839,PC04924,MSA1001
+118,Bacteroides,NA,PC04924,MSA1001
+119,Bifidobacterium,65.18004625,PC04924,MSA1001
+120,Bilophila,NA,PC04924,MSA1001
+121,Clostridium,NA,PC04924,MSA1001
+122,Lachnoclostridium,NA,PC04924,MSA1001
+123,Collinsella,NA,PC04924,MSA1001
+124,Coprobacillus,NA,PC04924,MSA1001
+125,Cryptococcus,NA,PC04924,MSA1001
+126,Deinococcus,-61.88152779,PC04924,MSA1001
+127,Enterococcus,NA,PC04924,MSA1001
+128,Escherichia-Shigella,58.52443999,PC04924,MSA1001
+129,Fusobacterium,NA,PC04924,MSA1001
+130,Helicobacter,NA,PC04924,MSA1001
+131,Lactobacillus,65.65064467,PC04924,MSA1001
+132,Listeria,NA,PC04924,MSA1001
+133,Neisseria,NA,PC04924,MSA1001
+134,Paenibacillus,NA,PC04924,MSA1001
+135,Parabacteroides,NA,PC04924,MSA1001
+136,Pediococcus,NA,PC04924,MSA1001
+137,Porphyromonadaceae,NA,PC04924,MSA1001
+138,Propionibacterium,NA,PC04924,MSA1001
+139,Pseudomonas,NA,PC04924,MSA1001
+140,Pyramidobacter,NA,PC04924,MSA1001
+141,Ralstonia,NA,PC04924,MSA1001
+142,Rhodobacter,-85.36436805,PC04924,MSA1001
+143,Saccharomyces,NA,PC04924,MSA1001
+144,Salmonella,NA,PC04924,MSA1001
+145,Staphylococcus,22.13763065,PC04924,MSA1001
+146,Streptococcus,NA,PC04924,MSA1001
+147,Subdoligranulum,NA,PC04924,MSA1001
+148,Clostridium innocuum group,NA,PC04924,MSA1001
+149,Eubacterium coprostanoligenes group,NA,PC04924,MSA1001
+150,Eubacterium eligens group,NA,PC04924,MSA1001
+151,Eubacterium hallii group,NA,PC04924,MSA1001
+152,Eubacterium rectale group,NA,PC04924,MSA1001
+153,Eubacterium ventriosum group,NA,PC04924,MSA1001
+154,Eubacterium xylanophilum group,NA,PC04924,MSA1001
+155,Ruminococcus gauvreauii group,NA,PC04924,MSA1001
+156,Ruminococcus torques group,NA,PC04924,MSA1001
+157,Adlercreutzia,NA,PC04924,MSA1001
+158,Akkermansia,NA,PC04924,MSA1001
+159,Ambiguous_taxa,NA,PC04924,MSA1001
+160,Anaerofilum,NA,PC04924,MSA1001
+161,Anaerotruncus,NA,PC04924,MSA1001
+162,Blautia,NA,PC04924,MSA1001
+163,Butyricicoccus,NA,PC04924,MSA1001
+164,Candidatus Stoquefichus,NA,PC04924,MSA1001
+165,Carnobacterium,NA,PC04924,MSA1001
+166,Christensenellaceae R-7 group,NA,PC04924,MSA1001
+167,Clostridium sensu stricto 1,NA,PC04924,MSA1001
+168,Coprococcus 1,NA,PC04924,MSA1001
+169,Coprococcus 2,NA,PC04924,MSA1001
+170,Coprococcus 3,NA,PC04924,MSA1001
+171,Defluviitaleaceae UCG-011,NA,PC04924,MSA1001
+172,Dialister,NA,PC04924,MSA1001
+173,Dorea,NA,PC04924,MSA1001
+174,Eisenbergiella,NA,PC04924,MSA1001
+175,Enterobacter,NA,PC04924,MSA1001
+176,Erwinia,NA,PC04924,MSA1001
+177,Erysipelatoclostridium,NA,PC04924,MSA1001
+178,Erysipelotrichaceae UCG-003,NA,PC04924,MSA1001
+179,Faecalibacterium,NA,PC04924,MSA1001
+180,Family XIII AD3011 group,NA,PC04924,MSA1001
+181,Flavonifractor,NA,PC04924,MSA1001
+182,Fusicatenibacter,NA,PC04924,MSA1001
+183,Gordonibacter,NA,PC04924,MSA1001
+184,Gossypium arboreum,NA,PC04924,MSA1001
+185,Holdemania,NA,PC04924,MSA1001
+186,Hungatella,NA,PC04924,MSA1001
+187,Intestinibacter,NA,PC04924,MSA1001
+188,Intestinimonas,NA,PC04924,MSA1001
+189,Kluyvera,NA,PC04924,MSA1001
+190,Lachnospira,NA,PC04924,MSA1001
+191,Lachnospiraceae FCS020 group,NA,PC04924,MSA1001
+192,Lachnospiraceae ND3007 group,NA,PC04924,MSA1001
+193,Lachnospiraceae NK4A136 group,NA,PC04924,MSA1001
+194,Lachnospiraceae UCG-001,NA,PC04924,MSA1001
+195,Lachnospiraceae UCG-004,NA,PC04924,MSA1001
+196,Lachnospiraceae UCG-008,NA,PC04924,MSA1001
+197,Lactonifactor,NA,PC04924,MSA1001
+198,Marvinbryantia,NA,PC04924,MSA1001
+199,Odoribacter,NA,PC04924,MSA1001
+200,Oryza sativa Indica Group (long-grained rice),NA,PC04924,MSA1001
+201,Other,NA,PC04924,MSA1001
+202,Oxalobacter,NA,PC04924,MSA1001
+203,Parasutterella,NA,PC04924,MSA1001
+204,Phascolarctobacterium,NA,PC04924,MSA1001
+205,Porphyromonas,NA,PC04924,MSA1001
+206,Raoultella,NA,PC04924,MSA1001
+207,Roseburia,NA,PC04924,MSA1001
+208,Ruminiclostridium,NA,PC04924,MSA1001
+209,Ruminiclostridium 5,NA,PC04924,MSA1001
+210,Ruminiclostridium 9,NA,PC04924,MSA1001
+211,Ruminococcaceae NK4A214 group,NA,PC04924,MSA1001
+212,Ruminococcaceae UCG-002,NA,PC04924,MSA1001
+213,Ruminococcaceae UCG-003,NA,PC04924,MSA1001
+214,Ruminococcaceae UCG-004,NA,PC04924,MSA1001
+215,Ruminococcaceae UCG-005,NA,PC04924,MSA1001
+216,Ruminococcaceae UCG-013,NA,PC04924,MSA1001
+217,Ruminococcaceae UCG-014,NA,PC04924,MSA1001
+218,Ruminococcus 1,NA,PC04924,MSA1001
+219,Ruminococcus 2,NA,PC04924,MSA1001
+220,Sellimonas,NA,PC04924,MSA1001
+221,Serratia,NA,PC04924,MSA1001
+222,Succiniclasticum,NA,PC04924,MSA1001
+223,Tyzzerella,NA,PC04924,MSA1001
+224,Tyzzerella 3,NA,PC04924,MSA1001
+225,Acinetobacter,53.5448547,PC04924,MSA1002
+226,Actinomyces,-74.28049979,PC04924,MSA1002
+227,Alistipes,NA,PC04924,MSA1002
+228,Anaerostipes,NA,PC04924,MSA1002
+229,Bacillus,-99.8034536,PC04924,MSA1002
+230,Bacteroides,28.58346202,PC04924,MSA1002
+231,Bifidobacterium,-24.90523656,PC04924,MSA1002
+232,Bilophila,NA,PC04924,MSA1002
+233,Clostridium,NA,PC04924,MSA1002
+234,Lachnoclostridium,NA,PC04924,MSA1002
+235,Collinsella,NA,PC04924,MSA1002
+236,Coprobacillus,NA,PC04924,MSA1002
+237,Cryptococcus,NA,PC04924,MSA1002
+238,Deinococcus,-84.71149796,PC04924,MSA1002
+239,Enterococcus,-52.43577144,PC04924,MSA1002
+240,Escherichia-Shigella,-32.21957041,PC04924,MSA1002
+241,Fusobacterium,NA,PC04924,MSA1002
+242,Helicobacter,-37.51228415,PC04924,MSA1002
+243,Lactobacillus,-23.45921662,PC04924,MSA1002
+244,Listeria,NA,PC04924,MSA1002
+245,Neisseria,-48.05559455,PC04924,MSA1002
+246,Paenibacillus,NA,PC04924,MSA1002
+247,Parabacteroides,NA,PC04924,MSA1002
+248,Pediococcus,NA,PC04924,MSA1002
+249,Porphyromonadaceae,NA,PC04924,MSA1002
+250,Propionibacterium,NA,PC04924,MSA1002
+251,Pseudomonas,-78.92741822,PC04924,MSA1002
+252,Pyramidobacter,NA,PC04924,MSA1002
+253,Ralstonia,NA,PC04924,MSA1002
+254,Rhodobacter,-93.16299312,PC04924,MSA1002
+255,Saccharomyces,NA,PC04924,MSA1002
+256,Salmonella,NA,PC04924,MSA1002
+257,Staphylococcus,11.49796434,PC04924,MSA1002
+258,Streptococcus,-5.706865085,PC04924,MSA1002
+259,Subdoligranulum,NA,PC04924,MSA1002
+260,Clostridium innocuum group,NA,PC04924,MSA1002
+261,Eubacterium coprostanoligenes group,NA,PC04924,MSA1002
+262,Eubacterium eligens group,NA,PC04924,MSA1002
+263,Eubacterium hallii group,NA,PC04924,MSA1002
+264,Eubacterium rectale group,NA,PC04924,MSA1002
+265,Eubacterium ventriosum group,NA,PC04924,MSA1002
+266,Eubacterium xylanophilum group,NA,PC04924,MSA1002
+267,Ruminococcus gauvreauii group,NA,PC04924,MSA1002
+268,Ruminococcus torques group,NA,PC04924,MSA1002
+269,Adlercreutzia,NA,PC04924,MSA1002
+270,Akkermansia,NA,PC04924,MSA1002
+271,Ambiguous_taxa,NA,PC04924,MSA1002
+272,Anaerofilum,NA,PC04924,MSA1002
+273,Anaerotruncus,NA,PC04924,MSA1002
+274,Blautia,NA,PC04924,MSA1002
+275,Butyricicoccus,NA,PC04924,MSA1002
+276,Candidatus Stoquefichus,NA,PC04924,MSA1002
+277,Carnobacterium,NA,PC04924,MSA1002
+278,Christensenellaceae R-7 group,NA,PC04924,MSA1002
+279,Clostridium sensu stricto 1,NA,PC04924,MSA1002
+280,Coprococcus 1,NA,PC04924,MSA1002
+281,Coprococcus 2,NA,PC04924,MSA1002
+282,Coprococcus 3,NA,PC04924,MSA1002
+283,Defluviitaleaceae UCG-011,NA,PC04924,MSA1002
+284,Dialister,NA,PC04924,MSA1002
+285,Dorea,NA,PC04924,MSA1002
+286,Eisenbergiella,NA,PC04924,MSA1002
+287,Enterobacter,NA,PC04924,MSA1002
+288,Erwinia,NA,PC04924,MSA1002
+289,Erysipelatoclostridium,NA,PC04924,MSA1002
+290,Erysipelotrichaceae UCG-003,NA,PC04924,MSA1002
+291,Faecalibacterium,NA,PC04924,MSA1002
+292,Family XIII AD3011 group,NA,PC04924,MSA1002
+293,Flavonifractor,NA,PC04924,MSA1002
+294,Fusicatenibacter,NA,PC04924,MSA1002
+295,Gordonibacter,NA,PC04924,MSA1002
+296,Gossypium arboreum,NA,PC04924,MSA1002
+297,Holdemania,NA,PC04924,MSA1002
+298,Hungatella,NA,PC04924,MSA1002
+299,Intestinibacter,NA,PC04924,MSA1002
+300,Intestinimonas,NA,PC04924,MSA1002
+301,Kluyvera,NA,PC04924,MSA1002
+302,Lachnospira,NA,PC04924,MSA1002
+303,Lachnospiraceae FCS020 group,NA,PC04924,MSA1002
+304,Lachnospiraceae ND3007 group,NA,PC04924,MSA1002
+305,Lachnospiraceae NK4A136 group,NA,PC04924,MSA1002
+306,Lachnospiraceae UCG-001,NA,PC04924,MSA1002
+307,Lachnospiraceae UCG-004,NA,PC04924,MSA1002
+308,Lachnospiraceae UCG-008,NA,PC04924,MSA1002
+309,Lactonifactor,NA,PC04924,MSA1002
+310,Marvinbryantia,NA,PC04924,MSA1002
+311,Odoribacter,NA,PC04924,MSA1002
+312,Oryza sativa Indica Group (long-grained rice),NA,PC04924,MSA1002
+313,Other,NA,PC04924,MSA1002
+314,Oxalobacter,NA,PC04924,MSA1002
+315,Parasutterella,NA,PC04924,MSA1002
+316,Phascolarctobacterium,NA,PC04924,MSA1002
+317,Porphyromonas,NA,PC04924,MSA1002
+318,Raoultella,NA,PC04924,MSA1002
+319,Roseburia,NA,PC04924,MSA1002
+320,Ruminiclostridium,NA,PC04924,MSA1002
+321,Ruminiclostridium 5,NA,PC04924,MSA1002
+322,Ruminiclostridium 9,NA,PC04924,MSA1002
+323,Ruminococcaceae NK4A214 group,NA,PC04924,MSA1002
+324,Ruminococcaceae UCG-002,NA,PC04924,MSA1002
+325,Ruminococcaceae UCG-003,NA,PC04924,MSA1002
+326,Ruminococcaceae UCG-004,NA,PC04924,MSA1002
+327,Ruminococcaceae UCG-005,NA,PC04924,MSA1002
+328,Ruminococcaceae UCG-013,NA,PC04924,MSA1002
+329,Ruminococcaceae UCG-014,NA,PC04924,MSA1002
+330,Ruminococcus 1,NA,PC04924,MSA1002
+331,Ruminococcus 2,NA,PC04924,MSA1002
+332,Sellimonas,NA,PC04924,MSA1002
+333,Serratia,NA,PC04924,MSA1002
+334,Succiniclasticum,NA,PC04924,MSA1002
+335,Tyzzerella,NA,PC04924,MSA1002
+336,Tyzzerella 3,NA,PC04924,MSA1002
+337,Acinetobacter,31.47714348,PC04924,MSA1003
+338,Actinomyces,-79.94416455,PC04924,MSA1003
+339,Alistipes,NA,PC04924,MSA1003
+340,Anaerostipes,NA,PC04924,MSA1003
+341,Bacillus,-98.97492397,PC04924,MSA1003
+342,Bacteroides,208.8598659,PC04924,MSA1003
+343,Bifidobacterium,-59.88832911,PC04924,MSA1003
+344,Bilophila,NA,PC04924,MSA1003
+345,Clostridium,NA,PC04924,MSA1003
+346,Lachnoclostridium,NA,PC04924,MSA1003
+347,Collinsella,NA,PC04924,MSA1003
+348,Coprobacillus,NA,PC04924,MSA1003
+349,Cryptococcus,NA,PC04924,MSA1003
+350,Deinococcus,-87.96649873,PC04924,MSA1003
+351,Enterococcus,20.33501268,PC04924,MSA1003
+352,Escherichia-Shigella,-31.10597682,PC04924,MSA1003
+353,Fusobacterium,NA,PC04924,MSA1003
+354,Helicobacter,-48.30051307,PC04924,MSA1003
+355,Lactobacillus,8122.001162,PC04924,MSA1003
+356,Listeria,NA,PC04924,MSA1003
+357,Neisseria,-62.11675527,PC04924,MSA1003
+358,Paenibacillus,NA,PC04924,MSA1003
+359,Parabacteroides,NA,PC04924,MSA1003
+360,Pediococcus,NA,PC04924,MSA1003
+361,Porphyromonadaceae,NA,PC04924,MSA1003
+362,Propionibacterium,NA,PC04924,MSA1003
+363,Pseudomonas,-85.11411325,PC04924,MSA1003
+364,Pyramidobacter,NA,PC04924,MSA1003
+365,Ralstonia,NA,PC04924,MSA1003
+366,Rhodobacter,-94.19272143,PC04924,MSA1003
+367,Saccharomyces,NA,PC04924,MSA1003
+368,Salmonella,NA,PC04924,MSA1003
+369,Staphylococcus,2.005194583,PC04924,MSA1003
+370,Streptococcus,-20.47354785,PC04924,MSA1003
+371,Subdoligranulum,NA,PC04924,MSA1003
+372,Clostridium innocuum group,NA,PC04924,MSA1003
+373,Eubacterium coprostanoligenes group,NA,PC04924,MSA1003
+374,Eubacterium eligens group,NA,PC04924,MSA1003
+375,Eubacterium hallii group,NA,PC04924,MSA1003
+376,Eubacterium rectale group,NA,PC04924,MSA1003
+377,Eubacterium ventriosum group,NA,PC04924,MSA1003
+378,Eubacterium xylanophilum group,NA,PC04924,MSA1003
+379,Ruminococcus gauvreauii group,NA,PC04924,MSA1003
+380,Ruminococcus torques group,NA,PC04924,MSA1003
+381,Adlercreutzia,NA,PC04924,MSA1003
+382,Akkermansia,NA,PC04924,MSA1003
+383,Ambiguous_taxa,NA,PC04924,MSA1003
+384,Anaerofilum,NA,PC04924,MSA1003
+385,Anaerotruncus,NA,PC04924,MSA1003
+386,Blautia,NA,PC04924,MSA1003
+387,Butyricicoccus,NA,PC04924,MSA1003
+388,Candidatus Stoquefichus,NA,PC04924,MSA1003
+389,Carnobacterium,NA,PC04924,MSA1003
+390,Christensenellaceae R-7 group,NA,PC04924,MSA1003
+391,Clostridium sensu stricto 1,NA,PC04924,MSA1003
+392,Coprococcus 1,NA,PC04924,MSA1003
+393,Coprococcus 2,NA,PC04924,MSA1003
+394,Coprococcus 3,NA,PC04924,MSA1003
+395,Defluviitaleaceae UCG-011,NA,PC04924,MSA1003
+396,Dialister,NA,PC04924,MSA1003
+397,Dorea,NA,PC04924,MSA1003
+398,Eisenbergiella,NA,PC04924,MSA1003
+399,Enterobacter,NA,PC04924,MSA1003
+400,Erwinia,NA,PC04924,MSA1003
+401,Erysipelatoclostridium,NA,PC04924,MSA1003
+402,Erysipelotrichaceae UCG-003,NA,PC04924,MSA1003
+403,Faecalibacterium,NA,PC04924,MSA1003
+404,Family XIII AD3011 group,NA,PC04924,MSA1003
+405,Flavonifractor,NA,PC04924,MSA1003
+406,Fusicatenibacter,NA,PC04924,MSA1003
+407,Gordonibacter,NA,PC04924,MSA1003
+408,Gossypium arboreum,NA,PC04924,MSA1003
+409,Holdemania,NA,PC04924,MSA1003
+410,Hungatella,NA,PC04924,MSA1003
+411,Intestinibacter,NA,PC04924,MSA1003
+412,Intestinimonas,NA,PC04924,MSA1003
+413,Kluyvera,NA,PC04924,MSA1003
+414,Lachnospira,NA,PC04924,MSA1003
+415,Lachnospiraceae FCS020 group,NA,PC04924,MSA1003
+416,Lachnospiraceae ND3007 group,NA,PC04924,MSA1003
+417,Lachnospiraceae NK4A136 group,NA,PC04924,MSA1003
+418,Lachnospiraceae UCG-001,NA,PC04924,MSA1003
+419,Lachnospiraceae UCG-004,NA,PC04924,MSA1003
+420,Lachnospiraceae UCG-008,NA,PC04924,MSA1003
+421,Lactonifactor,NA,PC04924,MSA1003
+422,Marvinbryantia,NA,PC04924,MSA1003
+423,Odoribacter,NA,PC04924,MSA1003
+424,Oryza sativa Indica Group (long-grained rice),NA,PC04924,MSA1003
+425,Other,NA,PC04924,MSA1003
+426,Oxalobacter,NA,PC04924,MSA1003
+427,Parasutterella,NA,PC04924,MSA1003
+428,Phascolarctobacterium,NA,PC04924,MSA1003
+429,Porphyromonas,NA,PC04924,MSA1003
+430,Raoultella,NA,PC04924,MSA1003
+431,Roseburia,NA,PC04924,MSA1003
+432,Ruminiclostridium,NA,PC04924,MSA1003
+433,Ruminiclostridium 5,NA,PC04924,MSA1003
+434,Ruminiclostridium 9,NA,PC04924,MSA1003
+435,Ruminococcaceae NK4A214 group,NA,PC04924,MSA1003
+436,Ruminococcaceae UCG-002,NA,PC04924,MSA1003
+437,Ruminococcaceae UCG-003,NA,PC04924,MSA1003
+438,Ruminococcaceae UCG-004,NA,PC04924,MSA1003
+439,Ruminococcaceae UCG-005,NA,PC04924,MSA1003
+440,Ruminococcaceae UCG-013,NA,PC04924,MSA1003
+441,Ruminococcaceae UCG-014,NA,PC04924,MSA1003
+442,Ruminococcus 1,NA,PC04924,MSA1003
+443,Ruminococcus 2,NA,PC04924,MSA1003
+444,Sellimonas,NA,PC04924,MSA1003
+445,Serratia,NA,PC04924,MSA1003
+446,Succiniclasticum,NA,PC04924,MSA1003
+447,Tyzzerella,NA,PC04924,MSA1003
+448,Tyzzerella 3,NA,PC04924,MSA1003
+449,Acinetobacter,NA,PC04924,Seq.200
+450,Actinomyces,NA,PC04924,Seq.200
+451,Alistipes,NA,PC04924,Seq.200
+452,Anaerostipes,NA,PC04924,Seq.200
+453,Bacillus,49.50244693,PC04924,Seq.200
+454,Bacteroides,NA,PC04924,Seq.200
+455,Bifidobacterium,NA,PC04924,Seq.200
+456,Bilophila,NA,PC04924,Seq.200
+457,Clostridium,NA,PC04924,Seq.200
+458,Lachnoclostridium,NA,PC04924,Seq.200
+459,Collinsella,NA,PC04924,Seq.200
+460,Coprobacillus,NA,PC04924,Seq.200
+461,Cryptococcus,NA,PC04924,Seq.200
+462,Deinococcus,NA,PC04924,Seq.200
+463,Enterococcus,-17.33090146,PC04924,Seq.200
+464,Escherichia-Shigella,-41.9064115,PC04924,Seq.200
+465,Fusobacterium,NA,PC04924,Seq.200
+466,Helicobacter,NA,PC04924,Seq.200
+467,Lactobacillus,-36.90104188,PC04924,Seq.200
+468,Listeria,32.26119996,PC04924,Seq.200
+469,Neisseria,NA,PC04924,Seq.200
+470,Paenibacillus,NA,PC04924,Seq.200
+471,Parabacteroides,NA,PC04924,Seq.200
+472,Pediococcus,NA,PC04924,Seq.200
+473,Porphyromonadaceae,NA,PC04924,Seq.200
+474,Propionibacterium,NA,PC04924,Seq.200
+475,Pseudomonas,-63.98442348,PC04924,Seq.200
+476,Pyramidobacter,NA,PC04924,Seq.200
+477,Ralstonia,NA,PC04924,Seq.200
+478,Rhodobacter,NA,PC04924,Seq.200
+479,Saccharomyces,NA,PC04924,Seq.200
+480,Salmonella,NA,PC04924,Seq.200
+481,Staphylococcus,72.20210204,PC04924,Seq.200
+482,Streptococcus,NA,PC04924,Seq.200
+483,Subdoligranulum,NA,PC04924,Seq.200
+484,Clostridium innocuum group,NA,PC04924,Seq.200
+485,Eubacterium coprostanoligenes group,NA,PC04924,Seq.200
+486,Eubacterium eligens group,NA,PC04924,Seq.200
+487,Eubacterium hallii group,NA,PC04924,Seq.200
+488,Eubacterium rectale group,NA,PC04924,Seq.200
+489,Eubacterium ventriosum group,NA,PC04924,Seq.200
+490,Eubacterium xylanophilum group,NA,PC04924,Seq.200
+491,Ruminococcus gauvreauii group,NA,PC04924,Seq.200
+492,Ruminococcus torques group,NA,PC04924,Seq.200
+493,Adlercreutzia,NA,PC04924,Seq.200
+494,Akkermansia,NA,PC04924,Seq.200
+495,Ambiguous_taxa,NA,PC04924,Seq.200
+496,Anaerofilum,NA,PC04924,Seq.200
+497,Anaerotruncus,NA,PC04924,Seq.200
+498,Blautia,NA,PC04924,Seq.200
+499,Butyricicoccus,NA,PC04924,Seq.200
+500,Candidatus Stoquefichus,NA,PC04924,Seq.200
+501,Carnobacterium,NA,PC04924,Seq.200
+502,Christensenellaceae R-7 group,NA,PC04924,Seq.200
+503,Clostridium sensu stricto 1,NA,PC04924,Seq.200
+504,Coprococcus 1,NA,PC04924,Seq.200
+505,Coprococcus 2,NA,PC04924,Seq.200
+506,Coprococcus 3,NA,PC04924,Seq.200
+507,Defluviitaleaceae UCG-011,NA,PC04924,Seq.200
+508,Dialister,NA,PC04924,Seq.200
+509,Dorea,NA,PC04924,Seq.200
+510,Eisenbergiella,NA,PC04924,Seq.200
+511,Enterobacter,NA,PC04924,Seq.200
+512,Erwinia,NA,PC04924,Seq.200
+513,Erysipelatoclostridium,NA,PC04924,Seq.200
+514,Erysipelotrichaceae UCG-003,NA,PC04924,Seq.200
+515,Faecalibacterium,NA,PC04924,Seq.200
+516,Family XIII AD3011 group,NA,PC04924,Seq.200
+517,Flavonifractor,NA,PC04924,Seq.200
+518,Fusicatenibacter,NA,PC04924,Seq.200
+519,Gordonibacter,NA,PC04924,Seq.200
+520,Gossypium arboreum,NA,PC04924,Seq.200
+521,Holdemania,NA,PC04924,Seq.200
+522,Hungatella,NA,PC04924,Seq.200
+523,Intestinibacter,NA,PC04924,Seq.200
+524,Intestinimonas,NA,PC04924,Seq.200
+525,Kluyvera,NA,PC04924,Seq.200
+526,Lachnospira,NA,PC04924,Seq.200
+527,Lachnospiraceae FCS020 group,NA,PC04924,Seq.200
+528,Lachnospiraceae ND3007 group,NA,PC04924,Seq.200
+529,Lachnospiraceae NK4A136 group,NA,PC04924,Seq.200
+530,Lachnospiraceae UCG-001,NA,PC04924,Seq.200
+531,Lachnospiraceae UCG-004,NA,PC04924,Seq.200
+532,Lachnospiraceae UCG-008,NA,PC04924,Seq.200
+533,Lactonifactor,NA,PC04924,Seq.200
+534,Marvinbryantia,NA,PC04924,Seq.200
+535,Odoribacter,NA,PC04924,Seq.200
+536,Oryza sativa Indica Group (long-grained rice),NA,PC04924,Seq.200
+537,Other,NA,PC04924,Seq.200
+538,Oxalobacter,NA,PC04924,Seq.200
+539,Parasutterella,NA,PC04924,Seq.200
+540,Phascolarctobacterium,NA,PC04924,Seq.200
+541,Porphyromonas,NA,PC04924,Seq.200
+542,Raoultella,NA,PC04924,Seq.200
+543,Roseburia,NA,PC04924,Seq.200
+544,Ruminiclostridium,NA,PC04924,Seq.200
+545,Ruminiclostridium 5,NA,PC04924,Seq.200
+546,Ruminiclostridium 9,NA,PC04924,Seq.200
+547,Ruminococcaceae NK4A214 group,NA,PC04924,Seq.200
+548,Ruminococcaceae UCG-002,NA,PC04924,Seq.200
+549,Ruminococcaceae UCG-003,NA,PC04924,Seq.200
+550,Ruminococcaceae UCG-004,NA,PC04924,Seq.200
+551,Ruminococcaceae UCG-005,NA,PC04924,Seq.200
+552,Ruminococcaceae UCG-013,NA,PC04924,Seq.200
+553,Ruminococcaceae UCG-014,NA,PC04924,Seq.200
+554,Ruminococcus 1,NA,PC04924,Seq.200
+555,Ruminococcus 2,NA,PC04924,Seq.200
+556,Sellimonas,NA,PC04924,Seq.200
+557,Serratia,NA,PC04924,Seq.200
+558,Succiniclasticum,NA,PC04924,Seq.200
+559,Tyzzerella,NA,PC04924,Seq.200
+560,Tyzzerella 3,NA,PC04924,Seq.200
+561,Acinetobacter,NA,PC04924,Seq.2000
+562,Actinomyces,NA,PC04924,Seq.2000
+563,Alistipes,NA,PC04924,Seq.2000
+564,Anaerostipes,NA,PC04924,Seq.2000
+565,Bacillus,46.26628809,PC04924,Seq.2000
+566,Bacteroides,NA,PC04924,Seq.2000
+567,Bifidobacterium,NA,PC04924,Seq.2000
+568,Bilophila,NA,PC04924,Seq.2000
+569,Clostridium,NA,PC04924,Seq.2000
+570,Lachnoclostridium,NA,PC04924,Seq.2000
+571,Collinsella,NA,PC04924,Seq.2000
+572,Coprobacillus,NA,PC04924,Seq.2000
+573,Cryptococcus,NA,PC04924,Seq.2000
+574,Deinococcus,NA,PC04924,Seq.2000
+575,Enterococcus,-9.953653191,PC04924,Seq.2000
+576,Escherichia-Shigella,-57.79295307,PC04924,Seq.2000
+577,Fusobacterium,NA,PC04924,Seq.2000
+578,Helicobacter,NA,PC04924,Seq.2000
+579,Lactobacillus,-7.277402446,PC04924,Seq.2000
+580,Listeria,26.08731561,PC04924,Seq.2000
+581,Neisseria,NA,PC04924,Seq.2000
+582,Paenibacillus,NA,PC04924,Seq.2000
+583,Parabacteroides,NA,PC04924,Seq.2000
+584,Pediococcus,NA,PC04924,Seq.2000
+585,Porphyromonadaceae,NA,PC04924,Seq.2000
+586,Propionibacterium,NA,PC04924,Seq.2000
+587,Pseudomonas,-58.51318575,PC04924,Seq.2000
+588,Pyramidobacter,NA,PC04924,Seq.2000
+589,Ralstonia,NA,PC04924,Seq.2000
+590,Rhodobacter,NA,PC04924,Seq.2000
+591,Saccharomyces,NA,PC04924,Seq.2000
+592,Salmonella,NA,PC04924,Seq.2000
+593,Staphylococcus,68.12429877,PC04924,Seq.2000
+594,Streptococcus,NA,PC04924,Seq.2000
+595,Subdoligranulum,NA,PC04924,Seq.2000
+596,Clostridium innocuum group,NA,PC04924,Seq.2000
+597,Eubacterium coprostanoligenes group,NA,PC04924,Seq.2000
+598,Eubacterium eligens group,NA,PC04924,Seq.2000
+599,Eubacterium hallii group,NA,PC04924,Seq.2000
+600,Eubacterium rectale group,NA,PC04924,Seq.2000
+601,Eubacterium ventriosum group,NA,PC04924,Seq.2000
+602,Eubacterium xylanophilum group,NA,PC04924,Seq.2000
+603,Ruminococcus gauvreauii group,NA,PC04924,Seq.2000
+604,Ruminococcus torques group,NA,PC04924,Seq.2000
+605,Adlercreutzia,NA,PC04924,Seq.2000
+606,Akkermansia,NA,PC04924,Seq.2000
+607,Ambiguous_taxa,NA,PC04924,Seq.2000
+608,Anaerofilum,NA,PC04924,Seq.2000
+609,Anaerotruncus,NA,PC04924,Seq.2000
+610,Blautia,NA,PC04924,Seq.2000
+611,Butyricicoccus,NA,PC04924,Seq.2000
+612,Candidatus Stoquefichus,NA,PC04924,Seq.2000
+613,Carnobacterium,NA,PC04924,Seq.2000
+614,Christensenellaceae R-7 group,NA,PC04924,Seq.2000
+615,Clostridium sensu stricto 1,NA,PC04924,Seq.2000
+616,Coprococcus 1,NA,PC04924,Seq.2000
+617,Coprococcus 2,NA,PC04924,Seq.2000
+618,Coprococcus 3,NA,PC04924,Seq.2000
+619,Defluviitaleaceae UCG-011,NA,PC04924,Seq.2000
+620,Dialister,NA,PC04924,Seq.2000
+621,Dorea,NA,PC04924,Seq.2000
+622,Eisenbergiella,NA,PC04924,Seq.2000
+623,Enterobacter,NA,PC04924,Seq.2000
+624,Erwinia,NA,PC04924,Seq.2000
+625,Erysipelatoclostridium,NA,PC04924,Seq.2000
+626,Erysipelotrichaceae UCG-003,NA,PC04924,Seq.2000
+627,Faecalibacterium,NA,PC04924,Seq.2000
+628,Family XIII AD3011 group,NA,PC04924,Seq.2000
+629,Flavonifractor,NA,PC04924,Seq.2000
+630,Fusicatenibacter,NA,PC04924,Seq.2000
+631,Gordonibacter,NA,PC04924,Seq.2000
+632,Gossypium arboreum,NA,PC04924,Seq.2000
+633,Holdemania,NA,PC04924,Seq.2000
+634,Hungatella,NA,PC04924,Seq.2000
+635,Intestinibacter,NA,PC04924,Seq.2000
+636,Intestinimonas,NA,PC04924,Seq.2000
+637,Kluyvera,NA,PC04924,Seq.2000
+638,Lachnospira,NA,PC04924,Seq.2000
+639,Lachnospiraceae FCS020 group,NA,PC04924,Seq.2000
+640,Lachnospiraceae ND3007 group,NA,PC04924,Seq.2000
+641,Lachnospiraceae NK4A136 group,NA,PC04924,Seq.2000
+642,Lachnospiraceae UCG-001,NA,PC04924,Seq.2000
+643,Lachnospiraceae UCG-004,NA,PC04924,Seq.2000
+644,Lachnospiraceae UCG-008,NA,PC04924,Seq.2000
+645,Lactonifactor,NA,PC04924,Seq.2000
+646,Marvinbryantia,NA,PC04924,Seq.2000
+647,Odoribacter,NA,PC04924,Seq.2000
+648,Oryza sativa Indica Group (long-grained rice),NA,PC04924,Seq.2000
+649,Other,NA,PC04924,Seq.2000
+650,Oxalobacter,NA,PC04924,Seq.2000
+651,Parasutterella,NA,PC04924,Seq.2000
+652,Phascolarctobacterium,NA,PC04924,Seq.2000
+653,Porphyromonas,NA,PC04924,Seq.2000
+654,Raoultella,NA,PC04924,Seq.2000
+655,Roseburia,NA,PC04924,Seq.2000
+656,Ruminiclostridium,NA,PC04924,Seq.2000
+657,Ruminiclostridium 5,NA,PC04924,Seq.2000
+658,Ruminiclostridium 9,NA,PC04924,Seq.2000
+659,Ruminococcaceae NK4A214 group,NA,PC04924,Seq.2000
+660,Ruminococcaceae UCG-002,NA,PC04924,Seq.2000
+661,Ruminococcaceae UCG-003,NA,PC04924,Seq.2000
+662,Ruminococcaceae UCG-004,NA,PC04924,Seq.2000
+663,Ruminococcaceae UCG-005,NA,PC04924,Seq.2000
+664,Ruminococcaceae UCG-013,NA,PC04924,Seq.2000
+665,Ruminococcaceae UCG-014,NA,PC04924,Seq.2000
+666,Ruminococcus 1,NA,PC04924,Seq.2000
+667,Ruminococcus 2,NA,PC04924,Seq.2000
+668,Sellimonas,NA,PC04924,Seq.2000
+669,Serratia,NA,PC04924,Seq.2000
+670,Succiniclasticum,NA,PC04924,Seq.2000
+671,Tyzzerella,NA,PC04924,Seq.2000
+672,Tyzzerella 3,NA,PC04924,Seq.2000
+673,Acinetobacter,NA,PC04925,MSA1000
+674,Actinomyces,NA,PC04925,MSA1000
+675,Alistipes,NA,PC04925,MSA1000
+676,Anaerostipes,NA,PC04925,MSA1000
+677,Bacillus,-99.90018922,PC04925,MSA1000
+678,Bacteroides,NA,PC04925,MSA1000
+679,Bifidobacterium,NA,PC04925,MSA1000
+680,Bilophila,NA,PC04925,MSA1000
+681,Clostridium,NA,PC04925,MSA1000
+682,Lachnoclostridium,NA,PC04925,MSA1000
+683,Collinsella,NA,PC04925,MSA1000
+684,Coprobacillus,NA,PC04925,MSA1000
+685,Cryptococcus,NA,PC04925,MSA1000
+686,Deinococcus,NA,PC04925,MSA1000
+687,Enterococcus,-67.72040457,PC04925,MSA1000
+688,Escherichia-Shigella,-34.73600869,PC04925,MSA1000
+689,Fusobacterium,NA,PC04925,MSA1000
+690,Helicobacter,NA,PC04925,MSA1000
+691,Lactobacillus,-54.32159484,PC04925,MSA1000
+692,Listeria,-99.93532261,PC04925,MSA1000
+693,Neisseria,NA,PC04925,MSA1000
+694,Paenibacillus,NA,PC04925,MSA1000
+695,Parabacteroides,NA,PC04925,MSA1000
+696,Pediococcus,NA,PC04925,MSA1000
+697,Porphyromonadaceae,NA,PC04925,MSA1000
+698,Propionibacterium,NA,PC04925,MSA1000
+699,Pseudomonas,-99.99443204,PC04925,MSA1000
+700,Pyramidobacter,NA,PC04925,MSA1000
+701,Ralstonia,NA,PC04925,MSA1000
+702,Rhodobacter,NA,PC04925,MSA1000
+703,Saccharomyces,NA,PC04925,MSA1000
+704,Salmonella,NA,PC04925,MSA1000
+705,Staphylococcus,-34.74217406,PC04925,MSA1000
+706,Streptococcus,NA,PC04925,MSA1000
+707,Subdoligranulum,NA,PC04925,MSA1000
+708,Clostridium innocuum group,NA,PC04925,MSA1000
+709,Eubacterium coprostanoligenes group,NA,PC04925,MSA1000
+710,Eubacterium eligens group,NA,PC04925,MSA1000
+711,Eubacterium hallii group,NA,PC04925,MSA1000
+712,Eubacterium rectale group,NA,PC04925,MSA1000
+713,Eubacterium ventriosum group,NA,PC04925,MSA1000
+714,Eubacterium xylanophilum group,NA,PC04925,MSA1000
+715,Ruminococcus gauvreauii group,NA,PC04925,MSA1000
+716,Ruminococcus torques group,NA,PC04925,MSA1000
+717,Adlercreutzia,NA,PC04925,MSA1000
+718,Akkermansia,NA,PC04925,MSA1000
+719,Ambiguous_taxa,NA,PC04925,MSA1000
+720,Anaerofilum,NA,PC04925,MSA1000
+721,Anaerotruncus,NA,PC04925,MSA1000
+722,Blautia,NA,PC04925,MSA1000
+723,Butyricicoccus,NA,PC04925,MSA1000
+724,Candidatus Stoquefichus,NA,PC04925,MSA1000
+725,Carnobacterium,NA,PC04925,MSA1000
+726,Christensenellaceae R-7 group,NA,PC04925,MSA1000
+727,Clostridium sensu stricto 1,NA,PC04925,MSA1000
+728,Coprococcus 1,NA,PC04925,MSA1000
+729,Coprococcus 2,NA,PC04925,MSA1000
+730,Coprococcus 3,NA,PC04925,MSA1000
+731,Defluviitaleaceae UCG-011,NA,PC04925,MSA1000
+732,Dialister,NA,PC04925,MSA1000
+733,Dorea,NA,PC04925,MSA1000
+734,Eisenbergiella,NA,PC04925,MSA1000
+735,Enterobacter,NA,PC04925,MSA1000
+736,Erwinia,NA,PC04925,MSA1000
+737,Erysipelatoclostridium,NA,PC04925,MSA1000
+738,Erysipelotrichaceae UCG-003,NA,PC04925,MSA1000
+739,Faecalibacterium,NA,PC04925,MSA1000
+740,Family XIII AD3011 group,NA,PC04925,MSA1000
+741,Flavonifractor,NA,PC04925,MSA1000
+742,Fusicatenibacter,NA,PC04925,MSA1000
+743,Gordonibacter,NA,PC04925,MSA1000
+744,Gossypium arboreum,NA,PC04925,MSA1000
+745,Holdemania,NA,PC04925,MSA1000
+746,Hungatella,NA,PC04925,MSA1000
+747,Intestinibacter,NA,PC04925,MSA1000
+748,Intestinimonas,NA,PC04925,MSA1000
+749,Kluyvera,NA,PC04925,MSA1000
+750,Lachnospira,NA,PC04925,MSA1000
+751,Lachnospiraceae FCS020 group,NA,PC04925,MSA1000
+752,Lachnospiraceae ND3007 group,NA,PC04925,MSA1000
+753,Lachnospiraceae NK4A136 group,NA,PC04925,MSA1000
+754,Lachnospiraceae UCG-001,NA,PC04925,MSA1000
+755,Lachnospiraceae UCG-004,NA,PC04925,MSA1000
+756,Lachnospiraceae UCG-008,NA,PC04925,MSA1000
+757,Lactonifactor,NA,PC04925,MSA1000
+758,Marvinbryantia,NA,PC04925,MSA1000
+759,Odoribacter,NA,PC04925,MSA1000
+760,Oryza sativa Indica Group (long-grained rice),NA,PC04925,MSA1000
+761,Other,NA,PC04925,MSA1000
+762,Oxalobacter,NA,PC04925,MSA1000
+763,Parasutterella,NA,PC04925,MSA1000
+764,Phascolarctobacterium,NA,PC04925,MSA1000
+765,Porphyromonas,NA,PC04925,MSA1000
+766,Raoultella,NA,PC04925,MSA1000
+767,Roseburia,NA,PC04925,MSA1000
+768,Ruminiclostridium,NA,PC04925,MSA1000
+769,Ruminiclostridium 5,NA,PC04925,MSA1000
+770,Ruminiclostridium 9,NA,PC04925,MSA1000
+771,Ruminococcaceae NK4A214 group,NA,PC04925,MSA1000
+772,Ruminococcaceae UCG-002,NA,PC04925,MSA1000
+773,Ruminococcaceae UCG-003,NA,PC04925,MSA1000
+774,Ruminococcaceae UCG-004,NA,PC04925,MSA1000
+775,Ruminococcaceae UCG-005,NA,PC04925,MSA1000
+776,Ruminococcaceae UCG-013,NA,PC04925,MSA1000
+777,Ruminococcaceae UCG-014,NA,PC04925,MSA1000
+778,Ruminococcus 1,NA,PC04925,MSA1000
+779,Ruminococcus 2,NA,PC04925,MSA1000
+780,Sellimonas,NA,PC04925,MSA1000
+781,Serratia,NA,PC04925,MSA1000
+782,Succiniclasticum,NA,PC04925,MSA1000
+783,Tyzzerella,NA,PC04925,MSA1000
+784,Tyzzerella 3,NA,PC04925,MSA1000
+785,Acinetobacter,NA,PC04925,MSA1001
+786,Actinomyces,NA,PC04925,MSA1001
+787,Alistipes,NA,PC04925,MSA1001
+788,Anaerostipes,NA,PC04925,MSA1001
+789,Bacillus,-99.87339018,PC04925,MSA1001
+790,Bacteroides,NA,PC04925,MSA1001
+791,Bifidobacterium,NA,PC04925,MSA1001
+792,Bilophila,NA,PC04925,MSA1001
+793,Clostridium,NA,PC04925,MSA1001
+794,Lachnoclostridium,NA,PC04925,MSA1001
+795,Collinsella,NA,PC04925,MSA1001
+796,Coprobacillus,NA,PC04925,MSA1001
+797,Cryptococcus,NA,PC04925,MSA1001
+798,Deinococcus,NA,PC04925,MSA1001
+799,Enterococcus,-99.58965793,PC04925,MSA1001
+800,Escherichia-Shigella,-32.88703028,PC04925,MSA1001
+801,Fusobacterium,NA,PC04925,MSA1001
+802,Helicobacter,NA,PC04925,MSA1001
+803,Lactobacillus,-93.29051256,PC04925,MSA1001
+804,Listeria,-99.92803231,PC04925,MSA1001
+805,Neisseria,NA,PC04925,MSA1001
+806,Paenibacillus,NA,PC04925,MSA1001
+807,Parabacteroides,NA,PC04925,MSA1001
+808,Pediococcus,NA,PC04925,MSA1001
+809,Porphyromonadaceae,NA,PC04925,MSA1001
+810,Propionibacterium,NA,PC04925,MSA1001
+811,Pseudomonas,-99.95539193,PC04925,MSA1001
+812,Pyramidobacter,NA,PC04925,MSA1001
+813,Ralstonia,NA,PC04925,MSA1001
+814,Rhodobacter,NA,PC04925,MSA1001
+815,Saccharomyces,NA,PC04925,MSA1001
+816,Salmonella,NA,PC04925,MSA1001
+817,Staphylococcus,317.9661793,PC04925,MSA1001
+818,Streptococcus,NA,PC04925,MSA1001
+819,Subdoligranulum,NA,PC04925,MSA1001
+820,Clostridium innocuum group,NA,PC04925,MSA1001
+821,Eubacterium coprostanoligenes group,NA,PC04925,MSA1001
+822,Eubacterium eligens group,NA,PC04925,MSA1001
+823,Eubacterium hallii group,NA,PC04925,MSA1001
+824,Eubacterium rectale group,NA,PC04925,MSA1001
+825,Eubacterium ventriosum group,NA,PC04925,MSA1001
+826,Eubacterium xylanophilum group,NA,PC04925,MSA1001
+827,Ruminococcus gauvreauii group,NA,PC04925,MSA1001
+828,Ruminococcus torques group,NA,PC04925,MSA1001
+829,Adlercreutzia,NA,PC04925,MSA1001
+830,Akkermansia,NA,PC04925,MSA1001
+831,Ambiguous_taxa,NA,PC04925,MSA1001
+832,Anaerofilum,NA,PC04925,MSA1001
+833,Anaerotruncus,NA,PC04925,MSA1001
+834,Blautia,NA,PC04925,MSA1001
+835,Butyricicoccus,NA,PC04925,MSA1001
+836,Candidatus Stoquefichus,NA,PC04925,MSA1001
+837,Carnobacterium,NA,PC04925,MSA1001
+838,Christensenellaceae R-7 group,NA,PC04925,MSA1001
+839,Clostridium sensu stricto 1,NA,PC04925,MSA1001
+840,Coprococcus 1,NA,PC04925,MSA1001
+841,Coprococcus 2,NA,PC04925,MSA1001
+842,Coprococcus 3,NA,PC04925,MSA1001
+843,Defluviitaleaceae UCG-011,NA,PC04925,MSA1001
+844,Dialister,NA,PC04925,MSA1001
+845,Dorea,NA,PC04925,MSA1001
+846,Eisenbergiella,NA,PC04925,MSA1001
+847,Enterobacter,NA,PC04925,MSA1001
+848,Erwinia,NA,PC04925,MSA1001
+849,Erysipelatoclostridium,NA,PC04925,MSA1001
+850,Erysipelotrichaceae UCG-003,NA,PC04925,MSA1001
+851,Faecalibacterium,NA,PC04925,MSA1001
+852,Family XIII AD3011 group,NA,PC04925,MSA1001
+853,Flavonifractor,NA,PC04925,MSA1001
+854,Fusicatenibacter,NA,PC04925,MSA1001
+855,Gordonibacter,NA,PC04925,MSA1001
+856,Gossypium arboreum,NA,PC04925,MSA1001
+857,Holdemania,NA,PC04925,MSA1001
+858,Hungatella,NA,PC04925,MSA1001
+859,Intestinibacter,NA,PC04925,MSA1001
+860,Intestinimonas,NA,PC04925,MSA1001
+861,Kluyvera,NA,PC04925,MSA1001
+862,Lachnospira,NA,PC04925,MSA1001
+863,Lachnospiraceae FCS020 group,NA,PC04925,MSA1001
+864,Lachnospiraceae ND3007 group,NA,PC04925,MSA1001
+865,Lachnospiraceae NK4A136 group,NA,PC04925,MSA1001
+866,Lachnospiraceae UCG-001,NA,PC04925,MSA1001
+867,Lachnospiraceae UCG-004,NA,PC04925,MSA1001
+868,Lachnospiraceae UCG-008,NA,PC04925,MSA1001
+869,Lactonifactor,NA,PC04925,MSA1001
+870,Marvinbryantia,NA,PC04925,MSA1001
+871,Odoribacter,NA,PC04925,MSA1001
+872,Oryza sativa Indica Group (long-grained rice),NA,PC04925,MSA1001
+873,Other,NA,PC04925,MSA1001
+874,Oxalobacter,NA,PC04925,MSA1001
+875,Parasutterella,NA,PC04925,MSA1001
+876,Phascolarctobacterium,NA,PC04925,MSA1001
+877,Porphyromonas,NA,PC04925,MSA1001
+878,Raoultella,NA,PC04925,MSA1001
+879,Roseburia,NA,PC04925,MSA1001
+880,Ruminiclostridium,NA,PC04925,MSA1001
+881,Ruminiclostridium 5,NA,PC04925,MSA1001
+882,Ruminiclostridium 9,NA,PC04925,MSA1001
+883,Ruminococcaceae NK4A214 group,NA,PC04925,MSA1001
+884,Ruminococcaceae UCG-002,NA,PC04925,MSA1001
+885,Ruminococcaceae UCG-003,NA,PC04925,MSA1001
+886,Ruminococcaceae UCG-004,NA,PC04925,MSA1001
+887,Ruminococcaceae UCG-005,NA,PC04925,MSA1001
+888,Ruminococcaceae UCG-013,NA,PC04925,MSA1001
+889,Ruminococcaceae UCG-014,NA,PC04925,MSA1001
+890,Ruminococcus 1,NA,PC04925,MSA1001
+891,Ruminococcus 2,NA,PC04925,MSA1001
+892,Sellimonas,NA,PC04925,MSA1001
+893,Serratia,NA,PC04925,MSA1001
+894,Succiniclasticum,NA,PC04925,MSA1001
+895,Tyzzerella,NA,PC04925,MSA1001
+896,Tyzzerella 3,NA,PC04925,MSA1001
+897,Acinetobacter,NA,PC04925,MSA1002
+898,Actinomyces,NA,PC04925,MSA1002
+899,Alistipes,NA,PC04925,MSA1002
+900,Anaerostipes,NA,PC04925,MSA1002
+901,Bacillus,-99.90699178,PC04925,MSA1002
+902,Bacteroides,NA,PC04925,MSA1002
+903,Bifidobacterium,NA,PC04925,MSA1002
+904,Bilophila,NA,PC04925,MSA1002
+905,Clostridium,NA,PC04925,MSA1002
+906,Lachnoclostridium,NA,PC04925,MSA1002
+907,Collinsella,NA,PC04925,MSA1002
+908,Coprobacillus,NA,PC04925,MSA1002
+909,Cryptococcus,NA,PC04925,MSA1002
+910,Deinococcus,NA,PC04925,MSA1002
+911,Enterococcus,-79.90609351,PC04925,MSA1002
+912,Escherichia-Shigella,-69.50272392,PC04925,MSA1002
+913,Fusobacterium,NA,PC04925,MSA1002
+914,Helicobacter,NA,PC04925,MSA1002
+915,Lactobacillus,-67.7726507,PC04925,MSA1002
+916,Listeria,-99.93094139,PC04925,MSA1002
+917,Neisseria,NA,PC04925,MSA1002
+918,Paenibacillus,NA,PC04925,MSA1002
+919,Parabacteroides,NA,PC04925,MSA1002
+920,Pediococcus,NA,PC04925,MSA1002
+921,Porphyromonadaceae,NA,PC04925,MSA1002
+922,Propionibacterium,NA,PC04925,MSA1002
+923,Pseudomonas,-91.75032434,PC04925,MSA1002
+924,Pyramidobacter,NA,PC04925,MSA1002
+925,Ralstonia,NA,PC04925,MSA1002
+926,Rhodobacter,NA,PC04925,MSA1002
+927,Saccharomyces,NA,PC04925,MSA1002
+928,Salmonella,NA,PC04925,MSA1002
+929,Staphylococcus,-18.38528424,PC04925,MSA1002
+930,Streptococcus,NA,PC04925,MSA1002
+931,Subdoligranulum,NA,PC04925,MSA1002
+932,Clostridium innocuum group,NA,PC04925,MSA1002
+933,Eubacterium coprostanoligenes group,NA,PC04925,MSA1002
+934,Eubacterium eligens group,NA,PC04925,MSA1002
+935,Eubacterium hallii group,NA,PC04925,MSA1002
+936,Eubacterium rectale group,NA,PC04925,MSA1002
+937,Eubacterium ventriosum group,NA,PC04925,MSA1002
+938,Eubacterium xylanophilum group,NA,PC04925,MSA1002
+939,Ruminococcus gauvreauii group,NA,PC04925,MSA1002
+940,Ruminococcus torques group,NA,PC04925,MSA1002
+941,Adlercreutzia,NA,PC04925,MSA1002
+942,Akkermansia,NA,PC04925,MSA1002
+943,Ambiguous_taxa,NA,PC04925,MSA1002
+944,Anaerofilum,NA,PC04925,MSA1002
+945,Anaerotruncus,NA,PC04925,MSA1002
+946,Blautia,NA,PC04925,MSA1002
+947,Butyricicoccus,NA,PC04925,MSA1002
+948,Candidatus Stoquefichus,NA,PC04925,MSA1002
+949,Carnobacterium,NA,PC04925,MSA1002
+950,Christensenellaceae R-7 group,NA,PC04925,MSA1002
+951,Clostridium sensu stricto 1,NA,PC04925,MSA1002
+952,Coprococcus 1,NA,PC04925,MSA1002
+953,Coprococcus 2,NA,PC04925,MSA1002
+954,Coprococcus 3,NA,PC04925,MSA1002
+955,Defluviitaleaceae UCG-011,NA,PC04925,MSA1002
+956,Dialister,NA,PC04925,MSA1002
+957,Dorea,NA,PC04925,MSA1002
+958,Eisenbergiella,NA,PC04925,MSA1002
+959,Enterobacter,NA,PC04925,MSA1002
+960,Erwinia,NA,PC04925,MSA1002
+961,Erysipelatoclostridium,NA,PC04925,MSA1002
+962,Erysipelotrichaceae UCG-003,NA,PC04925,MSA1002
+963,Faecalibacterium,NA,PC04925,MSA1002
+964,Family XIII AD3011 group,NA,PC04925,MSA1002
+965,Flavonifractor,NA,PC04925,MSA1002
+966,Fusicatenibacter,NA,PC04925,MSA1002
+967,Gordonibacter,NA,PC04925,MSA1002
+968,Gossypium arboreum,NA,PC04925,MSA1002
+969,Holdemania,NA,PC04925,MSA1002
+970,Hungatella,NA,PC04925,MSA1002
+971,Intestinibacter,NA,PC04925,MSA1002
+972,Intestinimonas,NA,PC04925,MSA1002
+973,Kluyvera,NA,PC04925,MSA1002
+974,Lachnospira,NA,PC04925,MSA1002
+975,Lachnospiraceae FCS020 group,NA,PC04925,MSA1002
+976,Lachnospiraceae ND3007 group,NA,PC04925,MSA1002
+977,Lachnospiraceae NK4A136 group,NA,PC04925,MSA1002
+978,Lachnospiraceae UCG-001,NA,PC04925,MSA1002
+979,Lachnospiraceae UCG-004,NA,PC04925,MSA1002
+980,Lachnospiraceae UCG-008,NA,PC04925,MSA1002
+981,Lactonifactor,NA,PC04925,MSA1002
+982,Marvinbryantia,NA,PC04925,MSA1002
+983,Odoribacter,NA,PC04925,MSA1002
+984,Oryza sativa Indica Group (long-grained rice),NA,PC04925,MSA1002
+985,Other,NA,PC04925,MSA1002
+986,Oxalobacter,NA,PC04925,MSA1002
+987,Parasutterella,NA,PC04925,MSA1002
+988,Phascolarctobacterium,NA,PC04925,MSA1002
+989,Porphyromonas,NA,PC04925,MSA1002
+990,Raoultella,NA,PC04925,MSA1002
+991,Roseburia,NA,PC04925,MSA1002
+992,Ruminiclostridium,NA,PC04925,MSA1002
+993,Ruminiclostridium 5,NA,PC04925,MSA1002
+994,Ruminiclostridium 9,NA,PC04925,MSA1002
+995,Ruminococcaceae NK4A214 group,NA,PC04925,MSA1002
+996,Ruminococcaceae UCG-002,NA,PC04925,MSA1002
+997,Ruminococcaceae UCG-003,NA,PC04925,MSA1002
+998,Ruminococcaceae UCG-004,NA,PC04925,MSA1002
+999,Ruminococcaceae UCG-005,NA,PC04925,MSA1002
+1000,Ruminococcaceae UCG-013,NA,PC04925,MSA1002
+1001,Ruminococcaceae UCG-014,NA,PC04925,MSA1002
+1002,Ruminococcus 1,NA,PC04925,MSA1002
+1003,Ruminococcus 2,NA,PC04925,MSA1002
+1004,Sellimonas,NA,PC04925,MSA1002
+1005,Serratia,NA,PC04925,MSA1002
+1006,Succiniclasticum,NA,PC04925,MSA1002
+1007,Tyzzerella,NA,PC04925,MSA1002
+1008,Tyzzerella 3,NA,PC04925,MSA1002
+1009,Acinetobacter,NA,PC04925,MSA1003
+1010,Actinomyces,NA,PC04925,MSA1003
+1011,Alistipes,NA,PC04925,MSA1003
+1012,Anaerostipes,NA,PC04925,MSA1003
+1013,Bacillus,-99.85319592,PC04925,MSA1003
+1014,Bacteroides,NA,PC04925,MSA1003
+1015,Bifidobacterium,NA,PC04925,MSA1003
+1016,Bilophila,NA,PC04925,MSA1003
+1017,Clostridium,NA,PC04925,MSA1003
+1018,Lachnoclostridium,NA,PC04925,MSA1003
+1019,Collinsella,NA,PC04925,MSA1003
+1020,Coprobacillus,NA,PC04925,MSA1003
+1021,Cryptococcus,NA,PC04925,MSA1003
+1022,Deinococcus,NA,PC04925,MSA1003
+1023,Enterococcus,-99.78752042,PC04925,MSA1003
+1024,Escherichia-Shigella,9.792996129,PC04925,MSA1003
+1025,Fusobacterium,NA,PC04925,MSA1003
+1026,Helicobacter,NA,PC04925,MSA1003
+1027,Lactobacillus,21.72504575,PC04925,MSA1003
+1028,Listeria,-99.87668458,PC04925,MSA1003
+1029,Neisseria,NA,PC04925,MSA1003
+1030,Paenibacillus,NA,PC04925,MSA1003
+1031,Parabacteroides,NA,PC04925,MSA1003
+1032,Pediococcus,NA,PC04925,MSA1003
+1033,Porphyromonadaceae,NA,PC04925,MSA1003
+1034,Propionibacterium,NA,PC04925,MSA1003
+1035,Pseudomonas,-98.07092166,PC04925,MSA1003
+1036,Pyramidobacter,NA,PC04925,MSA1003
+1037,Ralstonia,NA,PC04925,MSA1003
+1038,Rhodobacter,NA,PC04925,MSA1003
+1039,Saccharomyces,NA,PC04925,MSA1003
+1040,Salmonella,NA,PC04925,MSA1003
+1041,Staphylococcus,46.54434499,PC04925,MSA1003
+1042,Streptococcus,NA,PC04925,MSA1003
+1043,Subdoligranulum,NA,PC04925,MSA1003
+1044,Clostridium innocuum group,NA,PC04925,MSA1003
+1045,Eubacterium coprostanoligenes group,NA,PC04925,MSA1003
+1046,Eubacterium eligens group,NA,PC04925,MSA1003
+1047,Eubacterium hallii group,NA,PC04925,MSA1003
+1048,Eubacterium rectale group,NA,PC04925,MSA1003
+1049,Eubacterium ventriosum group,NA,PC04925,MSA1003
+1050,Eubacterium xylanophilum group,NA,PC04925,MSA1003
+1051,Ruminococcus gauvreauii group,NA,PC04925,MSA1003
+1052,Ruminococcus torques group,NA,PC04925,MSA1003
+1053,Adlercreutzia,NA,PC04925,MSA1003
+1054,Akkermansia,NA,PC04925,MSA1003
+1055,Ambiguous_taxa,NA,PC04925,MSA1003
+1056,Anaerofilum,NA,PC04925,MSA1003
+1057,Anaerotruncus,NA,PC04925,MSA1003
+1058,Blautia,NA,PC04925,MSA1003
+1059,Butyricicoccus,NA,PC04925,MSA1003
+1060,Candidatus Stoquefichus,NA,PC04925,MSA1003
+1061,Carnobacterium,NA,PC04925,MSA1003
+1062,Christensenellaceae R-7 group,NA,PC04925,MSA1003
+1063,Clostridium sensu stricto 1,NA,PC04925,MSA1003
+1064,Coprococcus 1,NA,PC04925,MSA1003
+1065,Coprococcus 2,NA,PC04925,MSA1003
+1066,Coprococcus 3,NA,PC04925,MSA1003
+1067,Defluviitaleaceae UCG-011,NA,PC04925,MSA1003
+1068,Dialister,NA,PC04925,MSA1003
+1069,Dorea,NA,PC04925,MSA1003
+1070,Eisenbergiella,NA,PC04925,MSA1003
+1071,Enterobacter,NA,PC04925,MSA1003
+1072,Erwinia,NA,PC04925,MSA1003
+1073,Erysipelatoclostridium,NA,PC04925,MSA1003
+1074,Erysipelotrichaceae UCG-003,NA,PC04925,MSA1003
+1075,Faecalibacterium,NA,PC04925,MSA1003
+1076,Family XIII AD3011 group,NA,PC04925,MSA1003
+1077,Flavonifractor,NA,PC04925,MSA1003
+1078,Fusicatenibacter,NA,PC04925,MSA1003
+1079,Gordonibacter,NA,PC04925,MSA1003
+1080,Gossypium arboreum,NA,PC04925,MSA1003
+1081,Holdemania,NA,PC04925,MSA1003
+1082,Hungatella,NA,PC04925,MSA1003
+1083,Intestinibacter,NA,PC04925,MSA1003
+1084,Intestinimonas,NA,PC04925,MSA1003
+1085,Kluyvera,NA,PC04925,MSA1003
+1086,Lachnospira,NA,PC04925,MSA1003
+1087,Lachnospiraceae FCS020 group,NA,PC04925,MSA1003
+1088,Lachnospiraceae ND3007 group,NA,PC04925,MSA1003
+1089,Lachnospiraceae NK4A136 group,NA,PC04925,MSA1003
+1090,Lachnospiraceae UCG-001,NA,PC04925,MSA1003
+1091,Lachnospiraceae UCG-004,NA,PC04925,MSA1003
+1092,Lachnospiraceae UCG-008,NA,PC04925,MSA1003
+1093,Lactonifactor,NA,PC04925,MSA1003
+1094,Marvinbryantia,NA,PC04925,MSA1003
+1095,Odoribacter,NA,PC04925,MSA1003
+1096,Oryza sativa Indica Group (long-grained rice),NA,PC04925,MSA1003
+1097,Other,NA,PC04925,MSA1003
+1098,Oxalobacter,NA,PC04925,MSA1003
+1099,Parasutterella,NA,PC04925,MSA1003
+1100,Phascolarctobacterium,NA,PC04925,MSA1003
+1101,Porphyromonas,NA,PC04925,MSA1003
+1102,Raoultella,NA,PC04925,MSA1003
+1103,Roseburia,NA,PC04925,MSA1003
+1104,Ruminiclostridium,NA,PC04925,MSA1003
+1105,Ruminiclostridium 5,NA,PC04925,MSA1003
+1106,Ruminiclostridium 9,NA,PC04925,MSA1003
+1107,Ruminococcaceae NK4A214 group,NA,PC04925,MSA1003
+1108,Ruminococcaceae UCG-002,NA,PC04925,MSA1003
+1109,Ruminococcaceae UCG-003,NA,PC04925,MSA1003
+1110,Ruminococcaceae UCG-004,NA,PC04925,MSA1003
+1111,Ruminococcaceae UCG-005,NA,PC04925,MSA1003
+1112,Ruminococcaceae UCG-013,NA,PC04925,MSA1003
+1113,Ruminococcaceae UCG-014,NA,PC04925,MSA1003
+1114,Ruminococcus 1,NA,PC04925,MSA1003
+1115,Ruminococcus 2,NA,PC04925,MSA1003
+1116,Sellimonas,NA,PC04925,MSA1003
+1117,Serratia,NA,PC04925,MSA1003
+1118,Succiniclasticum,NA,PC04925,MSA1003
+1119,Tyzzerella,NA,PC04925,MSA1003
+1120,Tyzzerella 3,NA,PC04925,MSA1003
+1121,Acinetobacter,NA,PC04925,Seq.200
+1122,Actinomyces,NA,PC04925,Seq.200
+1123,Alistipes,NA,PC04925,Seq.200
+1124,Anaerostipes,NA,PC04925,Seq.200
+1125,Bacillus,48.60661186,PC04925,Seq.200
+1126,Bacteroides,NA,PC04925,Seq.200
+1127,Bifidobacterium,NA,PC04925,Seq.200
+1128,Bilophila,NA,PC04925,Seq.200
+1129,Clostridium,NA,PC04925,Seq.200
+1130,Lachnoclostridium,NA,PC04925,Seq.200
+1131,Collinsella,NA,PC04925,Seq.200
+1132,Coprobacillus,NA,PC04925,Seq.200
+1133,Cryptococcus,NA,PC04925,Seq.200
+1134,Deinococcus,NA,PC04925,Seq.200
+1135,Enterococcus,-18.88905068,PC04925,Seq.200
+1136,Escherichia-Shigella,-37.41790256,PC04925,Seq.200
+1137,Fusobacterium,NA,PC04925,Seq.200
+1138,Helicobacter,NA,PC04925,Seq.200
+1139,Lactobacillus,-35.62460098,PC04925,Seq.200
+1140,Listeria,30.94984749,PC04925,Seq.200
+1141,Neisseria,NA,PC04925,Seq.200
+1142,Paenibacillus,NA,PC04925,Seq.200
+1143,Parabacteroides,NA,PC04925,Seq.200
+1144,Pediococcus,NA,PC04925,Seq.200
+1145,Porphyromonadaceae,NA,PC04925,Seq.200
+1146,Propionibacterium,NA,PC04925,Seq.200
+1147,Pseudomonas,-62.86062857,PC04925,Seq.200
+1148,Pyramidobacter,NA,PC04925,Seq.200
+1149,Ralstonia,NA,PC04925,Seq.200
+1150,Rhodobacter,NA,PC04925,Seq.200
+1151,Saccharomyces,NA,PC04925,Seq.200
+1152,Salmonella,NA,PC04925,Seq.200
+1153,Staphylococcus,70.93107644,PC04925,Seq.200
+1154,Streptococcus,NA,PC04925,Seq.200
+1155,Subdoligranulum,NA,PC04925,Seq.200
+1156,Clostridium innocuum group,NA,PC04925,Seq.200
+1157,Eubacterium coprostanoligenes group,NA,PC04925,Seq.200
+1158,Eubacterium eligens group,NA,PC04925,Seq.200
+1159,Eubacterium hallii group,NA,PC04925,Seq.200
+1160,Eubacterium rectale group,NA,PC04925,Seq.200
+1161,Eubacterium ventriosum group,NA,PC04925,Seq.200
+1162,Eubacterium xylanophilum group,NA,PC04925,Seq.200
+1163,Ruminococcus gauvreauii group,NA,PC04925,Seq.200
+1164,Ruminococcus torques group,NA,PC04925,Seq.200
+1165,Adlercreutzia,NA,PC04925,Seq.200
+1166,Akkermansia,NA,PC04925,Seq.200
+1167,Ambiguous_taxa,NA,PC04925,Seq.200
+1168,Anaerofilum,NA,PC04925,Seq.200
+1169,Anaerotruncus,NA,PC04925,Seq.200
+1170,Blautia,NA,PC04925,Seq.200
+1171,Butyricicoccus,NA,PC04925,Seq.200
+1172,Candidatus Stoquefichus,NA,PC04925,Seq.200
+1173,Carnobacterium,NA,PC04925,Seq.200
+1174,Christensenellaceae R-7 group,NA,PC04925,Seq.200
+1175,Clostridium sensu stricto 1,NA,PC04925,Seq.200
+1176,Coprococcus 1,NA,PC04925,Seq.200
+1177,Coprococcus 2,NA,PC04925,Seq.200
+1178,Coprococcus 3,NA,PC04925,Seq.200
+1179,Defluviitaleaceae UCG-011,NA,PC04925,Seq.200
+1180,Dialister,NA,PC04925,Seq.200
+1181,Dorea,NA,PC04925,Seq.200
+1182,Eisenbergiella,NA,PC04925,Seq.200
+1183,Enterobacter,NA,PC04925,Seq.200
+1184,Erwinia,NA,PC04925,Seq.200
+1185,Erysipelatoclostridium,NA,PC04925,Seq.200
+1186,Erysipelotrichaceae UCG-003,NA,PC04925,Seq.200
+1187,Faecalibacterium,NA,PC04925,Seq.200
+1188,Family XIII AD3011 group,NA,PC04925,Seq.200
+1189,Flavonifractor,NA,PC04925,Seq.200
+1190,Fusicatenibacter,NA,PC04925,Seq.200
+1191,Gordonibacter,NA,PC04925,Seq.200
+1192,Gossypium arboreum,NA,PC04925,Seq.200
+1193,Holdemania,NA,PC04925,Seq.200
+1194,Hungatella,NA,PC04925,Seq.200
+1195,Intestinibacter,NA,PC04925,Seq.200
+1196,Intestinimonas,NA,PC04925,Seq.200
+1197,Kluyvera,NA,PC04925,Seq.200
+1198,Lachnospira,NA,PC04925,Seq.200
+1199,Lachnospiraceae FCS020 group,NA,PC04925,Seq.200
+1200,Lachnospiraceae ND3007 group,NA,PC04925,Seq.200
+1201,Lachnospiraceae NK4A136 group,NA,PC04925,Seq.200
+1202,Lachnospiraceae UCG-001,NA,PC04925,Seq.200
+1203,Lachnospiraceae UCG-004,NA,PC04925,Seq.200
+1204,Lachnospiraceae UCG-008,NA,PC04925,Seq.200
+1205,Lactonifactor,NA,PC04925,Seq.200
+1206,Marvinbryantia,NA,PC04925,Seq.200
+1207,Odoribacter,NA,PC04925,Seq.200
+1208,Oryza sativa Indica Group (long-grained rice),NA,PC04925,Seq.200
+1209,Other,NA,PC04925,Seq.200
+1210,Oxalobacter,NA,PC04925,Seq.200
+1211,Parasutterella,NA,PC04925,Seq.200
+1212,Phascolarctobacterium,NA,PC04925,Seq.200
+1213,Porphyromonas,NA,PC04925,Seq.200
+1214,Raoultella,NA,PC04925,Seq.200
+1215,Roseburia,NA,PC04925,Seq.200
+1216,Ruminiclostridium,NA,PC04925,Seq.200
+1217,Ruminiclostridium 5,NA,PC04925,Seq.200
+1218,Ruminiclostridium 9,NA,PC04925,Seq.200
+1219,Ruminococcaceae NK4A214 group,NA,PC04925,Seq.200
+1220,Ruminococcaceae UCG-002,NA,PC04925,Seq.200
+1221,Ruminococcaceae UCG-003,NA,PC04925,Seq.200
+1222,Ruminococcaceae UCG-004,NA,PC04925,Seq.200
+1223,Ruminococcaceae UCG-005,NA,PC04925,Seq.200
+1224,Ruminococcaceae UCG-013,NA,PC04925,Seq.200
+1225,Ruminococcaceae UCG-014,NA,PC04925,Seq.200
+1226,Ruminococcus 1,NA,PC04925,Seq.200
+1227,Ruminococcus 2,NA,PC04925,Seq.200
+1228,Sellimonas,NA,PC04925,Seq.200
+1229,Serratia,NA,PC04925,Seq.200
+1230,Succiniclasticum,NA,PC04925,Seq.200
+1231,Tyzzerella,NA,PC04925,Seq.200
+1232,Tyzzerella 3,NA,PC04925,Seq.200
+1233,Acinetobacter,NA,PC04925,Seq.2000
+1234,Actinomyces,NA,PC04925,Seq.2000
+1235,Alistipes,NA,PC04925,Seq.2000
+1236,Anaerostipes,NA,PC04925,Seq.2000
+1237,Bacillus,45.19791412,PC04925,Seq.2000
+1238,Bacteroides,NA,PC04925,Seq.2000
+1239,Bifidobacterium,NA,PC04925,Seq.2000
+1240,Bilophila,NA,PC04925,Seq.2000
+1241,Clostridium,NA,PC04925,Seq.2000
+1242,Lachnoclostridium,NA,PC04925,Seq.2000
+1243,Collinsella,NA,PC04925,Seq.2000
+1244,Coprobacillus,NA,PC04925,Seq.2000
+1245,Cryptococcus,NA,PC04925,Seq.2000
+1246,Deinococcus,NA,PC04925,Seq.2000
+1247,Enterococcus,-10.80638462,PC04925,Seq.2000
+1248,Escherichia-Shigella,-56.08547212,PC04925,Seq.2000
+1249,Fusobacterium,NA,PC04925,Seq.2000
+1250,Helicobacter,NA,PC04925,Seq.2000
+1251,Lactobacillus,-6.298588373,PC04925,Seq.2000
+1252,Listeria,25.94943599,PC04925,Seq.2000
+1253,Neisseria,NA,PC04925,Seq.2000
+1254,Paenibacillus,NA,PC04925,Seq.2000
+1255,Parabacteroides,NA,PC04925,Seq.2000
+1256,Pediococcus,NA,PC04925,Seq.2000
+1257,Porphyromonadaceae,NA,PC04925,Seq.2000
+1258,Propionibacterium,NA,PC04925,Seq.2000
+1259,Pseudomonas,-57.31184493,PC04925,Seq.2000
+1260,Pyramidobacter,NA,PC04925,Seq.2000
+1261,Ralstonia,NA,PC04925,Seq.2000
+1262,Rhodobacter,NA,PC04925,Seq.2000
+1263,Saccharomyces,NA,PC04925,Seq.2000
+1264,Salmonella,NA,PC04925,Seq.2000
+1265,Staphylococcus,67.56325332,PC04925,Seq.2000
+1266,Streptococcus,NA,PC04925,Seq.2000
+1267,Subdoligranulum,NA,PC04925,Seq.2000
+1268,Clostridium innocuum group,NA,PC04925,Seq.2000
+1269,Eubacterium coprostanoligenes group,NA,PC04925,Seq.2000
+1270,Eubacterium eligens group,NA,PC04925,Seq.2000
+1271,Eubacterium hallii group,NA,PC04925,Seq.2000
+1272,Eubacterium rectale group,NA,PC04925,Seq.2000
+1273,Eubacterium ventriosum group,NA,PC04925,Seq.2000
+1274,Eubacterium xylanophilum group,NA,PC04925,Seq.2000
+1275,Ruminococcus gauvreauii group,NA,PC04925,Seq.2000
+1276,Ruminococcus torques group,NA,PC04925,Seq.2000
+1277,Adlercreutzia,NA,PC04925,Seq.2000
+1278,Akkermansia,NA,PC04925,Seq.2000
+1279,Ambiguous_taxa,NA,PC04925,Seq.2000
+1280,Anaerofilum,NA,PC04925,Seq.2000
+1281,Anaerotruncus,NA,PC04925,Seq.2000
+1282,Blautia,NA,PC04925,Seq.2000
+1283,Butyricicoccus,NA,PC04925,Seq.2000
+1284,Candidatus Stoquefichus,NA,PC04925,Seq.2000
+1285,Carnobacterium,NA,PC04925,Seq.2000
+1286,Christensenellaceae R-7 group,NA,PC04925,Seq.2000
+1287,Clostridium sensu stricto 1,NA,PC04925,Seq.2000
+1288,Coprococcus 1,NA,PC04925,Seq.2000
+1289,Coprococcus 2,NA,PC04925,Seq.2000
+1290,Coprococcus 3,NA,PC04925,Seq.2000
+1291,Defluviitaleaceae UCG-011,NA,PC04925,Seq.2000
+1292,Dialister,NA,PC04925,Seq.2000
+1293,Dorea,NA,PC04925,Seq.2000
+1294,Eisenbergiella,NA,PC04925,Seq.2000
+1295,Enterobacter,NA,PC04925,Seq.2000
+1296,Erwinia,NA,PC04925,Seq.2000
+1297,Erysipelatoclostridium,NA,PC04925,Seq.2000
+1298,Erysipelotrichaceae UCG-003,NA,PC04925,Seq.2000
+1299,Faecalibacterium,NA,PC04925,Seq.2000
+1300,Family XIII AD3011 group,NA,PC04925,Seq.2000
+1301,Flavonifractor,NA,PC04925,Seq.2000
+1302,Fusicatenibacter,NA,PC04925,Seq.2000
+1303,Gordonibacter,NA,PC04925,Seq.2000
+1304,Gossypium arboreum,NA,PC04925,Seq.2000
+1305,Holdemania,NA,PC04925,Seq.2000
+1306,Hungatella,NA,PC04925,Seq.2000
+1307,Intestinibacter,NA,PC04925,Seq.2000
+1308,Intestinimonas,NA,PC04925,Seq.2000
+1309,Kluyvera,NA,PC04925,Seq.2000
+1310,Lachnospira,NA,PC04925,Seq.2000
+1311,Lachnospiraceae FCS020 group,NA,PC04925,Seq.2000
+1312,Lachnospiraceae ND3007 group,NA,PC04925,Seq.2000
+1313,Lachnospiraceae NK4A136 group,NA,PC04925,Seq.2000
+1314,Lachnospiraceae UCG-001,NA,PC04925,Seq.2000
+1315,Lachnospiraceae UCG-004,NA,PC04925,Seq.2000
+1316,Lachnospiraceae UCG-008,NA,PC04925,Seq.2000
+1317,Lactonifactor,NA,PC04925,Seq.2000
+1318,Marvinbryantia,NA,PC04925,Seq.2000
+1319,Odoribacter,NA,PC04925,Seq.2000
+1320,Oryza sativa Indica Group (long-grained rice),NA,PC04925,Seq.2000
+1321,Other,NA,PC04925,Seq.2000
+1322,Oxalobacter,NA,PC04925,Seq.2000
+1323,Parasutterella,NA,PC04925,Seq.2000
+1324,Phascolarctobacterium,NA,PC04925,Seq.2000
+1325,Porphyromonas,NA,PC04925,Seq.2000
+1326,Raoultella,NA,PC04925,Seq.2000
+1327,Roseburia,NA,PC04925,Seq.2000
+1328,Ruminiclostridium,NA,PC04925,Seq.2000
+1329,Ruminiclostridium 5,NA,PC04925,Seq.2000
+1330,Ruminiclostridium 9,NA,PC04925,Seq.2000
+1331,Ruminococcaceae NK4A214 group,NA,PC04925,Seq.2000
+1332,Ruminococcaceae UCG-002,NA,PC04925,Seq.2000
+1333,Ruminococcaceae UCG-003,NA,PC04925,Seq.2000
+1334,Ruminococcaceae UCG-004,NA,PC04925,Seq.2000
+1335,Ruminococcaceae UCG-005,NA,PC04925,Seq.2000
+1336,Ruminococcaceae UCG-013,NA,PC04925,Seq.2000
+1337,Ruminococcaceae UCG-014,NA,PC04925,Seq.2000
+1338,Ruminococcus 1,NA,PC04925,Seq.2000
+1339,Ruminococcus 2,NA,PC04925,Seq.2000
+1340,Sellimonas,NA,PC04925,Seq.2000
+1341,Serratia,NA,PC04925,Seq.2000
+1342,Succiniclasticum,NA,PC04925,Seq.2000
+1343,Tyzzerella,NA,PC04925,Seq.2000
+1344,Tyzzerella 3,NA,PC04925,Seq.2000
+1345,Acinetobacter,NA,PC07578,MSA1000
+1346,Actinomyces,NA,PC07578,MSA1000
+1347,Alistipes,NA,PC07578,MSA1000
+1348,Anaerostipes,NA,PC07578,MSA1000
+1349,Bacillus,NaN,PC07578,MSA1000
+1350,Bacteroides,NA,PC07578,MSA1000
+1351,Bifidobacterium,NA,PC07578,MSA1000
+1352,Bilophila,NA,PC07578,MSA1000
+1353,Clostridium,NA,PC07578,MSA1000
+1354,Lachnoclostridium,NA,PC07578,MSA1000
+1355,Collinsella,NA,PC07578,MSA1000
+1356,Coprobacillus,NA,PC07578,MSA1000
+1357,Cryptococcus,NA,PC07578,MSA1000
+1358,Deinococcus,NA,PC07578,MSA1000
+1359,Enterococcus,NaN,PC07578,MSA1000
+1360,Escherichia-Shigella,NaN,PC07578,MSA1000
+1361,Fusobacterium,NA,PC07578,MSA1000
+1362,Helicobacter,NA,PC07578,MSA1000
+1363,Lactobacillus,NaN,PC07578,MSA1000
+1364,Listeria,NaN,PC07578,MSA1000
+1365,Neisseria,NA,PC07578,MSA1000
+1366,Paenibacillus,NA,PC07578,MSA1000
+1367,Parabacteroides,NA,PC07578,MSA1000
+1368,Pediococcus,NA,PC07578,MSA1000
+1369,Porphyromonadaceae,NA,PC07578,MSA1000
+1370,Propionibacterium,NA,PC07578,MSA1000
+1371,Pseudomonas,NaN,PC07578,MSA1000
+1372,Pyramidobacter,NA,PC07578,MSA1000
+1373,Ralstonia,NA,PC07578,MSA1000
+1374,Rhodobacter,NA,PC07578,MSA1000
+1375,Saccharomyces,NA,PC07578,MSA1000
+1376,Salmonella,NA,PC07578,MSA1000
+1377,Staphylococcus,NaN,PC07578,MSA1000
+1378,Streptococcus,NA,PC07578,MSA1000
+1379,Subdoligranulum,NA,PC07578,MSA1000
+1380,Clostridium innocuum group,NA,PC07578,MSA1000
+1381,Eubacterium coprostanoligenes group,NA,PC07578,MSA1000
+1382,Eubacterium eligens group,NA,PC07578,MSA1000
+1383,Eubacterium hallii group,NA,PC07578,MSA1000
+1384,Eubacterium rectale group,NA,PC07578,MSA1000
+1385,Eubacterium ventriosum group,NA,PC07578,MSA1000
+1386,Eubacterium xylanophilum group,NA,PC07578,MSA1000
+1387,Ruminococcus gauvreauii group,NA,PC07578,MSA1000
+1388,Ruminococcus torques group,NA,PC07578,MSA1000
+1389,Adlercreutzia,NA,PC07578,MSA1000
+1390,Akkermansia,NA,PC07578,MSA1000
+1391,Ambiguous_taxa,NA,PC07578,MSA1000
+1392,Anaerofilum,NA,PC07578,MSA1000
+1393,Anaerotruncus,NA,PC07578,MSA1000
+1394,Blautia,NA,PC07578,MSA1000
+1395,Butyricicoccus,NA,PC07578,MSA1000
+1396,Candidatus Stoquefichus,NA,PC07578,MSA1000
+1397,Carnobacterium,NA,PC07578,MSA1000
+1398,Christensenellaceae R-7 group,NA,PC07578,MSA1000
+1399,Clostridium sensu stricto 1,NA,PC07578,MSA1000
+1400,Coprococcus 1,NA,PC07578,MSA1000
+1401,Coprococcus 2,NA,PC07578,MSA1000
+1402,Coprococcus 3,NA,PC07578,MSA1000
+1403,Defluviitaleaceae UCG-011,NA,PC07578,MSA1000
+1404,Dialister,NA,PC07578,MSA1000
+1405,Dorea,NA,PC07578,MSA1000
+1406,Eisenbergiella,NA,PC07578,MSA1000
+1407,Enterobacter,NA,PC07578,MSA1000
+1408,Erwinia,NA,PC07578,MSA1000
+1409,Erysipelatoclostridium,NA,PC07578,MSA1000
+1410,Erysipelotrichaceae UCG-003,NA,PC07578,MSA1000
+1411,Faecalibacterium,NA,PC07578,MSA1000
+1412,Family XIII AD3011 group,NA,PC07578,MSA1000
+1413,Flavonifractor,NA,PC07578,MSA1000
+1414,Fusicatenibacter,NA,PC07578,MSA1000
+1415,Gordonibacter,NA,PC07578,MSA1000
+1416,Gossypium arboreum,NA,PC07578,MSA1000
+1417,Holdemania,NA,PC07578,MSA1000
+1418,Hungatella,NA,PC07578,MSA1000
+1419,Intestinibacter,NA,PC07578,MSA1000
+1420,Intestinimonas,NA,PC07578,MSA1000
+1421,Kluyvera,NA,PC07578,MSA1000
+1422,Lachnospira,NA,PC07578,MSA1000
+1423,Lachnospiraceae FCS020 group,NA,PC07578,MSA1000
+1424,Lachnospiraceae ND3007 group,NA,PC07578,MSA1000
+1425,Lachnospiraceae NK4A136 group,NA,PC07578,MSA1000
+1426,Lachnospiraceae UCG-001,NA,PC07578,MSA1000
+1427,Lachnospiraceae UCG-004,NA,PC07578,MSA1000
+1428,Lachnospiraceae UCG-008,NA,PC07578,MSA1000
+1429,Lactonifactor,NA,PC07578,MSA1000
+1430,Marvinbryantia,NA,PC07578,MSA1000
+1431,Odoribacter,NA,PC07578,MSA1000
+1432,Oryza sativa Indica Group (long-grained rice),NA,PC07578,MSA1000
+1433,Other,NA,PC07578,MSA1000
+1434,Oxalobacter,NA,PC07578,MSA1000
+1435,Parasutterella,NA,PC07578,MSA1000
+1436,Phascolarctobacterium,NA,PC07578,MSA1000
+1437,Porphyromonas,NA,PC07578,MSA1000
+1438,Raoultella,NA,PC07578,MSA1000
+1439,Roseburia,NA,PC07578,MSA1000
+1440,Ruminiclostridium,NA,PC07578,MSA1000
+1441,Ruminiclostridium 5,NA,PC07578,MSA1000
+1442,Ruminiclostridium 9,NA,PC07578,MSA1000
+1443,Ruminococcaceae NK4A214 group,NA,PC07578,MSA1000
+1444,Ruminococcaceae UCG-002,NA,PC07578,MSA1000
+1445,Ruminococcaceae UCG-003,NA,PC07578,MSA1000
+1446,Ruminococcaceae UCG-004,NA,PC07578,MSA1000
+1447,Ruminococcaceae UCG-005,NA,PC07578,MSA1000
+1448,Ruminococcaceae UCG-013,NA,PC07578,MSA1000
+1449,Ruminococcaceae UCG-014,NA,PC07578,MSA1000
+1450,Ruminococcus 1,NA,PC07578,MSA1000
+1451,Ruminococcus 2,NA,PC07578,MSA1000
+1452,Sellimonas,NA,PC07578,MSA1000
+1453,Serratia,NA,PC07578,MSA1000
+1454,Succiniclasticum,NA,PC07578,MSA1000
+1455,Tyzzerella,NA,PC07578,MSA1000
+1456,Tyzzerella 3,NA,PC07578,MSA1000
+1457,Acinetobacter,NA,PC07578,MSA1001
+1458,Actinomyces,NA,PC07578,MSA1001
+1459,Alistipes,NA,PC07578,MSA1001
+1460,Anaerostipes,NA,PC07578,MSA1001
+1461,Bacillus,-99.91512263,PC07578,MSA1001
+1462,Bacteroides,NA,PC07578,MSA1001
+1463,Bifidobacterium,NA,PC07578,MSA1001
+1464,Bilophila,NA,PC07578,MSA1001
+1465,Clostridium,NA,PC07578,MSA1001
+1466,Lachnoclostridium,NA,PC07578,MSA1001
+1467,Collinsella,NA,PC07578,MSA1001
+1468,Coprobacillus,NA,PC07578,MSA1001
+1469,Cryptococcus,NA,PC07578,MSA1001
+1470,Deinococcus,NA,PC07578,MSA1001
+1471,Enterococcus,-99.63564154,PC07578,MSA1001
+1472,Escherichia-Shigella,-35.50302945,PC07578,MSA1001
+1473,Fusobacterium,NA,PC07578,MSA1001
+1474,Helicobacter,NA,PC07578,MSA1001
+1475,Lactobacillus,-93.84705363,PC07578,MSA1001
+1476,Listeria,-99.948437,PC07578,MSA1001
+1477,Neisseria,NA,PC07578,MSA1001
+1478,Paenibacillus,NA,PC07578,MSA1001
+1479,Parabacteroides,NA,PC07578,MSA1001
+1480,Pediococcus,NA,PC07578,MSA1001
+1481,Porphyromonadaceae,NA,PC07578,MSA1001
+1482,Propionibacterium,NA,PC07578,MSA1001
+1483,Pseudomonas,-99.99408138,PC07578,MSA1001
+1484,Pyramidobacter,NA,PC07578,MSA1001
+1485,Ralstonia,NA,PC07578,MSA1001
+1486,Rhodobacter,NA,PC07578,MSA1001
+1487,Saccharomyces,NA,PC07578,MSA1001
+1488,Salmonella,NA,PC07578,MSA1001
+1489,Staphylococcus,322.7339961,PC07578,MSA1001
+1490,Streptococcus,NA,PC07578,MSA1001
+1491,Subdoligranulum,NA,PC07578,MSA1001
+1492,Clostridium innocuum group,NA,PC07578,MSA1001
+1493,Eubacterium coprostanoligenes group,NA,PC07578,MSA1001
+1494,Eubacterium eligens group,NA,PC07578,MSA1001
+1495,Eubacterium hallii group,NA,PC07578,MSA1001
+1496,Eubacterium rectale group,NA,PC07578,MSA1001
+1497,Eubacterium ventriosum group,NA,PC07578,MSA1001
+1498,Eubacterium xylanophilum group,NA,PC07578,MSA1001
+1499,Ruminococcus gauvreauii group,NA,PC07578,MSA1001
+1500,Ruminococcus torques group,NA,PC07578,MSA1001
+1501,Adlercreutzia,NA,PC07578,MSA1001
+1502,Akkermansia,NA,PC07578,MSA1001
+1503,Ambiguous_taxa,NA,PC07578,MSA1001
+1504,Anaerofilum,NA,PC07578,MSA1001
+1505,Anaerotruncus,NA,PC07578,MSA1001
+1506,Blautia,NA,PC07578,MSA1001
+1507,Butyricicoccus,NA,PC07578,MSA1001
+1508,Candidatus Stoquefichus,NA,PC07578,MSA1001
+1509,Carnobacterium,NA,PC07578,MSA1001
+1510,Christensenellaceae R-7 group,NA,PC07578,MSA1001
+1511,Clostridium sensu stricto 1,NA,PC07578,MSA1001
+1512,Coprococcus 1,NA,PC07578,MSA1001
+1513,Coprococcus 2,NA,PC07578,MSA1001
+1514,Coprococcus 3,NA,PC07578,MSA1001
+1515,Defluviitaleaceae UCG-011,NA,PC07578,MSA1001
+1516,Dialister,NA,PC07578,MSA1001
+1517,Dorea,NA,PC07578,MSA1001
+1518,Eisenbergiella,NA,PC07578,MSA1001
+1519,Enterobacter,NA,PC07578,MSA1001
+1520,Erwinia,NA,PC07578,MSA1001
+1521,Erysipelatoclostridium,NA,PC07578,MSA1001
+1522,Erysipelotrichaceae UCG-003,NA,PC07578,MSA1001
+1523,Faecalibacterium,NA,PC07578,MSA1001
+1524,Family XIII AD3011 group,NA,PC07578,MSA1001
+1525,Flavonifractor,NA,PC07578,MSA1001
+1526,Fusicatenibacter,NA,PC07578,MSA1001
+1527,Gordonibacter,NA,PC07578,MSA1001
+1528,Gossypium arboreum,NA,PC07578,MSA1001
+1529,Holdemania,NA,PC07578,MSA1001
+1530,Hungatella,NA,PC07578,MSA1001
+1531,Intestinibacter,NA,PC07578,MSA1001
+1532,Intestinimonas,NA,PC07578,MSA1001
+1533,Kluyvera,NA,PC07578,MSA1001
+1534,Lachnospira,NA,PC07578,MSA1001
+1535,Lachnospiraceae FCS020 group,NA,PC07578,MSA1001
+1536,Lachnospiraceae ND3007 group,NA,PC07578,MSA1001
+1537,Lachnospiraceae NK4A136 group,NA,PC07578,MSA1001
+1538,Lachnospiraceae UCG-001,NA,PC07578,MSA1001
+1539,Lachnospiraceae UCG-004,NA,PC07578,MSA1001
+1540,Lachnospiraceae UCG-008,NA,PC07578,MSA1001
+1541,Lactonifactor,NA,PC07578,MSA1001
+1542,Marvinbryantia,NA,PC07578,MSA1001
+1543,Odoribacter,NA,PC07578,MSA1001
+1544,Oryza sativa Indica Group (long-grained rice),NA,PC07578,MSA1001
+1545,Other,NA,PC07578,MSA1001
+1546,Oxalobacter,NA,PC07578,MSA1001
+1547,Parasutterella,NA,PC07578,MSA1001
+1548,Phascolarctobacterium,NA,PC07578,MSA1001
+1549,Porphyromonas,NA,PC07578,MSA1001
+1550,Raoultella,NA,PC07578,MSA1001
+1551,Roseburia,NA,PC07578,MSA1001
+1552,Ruminiclostridium,NA,PC07578,MSA1001
+1553,Ruminiclostridium 5,NA,PC07578,MSA1001
+1554,Ruminiclostridium 9,NA,PC07578,MSA1001
+1555,Ruminococcaceae NK4A214 group,NA,PC07578,MSA1001
+1556,Ruminococcaceae UCG-002,NA,PC07578,MSA1001
+1557,Ruminococcaceae UCG-003,NA,PC07578,MSA1001
+1558,Ruminococcaceae UCG-004,NA,PC07578,MSA1001
+1559,Ruminococcaceae UCG-005,NA,PC07578,MSA1001
+1560,Ruminococcaceae UCG-013,NA,PC07578,MSA1001
+1561,Ruminococcaceae UCG-014,NA,PC07578,MSA1001
+1562,Ruminococcus 1,NA,PC07578,MSA1001
+1563,Ruminococcus 2,NA,PC07578,MSA1001
+1564,Sellimonas,NA,PC07578,MSA1001
+1565,Serratia,NA,PC07578,MSA1001
+1566,Succiniclasticum,NA,PC07578,MSA1001
+1567,Tyzzerella,NA,PC07578,MSA1001
+1568,Tyzzerella 3,NA,PC07578,MSA1001
+1569,Acinetobacter,NA,PC07578,MSA1002
+1570,Actinomyces,NA,PC07578,MSA1002
+1571,Alistipes,NA,PC07578,MSA1002
+1572,Anaerostipes,NA,PC07578,MSA1002
+1573,Bacillus,-99.91365484,PC07578,MSA1002
+1574,Bacteroides,NA,PC07578,MSA1002
+1575,Bifidobacterium,NA,PC07578,MSA1002
+1576,Bilophila,NA,PC07578,MSA1002
+1577,Clostridium,NA,PC07578,MSA1002
+1578,Lachnoclostridium,NA,PC07578,MSA1002
+1579,Collinsella,NA,PC07578,MSA1002
+1580,Coprobacillus,NA,PC07578,MSA1002
+1581,Cryptococcus,NA,PC07578,MSA1002
+1582,Deinococcus,NA,PC07578,MSA1002
+1583,Enterococcus,-79.941792,PC07578,MSA1002
+1584,Escherichia-Shigella,-68.69243578,PC07578,MSA1002
+1585,Fusobacterium,NA,PC07578,MSA1002
+1586,Helicobacter,NA,PC07578,MSA1002
+1587,Lactobacillus,-68.6081376,PC07578,MSA1002
+1588,Listeria,-99.95855432,PC07578,MSA1002
+1589,Neisseria,NA,PC07578,MSA1002
+1590,Paenibacillus,NA,PC07578,MSA1002
+1591,Parabacteroides,NA,PC07578,MSA1002
+1592,Pediococcus,NA,PC07578,MSA1002
+1593,Porphyromonadaceae,NA,PC07578,MSA1002
+1594,Propionibacterium,NA,PC07578,MSA1002
+1595,Pseudomonas,-91.68303434,PC07578,MSA1002
+1596,Pyramidobacter,NA,PC07578,MSA1002
+1597,Ralstonia,NA,PC07578,MSA1002
+1598,Rhodobacter,NA,PC07578,MSA1002
+1599,Saccharomyces,NA,PC07578,MSA1002
+1600,Salmonella,NA,PC07578,MSA1002
+1601,Staphylococcus,-16.51585322,PC07578,MSA1002
+1602,Streptococcus,NA,PC07578,MSA1002
+1603,Subdoligranulum,NA,PC07578,MSA1002
+1604,Clostridium innocuum group,NA,PC07578,MSA1002
+1605,Eubacterium coprostanoligenes group,NA,PC07578,MSA1002
+1606,Eubacterium eligens group,NA,PC07578,MSA1002
+1607,Eubacterium hallii group,NA,PC07578,MSA1002
+1608,Eubacterium rectale group,NA,PC07578,MSA1002
+1609,Eubacterium ventriosum group,NA,PC07578,MSA1002
+1610,Eubacterium xylanophilum group,NA,PC07578,MSA1002
+1611,Ruminococcus gauvreauii group,NA,PC07578,MSA1002
+1612,Ruminococcus torques group,NA,PC07578,MSA1002
+1613,Adlercreutzia,NA,PC07578,MSA1002
+1614,Akkermansia,NA,PC07578,MSA1002
+1615,Ambiguous_taxa,NA,PC07578,MSA1002
+1616,Anaerofilum,NA,PC07578,MSA1002
+1617,Anaerotruncus,NA,PC07578,MSA1002
+1618,Blautia,NA,PC07578,MSA1002
+1619,Butyricicoccus,NA,PC07578,MSA1002
+1620,Candidatus Stoquefichus,NA,PC07578,MSA1002
+1621,Carnobacterium,NA,PC07578,MSA1002
+1622,Christensenellaceae R-7 group,NA,PC07578,MSA1002
+1623,Clostridium sensu stricto 1,NA,PC07578,MSA1002
+1624,Coprococcus 1,NA,PC07578,MSA1002
+1625,Coprococcus 2,NA,PC07578,MSA1002
+1626,Coprococcus 3,NA,PC07578,MSA1002
+1627,Defluviitaleaceae UCG-011,NA,PC07578,MSA1002
+1628,Dialister,NA,PC07578,MSA1002
+1629,Dorea,NA,PC07578,MSA1002
+1630,Eisenbergiella,NA,PC07578,MSA1002
+1631,Enterobacter,NA,PC07578,MSA1002
+1632,Erwinia,NA,PC07578,MSA1002
+1633,Erysipelatoclostridium,NA,PC07578,MSA1002
+1634,Erysipelotrichaceae UCG-003,NA,PC07578,MSA1002
+1635,Faecalibacterium,NA,PC07578,MSA1002
+1636,Family XIII AD3011 group,NA,PC07578,MSA1002
+1637,Flavonifractor,NA,PC07578,MSA1002
+1638,Fusicatenibacter,NA,PC07578,MSA1002
+1639,Gordonibacter,NA,PC07578,MSA1002
+1640,Gossypium arboreum,NA,PC07578,MSA1002
+1641,Holdemania,NA,PC07578,MSA1002
+1642,Hungatella,NA,PC07578,MSA1002
+1643,Intestinibacter,NA,PC07578,MSA1002
+1644,Intestinimonas,NA,PC07578,MSA1002
+1645,Kluyvera,NA,PC07578,MSA1002
+1646,Lachnospira,NA,PC07578,MSA1002
+1647,Lachnospiraceae FCS020 group,NA,PC07578,MSA1002
+1648,Lachnospiraceae ND3007 group,NA,PC07578,MSA1002
+1649,Lachnospiraceae NK4A136 group,NA,PC07578,MSA1002
+1650,Lachnospiraceae UCG-001,NA,PC07578,MSA1002
+1651,Lachnospiraceae UCG-004,NA,PC07578,MSA1002
+1652,Lachnospiraceae UCG-008,NA,PC07578,MSA1002
+1653,Lactonifactor,NA,PC07578,MSA1002
+1654,Marvinbryantia,NA,PC07578,MSA1002
+1655,Odoribacter,NA,PC07578,MSA1002
+1656,Oryza sativa Indica Group (long-grained rice),NA,PC07578,MSA1002
+1657,Other,NA,PC07578,MSA1002
+1658,Oxalobacter,NA,PC07578,MSA1002
+1659,Parasutterella,NA,PC07578,MSA1002
+1660,Phascolarctobacterium,NA,PC07578,MSA1002
+1661,Porphyromonas,NA,PC07578,MSA1002
+1662,Raoultella,NA,PC07578,MSA1002
+1663,Roseburia,NA,PC07578,MSA1002
+1664,Ruminiclostridium,NA,PC07578,MSA1002
+1665,Ruminiclostridium 5,NA,PC07578,MSA1002
+1666,Ruminiclostridium 9,NA,PC07578,MSA1002
+1667,Ruminococcaceae NK4A214 group,NA,PC07578,MSA1002
+1668,Ruminococcaceae UCG-002,NA,PC07578,MSA1002
+1669,Ruminococcaceae UCG-003,NA,PC07578,MSA1002
+1670,Ruminococcaceae UCG-004,NA,PC07578,MSA1002
+1671,Ruminococcaceae UCG-005,NA,PC07578,MSA1002
+1672,Ruminococcaceae UCG-013,NA,PC07578,MSA1002
+1673,Ruminococcaceae UCG-014,NA,PC07578,MSA1002
+1674,Ruminococcus 1,NA,PC07578,MSA1002
+1675,Ruminococcus 2,NA,PC07578,MSA1002
+1676,Sellimonas,NA,PC07578,MSA1002
+1677,Serratia,NA,PC07578,MSA1002
+1678,Succiniclasticum,NA,PC07578,MSA1002
+1679,Tyzzerella,NA,PC07578,MSA1002
+1680,Tyzzerella 3,NA,PC07578,MSA1002
+1681,Acinetobacter,NA,PC07578,MSA1003
+1682,Actinomyces,NA,PC07578,MSA1003
+1683,Alistipes,NA,PC07578,MSA1003
+1684,Anaerostipes,NA,PC07578,MSA1003
+1685,Bacillus,-99.9052053,PC07578,MSA1003
+1686,Bacteroides,NA,PC07578,MSA1003
+1687,Bifidobacterium,NA,PC07578,MSA1003
+1688,Bilophila,NA,PC07578,MSA1003
+1689,Clostridium,NA,PC07578,MSA1003
+1690,Lachnoclostridium,NA,PC07578,MSA1003
+1691,Collinsella,NA,PC07578,MSA1003
+1692,Coprobacillus,NA,PC07578,MSA1003
+1693,Cryptococcus,NA,PC07578,MSA1003
+1694,Deinococcus,NA,PC07578,MSA1003
+1695,Enterococcus,-99.73412844,PC07578,MSA1003
+1696,Escherichia-Shigella,9.218202058,PC07578,MSA1003
+1697,Fusobacterium,NA,PC07578,MSA1003
+1698,Helicobacter,NA,PC07578,MSA1003
+1699,Lactobacillus,21.51807224,PC07578,MSA1003
+1700,Listeria,-99.94072837,PC07578,MSA1003
+1701,Neisseria,NA,PC07578,MSA1003
+1702,Paenibacillus,NA,PC07578,MSA1003
+1703,Parabacteroides,NA,PC07578,MSA1003
+1704,Pediococcus,NA,PC07578,MSA1003
+1705,Porphyromonadaceae,NA,PC07578,MSA1003
+1706,Propionibacterium,NA,PC07578,MSA1003
+1707,Pseudomonas,-97.85691412,PC07578,MSA1003
+1708,Pyramidobacter,NA,PC07578,MSA1003
+1709,Ralstonia,NA,PC07578,MSA1003
+1710,Rhodobacter,NA,PC07578,MSA1003
+1711,Saccharomyces,NA,PC07578,MSA1003
+1712,Salmonella,NA,PC07578,MSA1003
+1713,Staphylococcus,54.42229069,PC07578,MSA1003
+1714,Streptococcus,NA,PC07578,MSA1003
+1715,Subdoligranulum,NA,PC07578,MSA1003
+1716,Clostridium innocuum group,NA,PC07578,MSA1003
+1717,Eubacterium coprostanoligenes group,NA,PC07578,MSA1003
+1718,Eubacterium eligens group,NA,PC07578,MSA1003
+1719,Eubacterium hallii group,NA,PC07578,MSA1003
+1720,Eubacterium rectale group,NA,PC07578,MSA1003
+1721,Eubacterium ventriosum group,NA,PC07578,MSA1003
+1722,Eubacterium xylanophilum group,NA,PC07578,MSA1003
+1723,Ruminococcus gauvreauii group,NA,PC07578,MSA1003
+1724,Ruminococcus torques group,NA,PC07578,MSA1003
+1725,Adlercreutzia,NA,PC07578,MSA1003
+1726,Akkermansia,NA,PC07578,MSA1003
+1727,Ambiguous_taxa,NA,PC07578,MSA1003
+1728,Anaerofilum,NA,PC07578,MSA1003
+1729,Anaerotruncus,NA,PC07578,MSA1003
+1730,Blautia,NA,PC07578,MSA1003
+1731,Butyricicoccus,NA,PC07578,MSA1003
+1732,Candidatus Stoquefichus,NA,PC07578,MSA1003
+1733,Carnobacterium,NA,PC07578,MSA1003
+1734,Christensenellaceae R-7 group,NA,PC07578,MSA1003
+1735,Clostridium sensu stricto 1,NA,PC07578,MSA1003
+1736,Coprococcus 1,NA,PC07578,MSA1003
+1737,Coprococcus 2,NA,PC07578,MSA1003
+1738,Coprococcus 3,NA,PC07578,MSA1003
+1739,Defluviitaleaceae UCG-011,NA,PC07578,MSA1003
+1740,Dialister,NA,PC07578,MSA1003
+1741,Dorea,NA,PC07578,MSA1003
+1742,Eisenbergiella,NA,PC07578,MSA1003
+1743,Enterobacter,NA,PC07578,MSA1003
+1744,Erwinia,NA,PC07578,MSA1003
+1745,Erysipelatoclostridium,NA,PC07578,MSA1003
+1746,Erysipelotrichaceae UCG-003,NA,PC07578,MSA1003
+1747,Faecalibacterium,NA,PC07578,MSA1003
+1748,Family XIII AD3011 group,NA,PC07578,MSA1003
+1749,Flavonifractor,NA,PC07578,MSA1003
+1750,Fusicatenibacter,NA,PC07578,MSA1003
+1751,Gordonibacter,NA,PC07578,MSA1003
+1752,Gossypium arboreum,NA,PC07578,MSA1003
+1753,Holdemania,NA,PC07578,MSA1003
+1754,Hungatella,NA,PC07578,MSA1003
+1755,Intestinibacter,NA,PC07578,MSA1003
+1756,Intestinimonas,NA,PC07578,MSA1003
+1757,Kluyvera,NA,PC07578,MSA1003
+1758,Lachnospira,NA,PC07578,MSA1003
+1759,Lachnospiraceae FCS020 group,NA,PC07578,MSA1003
+1760,Lachnospiraceae ND3007 group,NA,PC07578,MSA1003
+1761,Lachnospiraceae NK4A136 group,NA,PC07578,MSA1003
+1762,Lachnospiraceae UCG-001,NA,PC07578,MSA1003
+1763,Lachnospiraceae UCG-004,NA,PC07578,MSA1003
+1764,Lachnospiraceae UCG-008,NA,PC07578,MSA1003
+1765,Lactonifactor,NA,PC07578,MSA1003
+1766,Marvinbryantia,NA,PC07578,MSA1003
+1767,Odoribacter,NA,PC07578,MSA1003
+1768,Oryza sativa Indica Group (long-grained rice),NA,PC07578,MSA1003
+1769,Other,NA,PC07578,MSA1003
+1770,Oxalobacter,NA,PC07578,MSA1003
+1771,Parasutterella,NA,PC07578,MSA1003
+1772,Phascolarctobacterium,NA,PC07578,MSA1003
+1773,Porphyromonas,NA,PC07578,MSA1003
+1774,Raoultella,NA,PC07578,MSA1003
+1775,Roseburia,NA,PC07578,MSA1003
+1776,Ruminiclostridium,NA,PC07578,MSA1003
+1777,Ruminiclostridium 5,NA,PC07578,MSA1003
+1778,Ruminiclostridium 9,NA,PC07578,MSA1003
+1779,Ruminococcaceae NK4A214 group,NA,PC07578,MSA1003
+1780,Ruminococcaceae UCG-002,NA,PC07578,MSA1003
+1781,Ruminococcaceae UCG-003,NA,PC07578,MSA1003
+1782,Ruminococcaceae UCG-004,NA,PC07578,MSA1003
+1783,Ruminococcaceae UCG-005,NA,PC07578,MSA1003
+1784,Ruminococcaceae UCG-013,NA,PC07578,MSA1003
+1785,Ruminococcaceae UCG-014,NA,PC07578,MSA1003
+1786,Ruminococcus 1,NA,PC07578,MSA1003
+1787,Ruminococcus 2,NA,PC07578,MSA1003
+1788,Sellimonas,NA,PC07578,MSA1003
+1789,Serratia,NA,PC07578,MSA1003
+1790,Succiniclasticum,NA,PC07578,MSA1003
+1791,Tyzzerella,NA,PC07578,MSA1003
+1792,Tyzzerella 3,NA,PC07578,MSA1003
+1793,Acinetobacter,NA,PC07578,Seq.200
+1794,Actinomyces,NA,PC07578,Seq.200
+1795,Alistipes,NA,PC07578,Seq.200
+1796,Anaerostipes,NA,PC07578,Seq.200
+1797,Bacillus,48.69016257,PC07578,Seq.200
+1798,Bacteroides,NA,PC07578,Seq.200
+1799,Bifidobacterium,NA,PC07578,Seq.200
+1800,Bilophila,NA,PC07578,Seq.200
+1801,Clostridium,NA,PC07578,Seq.200
+1802,Lachnoclostridium,NA,PC07578,Seq.200
+1803,Collinsella,NA,PC07578,Seq.200
+1804,Coprobacillus,NA,PC07578,Seq.200
+1805,Cryptococcus,NA,PC07578,Seq.200
+1806,Deinococcus,NA,PC07578,Seq.200
+1807,Enterococcus,-26.6794514,PC07578,Seq.200
+1808,Escherichia-Shigella,-45.87332751,PC07578,Seq.200
+1809,Fusobacterium,NA,PC07578,Seq.200
+1810,Helicobacter,NA,PC07578,Seq.200
+1811,Lactobacillus,-32.94351002,PC07578,Seq.200
+1812,Listeria,21.68751023,PC07578,Seq.200
+1813,Neisseria,NA,PC07578,Seq.200
+1814,Paenibacillus,NA,PC07578,Seq.200
+1815,Parabacteroides,NA,PC07578,Seq.200
+1816,Pediococcus,NA,PC07578,Seq.200
+1817,Porphyromonadaceae,NA,PC07578,Seq.200
+1818,Propionibacterium,NA,PC07578,Seq.200
+1819,Pseudomonas,-52.69247858,PC07578,Seq.200
+1820,Pyramidobacter,NA,PC07578,Seq.200
+1821,Ralstonia,NA,PC07578,Seq.200
+1822,Rhodobacter,NA,PC07578,Seq.200
+1823,Saccharomyces,NA,PC07578,Seq.200
+1824,Salmonella,NA,PC07578,Seq.200
+1825,Staphylococcus,79.38734647,PC07578,Seq.200
+1826,Streptococcus,NA,PC07578,Seq.200
+1827,Subdoligranulum,NA,PC07578,Seq.200
+1828,Clostridium innocuum group,NA,PC07578,Seq.200
+1829,Eubacterium coprostanoligenes group,NA,PC07578,Seq.200
+1830,Eubacterium eligens group,NA,PC07578,Seq.200
+1831,Eubacterium hallii group,NA,PC07578,Seq.200
+1832,Eubacterium rectale group,NA,PC07578,Seq.200
+1833,Eubacterium ventriosum group,NA,PC07578,Seq.200
+1834,Eubacterium xylanophilum group,NA,PC07578,Seq.200
+1835,Ruminococcus gauvreauii group,NA,PC07578,Seq.200
+1836,Ruminococcus torques group,NA,PC07578,Seq.200
+1837,Adlercreutzia,NA,PC07578,Seq.200
+1838,Akkermansia,NA,PC07578,Seq.200
+1839,Ambiguous_taxa,NA,PC07578,Seq.200
+1840,Anaerofilum,NA,PC07578,Seq.200
+1841,Anaerotruncus,NA,PC07578,Seq.200
+1842,Blautia,NA,PC07578,Seq.200
+1843,Butyricicoccus,NA,PC07578,Seq.200
+1844,Candidatus Stoquefichus,NA,PC07578,Seq.200
+1845,Carnobacterium,NA,PC07578,Seq.200
+1846,Christensenellaceae R-7 group,NA,PC07578,Seq.200
+1847,Clostridium sensu stricto 1,NA,PC07578,Seq.200
+1848,Coprococcus 1,NA,PC07578,Seq.200
+1849,Coprococcus 2,NA,PC07578,Seq.200
+1850,Coprococcus 3,NA,PC07578,Seq.200
+1851,Defluviitaleaceae UCG-011,NA,PC07578,Seq.200
+1852,Dialister,NA,PC07578,Seq.200
+1853,Dorea,NA,PC07578,Seq.200
+1854,Eisenbergiella,NA,PC07578,Seq.200
+1855,Enterobacter,NA,PC07578,Seq.200
+1856,Erwinia,NA,PC07578,Seq.200
+1857,Erysipelatoclostridium,NA,PC07578,Seq.200
+1858,Erysipelotrichaceae UCG-003,NA,PC07578,Seq.200
+1859,Faecalibacterium,NA,PC07578,Seq.200
+1860,Family XIII AD3011 group,NA,PC07578,Seq.200
+1861,Flavonifractor,NA,PC07578,Seq.200
+1862,Fusicatenibacter,NA,PC07578,Seq.200
+1863,Gordonibacter,NA,PC07578,Seq.200
+1864,Gossypium arboreum,NA,PC07578,Seq.200
+1865,Holdemania,NA,PC07578,Seq.200
+1866,Hungatella,NA,PC07578,Seq.200
+1867,Intestinibacter,NA,PC07578,Seq.200
+1868,Intestinimonas,NA,PC07578,Seq.200
+1869,Kluyvera,NA,PC07578,Seq.200
+1870,Lachnospira,NA,PC07578,Seq.200
+1871,Lachnospiraceae FCS020 group,NA,PC07578,Seq.200
+1872,Lachnospiraceae ND3007 group,NA,PC07578,Seq.200
+1873,Lachnospiraceae NK4A136 group,NA,PC07578,Seq.200
+1874,Lachnospiraceae UCG-001,NA,PC07578,Seq.200
+1875,Lachnospiraceae UCG-004,NA,PC07578,Seq.200
+1876,Lachnospiraceae UCG-008,NA,PC07578,Seq.200
+1877,Lactonifactor,NA,PC07578,Seq.200
+1878,Marvinbryantia,NA,PC07578,Seq.200
+1879,Odoribacter,NA,PC07578,Seq.200
+1880,Oryza sativa Indica Group (long-grained rice),NA,PC07578,Seq.200
+1881,Other,NA,PC07578,Seq.200
+1882,Oxalobacter,NA,PC07578,Seq.200
+1883,Parasutterella,NA,PC07578,Seq.200
+1884,Phascolarctobacterium,NA,PC07578,Seq.200
+1885,Porphyromonas,NA,PC07578,Seq.200
+1886,Raoultella,NA,PC07578,Seq.200
+1887,Roseburia,NA,PC07578,Seq.200
+1888,Ruminiclostridium,NA,PC07578,Seq.200
+1889,Ruminiclostridium 5,NA,PC07578,Seq.200
+1890,Ruminiclostridium 9,NA,PC07578,Seq.200
+1891,Ruminococcaceae NK4A214 group,NA,PC07578,Seq.200
+1892,Ruminococcaceae UCG-002,NA,PC07578,Seq.200
+1893,Ruminococcaceae UCG-003,NA,PC07578,Seq.200
+1894,Ruminococcaceae UCG-004,NA,PC07578,Seq.200
+1895,Ruminococcaceae UCG-005,NA,PC07578,Seq.200
+1896,Ruminococcaceae UCG-013,NA,PC07578,Seq.200
+1897,Ruminococcaceae UCG-014,NA,PC07578,Seq.200
+1898,Ruminococcus 1,NA,PC07578,Seq.200
+1899,Ruminococcus 2,NA,PC07578,Seq.200
+1900,Sellimonas,NA,PC07578,Seq.200
+1901,Serratia,NA,PC07578,Seq.200
+1902,Succiniclasticum,NA,PC07578,Seq.200
+1903,Tyzzerella,NA,PC07578,Seq.200
+1904,Tyzzerella 3,NA,PC07578,Seq.200
+1905,Acinetobacter,NA,PC07578,Seq.2000
+1906,Actinomyces,NA,PC07578,Seq.2000
+1907,Alistipes,NA,PC07578,Seq.2000
+1908,Anaerostipes,NA,PC07578,Seq.2000
+1909,Bacillus,44.74677706,PC07578,Seq.2000
+1910,Bacteroides,NA,PC07578,Seq.2000
+1911,Bifidobacterium,NA,PC07578,Seq.2000
+1912,Bilophila,NA,PC07578,Seq.2000
+1913,Clostridium,NA,PC07578,Seq.2000
+1914,Lachnoclostridium,NA,PC07578,Seq.2000
+1915,Collinsella,NA,PC07578,Seq.2000
+1916,Coprobacillus,NA,PC07578,Seq.2000
+1917,Cryptococcus,NA,PC07578,Seq.2000
+1918,Deinococcus,NA,PC07578,Seq.2000
+1919,Enterococcus,-11.141919,PC07578,Seq.2000
+1920,Escherichia-Shigella,-55.75095711,PC07578,Seq.2000
+1921,Fusobacterium,NA,PC07578,Seq.2000
+1922,Helicobacter,NA,PC07578,Seq.2000
+1923,Lactobacillus,-6.346738433,PC07578,Seq.2000
+1924,Listeria,22.20208049,PC07578,Seq.2000
+1925,Neisseria,NA,PC07578,Seq.2000
+1926,Paenibacillus,NA,PC07578,Seq.2000
+1927,Parabacteroides,NA,PC07578,Seq.2000
+1928,Pediococcus,NA,PC07578,Seq.2000
+1929,Porphyromonadaceae,NA,PC07578,Seq.2000
+1930,Propionibacterium,NA,PC07578,Seq.2000
+1931,Pseudomonas,-56.28871986,PC07578,Seq.2000
+1932,Pyramidobacter,NA,PC07578,Seq.2000
+1933,Ralstonia,NA,PC07578,Seq.2000
+1934,Rhodobacter,NA,PC07578,Seq.2000
+1935,Saccharomyces,NA,PC07578,Seq.2000
+1936,Salmonella,NA,PC07578,Seq.2000
+1937,Staphylococcus,71.82569223,PC07578,Seq.2000
+1938,Streptococcus,NA,PC07578,Seq.2000
+1939,Subdoligranulum,NA,PC07578,Seq.2000
+1940,Clostridium innocuum group,NA,PC07578,Seq.2000
+1941,Eubacterium coprostanoligenes group,NA,PC07578,Seq.2000
+1942,Eubacterium eligens group,NA,PC07578,Seq.2000
+1943,Eubacterium hallii group,NA,PC07578,Seq.2000
+1944,Eubacterium rectale group,NA,PC07578,Seq.2000
+1945,Eubacterium ventriosum group,NA,PC07578,Seq.2000
+1946,Eubacterium xylanophilum group,NA,PC07578,Seq.2000
+1947,Ruminococcus gauvreauii group,NA,PC07578,Seq.2000
+1948,Ruminococcus torques group,NA,PC07578,Seq.2000
+1949,Adlercreutzia,NA,PC07578,Seq.2000
+1950,Akkermansia,NA,PC07578,Seq.2000
+1951,Ambiguous_taxa,NA,PC07578,Seq.2000
+1952,Anaerofilum,NA,PC07578,Seq.2000
+1953,Anaerotruncus,NA,PC07578,Seq.2000
+1954,Blautia,NA,PC07578,Seq.2000
+1955,Butyricicoccus,NA,PC07578,Seq.2000
+1956,Candidatus Stoquefichus,NA,PC07578,Seq.2000
+1957,Carnobacterium,NA,PC07578,Seq.2000
+1958,Christensenellaceae R-7 group,NA,PC07578,Seq.2000
+1959,Clostridium sensu stricto 1,NA,PC07578,Seq.2000
+1960,Coprococcus 1,NA,PC07578,Seq.2000
+1961,Coprococcus 2,NA,PC07578,Seq.2000
+1962,Coprococcus 3,NA,PC07578,Seq.2000
+1963,Defluviitaleaceae UCG-011,NA,PC07578,Seq.2000
+1964,Dialister,NA,PC07578,Seq.2000
+1965,Dorea,NA,PC07578,Seq.2000
+1966,Eisenbergiella,NA,PC07578,Seq.2000
+1967,Enterobacter,NA,PC07578,Seq.2000
+1968,Erwinia,NA,PC07578,Seq.2000
+1969,Erysipelatoclostridium,NA,PC07578,Seq.2000
+1970,Erysipelotrichaceae UCG-003,NA,PC07578,Seq.2000
+1971,Faecalibacterium,NA,PC07578,Seq.2000
+1972,Family XIII AD3011 group,NA,PC07578,Seq.2000
+1973,Flavonifractor,NA,PC07578,Seq.2000
+1974,Fusicatenibacter,NA,PC07578,Seq.2000
+1975,Gordonibacter,NA,PC07578,Seq.2000
+1976,Gossypium arboreum,NA,PC07578,Seq.2000
+1977,Holdemania,NA,PC07578,Seq.2000
+1978,Hungatella,NA,PC07578,Seq.2000
+1979,Intestinibacter,NA,PC07578,Seq.2000
+1980,Intestinimonas,NA,PC07578,Seq.2000
+1981,Kluyvera,NA,PC07578,Seq.2000
+1982,Lachnospira,NA,PC07578,Seq.2000
+1983,Lachnospiraceae FCS020 group,NA,PC07578,Seq.2000
+1984,Lachnospiraceae ND3007 group,NA,PC07578,Seq.2000
+1985,Lachnospiraceae NK4A136 group,NA,PC07578,Seq.2000
+1986,Lachnospiraceae UCG-001,NA,PC07578,Seq.2000
+1987,Lachnospiraceae UCG-004,NA,PC07578,Seq.2000
+1988,Lachnospiraceae UCG-008,NA,PC07578,Seq.2000
+1989,Lactonifactor,NA,PC07578,Seq.2000
+1990,Marvinbryantia,NA,PC07578,Seq.2000
+1991,Odoribacter,NA,PC07578,Seq.2000
+1992,Oryza sativa Indica Group (long-grained rice),NA,PC07578,Seq.2000
+1993,Other,NA,PC07578,Seq.2000
+1994,Oxalobacter,NA,PC07578,Seq.2000
+1995,Parasutterella,NA,PC07578,Seq.2000
+1996,Phascolarctobacterium,NA,PC07578,Seq.2000
+1997,Porphyromonas,NA,PC07578,Seq.2000
+1998,Raoultella,NA,PC07578,Seq.2000
+1999,Roseburia,NA,PC07578,Seq.2000
+2000,Ruminiclostridium,NA,PC07578,Seq.2000
+2001,Ruminiclostridium 5,NA,PC07578,Seq.2000
+2002,Ruminiclostridium 9,NA,PC07578,Seq.2000
+2003,Ruminococcaceae NK4A214 group,NA,PC07578,Seq.2000
+2004,Ruminococcaceae UCG-002,NA,PC07578,Seq.2000
+2005,Ruminococcaceae UCG-003,NA,PC07578,Seq.2000
+2006,Ruminococcaceae UCG-004,NA,PC07578,Seq.2000
+2007,Ruminococcaceae UCG-005,NA,PC07578,Seq.2000
+2008,Ruminococcaceae UCG-013,NA,PC07578,Seq.2000
+2009,Ruminococcaceae UCG-014,NA,PC07578,Seq.2000
+2010,Ruminococcus 1,NA,PC07578,Seq.2000
+2011,Ruminococcus 2,NA,PC07578,Seq.2000
+2012,Sellimonas,NA,PC07578,Seq.2000
+2013,Serratia,NA,PC07578,Seq.2000
+2014,Succiniclasticum,NA,PC07578,Seq.2000
+2015,Tyzzerella,NA,PC07578,Seq.2000
+2016,Tyzzerella 3,NA,PC07578,Seq.2000

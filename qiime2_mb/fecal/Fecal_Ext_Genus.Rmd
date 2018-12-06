@@ -29,13 +29,14 @@ Database information
 ---genus_otuabund_ext_kit: subset of genus_otuabund_ext_kit, to include only ext controls, grouped by kit
 
 
-#Load required libraries
+#1. Load required libraries
 ```{r}
 library("biom")
 library(data.table)
+library(ggplot2)
 ```
 
-#Taxonomy Reference - Control Annotations
+#2. Taxonomy Reference - Control Annotations
 Read in controls taxonomy file, grouped by Genus
 ```{r}
 genus_percent <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Taxonomy\\Taxonomy_Genus.txt",sep="\t",header=TRUE)
@@ -55,13 +56,13 @@ zymo.ext.con <- zymo.ext.con[,c(1:9,16)]
 
 ```
 
-#Variable info
+#3. Variable info
 Read in the entire control variable database, and controls that failed threshold QC. 
 Filter database removing all failed sampels, and any that are not a control
 ```{r}
-#Read in database with variable information and list of samples that did not meet the sequencing threshold
+#Read in database with variable information and list of samples that did not meet the  threshold
 variable_info <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\sampledata.txt",sep="\t",header=TRUE)
-samples_failed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\samples_being_ignored.txt",sep="\t")
+samples_failed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\samplesfailed_nephele1.txt",sep="\t")
 
 #Remove failed samples from info database
 filtered_info <-subset(variable_info, !(NephID %in% samples_failed$V1))
@@ -83,11 +84,11 @@ nrow(control_info)
 row.names(control_info) <- control_info$NephID
 ```
 
-#OTU Counts - OTU's by Genus (raw data)
+#4. OTU Counts - OTU's by Genus (raw data)
 Read in OTU information, and determine total Genus counts
 ```{r}
 #Read in OTU database at Genus level
-genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\taxa_counts_Genus.csv", row.names = 1)
+genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\nephele1_taxa_counts_Genus.csv", row.names = 1)
 
 #Create a total row for each sample
 sample_list <- colnames(genus_otu)
@@ -106,12 +107,10 @@ for (a in sample_list){
  
  #When complete, push to a "Total_Reads" row
  genus_otu["Total_Reads",a] <- sum
- 
- 
 }
 ```
 
-#OTU Counts - Analysis Genus Expected in Controls by Control Type
+#5. OTU Counts - Analysis Genus Expected in Controls by Control Type
 Read in OTU information, and determine Genus counts (presence/absence) for each sample
 ```{r}
 #Create control sample list, control type list
@@ -211,7 +210,7 @@ for (b in control_types){
 }
 ```
 
-#OTU Counts - Analysis Genus OTU Presence/Absence by Control Type by Kit (Ext Control Only)
+#6. OTU Counts - Analysis Genus OTU Presence/Absence by Control Type by Kit (Ext Control Only)
 Extraction controls by control type by kit
 ```{r}
 #Unique Kits, removing "None" as a kit type
@@ -276,7 +275,7 @@ for (a in kit_types){
 row.names (genus_otucount_ext_kit) <- c("Qiagen DSPs_Count", "Qiagen DSP_Expected", "Zymo Mag Bead_Count", "Zymo MagBead_Expected", "PowerMag Soil_Count", "PowerMag Soil_Expected", "PowerMag MB_Count", "PowerMag MB_Expected", "Qiagen QIAmp_Count", "Qiagen QIAmp_Expected")  
 ```
 
-#OTU Percent - Analysis Genus OTU Abundance (All Samples)
+#7. OTU Percent - Analysis Genus OTU Abundance (All Samples)
 ```{r}
 #Create sample list
 sample_list <- unique(control_info$NephID)
@@ -310,10 +309,11 @@ for (a in sample_list){
 }
 
 #Output the table of all samples
-write.csv(genus_otuabund_sample,"genus_otuabund_sample.csv")
+write.csv(genus_otuabund_sample,"Data/genus_otuabund_sample.csv")
+
 ```
 
-#OTU Percent - Analysis Genus OTU Abundance by Control Type
+#8. OTU Percent - Analysis Genus OTU Abundance by Control Type
 ```{r}
 #Unique Types of controls and all genus
 control_types <- unique(control_info$Type)
@@ -353,10 +353,10 @@ for (a in control_types){
  }
 
 #Output to text file
-write.csv(genus_otuabund_control,"genus_otuabund_control.csv")
+write.csv(genus_otuabund_control,"Data/genus_otuabund_control.csv")
 ```
 
-#OTU Percent - Analysis Genus OTU Abundance by Control Type by Kit (Ext Control Only)
+#9. OTU Percent - Analysis Genus OTU Abundance by Control Type by Kit (Ext Control Only)
 ```{r}
 #Unique Types of controls and all genus
 kit_types <- unique(control_info$Kit)
@@ -448,10 +448,10 @@ for (a in new_colnames){
 }
 
 #Output to text file
-write.csv(genus_percent,"genus_outabund_kit.csv")
+write.csv(genus_percent,"Data/genus_outabund_kit.csv")
 ```
 
-#OTU Percent - Analysis of Genus Percent Abundance Differences, expected versus observed by kit (Ext Only)
+#10. OTU Percent - Analysis of Genus Percent Abundance Differences, expected versus observed by kit (Ext Only)
 Perform AC and Zymo.Ext Comparisons
 ```{r}
 #Create new genus databse with only AC and Zymo Columns
@@ -513,10 +513,10 @@ temp <- genus_percent[,c(11,16,19:42)]
 temp <- subset(temp, !(Art.Col=="NA" & Zymo.Ext=="NA"))
 
 #Output file
-write.csv(temp,"genus_otuabund_obsVSexp_ext.csv")
+write.csv(temp,"Data/genus_otuabund_obsVSexp_ext.csv")
 ```
 
-#OTU Percent - Not expected Genus by Control Type by Kit (Ext Control Only)
+#11. OTU Percent - Not expected Genus by Control Type by Kit (Ext Control Only)
 ```{r}
 
 #Create temp dataframe from genus_percent
@@ -526,5 +526,488 @@ temp <- genus_percent[,c(11,16,23:32)]
 temp <- subset(temp, is.na(Art.Col) | is.na(Zymo.Ext))
 
 #Output the unexpected percent frequency database
-write.csv(temp,"genus_other.csv")
+write.csv(temp,"Data/genus_other.csv")
+```
+
+#12A Plot graph - Actual to Expected - Intrakit (Artificial Colonies)
+For each kit, show variability, and map
+```{r}
+#Create genus list for art colonies only
+genus_list <- rownames(art.col.con)
+genus_list
+
+## Zymo MagBead DNone Kit
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="Zymo MagBead DNone Kit")
+ temp2 <- subset(temp2,Type=="AC")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Art.Col"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Artifical Colony: Intrakit Variablity (Zymo MagBead DNone Kit)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+
+
+#################
+## Qiagen DSP Virus
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="Qiagen DSP Virus")
+ temp2 <- subset(temp2,Type=="AC")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Art.Col"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Artifical Colony: Intrakit Variablity (Qiagen DSP)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+ 
+#################
+## MagAttract PowerMag Soil
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="MagAttract PowerMag Soil")
+ temp2 <- subset(temp2,Type=="AC")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Art.Col"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Artifical Colony: Intrakit Variablity (Mag Attract PowerSoil)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+
+#################
+## MagAttract PowerMag Microbiome
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="MagAttract PowerMag Microbiome")
+ temp2 <- subset(temp2,Type=="AC")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Art.Col"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Artifical Colony: Intrakit Variablity (Mag Attract Microbiome)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+#################
+## Qiagen QIAamp  Modified
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="Qiagen QIAamp  Modified")
+ temp2 <- subset(temp2,Type=="AC")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Art.Col"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Artifical Colony: Intrakit Variablity (Qiagen QIAamp Modified)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+```
+
+#12B Plot graph - Actual to Expected - Intrakit (Zymo Ext Blank)
+For each kit, show variability, and map
+```{r}
+#Create genus list for zymo extraction control only
+genus_list <- rownames(zymo.ext.con)
+genus_list
+
+## Zymo MagBead DNone Kit
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="Zymo MagBead DNone Kit")
+ temp2 <- subset(temp2,Type=="Zymo.Ext")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Zymo.Ext"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Ext Control: Intrakit Variablity (Zymo MagBead DNone Kit)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+
+
+#################
+## Qiagen DSP Virus
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="Qiagen DSP Virus")
+ temp2 <- subset(temp2,Type=="Zymo.Ext")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Zymo.Ext"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Ext Control: Intrakit Variablity (Qiagen DSP)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+ 
+#################
+## MagAttract PowerMag Soil
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="MagAttract PowerMag Soil")
+ temp2 <- subset(temp2,Type=="Zymo.Ext")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Zymo.Ext"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Ext Control: Intrakit Variablity (Mag Attract PowerSoil)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+
+ #Remove outliers, and re-plot Data
+ temp <- subset(temp,!(Sample=="SC249408.PC04925.E02") | !(Sample=="SC249408.PC07578.E02"))
+ unique(temp$Sample)
+ 
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Ext Control: Intrakit Variablity (Mag Attract PowerSoil)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+
+#################
+## MagAttract PowerMag Microbiome
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="MagAttract PowerMag Microbiome")
+ temp2 <- subset(temp2,Type=="Zymo.Ext")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Zymo.Ext"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Ext Control: Intrakit Variablity (Mag Attract Microbiome)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+#################
+## Qiagen QIAamp  Modified
+#################
+ temp<-data.frame()
+ count=1
+ 
+###Create database
+ temp2 <- subset(control_info,Kit=="Qiagen QIAamp  Modified")
+ temp2 <- subset(temp2,Type=="Zymo.Ext")
+ temp2
+ 
+ #Subset, and create a sample list
+ sample_list <- unique(temp2$NephID)
+ sample_list
+ 
+ #For each Genus in list, determine the samples value
+ for (a in genus_list){
+    
+   #For each of the samples in the sample list
+   for(b in sample_list){
+    temp[count,"Genus"]<-a
+    temp[count,"value"]<- genus_otuabund_sample[a,b]
+    temp[count,"Sample"]<-b
+    temp[count,"Expected"]<-genus_percent[a,"Zymo.Ext"]
+    count=count+1
+   }
+ }
+ temp
+ 
+ #Plot Data
+ ggplot(data=temp,mapping=aes(x=Expected,y=value,color=Sample))+
+ geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Ext Control: Intrakit Variablity (Qiagen QIAamp Modified)", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+```
+
+#13. Plot graph - Actual to Expected - Between kits
+```{r}
+###############
+#Zymo Ext
+###############
+#Create dataframe
+colnames(genus_percent)
+zymo.kits <- genus_percent[,c("Zymo.Ext","Genus","Qiagen DSP Virus_OB_ZE","Zymo MagBead DNone Kit_OB_ZE","MagAttract PowerMag Soil_OB_ZE","Qiagen QIAamp  Modified_OB_ZE", "MagAttract PowerMag Microbiome_OB_ZE")]
+
+zymo.kits <- subset(zymo.kits,!(is.na(Zymo.Ext)))
+rownames(zymo.kits)
+colnames(zymo.kits)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:7)){
+ count2=1
+ for(b in 1:nrow(zymo.kits)){
+  temp3[count,"Expected"]<- zymo.kits[count2,"Zymo.Ext"]
+  temp3[count,"Genus"] <- rownames(zymo.kits[b,])
+  temp3[count,"value"] <- zymo.kits[b,a]
+  temp3[count,"Kit"] <- colnames(zymo.kits[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+head(temp3)
+
+#Plot graph
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Kit))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo.Extraction-Nephele", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+
+
+###############
+#AC
+###############
+#Create dataframe
+colnames(genus_percent)
+ac.kits <- genus_percent[,c("Art.Col","Genus","Qiagen DSP Virus_OB_AC","Zymo MagBead DNone Kit_OB_AC","MagAttract PowerMag Soil_OB_AC","Qiagen QIAamp  Modified_OB_AC", "MagAttract PowerMag Microbiome_OB_AC")]
+
+ac.kits <- subset(ac.kits,!(is.na(Art.Col)))
+rownames(ac.kits)
+colnames(ac.kits)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:7)){
+ count2=1
+ for(b in 1:nrow(ac.kits)){
+  temp3[count,"Expected"]<- ac.kits[count2,"Art.Col"]
+  temp3[count,"Genus"] <- rownames(ac.kits[b,])
+  temp3[count,"value"] <- ac.kits[b,a]
+  temp3[count,"Kit"] <- colnames(ac.kits[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+head(temp3)
+
+#Plot graph
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Kit))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Artificial Colony-Nephele", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+
+```
+
+#14. Unexpected by kit
+```{r}
+#Create temp dataframe from genus_percent
+colnames(genus_percent)
+temp <- genus_percent[,c(11,16,23:32)]
+
+#Subset by those Genus not expected to be in extraction
+temp <- subset(temp, is.na(Art.Col) | is.na(Zymo.Ext))
+head(temp)
+colnames(temp)
+
+#Create tableau file
+temp2<-data.frame()
+count=1
+for (a in 3:12){
+ for(b in 1:nrow(temp)){
+  temp2[count,"Genus"] <- rownames(temp[b,])
+  temp2[count,"value"] <- temp[b,a]
+  temp2[count,"Type"] <- colnames(temp[a])
+  count=count+1
+ }
+}
+head(temp2)
+write.csv(temp2,"Data/genus_otuabund_ext_neph_other_tab.csv")
 ```
