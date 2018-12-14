@@ -1,1 +1,0 @@
-#SampleID	BarcodeSequence	LinkerPrimerSequence	ForwardFastqFile	ReverseFastqFile	TreatmentGroup	VialLabel	AssayPlate	ExtractionBatch	Description

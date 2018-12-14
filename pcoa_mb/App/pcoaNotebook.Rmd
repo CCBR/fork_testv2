@@ -3,9 +3,8 @@ title: "R Notebook"
 output: pdf_document
 ---
 
-###########################################################################
 Creates two pages, with diferent sidebars
-
+###########################################################################
 ```{r}
 fluidPage(
   navbarPage("App Title",
@@ -48,9 +47,9 @@ fluidPage(
 )
 ```
 
-###########################################################################
-3d interactive pcoa plot for shiny
 
+3d interactive pcoa plot for shiny
+###########################################################################
 ```{r}
 library(rgl)
 library(car)
@@ -82,9 +81,9 @@ function(input, output) {
 
 ```
 
-###########################################################################
-functioning single file input
 
+functioning single file input
+###########################################################################
 ```{r}
 library(rgl)
 library(car)
@@ -110,12 +109,6 @@ fluidPage(
   )
 )
 
-
-
-
-library(rgl)
-library(car)
-library(shiny)
 
 function(input,output){
   
@@ -149,9 +142,8 @@ function(input,output){
 }
 ```
 
-###########################################################################
-
 functioning Labels as checkboxes
+###########################################################################
 ```{r}
 
 library(rgl)
@@ -159,17 +151,6 @@ library(car)
 library(shiny)
 library("RColorBrewer")
 library(leaflet)
-
-#######################################################################################
-###                                      NOTES                                      ###
-#######################################################################################
-##This code is written to take in the generated pCOA weighted unifrac values and generate
-##a pCOA plot using the top three values. It will also allow users to upload a labels 
-##document, which will allow for additional visualization of categorical labels.
-
-#######################################################################################
-###                                      Code                                      ###
-#######################################################################################
 
 function(input,output, session){
   
@@ -258,24 +239,6 @@ function(input,output, session){
 }
 
 
-
-
-
-library(rgl)
-library(car)
-library(shiny)
-library("RColorBrewer")
-
-#######################################################################################
-###                                      NOTES                                      ###
-#######################################################################################
-##This code is written to take in the generated pCOA weighted unifrac values and generate
-##a pCOA plot using the top three values. It will also allow users to upload a labels 
-##document, which will allow for additional visualization of categorical labels.
-
-#######################################################################################
-###                                      Code                                      ###
-#######################################################################################
 fluidPage(
   
   ##Create two navigation pages, 1) Input files | 2) pCOA Plots
@@ -322,8 +285,8 @@ fluidPage(
 )
 ```
 
-###########################################################################
 functioning action buttons for data labels
+###########################################################################
 ```{r}
 library(rgl)
 library(car)
@@ -730,8 +693,9 @@ fluidPage(
 )
 ```
 
-###########################################################################
+
 viewing a printout of the data tables
+###########################################################################
 ```{r}
 server
   output$filedata <- renderTable({
@@ -753,8 +717,35 @@ server
 
 ```
 
+Input file - old nephele output, functioning
 ###########################################################################
-NEXT
+```{r}
+#Takes the input file of pCOA data, saving it to the data_vals matrix 
+ data_vals <- reactive({
+  file <- input$file
+  if (is.null(file))
+   return(NULL)
+  
+  #Skip the first 9 lines of the PCOA data table, read in the table. 
+  #Removes the last two lines that includes the Biplot and Site data 
+  #Chooses the sample ID and top 3 pCOA values 
+  #Updates all col classes to numeric for evaluation
+  #Renames the col1 to StudyID, col2 to pcOA1, col3 to pCOA2, col4 to pCOA3 for later matching
+  
+  data_val_ori <- read.table(skip=9,fill=TRUE, file=input$file$datapath)
+  colschoose <- dim(data_val_ori)[1]-2
+  data_clean <- data_val_ori[1:colschoose,1:4]
+  data_clean$V2 <- as.numeric(data_clean$V2)
+  names(data_clean)[1] <- "StudyID"
+   names(data_clean)[2] <- "pCOA1"
+   names(data_clean)[3] <- "pCOA2"
+   names(data_clean)[4] <- "pCOA3"
+  return(data_clean)
+ })
 
+```
 
     
+
+
+ 

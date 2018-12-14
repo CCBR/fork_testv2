@@ -64,7 +64,7 @@ eval "use File::chdir"
 #Call subroutines
 	qc_mb_dir(\@Proj_List, \$MRName, \$Proj_Num, \@QCPath, \@ManPath);
 		$CWD = $QCPath[0];
-	Qiime_Neph_Dir(\$Nephpath, $date); 
+	Neph_Dir(\$Nephpath, $date); 
 		$CWD = $ManPath[0];
 	read_MB_Man($StudyAns, @Proj_List, @ManPath, \@SampleID, \@ExternalID, \@SampleType, \@SourceMaterial, \@ExtractionBatchID, \@SourcePCRPlate, 
 		\@RunID, \@ProjectID);
@@ -100,21 +100,21 @@ sub qc_mb_dir {
 	}
 }
 
-#Creates Qiime and Nephele Directory, if necessary using variables created in QC_MB_DIR
-sub Qiime_Neph_Dir {
+#Creates Nephele Directory, if necessary using variables created in QC_MB_DIR
+sub Neph_Dir {
 	
 	#Initialize variables
 	my ($Nephpath, $date) = @_;
-	my $qiime = "qiime";
+	my $nephele = "nephele";
 	
-	#Make Directories for qiime (unless already created)
-	mkdir $qiime unless -d $qiime;
+	#Make Directories for nephele (unless already created)
+	mkdir $nephele unless -d $nephele;
 
 	#Create new Nephele directory
-	my $nephele = "$date\_input";
-	$CWD .= "\\$qiime";
-	mkdir $nephele unless -d $nephele;
-	$$Nephpath = "$CWD\\$nephele";
+	my $nephele_vers = "$date\_input";
+	$CWD .= "\\$nephele";
+	mkdir $nephele_vers unless -d $nephele_vers;
+	$$Nephpath = "$CWD\\$nephele_vers";
 }
 
 #Reads in Microbiome Manifest, and parses for data
@@ -279,8 +279,7 @@ sub FastQ_File{
 		push (@fastqpath, $FastP);
 		$n++;
 	}
-	print "\n******************************"; 
-	print "\nMoving Files";
+	print "\n****************************** \nMoving Files\n";
 	
 	#Run through each directory, find paths for FASTQ Files
 	foreach my $line (@fastqpath){
@@ -367,12 +366,10 @@ sub FastQ_Man {
 			$n++;
 		}
 	#Confirmations
-	print "\n\n******************************";
-	print "\nFinished generating TXT file\n";
+	print "\n\n******************************\nFinished generating TXT file\n";
 	
 	my $total = scalar @SampleID_Neph*2;
-	print "\n******************************"; 
-	print "\nThere should be $total FASTQ files in the folder\n\n";
+	print "\n******************************\nThere should be $total FASTQ files in the folder\n\n";
 }
 
 exit;
@@ -395,3 +392,4 @@ exit;
 		## 1)remove Barcode and Linker Seq columns
 		## 2) change all "-" in sample ID to "."
 		## 3) remove code that previously removed .gz from file name of FastQ - required now
+##12/13/18: Change directory name from qiime to nephele

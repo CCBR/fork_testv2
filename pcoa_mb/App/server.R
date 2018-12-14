@@ -3,6 +3,7 @@ library(car)
 library(shiny)
 library("RColorBrewer")
 library(leaflet)
+library(dplyr)
 
 #######################################################################################
 ###                                      NOTES                                      ###
@@ -26,21 +27,41 @@ function(input,output, session){
   if (is.null(file))
    return(NULL)
   
-  #Skip the first 9 lines of the PCOA data table, read in the table. 
-  #Removes the last two lines that includes the Biplot and Site data 
-  #Chooses the sample ID and top 3 pCOA values 
-  #Updates all col classes to numeric for evaluation
-  #Renames the col1 to StudyID, col2 to pcOA1, col3 to pCOA2, col4 to pCOA3 for later matching
+  #Determine the file type to determine how to read in file
   
-  data_val_ori <- read.table(skip=9,fill=TRUE, file=input$file$datapath)
-  colschoose <- dim(data_val_ori)[1]-2
-  data_clean <- data_val_ori[1:colschoose,1:4]
-  data_clean$V2 <- as.numeric(data_clean$V2)
-  names(data_clean)[1] <- "StudyID"
+  #If the file is a unifrac file
+  data_val_test <- read.table(fill=TRUE, file=input$file$datapath)
+  if(data_val_test[1,1]=="Eigvals"){
+   #Skip the first 9 lines of the PCOA data table, read in the table. 
+   #Removes the last two lines that includes the Biplot and Site data 
+   #Chooses the sample ID and top 3 pCOA values 
+   #Updates 2nd col to numeric for evaluation (input as a factor)
+   #Renames the col1 to StudyID, col2 to pcOA1, col3 to pCOA2, col4 to pCOA3
+   
+   data_val_ori <- read.table(skip=9,fill=TRUE, file=input$file$datapath)
+   colschoose <- dim(data_val_ori)[1]-2
+   data_clean <- data_val_ori[1:colschoose,1:4]
+   data_clean$V2 <- as.numeric(as.character(data_clean$V2))
+   names(data_clean)[1] <- "StudyID"
    names(data_clean)[2] <- "pCOA1"
    names(data_clean)[3] <- "pCOA2"
    names(data_clean)[4] <- "pCOA3"
-  return(data_clean)
+   return(data_clean)
+   
+   #If the file is a pcoa-binomial or pcoa-bray file
+  } else{
+  
+   #Chooses the sample ID and top 3 pCOA values 
+   #Renames the col1 to StudyID, col2 to pcOA1, col3 to pCOA2, col4 to pCOA3
+   
+   data_val_ori <- read.table(skip=1,fill=TRUE, file=input$file$datapath)
+   data_clean <- data_val_ori[,-c(2:7,11:ncol(data_val_ori))]
+   names(data_clean)[1] <- "StudyID"
+   names(data_clean)[2] <- "pCOA1"
+   names(data_clean)[3] <- "pCOA2"
+   names(data_clean)[4] <- "pCOA3"
+   return(data_clean)
+  }
  })
  
  #Takes the input file, with headers, of data labels, saving it to the data_labels matrix
@@ -297,3 +318,7 @@ function(input,output, session){
   }
  })
 }
+#######################################################################################
+###                                      Updates                                      ###
+#######################################################################################
+#12/10/18: Update the input file due to Nephele update changes, using the QIIME pipeline
