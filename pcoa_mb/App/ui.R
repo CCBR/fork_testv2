@@ -37,10 +37,10 @@ sidebar <- dashboardSidebar(
  )
 
 #######################################################################################
-#################################MainBody INFORMATION####################################
+#################################File Uploads Page####################################
 
-##Create the Main body information for File Uploads
-###First data box includes all text upload information
+#Create the Main body information for File Uploads
+##First data box includes all text upload information
 fcol1 <- fluidRow(
   column(12,
          fileInput("file","Upload the pCOA File"),
@@ -69,8 +69,10 @@ box1 <- box(title = "Upload Text Files", width=4, status="primary", solidHeader 
 box2 <- box(title = "File Upload Summary", width=8, status="primary", solidHeader = TRUE, fcol2)
 box3 <- box(title = "Confirmation", width=8, status="primary", solidHeader = TRUE, fcol3)
 
-##Create the Main body information for the pCOA plot and filtering data
-##4: COlor Data by group selection, #5: ill Label data
+#######################################################################################
+#################################pCOA Plots Page####################################
+#Create the Main body information for the pCOA plot and filtering data
+##4: COlor Data by group selection
 fcol4 <- fluidRow(
  column(5, uiOutput("choose_colorlabels"))
  )
@@ -98,7 +100,6 @@ fcol8 <- fluidRow(
  column(5,
         uiOutput("choose_filt3"),
         uiOutput("inCheckboxGroup3")
-        
  )
 )
 
@@ -111,8 +112,6 @@ fcol9 <- fluidRow(
 fcol10 <- fluidRow(
  column(7, rglwidgetOutput("plot", width=700))
 )
-
-
 
 #Generate box4 for the filtering and plot generation tools
 box4 <- fluidRow(
@@ -133,10 +132,10 @@ box4 <- fluidRow(
  column(7,
         box(title = "pCOA Plots", width=NULL, status="primary",
             solidHeader = TRUE, fcol10)
-
  )
 )
-
+#######################################################################################
+#################################Table Summary Page####################################
 ##Create the Data Table Summary information
 ##Will COlor Data
 fcol9 <- fluidRow(
@@ -171,6 +170,6 @@ dashboardPage(header,sidebar,body)
 #######################################################################################
 ###                                      Updates                                      ###
 #######################################################################################
-#
+#12/18/18 - formatting and markup add-ons
 
 

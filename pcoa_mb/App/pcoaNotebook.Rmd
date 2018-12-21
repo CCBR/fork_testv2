@@ -1,6 +1,8 @@
 ---
 title: "R Notebook"
 output: pdf_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 Creates two pages, with diferent sidebars
@@ -745,7 +747,34 @@ Input file - old nephele output, functioning
 
 ```
 
-    
+Labels 
+```{r}
+full_data <- read.table("C:\\Program Files\\Git\\Coding\\MicrobiomeAnalysis\\pcoa_mb\\Data\\pcoa_weighted_unifrac_rarefaction_10000_0.txt",skip=9,fill=TRUE)
+data_labels <- read.table("C:\\Program Files\\Git\\Coding\\MicrobiomeAnalysis\\pcoa_mb\\Data\\NP0452-MB6_Nephele_Labels_10000.txt",fill=TRUE,header = TRUE,  colClasses = "factor")
+colnames(full_data)[1]<-"StudyID"
+
+colschoose <- dim(full_data)[1]-2
+data_clean <- full_data[1:colschoose,1:4]
+combined_data<-merge.data.frame(data_clean[,1:4], data_labels, by="StudyID")
+head(combined_data)
+combined_data$V2 <- as.numeric(as.character(combined_data$V2))
+
+
+pc1<-combined_data[,2]
+pc2<-combined_data[,3]
+pc3<-combined_data[,4]
+
+selection <- "StudyID"
+group_select <- combined_data[,6]
+
+scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, 
+                groups = group_select, pch=5, surface.col = palette(), cex=5,
+                #axis.col = c("white", "white", "white"), bg="black", 
+        labels = as.character(combined_data[,5]), id.n=nrow(combined_data)
+          )
+
+Identify3d(x=pc1,y=pc2,z=pc3,labels=rownames(combined_data))
+```
 
 
  

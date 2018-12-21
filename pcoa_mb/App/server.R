@@ -108,6 +108,7 @@ function(input,output, session){
  
  ########################################################################
  #############################pCOA Plots Page###########################
+ 
  #Create palette of colors (https://moderndata.plot.ly/create-colorful-graphs-in-r-with-rcolorbrewer-and-plotly/)
  palette(c(brewer.pal(n=8, name = "Set1"), brewer.pal(n=8, name = "Dark2"), brewer.pal(n=8, name = "Accent"), 
            brewer.pal(n=9, name = "Pastel1"), brewer.pal(n=9, name = "Greens"), brewer.pal(n=9, name = "Purples"),
@@ -126,8 +127,9 @@ function(input,output, session){
            brewer.pal(n=9, name = "YlOrBr"), brewer.pal(n=12, name = "Set3"), brewer.pal(n=9, name = "Reds"), 
            brewer.pal(n=9, name = "Blues"), brewer.pal(n=9, name = "Oranges"), brewer.pal(n=9, name = "Greys")
  ))
+
  
- #Create dropdown list from the column names of the data_lables file, shown to user
+ #Create dropdown list from the column names of the data_labels file, shown to user for color selction
  observe({
   req(input$file2)
   dsnames <- names(data_labels())
@@ -138,7 +140,7 @@ function(input,output, session){
   })
  })
  
- #Create a radio button that updates whether or not to display the SampleID label name
+ #Create a radio button for display labels
  observe({
   req(input$file2)
   dsnames <- c(names(data_labels()), "NONE")
@@ -294,10 +296,11 @@ function(input,output, session){
      }
      
      else {
+      labchoose<- full_data[,input$samplelabels]
       scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, 
-                groups = group_select, pch=5, surface.col = palette(), cex=5,
+                groups = group_select, pch=15, surface.col = palette(), cex=15,
                 axis.col = c("white", "white", "white"), bg="black", 
-                labels=full_data[,input$samplelabels], id.n=nrow(full_data)
+                labels=labchoose, id.n=nrow(labchoose)
       )
       par3d(mouseMode = "trackball")
       rglwidget()
@@ -312,8 +315,6 @@ function(input,output, session){
      plot.new()
      legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
     })
-    
-    
    })
   }
  })
