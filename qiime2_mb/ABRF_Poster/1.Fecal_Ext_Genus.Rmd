@@ -36,7 +36,7 @@ library(ggplot2)
 #2. Taxonomy Reference - Expected frequencies
 ```{r}
 #Read in controls taxonomy file, grouped by Genus
-control_expect <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Controls\\Taxonomy\\Taxonomy_Genus.txt",sep="\t",header=TRUE)
+control_expect <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Controls\\Taxonomy\\Taxonomy_Genus_ABRF.txt",sep="\t",header=TRUE)
 
 #Create list of expected genus; add as the row names for control_expect
 control_select <- subset(control_expect, !(Art.Col=='NA')|!(Zymo.Ext=='NA'))
@@ -60,7 +60,8 @@ nrow(samples_variables_complete) - nrow(samples_failed)
 nrow(samples_filtered)
 
 #Only include Ext Controls
-samples_variables_f <- subset(samples_filtered,Type=='Art.Col' | Type=='Zymo.Ext')
+control_types <- c("Art.Col","Zymo.Ext")
+samples_variables_f <- samples_filtered[samples_filtered$Type %in% control_types,]
 
 #Add sample ID's as row names
 row.names(samples_variables_f) <- samples_variables_f$NephID
@@ -404,75 +405,65 @@ write.csv(samples_obs_abund_vari,"Data/ext_obs_abund_vari.csv")
 
 #10. OTU Percent - Analysis Exp OTU Rel Abun % Diff by Control by Kit
 ```{r}
-#Add expected frequencies to data table for the AC
-for (a in genus_expect){
- value1 <- control_expect[a,10]
- value2 <- control_expect[a,11]
- value3 <- control_expect[a,16]
+#Add expected frequencies and gram positive status to data table
+for (a in control_types){
  
- #Add the Gram Positive / Neg Value
- if(is.na(value1) | is.null(value1)){
- } else{
-  samples_obs_abund_vari[a,"Gram"] <- value1
- }
- 
- #Add the Art Colony expected value
- if(is.na(value2) | is.null(value2)){
- } else{
-  samples_obs_abund_vari[a,"AC_Exp"] <- value2
- }
- 
-  #Add the Zymo Ext expected value
- if(is.na(value3) | is.null(value3)){
- } else{
-  samples_obs_abund_vari[a,"Zymo_Exp"] <- value3
- }
+ #For each of the genus
+ for (b in genus_expect){
+  
+  #Add gram pos/neg information
+  samples_obs_abund_vari[b,"Gram"] <- control_expect[b,10]
+  
+  #Find value and pass to database
+  value <- control_expect[b,a]
+  
+  if(is.na(value) | is.null(value)){
+  } else{
+   #Create new column
+   col_name <- paste(a,"_Exp",sep="")
+   samples_obs_abund_vari[b,col_name] <- value
+  }
+  }
 }
 
 #Output to text file
 write.csv(samples_obs_abund_vari,"Data/ext_obs_abund_vari.csv")
 
-#Start Counters at Rel Abundance for AC (8) and Zymo Ext (9)
-b = 8
-c = 9
+#Start counter
+count=1
 
-while (b<18){
- #For each expected genus
+#For each of the AC/ZE Controls
+for (i in 8:17){
+ 
+ #For each genus
  for (a in genus_expect){
-
-  #Check if the control is expected - Zymo Ext.
-  value1 <- samples_obs_abund_vari[a,c]
-  value2 <- samples_obs_abund_vari[a,19]
+  
+  #Find the correct expected column
+  col_name <- paste(control_types[count],"_Exp",sep="")
+  
+  #Find the value for the observe rel abund and the expected rel abund
+  value1 <- samples_obs_abund_vari[a,i]
+  value2 <- samples_obs_abund_vari[a,col_name]
   
   #Calculate percent difference
   if(is.na(value1) | is.null(value1)| is.na(value2) | is.null(value2)){
    value <- "NA"
   } else{
-   value <- (samples_obs_abund_vari[a,c] - samples_obs_abund_vari[a,19])/ samples_obs_abund_vari[a,19]
-  } 
- 
-  #Check if the control is expected - AC
-  value1 <- samples_obs_abund_vari[a,b]
-  value2 <- samples_obs_abund_vari[a,20]
-  
-  #Calculate percent difference
-  if(is.na(value1) | is.null(value1)| is.na(value2) | is.null(value2)){
-   value2 <- "NA"
-  } else{
-   value2 <- (samples_obs_abund_vari[a,b] - samples_obs_abund_vari[a,20])/ samples_obs_abund_vari[a,20]
+   value <- ((value1 - value2)/ value2)
   } 
   
-  #Create column names 
-  col_name <- paste((colnames(samples_obs_abund_vari[b])),"- Df")
-  col_name2 <- paste((colnames(samples_obs_abund_vari[c])),"- Df")
- 
+  #Create new column name
+  col_name <- paste((colnames(samples_obs_abund_vari[i])),"-Df",sep="")
+  
   #Pass values
-  samples_obs_abund_vari[a,col_name]<- value2
-  samples_obs_abund_vari[a,col_name2]<- value
+  samples_obs_abund_vari[a,col_name]<- value
+  
  }
- #Increase counter by 2, every other col is AC or ZymoExt
- b = b+2
- c = c+2
+ 
+ #Move the counter to the next control type
+ if(count==length(control_types)){
+   count=1
+ } else{count=count+1}
 }
 
 #Output to text file
@@ -563,7 +554,7 @@ for (a in kit_types){
 write.csv(samples_obs_abund_vari_unexp,"Data/ext_obs_abund_vari_unexp.csv")
 ```
 
-#12A Plot graph - Actual to Expected - Intrakit (Artificial Colonies)
+#12 Plot graph - Actual to Expected - Intrakit (Artificial Colonies)
 For each kit, show variability, and map
 ```{r}
 #Create list for plots, start counter

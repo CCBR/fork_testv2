@@ -1,3 +1,3 @@
-"","Art.Col","Zymo.Ext"
-"Genus Count",16.4230769230769,6
-"Expected",19,8
+"","MSA1000","MSA1001","MSA1002","MSA1003","Zymo.Seq.200","Zymo.Seq.2000"
+"Genus Count",9,7,14.3333333333333,13,6,6
+"Expected",10,8,18,18,10,10
