@@ -1,0 +1,927 @@
+---
+title: "Fecal_Genus"
+author: "NHI"
+date: "July 3, 2018"
+output: word_document
+editor_options: 
+  chunk_output_type: console
+---
+
+---
+title: "R Notebook"
+output: word_document
+editor_options: 
+  chunk_output_type: console
+---
+Database information
+#Databases Created
+-dat: table of all the taxonomy assigned within Silva used in this study
+
+-genus_percent: table of the taxonomy information of all controls including expected frequencies
+ -> observed percentages added for both controls and kits
+--genus_percent_ext: subset including only ext controls and kits, and genus related to the kits
+ 
+-samples_failed: table of samples that did not meet QC thresholds
+
+-variable_info: table of the variable information of all samples and controls
+--filtered_info: table of all samples/controls that passed QC, filtering off of samples_failed
+---control_info: subset of filtered_info, to only include all controls 
+   ->genus count information added from genus_otu
+
+-genus_otu: complete table of the OTUs for passed samples/controls by Genus
+--genus_otucount_controls: count of the expected number of genus, the observed number of genus, and the total number of genus found in each control
+---genus_otucount_ext_kit: subsetting genus_otucount_controls to include only the extraction controls, and expanding information by kit
+--missing_annot: list of all the species not annotated in the Silva database, expected in the controls
+
+-genus_otuabund_sample: table of the oberved percent frequency of each Genus for all samples
+--genus_otuabund_control: subset of genus_otuabund_sample, grouped by controls
+---genus_otuabund_ext_kit: subset of genus_otuabund_ext_kit, to include only ext controls, grouped by kit
+
+
+#1. Load required libraries
+```{r}
+library("biom")
+library(data.table)
+```
+
+#2. Taxonomy Reference - Control Annotations
+Read in controls taxonomy file, grouped by Genus
+```{r}
+genus_percent <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Taxonomy\\Taxonomy_Genus.txt",sep="\t",header=TRUE)
+
+#Add row names to genus full
+genus_list <- unique(genus_percent[,"Genus"])
+rownames(genus_percent) <- genus_list
+
+#Create Control Composition Database, removing rows of species not in samples, followed by samples not of specified control type
+##Two concentrations of zymo sequencing controls
+zymo.seq200.con <- subset(genus_percent, !(Zymo.Seq=='NA'))
+zymo.seq200.con <- zymo.seq200.con[,c(1:9,17)]
+zymo.seq2000.con <- zymo.seq200.con
+
+#ATTC Controls
+msa1000.con <-subset(genus_percent, !(MSA1000=='NA'))
+msa1000.con <- msa1000.con[,c(1:9,12)]
+
+msa1001.con <- subset(genus_percent, !(MSA1001=='NA'))
+msa1001.con <- msa1001.con[,c(1:9,13)]
+
+msa1002.con <- subset(genus_percent, !(MSA1002=='NA'))
+msa1002.con <- msa1002.con[,c(1:9,14)]
+
+msa1003.con <- subset(genus_percent, !(MSA1003=='NA'))
+msa1003.con <- msa1003.con[,c(1:9,15)]
+
+```
+
+#3. Variable info
+Read in the entire control variable database, and controls that failed threshold QC. 
+Filter database removing all failed samples, and any that are not a control
+```{r}
+#Read in database with variable information and list of samples that did not meet the sequencing #threshold
+variable_info <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\sampledata.txt",sep="\t",header=TRUE)
+samples_failed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\samplesfailed_q2_exclusions.txt",sep="\t")
+
+#Remove failed samples from info database
+filtered_info <-subset(variable_info, !(NephID %in% samples_failed$V1))
+
+#Verify filtering - numbers should match
+nrow(variable_info) - nrow(samples_failed)
+nrow(filtered_info)
+
+#Remove Study samples from database
+control_info <- subset(filtered_info,!Type=='Study')
+control_info <- subset(control_info,!Type=='EB')
+control_info <- subset(control_info,!Type=='RG')
+
+#Verify the subsetting - numbers should match
+nrow(filtered_info) - sum(filtered_info$Type=='Study') - sum(filtered_info$Type=='EB') - sum(filtered_info$Type=='RG')
+nrow(control_info)
+
+#Add Row names to dataframe
+row.names(control_info) <- control_info$NephID
+```
+
+#4. OTU Counts - OTU's by Genus (raw data)
+Read in OTU information, and determine total Genus counts
+```{r}
+#Read in OTU database at Genus level
+genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_silva_exclusions.csv", row.names = 1)
+
+#Create a total row for each sample
+sample_list <- colnames(genus_otu)
+genus_list <- rownames(genus_otu)
+
+#For each sample
+for (a in sample_list){
+ #Set sum to 0
+ sum=0
+ 
+ #For each genus
+ for (b in genus_list){
+  #Add the number of counts together
+  sum <- genus_otu[b,a] + sum
+ }
+ 
+ #When complete, push to a "Total_Reads" row
+ genus_otu["Total_Reads",a] <- sum
+}
+```
+
+#5. OTU Counts - Analysis Genus Expected in Controls by Control Type
+Read in OTU information, and determine Genus counts (presence/absence) for each sample
+```{r}
+#Create control sample list, control type list
+sample_list <- unique(control_info$NephID)
+control_types <- unique(control_info$Type)
+
+#Create a missing list for non-annotated Genus
+missing_anno <- list()
+
+#Determine which genus_list to use
+##Run through each sample
+for (a in sample_list){
+ 
+ #Set count to 0
+ count_present = 0
+ count_absent = 0
+ 
+ #Create genus list of control types
+ if(control_info[a,"Type"]=="MSA-1000"){
+    genus_list <- unique(msa1000.con$Genus)
+  } else if(control_info[a,"Type"]=="MSA-1001"){
+   genus_list <- unique(msa1001.con$Genus)
+   } else if(control_info[a,"Type"]=="MSA-1002"){
+    genus_list <- unique(msa1002.con$Genus)
+    } else if(control_info[a,"Type"]=="MSA-1003"){
+     genus_list <- unique(msa1003.con$Genus)
+     } else if(control_info[a,"Type"]=="Zymo.Seq.200"){
+      genus_list <- unique(zymo.seq200.con$Genus)
+      } else if(control_info[a,"Type"]=="Zymo.Seq.2000"){
+       genus_list <- unique(zymo.seq2000.con$Genus)
+       } else {genus_list <- data.frame()}
+ 
+ #Convert to character
+ genus_list <- as.character(genus_list)
+ 
+ #For each genus is list, determine number of reads
+ for (b in genus_list){
+  value <- genus_otu[b,a]
+
+  #If value is NA (meaning that the genus was not found in sample), skip
+  #If reads are >0 then count_presence increases by 1
+  #If reads are =0 then count_absence increases by 1 
+
+  if(is.na(value) | is.null(value)) {
+   missing_anno[[b]] <- "No Annotations"
+   next
+  } else if (value>0) {
+   count_present = count_present +1
+  } else if (value==0){
+   count_absent = count_absent +1
+  } else{
+   next
+   }
+ }
+ 
+ #Add final count and length of the list to Control_Info dataframe
+ control_info[a,"GenusCount"] <- count_present
+ control_info[a,"GenusAbsent"] <- count_absent
+ control_info[a,"GenusExpect"] <- length(genus_list)
+}
+
+#New Database to store final Genus information
+genus_otucount_controls <- data.frame()
+
+#For each of the control types
+for (b in control_types){
+ 
+ #Reset counts
+ genus=0
+ total=0
+ count=0
+ 
+ #For each of the samples in the sample list
+ for(a in sample_list){
+  
+  #Create control type groups
+  valid <- control_info[a,"Type"]
+  
+  #If the current samples control type matches the control type of the iteration
+  if(valid==b){
+   
+   #Add the total number of genus found
+   #Add the total number of genus expected, and subtract the number missing (this is necessary as some
+   #genus are not found in the list, and not necessarily absent from the sample)
+   genus <- genus + control_info[a,"GenusCount"]
+   total <- total + control_info[a,"GenusCount"] + control_info[a,"GenusAbsent"]
+   expect <- control_info[a,"GenusExpect"]
+   count <- count + 1
+  } else{
+    next
+   }
+ }
+ 
+ #Find the average of the genus and totals
+ genus_average <- genus/count
+ total_average <- total/count
+ 
+ #Push the totals to the new database 
+ genus_otucount_controls[1,b] <- genus_average
+ genus_otucount_controls[2,b] <- total_average
+ genus_otucount_controls[3,b] <- expect
+
+ #Add Row names
+ row.names(genus_otucount_controls) <- c("Genus Count","Total", "Expected")
+ genus_otucount_controls
+}
+head(genus_otucount_controls)
+```
+
+#6. OTU Counts - Analysis Genus OTU Presence/Absence by Control Type by Plate (Seq Control Only)
+Sequencing controls by control type by plate
+```{r}
+#Unique plates
+plates <- unique(control_info$Seq.Plate)
+
+#Control Types for Extraction only - no information for Sequencing controls
+control_types <- c("MSA-1000","MSA-1001", "MSA-1002","MSA-1003", "Zymo.Seq.200","Zymo.Seq.2000")
+
+#New Database for genus level count information from seq plates
+genus_otucount <- data.frame()
+
+#Reset counters
+sums =0
+row_count =0
+row_count2 =0
+
+#For each of the sequencing plates
+for (a in plates){
+ 
+ #Group by control types
+ for (b in control_types) {
+  
+  #Reset counters
+  genus =0
+  total=0
+  expect=0
+
+  #Create a list of samples that are of the specified plate and control type
+  sample_list<- subset(control_info, Seq.Plate==a & Type==b)
+  sample_list <- unique(sample_list$NephID)
+
+  #For each sample in the list
+  for (c in sample_list){
+   
+   #Count the number of unique genus found
+   #Count the total number of gensus matched in reference database
+   #Count the number of expected genus for this sample
+   genus <- genus + control_info[c,"GenusCount"]
+   total <- total + control_info[c,"GenusCount"] + control_info[c,"GenusAbsent"]
+   expect <- control_info[c,"GenusExpect"]
+  }
+  
+  #Take the average of all extracted iterations of this control  with this kit of
+  genus_average <- genus/length(sample_list)
+  total_average <- total/length(sample_list)
+  
+  #Move the row counters by 1 or 2
+  row_count <- sums +1
+  row_count2 <- sums+2
+  
+  #Push information to the database
+  genus_otucount[row_count, b] <- genus_average
+  genus_otucount[row_count2, b] <- genus_average
+ }
+ 
+ #Increase the row counter to skip the two filled rows
+ sums = sums+2
+}
+genus_otucount
+#Add row names to the database
+row.names (genus_otucount) <- c("PC04924_Count", "PC04924_Expected", "PC04925_Count", "PC04925_Expected", "PC07578_Count", "PC07578_Expected")  
+```
+
+#7. OTU Percent - Analysis Genus OTU Abundance (All Samples)
+Percentages of all genus, listed by control type
+```{r}
+#Create sample list
+sample_list <- unique(control_info$NephID)
+genus_list <- rownames(genus_otu[1:nrow(genus_otu)-1,])
+
+#Create new table
+genus_otuabund_sample = data.frame()
+
+#Determine which genus_list to use
+##Run through each sample
+for (a in sample_list){
+ 
+ for (b in genus_list){
+  
+  #Determine the reads for the genus, and the total reads for the sample
+  reads <- genus_otu[b,a]
+  total <- genus_otu["Total_Reads",a]
+
+  #If value is NA (meaning that the genus was not found in sample), skip
+  #If reads are >0 then add the read count to reads_total
+
+  if(is.na(reads) | is.null(reads)) {
+   next
+  } else {
+   percent <- (reads/total)
+
+   #Add out count percent to the genus_otuabund_sample database
+   genus_otuabund_sample[b,a] <- percent
+  }
+ }
+}
+
+#Output the table of all samples
+write.csv(genus_otuabund_sample,"Data/genus_otuabund_seq_q2_sample.csv")
+```
+
+#8, OTU Percent - Analysis Genus OTU Abundance by Control Type
+Percentages of genus included in controls, listed by control type
+```{r}
+#Unique Types of controls and all genus
+control_types <- unique(control_info$Type)
+genus_list <- rownames(genus_otu[1:nrow(genus_otu)-1,])
+
+#New Database to store final Genus information
+genus_otuabund_control <- data.frame()
+
+#For each of the control types
+for (a in control_types){
+ 
+  #For each Genus in list
+  for (b in genus_list){
+   
+   #Reset Counter
+   reads <- 0
+   total <- 0
+   
+   #Create a list of samples that are of the specified control type
+   sample_list<- subset(control_info, Type==a)
+   sample_list <- unique(sample_list$NephID)
+   
+   #For each of the samples in the sample list
+   for(c in sample_list){
+    
+    #Add up the total percentages from otupercent_sample table [genus,sampleID]
+    reads <- genus_otu [b,c] + reads
+    total <- genus_otu["Total_Reads",c] + total
+   }
+   
+   #average of genus level by taking total number of reads of that genus divded by 
+   #total number of reads for samples included
+   #Push value to new dataframe
+   percent <- reads / total
+   genus_otuabund_control[b,a] <- percent
+  }
+ }
+
+#Output to text file
+write.csv(genus_otuabund_control,"Data/genus_otuabund_seq_q2_control.csv")
+```
+
+#9. OTU Percent - Analysis Genus OTU Abundance by Control Type by Plate (Seq only)
+```{r}
+#All known genus (removes uncultured group and total_reads)
+genus_list <- rownames(genus_otu[1:(nrow(genus_otu)-2),])
+#Store column number for final dataframe
+cols <- ncol(genus_percent)
+
+#For each of the seq plates
+for (a in plates){
+ 
+  #For each Genus in list
+  for (b in genus_list){
+   
+   #Reset Counter
+   reads <- 0
+   total <- 0
+   
+   #Create a list of samples that are of the specified control type
+   sample_list<- subset(control_info, Seq.Plate==a)
+   sample_list <- unique(sample_list$NephID)
+   
+   #For each of the samples in the sample list
+   for(c in sample_list){
+    
+    #Add up the total percentages from otupercent_sample table [genus,sampleID]
+    reads <- genus_otu [b,c] + reads
+    total <- genus_otu["Total_Reads",c] + total
+   }
+   
+   #average of genus level by taking total number of reads of that genus divded by 
+   #total number of reads for samples included
+   #Push value to new dataframe
+   percent <- reads / total
+   genus_percent[b,a] <- percent
+  }
+}
+#Repeat at the control by plate level
+control_types<-c("MSA-1000", "MSA-1001", "MSA-1002", "MSA-1003", "Zymo.Seq.200", "Zymo.Seq.2000")
+hide <- genus_percent
+
+i = ncol(genus_percent) +1
+
+#For each of the plates
+for (a in plates){
+ for(b in control_types){
+  #Create a list of samples that are of the specified control type
+  sample_list<- subset(control_info, Seq.Plate==a)
+  sample_list<- subset(sample_list,Type==b)
+  sample_list <- unique(sample_list$NephID)
+  
+  for(c in genus_list){
+   
+   #Reset Counter
+   reads <- 0
+   total <- 0
+
+    #For each of the samples in the sample list
+   for(d in sample_list){
+    
+    #Add up the total percentages from otupercent_sample table [genus,sampleID]
+    reads <- genus_otu [c,d] + reads
+    total <- genus_otu["Total_Reads",d] + total
+   }
+   
+   #average of genus level by taking total number of reads of that genus divded by 
+   #total number of reads for samples included
+   #Push value to new dataframe
+   percent <- reads / total
+   genus_percent[c,i] <- percent
+  }
+  i=i+1
+ }
+}
+
+i=cols+1
+#Add column names
+new_colnames<- c("PC04924_OB", "PC04925_OB","PC07578_OB",
+                 "PC04924_MSA1000", "PC04924_MSA1001", "PC04924_MSA1002", "PC04924_MSA1003", 
+                 "PC04924_Seq200", "PC04924_Seq2000",
+                 "PC04925_MSA1000", "PC04925_MSA1001","PC04925_MSA1002","PC04925_MSA1003", 
+                 "PC04925_Seq200", "PC04925_Seq2000",
+                 "PC07578_MSA1000", "PC07578_MSA1001","PC07578_MSA1002","PC07578_MSA1003", 
+                 "PC07578_Seq200", "PC07578_Seq2000")
+#for each header name, apply it to the recently created columns
+for (a in new_colnames){
+ colnames(genus_percent)[i]<- a
+ i=i+1
+}
+
+#Output to text file
+write.csv(genus_percent,"Data/genus_outabund_seq_q2.csv")
+```
+
+#10.OTU Percent - Analysis of Genus Percent Abundance Differences
+Expected versus observed by plate (Seq Only) - Create new genus databse with only MSA and Zymo Seq Columns
+```{r}
+#Remove genus groups not included in control types
+hide<-genus_percent
+temp <- data.frame()
+colnames(genus_percent)
+temp <- genus_percent[,c(12:15,17,21:38)]
+temp <- subset(temp, !('MSA-1000'=="NA" & 'MSA-1001'=="NA"& 'MSA-1002'=="NA"& 'MSA-1003'=="NA"& 
+                       'Zymo.Seq.200'=="NA"& 'Zymo.Seq.2000'=="NA"))
+temp2 <- temp[,c(1:5,5)]
+head(temp2)
+
+#Save the column start
+cols=ncol(genus_percent)
+cols
+
+#Set the counter
+i=cols+1
+counter=0
+
+#Create lists to compare plates
+genus_list <- unique(rownames(temp))
+compare_list <- colnames(temp[,6:23])
+
+#For each control 
+for (a in compare_list){
+ if(counter==6){
+  counter==1
+ } else{counter=counter+1}
+ 
+ #For each genus, within the specific colony list
+ for (b in genus_list){
+  
+  #Determine abundance value
+  value <- temp2[b,counter]
+  
+  #If the value is NA fill in NA
+  if(is.na(value)){
+   genus_percent[b,i] <- "NA"
+  }
+  #Otherwise, fill in the abundance rate
+  else{
+   genus_percent[b,i] <- ((value - temp[b,a])/value)*100*-1
+   
+  }
+  
+ }
+ #increase the counter
+ i=i+1
+}
+
+#Add column names
+new_colnames <- c("PC04924-MSA1000_Diff", "PC04924-MSA1001_Diff", "PC04924-MSA1002_Diff",
+                  "PC04924-MSA1003_Diff", "PC04924-Seq.200_Diff", "PC04924-Seq.2000_Diff",
+                  "PC04925-MSA1000_Diff", "PC04925-MSA1001_Diff", "PC04925-MSA1002_Diff",
+                  "PC04925-MSA1003_Diff", "PC04925-Seq.200_Diff", "PC04925-Seq.2000_Diff",
+                  "PC07578-MSA1000_Diff", "PC07578-MSA1001_Diff", "PC07578-MSA1002_Diff",
+                  "PC07578-MSA1003_Diff", "PC07578-Seq.200_Diff", "PC07578-Seq.2000_Diff")
+
+i=cols+1
+for (a in new_colnames){
+ colnames(genus_percent)[i]<- a
+ i=i+1
+}
+
+#Fix bug
+#genus_percent["Staphylococcus","PC07578_MSA1000"]<-0
+
+
+#subset table to include only relevant genus, and only seq control information
+colnames(genus_percent)
+temp <- genus_percent[,c(12:15,17,21:56)]
+temp <- subset(temp, !('MSA-1000'=="NA" & 'MSA-1001'=="NA"& 'MSA-1002'=="NA"& 'MSA-1003'=="NA"& 
+                       'Zymo.Seq.200'=="NA"& 'Zymo.Seq.2000'=="NA"))
+
+#Output file
+write.csv(temp,"Data/genus_otuabund_seq_q2_obsVSexp.csv")
+
+#Create tableau file
+temp2<-data.frame()
+count=1
+for (a in 24:ncol(temp)){
+ for(b in 1:nrow(temp)){
+  temp2[count,"Genus"] <- rownames(temp[b,])
+  temp2[count,"value"] <- temp[b,a]
+  temp2[count,"Type"] <- colnames(temp[a])
+  count=count+1
+ }
+}
+head(temp2)
+write.csv(temp2,"Data/genus_otuabund_seq_q2_obsVexp_tab.csv")
+
+```
+
+#11.OTU Percent - Not expected Genus by Control Type by Plate (Seq Only)
+```{r}
+#Create temp dataframe from genus_percent
+colnames(genus_percent)
+temp <- genus_percent[,c(12:15,17,21:56)]
+
+#Subset by those Genus not expected to be in extraction
+temp <- subset(temp, is.na(MSA1000) | is.na(MSA1001) | is.na(MSA1002) | 
+                is.na(MSA1003) | is.na(Zymo.Seq))
+#Output the unexpected percent frequency database
+write.csv(temp,"Data/genus_otuabund_seq_q2_other.csv")
+colnames(temp)
+head(temp)
+
+#Create tableau file
+temp2<-data.frame()
+count=1
+for (a in 6:23){
+ for(b in 1:nrow(temp)){
+  temp2[count,"Genus"] <- rownames(temp[b,])
+  temp2[count,"value"] <- temp[b,a]
+  temp2[count,"Type"] <- colnames(temp[a])
+  count=count+1
+ }
+}
+head(temp2)
+write.csv(temp2,"Data/genus_otuabund_seq_q2_other_tab.csv")
+```
+
+#12 Plot graphs of expected to actual
+Add slope
+```{r}
+###############
+#MSA1000
+###############
+#Create dataframe
+colnames(genus_percent)
+msa1000.plates <- genus_percent[,c("MSA1000","Genus","PC04924_MSA1000","PC04925_MSA1000","PC07578_MSA1000")]
+msa1000.plates <- subset(msa1000.plates,!(is.na(MSA1000)))
+rownames(msa1000.plates)
+colnames(msa1000.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(msa1000.plates)){
+  temp3[count,"Expected"]<- msa1000.plates[count2,"MSA1000"]
+  temp3[count,"Genus"] <- rownames(msa1000.plates[b,])
+  temp3[count,"value"] <- msa1000.plates[b,a]
+  temp3[count,"Type"] <- colnames(msa1000.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+unique(temp3$Expected)
+unique(temp3$value)
+
+
+#Expand the plot
+temp4 <- subset(temp3,value>.05)
+temp4
+
+temp5 <- subset(temp3,value<.05)
+temp5
+
+#Plot graph
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1000-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1000-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1000-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(x=Expected,y=value,label=Genus),check_overlap = TRUE)
+###############
+#MSA1001
+###############
+#Create dataframe
+colnames(genus_percent)
+msa1001.plates <- genus_percent[,c("MSA1001","Genus","PC04924_MSA1001","PC04925_MSA1001","PC07578_MSA1001")]
+msa1001.plates <- subset(msa1001.plates,!(is.na(MSA1001)))
+rownames(msa1001.plates)
+colnames(msa1001.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(msa1001.plates)){
+  temp3[count,"Expected"]<- msa1001.plates[count2,"MSA1001"]
+  temp3[count,"Genus"] <- rownames(msa1001.plates[b,])
+  temp3[count,"value"] <- msa1001.plates[b,a]
+  temp3[count,"Type"] <- colnames(msa1001.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+temp3
+unique(temp3$Expected)
+unique(temp3$value)
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,Expected>.04)
+temp4
+
+temp5 <- subset(temp3,Expected<.04)
+temp5
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1001-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Uppers
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1001-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Lowers
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1001-QIIME2-Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+
+###############
+#MSA1002
+###############
+#Create dataframe
+colnames(genus_percent)
+msa1002.plates <- genus_percent[,c("MSA1002","Genus","PC04924_MSA1002","PC04925_MSA1002","PC07578_MSA1002")]
+msa1002.plates <- subset(msa1002.plates,!(is.na(MSA1002)))
+rownames(msa1002.plates)
+colnames(msa1002.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(msa1002.plates)){
+  temp3[count,"Expected"]<- msa1002.plates[count2,"MSA1002"]
+  temp3[count,"Genus"] <- rownames(msa1002.plates[b,])
+  temp3[count,"value"] <- msa1002.plates[b,a]
+  temp3[count,"Type"] <- colnames(msa1002.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+temp3
+unique(temp3$Expected)
+unique(temp3$value)
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,value>.07)
+temp4
+
+temp5 <- subset(temp3,value<.07)
+temp5
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1002-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Uppers
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1002-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Lowers
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1002-QIIME2-Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+
+###############
+#MSA1003
+###############
+#Create dataframe
+colnames(genus_percent)
+msa1003.plates <- genus_percent[,c("MSA1003","Genus","PC04924_MSA1003","PC04925_MSA1003","PC07578_MSA1003")]
+msa1003.plates <- subset(msa1003.plates,!(is.na(MSA1003)))
+rownames(msa1003.plates)
+colnames(msa1003.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(msa1003.plates)){
+  temp3[count,"Expected"]<- msa1003.plates[count2,"MSA1003"]
+  temp3[count,"Genus"] <- rownames(msa1003.plates[b,])
+  temp3[count,"value"] <- msa1003.plates[b,a]
+  temp3[count,"Type"] <- colnames(msa1003.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+unique(temp3$Expected)
+temp3
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,Expected>.1)
+temp4
+
+temp5 <- subset(temp3,Expected<.2)
+temp5
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1003-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Uppers
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1003-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+##Lowers
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="MSA1003-QIIME2-Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+
+
+###############
+#SEQ200
+###############
+#Create dataframe
+colnames(genus_percent)
+seq200.plates <- genus_percent[,c("Zymo.Seq","Genus","PC04924_Seq200","PC04925_Seq200","PC07578_Seq200")]
+seq200.plates <- subset(seq200.plates,!(is.na(Zymo.Seq)))
+rownames(seq200.plates)
+colnames(seq200.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(seq200.plates)){
+  temp3[count,"Expected"]<- seq200.plates[count2,"Zymo.Seq"]
+  temp3[count,"Genus"] <- rownames(seq200.plates[b,])
+  temp3[count,"value"] <- seq200.plates[b,a]
+  temp3[count,"Type"] <- colnames(seq200.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+unique(temp3$Expected)
+temp3
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,value>.15)
+temp4
+
+temp5 <- subset(temp3,value<.15)
+temp5
+
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 200-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 200-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 200-QIIME2_Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+###############
+#SEQ2000
+###############
+#Create dataframe
+colnames(genus_percent)
+seq2000.plates <- genus_percent[,c("Zymo.Seq","Genus","PC04924_Seq2000","PC04925_Seq2000","PC07578_Seq2000")]
+seq2000.plates <- subset(seq2000.plates,!(is.na(Zymo.Seq)))
+rownames(seq2000.plates)
+colnames(seq2000.plates)
+
+#Change formatting for graphics
+temp3<-data.frame()
+count=1
+for (a in c(3:5)){
+ count2=1
+ for(b in 1:nrow(seq2000.plates)){
+  temp3[count,"Expected"]<- seq2000.plates[count2,"Zymo.Seq"]
+  temp3[count,"Genus"] <- rownames(seq2000.plates[b,])
+  temp3[count,"value"] <- seq2000.plates[b,a]
+  temp3[count,"Type"] <- colnames(seq2000.plates[a])
+  count=count+1
+  count2=count2+1
+ }
+}
+unique(temp3$Expected)
+temp3
+
+#Create databases of upper and lower expected frequencies
+temp4 <- subset(temp3,value>.15)
+temp4
+
+temp5 <- subset(temp3,value<.15)
+temp5
+
+
+#Plot graphs
+##All data
+ggplot(data=temp3,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 2000-QIIME2", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+ggplot(data=temp4,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 2000-QIIME2-Upper", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+ggplot(data=temp5,mapping=aes(x=Expected,y=value,color=Type,jitter(Expected,factor=1)))+
+ #geom_line()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Zymo Seq 2000-QIIME2_Lower", x="Expected Percentage", y= "Actual Percentage")+
+ geom_text(mapping=aes(label=Genus))
+```
