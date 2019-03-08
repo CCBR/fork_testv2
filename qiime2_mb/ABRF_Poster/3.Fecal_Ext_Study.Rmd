@@ -270,7 +270,7 @@ for (a in kit_types){
 write.csv(samples_obs_abund_vari,"Data/study_obs_abund_vari.csv")
 ```
 
-#8 - Not Used
+#8 - Plot Interkit Sample Variability
 ```{r}
 #Sort genus list alphabetically
 genus_found<-sort(genus_found)
@@ -302,6 +302,7 @@ for (a in control_types){
     
     #Determine the abundance value
     value <- samples_obs_abund[d,c]
+    aliquot<-samples_variables_f[c,"AliquotNumber"]
    
     #If the value is null or smaller than 1 X10-5, skip
     if(is.na(value) | is.null(value) | value<0.0000000001){
@@ -311,15 +312,23 @@ for (a in control_types){
     else{
      temp[count,"Abundance"]<-value
      temp[count,"Genus"]<-d
-     temp[count,"SampleID"]<-c
+     
+     if(aliquot=="None"){
+      temp[count,"SampleID"]<-c
+     }else{
+      temp[count,"SampleID"]<-aliquot
+     }
      count=count+1
      }
    }
   }
   
-  #After all samples have been processed write new data_table
+  #Create file name
   file_name <- paste ("Data/Study/SampleVari",b,a,sep = "_")
   file_name <- paste(file_name,".csv",sep="")
+  
+  #Sort and save the datatable
+  temp<-temp[order(temp$SampleID), ]
   write.csv(temp,file_name)
   
   #Create graph title
@@ -329,7 +338,7 @@ for (a in control_types){
   graph_new<- ggplot(temp,aes(x =SampleID , y = Abundance, fill = Genus)) + 
    geom_bar(position = position_fill(), stat = "identity") +
    scale_y_continuous(labels = percent_format())+
-   labs(title=graph_title, x="SampleID", y= "Relative Abundance")+
+   labs(title=graph_title, x="Sample ID", y= "Relative Abundance")+
    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
    #+ theme(legend.position = "bottom",legend.box = "vertical")
    theme(legend.position = "none") ##Remove Legend
@@ -358,4 +367,112 @@ for (a in control_types){
   i=i+1
  }
 }
+```
+
+#9 - Plot All Sample Variability
+```{r}
+#Create list for plots, start counter
+plot_list <- list()
+i=1
+
+#For each of the control types
+for (a in control_types){
+ 
+ #Create new dataframe and start counter
+ temp<-data.frame()
+ count=1
+    
+ ###Create list of sample ids with specific variables
+ temp2 <- subset(samples_variables_f,Type==a)
+ sample_list <- unique(temp2$NephID)
+ 
+ #For each sample in list
+ for (b in sample_list){
+  
+  #For each genus
+  for (c in genus_found){
+   
+   #Determine the abundance value
+   value <- samples_obs_abund[c,b]
+   aliquot<-samples_variables_f[b,"AliquotNumber"]
+   
+   #If the value is null or smaller than 1 X10-5, skip
+   if(is.na(value) | is.null(value) | value<0.0000000001){
+    next}
+    
+   #Otherwise add to datatable
+   else{
+    temp[count,"Abundance"]<-value
+    temp[count,"Genus"]<-c
+    
+    if(aliquot=="None"){
+     
+     temp[count,"SampleID"]<-b
+     }else{
+      
+      #Add kit info
+      aliquot <- paste(aliquot,samples_variables_f[b,"Kit"],sep="_")
+      temp[count,"SampleID"]<-aliquot
+     }
+    count=count+1
+   }
+  }
+ }
+ 
+ #Create file name
+ file_name <- paste ("Data/Study/StudyVari",a,sep = "_")
+ file_name <- paste(file_name,".csv",sep="")
+ 
+ #Sort and save the datatable
+ temp<-temp[order(temp$SampleID), ]
+ write.csv(temp,file_name)
+  
+ #Create graph title
+ graph_title<-paste(a,sep="_")
+ 
+ #Create Graph for the datatable
+ graph_new<- ggplot(temp,aes(x =SampleID , y = Abundance, fill = Genus)) + 
+  geom_bar(position = position_fill(), stat = "identity") +
+  scale_y_continuous(labels = percent_format())+
+  labs(title=graph_title, x="Sample ID", y= "Relative Abundance")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  #+ theme(legend.position = "bottom",legend.box = "vertical")
+  theme(legend.position = "none") ##Remove Legend
+  
+ plot_list[[i]] = graph_new
+ i=i+1
+    
+ #Reset data table
+   temp<-data.frame()
+}
+
+#Print the plots
+i=1
+for (a in control_types){
+ 
+ #Create file name
+ file_name<-paste("Interstudy Variability",a,sep="_")
+ file_name<-paste("Data/Graphs/",file_name,".tiff",sep="")
+ tiff(file_name)
+ print(plot_list[[i]])
+ dev.off()
+ i=i+1
+}
+```
+
+#10 Manual Processing
+```{r}
+
+temp<-read.csv("Data/Study/StudyVari_Study_Edited.csv",header = TRUE)
+
+
+ggplot(temp,aes(x =SampleID , y = Abundance, fill = Genus)) + 
+ geom_bar(position = position_fill(), stat = "identity") +
+ scale_y_continuous(labels = percent_format())+
+ labs(title="Study Samples - Aliquot ID & Kit", x="Sample ID", y= "Relative Abundance")+
+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+ #+ theme(legend.position = "bottom",legend.box = "vertical")
+ theme(legend.position = "none") ##Remove Legend
+
+
 ```
