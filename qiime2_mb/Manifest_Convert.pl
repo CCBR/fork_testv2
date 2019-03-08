@@ -21,13 +21,13 @@ my $ans = <STDIN>; chomp $ans;
 if ($ans==1){
 	#Ask user for the manifest file location
 	print "What is the path to your manifest file (generated from LIMS)\n";
-	#my $dir_path = <STDIN>; chomp $dir_path;
-		my $dir_path="T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis"; ##Testing
+	my $dir_path = <STDIN>; chomp $dir_path;
+	#	my $dir_path="T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis"; ##Testing
 	
 	#Ask user for QIIME2 path folder
 	print "\nWhat is the path to the QIIME analysis folder\n";
-	#my $anal_path = <STDIN>; chomp $anal_path;
-		my $anal_path = "T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084_MB4and5"; ##Testing
+	my $anal_path = <STDIN>; chomp $anal_path;
+	#	my $anal_path = "T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084_MB4and5"; ##Testing
 		
 	#Call Sub-Routes
 	convertfile($dir_path, $anal_path);
