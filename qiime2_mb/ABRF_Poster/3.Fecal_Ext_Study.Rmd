@@ -9,6 +9,7 @@ editor_options:
 library("biom")
 library(data.table)
 library(ggplot2)
+library(scales)
 ```
 
 #2. Filtering of samples, control variable information
@@ -274,50 +275,87 @@ write.csv(samples_obs_abund_vari,"Data/study_obs_abund_vari.csv")
 #Sort genus list alphabetically
 genus_found<-sort(genus_found)
 
+#Create list for plots, start counter
+plot_list <- list()
+i=1
+
+#For each of the control types
 for (a in control_types){
-   for (b in kit_types){
-    temp<-data.frame()
-    count=1
+ 
+ #For each kit
+ for (b in kit_types){
+  
+  #Create new dataframe and start counter
+  temp<-data.frame()
+  count=1
     
-    ###Create database
-    temp2 <- subset(samples_variables_f,Kit==b)
-    temp2 <- subset(temp2,Type==a)
+  ###Create list of sample ids with specific variables
+  temp2 <- subset(samples_variables_f,Kit==b)
+  temp2 <- subset(temp2,Type==a)
+  sample_list <- unique(temp2$NephID)
+  
+  #For each sample in list
+  for (c in sample_list){
+   
+   #For each genus
+   for (d in genus_found){
     
-    #Subset, and create a sample list
-    sample_list <- unique(temp2$NephID)
-    sample_list
+    #Determine the abundance value
+    value <- samples_obs_abund[d,c]
+   
+    #If the value is null or smaller than 1 X10-5, skip
+    if(is.na(value) | is.null(value) | value<0.0000000001){
+     next}
     
-    #For each sample
-    for (c in sample_list){
-     
-     #Grab value at each genus
-     for (d in genus_found){
-      value <- samples_obs_abund[d,c]
-      
-      if(is.na(value) | is.null(value) | value<0.0000000001){
-       next}
-      else{
-       temp[d,"Abundance"]<-value
-       temp[d,"Genus"]<-d
-      }
-    
+    #Otherwise add to datatable
+    else{
+     temp[count,"Abundance"]<-value
+     temp[count,"Genus"]<-d
+     temp[count,"SampleID"]<-c
+     count=count+1
      }
-     write.csv(temp,"temp4.csv")
+   }
+  }
+  
+  #After all samples have been processed write new data_table
+  file_name <- paste ("Data/Study/SampleVari",b,a,sep = "_")
+  file_name <- paste(file_name,".csv",sep="")
+  write.csv(temp,file_name)
+  
+  #Create graph title
+  graph_title<-paste(a,b,sep="_")
+    
+  #Create Graph for the datatable
+  graph_new<- ggplot(temp,aes(x =SampleID , y = Abundance, fill = Genus)) + 
+   geom_bar(position = position_fill(), stat = "identity") +
+   scale_y_continuous(labels = percent_format())+
+   labs(title=graph_title, x="SampleID", y= "Relative Abundance")+
+   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+   #+ theme(legend.position = "bottom",legend.box = "vertical")
+   theme(legend.position = "none") ##Remove Legend
+  
+  graph_new  
+  plot_list[[i]] = graph_new
+  i=i+1
+    
+  #Reset data table
     temp<-data.frame()
-   }
-   }
+  }
 }
-temp<-read.csv("temp4.csv",header = TRUE)
-temp
 
-library(reshape)
-datm <- melt(cbind(dat, ind = rownames(dat)), id.vars = c('ind'))
-
-library(scales)
-ggplot(datm,aes(x = variable, y = value,fill = ind)) + 
-    geom_bar(position = "fill",stat = "identity") +
-    # or:
-    # geom_bar(position = position_fill(), stat = "identity") 
-    scale_y_continuous(labels = percent_format())
-
+#Print the plots
+i=1
+for (a in control_types){
+ 
+ for (b in kit_types){
+  
+  #Create file name
+  file_name<-paste("Interkit Variability",a,b,sep="_")
+  file_name<-paste("Data/Graphs/",file_name,".tiff",sep="")
+  tiff(file_name)
+  print(plot_list[[i]])
+  dev.off()
+  i=i+1
+ }
+}
 ```
