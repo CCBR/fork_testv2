@@ -369,7 +369,7 @@ for (a in control_types){
 }
 ```
 
-#9 - Plot All Sample Variability
+#9 - Plot All Sample Variability in individual kit graphs
 ```{r}
 #Create list for plots, start counter
 plot_list <- list()
@@ -460,19 +460,22 @@ for (a in control_types){
 }
 ```
 
-#10 Manual Processing
+#10 - Plot all sample variability in one graph
 ```{r}
+#Edit the data to be able to numerically order the aliquots
+temp<-read.csv("Data/Study/StudyVari_Study_Edited(Aliquot).csv",header = TRUE)
 
-temp<-read.csv("Data/Study/StudyVari_Study_Edited.csv",header = TRUE)
+#Edit the data to be able to numerically order the aliquots by kit
+temp<-read.csv("Data/Study/StudyVari_Study_Edited(Kit).csv",header = TRUE)
+temp$X<- factor(temp$X, levels=temp$X)
 
-
+#Create a plot for 
 ggplot(temp,aes(x =SampleID , y = Abundance, fill = Genus)) + 
  geom_bar(position = position_fill(), stat = "identity") +
  scale_y_continuous(labels = percent_format())+
- labs(title="Study Samples - Aliquot ID & Kit", x="Sample ID", y= "Relative Abundance")+
+ labs(title="Fresh-Frozen Fecal Study Samples", x="Extraction Kit_Aliquot ID", y= "Relative Abundance")+
  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
  #+ theme(legend.position = "bottom",legend.box = "vertical")
  theme(legend.position = "none") ##Remove Legend
-
 
 ```
