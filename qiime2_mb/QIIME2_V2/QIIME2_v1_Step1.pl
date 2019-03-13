@@ -16,108 +16,144 @@ use Win32::OLE;
 ######################################################################################
 								##Main Code##
 ######################################################################################
-my @runid_unique; my @projectid;
+my (@runid_unique, @projectid, @fastq_files);
 
 #Ask user where the project directory is
 print "Where is the project directory?\n";
 print "ANS: ";
-#my $PROJECT_DIR = <STDIN>; chomp $PROJECT_DIR;
-#my $PROJECT_DIR =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0440-MB3_Baseline_Month1_Repeat"); ###Testing
-my $PROJECT_DIR =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2"); ###Testing
+#my $project_dir = <STDIN>; chomp $project_dir;
+my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0440-MB3_Baseline_Month1_Repeat"); ###Testing
+#my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2"); ###Testing
 
 #Ask user what type of file is being used
 print "\n\nWhat is the name of the manifest file (include .txt)?\n";
 print "ANS: ";
-#my $MANIFEST_ORI=<STDIN>; chomp $MANIFEST_ORI;
-#my $MANIFEST_FILE="NP0440-MB3-manifest_withmeta.txt"; ###Testing
-my $MANIFEST_FILE="NP0501_MB1and2.txt"; ###Testing
+#my $manifest_ori=<STDIN>; chomp $manifest_ori;
+my $manifest_ori="NP0440-MB3-manifest_withmeta.txt"; ###Testing
+#my $manifest_ori="NP0501_MB1and2.txt"; ###Testing
 
 
 ######################################################################################
 								##Subroutines##
 ######################################################################################
 #Create directories within Input folder
-makedirect_input($PROJECT_DIR);
+makedirect_input($project_dir);
 
-#Create manifest for QIIME, and split manifests
-manifest($PROJECT_DIR, $MANIFEST_FILE, @runid_unique, @projectid);
+#Create QIIME2 manifest
+manifest_qiime2($project_dir, $manifest_ori);
+
+#Create split manifests with metadata
+manifest_meta($project_dir, $manifest_ori, @runid_unique);
 
 #Creates directories for flowcells
-makedirect_output($PROJECT_DIR,\@runid_unique);
+makedirect_output($project_dir,\@runid_unique);
 
-#Finds FastQ files and creates softlinks
-fastq_files($PROJECT_DIR, @runid_unique);
+#Create split manifests with softlinks
+fastqfiles($project_dir, \@runid_unique);
 
 sub makedirect_input{
-	#Initialize variables / Read in variables
-	my ($PROJECT_DIR)=@_;
-	my $DIR_NAME; 
+	#Initialize / Read in variables
+	my ($project_dir)=@_;
+	my $dir_path; 
 	
-	#Make Input directory
-	my $INP_DIR = $PROJECT_DIR;
-	$INP_DIR.= "\\Input";
-	mkdir($INP_DIR);
+	#Make directories nested under Project
+	my $inp_dir = $project_dir;
+	$inp_dir.= "\\Input";
+	mkdir($inp_dir);
 	
 	#Make directories nested under Input
 	my @directory_list = ("\\tmp", "\\Log", "\\manifest_file_split_parts", "\\manifest_file_split_parts_fastq_import", "\\Fasta","\\qza_results", "\\qzv_results");
 		
-	foreach my $DIR_NEW (@directory_list){
+	#Create new directories from list	
+	foreach my $dir_new (@directory_list){
 		
 		#Add Input to the directory path
-		$DIR_NAME = $INP_DIR;
-		$DIR_NAME .= $DIR_NEW;
+		$dir_path = $inp_dir;
+		$dir_path .= $dir_new;
 		
 		#Make new directory
-		mkdir($DIR_NAME);
+		mkdir($dir_path);
 	}
 	
 	#Make QZA directories
-	$INP_DIR = $PROJECT_DIR;
-	$INP_DIR.= "\\Input\\qza_results";
+	$inp_dir = $project_dir;
+	$inp_dir.= "\\Input\\qza_results";
 	
 	#Make directories nested under Input \ QZA
 	@directory_list = ("\\abundance_qza_results", "\\core_metrics_results", "\\demux_qza_split_parts", "\\phylogeny_qza_results", "\\repseqs_dada2_qza_merged_parts_final","\\repseqs_dada2_qza_merged_parts_temp", "\\repseqs_dada2_qza_split_parts", "\\table_dada2_qza_merged_parts_final", "\\table_dada2_qza_merged_parts_tmp", "\\table_dada2_qza_split_parts", "\\taxonomy_qza_results");
-		
-	foreach my $DIR_NEW (@directory_list){
+	
+	#Create new directories from list
+	foreach my $dir_new (@directory_list){
 		
 		#Add Input to the directory path
-		$DIR_NAME = $INP_DIR;
-		$DIR_NAME .= $DIR_NEW;
+		$dir_path = $inp_dir;
+		$dir_path .= $dir_new;
 		
 		#Make new directory
-		mkdir($DIR_NAME);
+		mkdir($dir_path);
 	}
 	
 	#Make QZV directories
-	$INP_DIR = $PROJECT_DIR;
-	$INP_DIR.= "\\Input\\qzv_results";
+	$inp_dir = $project_dir;
+	$inp_dir.= "\\Input\\qzv_results";
 	
 	#Make directories nested under Input \ QZA
 	@directory_list = ("\\demux_qzv_split_parts", "\\otu_relative_abundance_results", "\\rarefaction_qzv_results", "\\repseqs_dada2_qzv_merged_parts_final", "\\table_dada2_qzv_merged_parts_final","\\taxonomy_qzv_results", "\\taxonomy_relative_abundance_results");
 		
-	foreach my $DIR_NEW (@directory_list){
+	#Make new directories from list	
+	foreach my $dir_new (@directory_list){
 		
 		#Add Input to the directory path
-		$DIR_NAME = $INP_DIR;
-		$DIR_NAME .= $DIR_NEW;
+		$dir_path = $inp_dir;
+		$dir_path .= $dir_new;
 		
 		#Make new directory
-		mkdir($DIR_NAME);
+		mkdir($dir_path);
 	}
 }
 
-sub manifest{
+sub manifest_qiime2{
 	#Initialize variables / Read in variables
-	my ($PROJECT_DIR, $MANIFEST_FILE, $runid_unique, $projectid)=@_;
+	my ($project_dir, $manifest_ori)=@_;
+
+	#Set pathway for original manifest
+	my $manifest_path=$project_dir; $manifest_path.="\\";
+	$manifest_path.= $manifest_ori; 
+
+	#Set pathway and name for qiime2 file
+	my $MANIFEST_FILE_QIIME = $project_dir; $MANIFEST_FILE_QIIME .="\\Input\\manifest_qiime2.tsv";
+	open my $fh, ">$MANIFEST_FILE_QIIME";
+	
+	#Open, read original manifest file
+	open my $in, "<:encoding(utf8)", $manifest_path or die "$manifest_path: $!";
+	my @lines = <$in>; close $in;
+	chomp @lines;
+	
+	#Run through each line and save relevant information
+	foreach (@lines) {
+		my @columns = split('\t',$_);
+		
+		#Print information to QIIME2 File
+		print $fh "$columns[0] \t";
+		print $fh "$columns[2]\t";
+		print $fh "$columns[3]\n";
+	}
+	
+	print "\n\n***********************************";
+	print "Completed generating QIIME2 manifest\n";
+}
+
+sub manifest_meta{
+	#Initialize variables / Read in variables
+	my ($project_dir, $manifest_ori, $runid_unique)=@_;
 	my (@sampleid, @externalid, @sampletype, @sourcematerial, @sourcepcrplate, @runid);
-	my @fastqpath;
 	
 	#Set pathway for manifest
-	my $MANIFEST_FILE_TXT=$PROJECT_DIR; $MANIFEST_FILE_TXT.="\\";
-	$MANIFEST_FILE_TXT.= $MANIFEST_FILE; 
+	my $manifest_path=$project_dir; $manifest_path.="\\";
+	$manifest_path.= $manifest_ori; 
 
 	#Open text file
-	open my $in, "<:encoding(utf8)", $MANIFEST_FILE_TXT or die "$MANIFEST_FILE_TXT: $!";
+	open my $in, "<:encoding(utf8)", $manifest_path or die "$manifest_path: $!";
 	my @lines = <$in>; close $in;
 	chomp @lines;
 	
@@ -133,177 +169,186 @@ sub manifest{
 		push (@projectid, $columns[9]); #Project ID
 	}
 	
-	#Create the TXT manifest to the QIIME manifest with sample ID, Sample Type, Source Material
-	my $MANIFEST_FILE_QIIME = $PROJECT_DIR; $MANIFEST_FILE_QIIME .="\\Input\\manifest_qiime2.tsv";
-	
-	##Print the qiime manifest
-	my $i=0; 
-	open my $fh, ">$MANIFEST_FILE_QIIME";
-
-	foreach my $line (@sampleid){
-		print $fh "$line \t";
-		print $fh "$sampletype[$i]\t";
-		print $fh "$sourcematerial[$i]\n";
-		$i++;
-	} 
-	close $fh;
-	
 	#Find all unique run ID's
 	@runid_unique = uniq @runid;
 	shift @runid_unique;
 	
 	#Create split manifests with sample ID's
 	my $count = 1;
-	$i=0;
+	my $i=0;
 	
 	#Create manifests for each RunID
-	foreach my $line (@runid_unique){
+	foreach my $flowcell_unique (@runid_unique){
 		
 		#Create new manifest file based on current count
-		my $MANIFEST_FILE_SPLIT = $PROJECT_DIR;
-		$MANIFEST_FILE_SPLIT .= "\\Input\\manifest_file_split_parts\\manifest_split_part_";
-		$MANIFEST_FILE_SPLIT .= $count; $MANIFEST_FILE_SPLIT .= ".txt";
+		my $manifest_file_split_parts = $project_dir;
+		$manifest_file_split_parts .= "\\Input\\manifest_file_split_parts\\manifest_split_part_";
+		$manifest_file_split_parts .= $count; $manifest_file_split_parts .= ".txt";
 		
-		open my $fh, ">$MANIFEST_FILE_SPLIT";
+		#Open two files, one for manifest split, and one for QIIME input
+		open my $fh, ">$manifest_file_split_parts";
 
-		foreach (@lines){
-			my @columns = split ('\t', $_);
-			my $check = $columns[7];
-			
-			if ($check =~ $line){
+		#Print header
+		#print $fh "Sample ID\t External ID\t Sampletype \t sourcematerial \t plateid\t runid\t projectid\t R1path\t R2path\t R1name\t R2name\n";
+		
+		foreach my $flowcell (@runid){
+			#If the flowcell of the sample matches the current flow cell
+			if ($flowcell =~ $flowcell_unique){
 				print $fh "$sampleid[$i]\t";
 				print $fh "$externalid[$i]\t";
 				print $fh "$sampletype[$i] \t";
 				print $fh "$sourcematerial[$i]\t";
 				print $fh "$sourcepcrplate[$i]\t";
 				print $fh "$runid[$i]\t";
-				print $fh "$projectid[$i]\n";
-			} 
-			$i++;
-		}
+				print $fh "$projectid[$i]\t";
 		
-		#Create new manifest file based on current count
-		my $MANIFEST_FILE_SPLIT_FASTQ = $PROJECT_DIR;
-		$MANIFEST_FILE_SPLIT_FASTQ .= "\\Input\\manifest_file_split_parts_fastq_import\\manifest_file_split_parts_fastq_import_";
-		$MANIFEST_FILE_SPLIT_FASTQ .= $count; $MANIFEST_FILE_SPLIT_FASTQ .= ".txt";
-		
-		open my $fh1, ">$MANIFEST_FILE_SPLIT_FASTQ";
-		$i=0;
-		
-		foreach (@lines){
-			my @columns = split ('\t', $_);
-			my $check = $columns[7];
-			
-			if ($check =~ $line){
-			
+				#Create sample ID name with prefix
 				my $sample_name = "Sample_";
 				$sample_name .= $sampleid[$i];
 				
+				#Generate file path
 				my $FastP = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$runid[$i]\\CASAVA\\L1\\Project_$projectid[$i]\\$sample_name\\";
-				push (@fastqpath, $FastP);
-								
-				print $fh1 "$FastP\n";
-			} 
+				
+				#Open File Directory and copy fastq file names
+				opendir(DIR, $FastP) or die "Can't open directory $FastP!";
+				my @fastq_temp = grep {/_001\.fastq\.gz$/} readdir(DIR);
+				closedir(DIR);
+				
+				#Create full file path for each fastq file
+				my $FastP1 = $FastP; my $FastP2 = $FastP;
+				$FastP1 .=$fastq_temp[0]; $FastP2 .=$fastq_temp[1]; 
+				
+				#Print to file
+				if($FastP1 =~ /R1/){
+					print $fh "$FastP1\t"; print $fh "$FastP2\t";
+					print $fh "$fastq_temp[0]\t"; print $fh "$fastq_temp[1]\n";
+				} else{
+					print $fh "$FastP2\t"; print $fh "$FastP1\t";
+					print $fh "$fastq_temp[1]\t"; print $fh "$fastq_temp[0]\n";
+				}
+			}
 			$i++;
 		}
-		
-	$i=0;
-	$count ++;
-	close $fh;
-	close $fh1;
-
+		$i=0;
+		close $fh;
+		$count++;
 	}
-	print "\n***********************************\n";
-	print "Completed generating needed manifests\n";
+	print "\n***********************************";
+	print "Completed generating metadata split manifests\n";
 }
 
 sub makedirect_output{
 	#Initialize variables / Read in variables
-	my ($PROJECT_DIR, $runid_unique)=@_;
-	my $DIR_NAME; 
+	my ($project_dir, $runid_unique)=@_;
+	my $dir_path; 
 	
 	#Make Input directory
-	my $INP_DIR = $PROJECT_DIR;
-	$INP_DIR.= "\\Input\\Fasta";
+	my $inp_dir = $project_dir;
+	$inp_dir.= "\\Input\\Fasta";
 	
 	my $count=1;
 	
-	foreach my $DIR_NEW (@$runid_unique){
+	foreach my $dir_new (@$runid_unique){
 		
 		#Add Input to the directory path
-		$DIR_NAME = $INP_DIR;
-		$DIR_NAME .="\\fasta_dir_split_part_";
-		$DIR_NAME .= $count;
+		my $dir_name = $inp_dir;
+		$dir_name .="\\fasta_dir_split_part_";
+		$dir_name .= $count;
 		
 		#Make new directory
-		mkdir($DIR_NAME);
+		mkdir($dir_name);
 		$count++;
 	}
 	
 	my $length = scalar (@$runid_unique);
-	print "\n***********************************\n";
+	print "\n***********************************";
 	print "Completed generating directories for $length flowcell(s)\n";
 }
 
-sub fastq_files{
-	
-	#Initialize Variables
-	my ($PROJECT_DIR, $runid_unique) =@_;
-	my (@fastq_files_R1, @fastq_files_R2);
+sub fastqfiles{
+	#Initialize variables / Read in variables
+	my ($project_dir, $runid_unique)=@_;
+	my $count=1; 
 	my $wsh = new Win32::OLE 'WScript.Shell';
 	
-	#Set Pathway for FastQ files
-	my $MANIFEST_DIR = $PROJECT_DIR;
-		$MANIFEST_DIR .="\\Input\\manifest_file_split_parts_fastq_import\\";
-	my $FASTQ_DIR = $PROJECT_DIR;
-		$FASTQ_DIR .= "\\Input\\Fasta\\fasta_dir_split_part_";
-
-	#Set counter to number of unique flow cells
-	my $unique_count = scalar(@runid_unique);
-	my $count=1;
+	#Set pathway for manifest (split meta files)
+	my $manifest_path=$project_dir; $manifest_path.="\\Input\\manifest_file_split_parts\\manifest_split_part_";
+			
+	#Set pathway for FASTQ files to be copied
+	my $fastq_parent=$project_dir; $fastq_parent.="\\Input\\Fasta\\fasta_dir_split_part_";
 	
-	#For each of the flow cells
-	while ($unique_count>0){
-		my $manifest_name = $MANIFEST_DIR;
-		$manifest_name .= "manifest_file_split_parts_fastq_import_";
-		$manifest_name .=$count; $manifest_name .= ".txt";	
+	#Create new manifest file based on current count
+	my $manifest_file_split_fastq = $project_dir;
+	$manifest_file_split_fastq .= "\\Input\\manifest_file_split_parts_fastq_import\\manifest_file_split_parts_fastq_import_";
 		
-		#Open the manifest with all sample ID's for that flow cell
-		open my $in, "<:encoding(utf8)", $manifest_name or die "$manifest_name: $!";
-		my @lines = <$in>; close $in;
+	#Determine number of flowcells
+	my $count_flowcells = scalar(@$runid_unique);
+	
+	while ($count_flowcells>$count-1){
+		
+		#Split meta file full path
+		my $file1 = $manifest_path;
+		$file1.= $count; $file1 .= ".txt";
+		
+		#Open split meta file
+		open my $fh1, "<:encoding(utf8)", $file1 or die "$file1: $!";
+		my @lines = <$fh1>; close $fh1;
 		chomp @lines;
 		
-		#Print message for user to know status
-		print "\n***********************************\n";
-		print "Creating links for $manifest_name\n";
+		#New split fastq file
+		my $file2 = $manifest_file_split_fastq;
+		$file2.= $count; $file2 .= ".txt";
+
+		#Open split fastq file, print header
+		open my $fh2, ">$file2";
+		print $fh2 "sample-id,absolute-filepath,direction\n";
 		
-		#Run through each directory and copy the directory
-		foreach (@lines) {
-			my @columns = split('\t',$_);		
-						
-			#Open File Directory and copy fastq file names
-			opendir(DIR, $columns[0]) or die "Can't open directory $columns[0]!";
-			my @fastq_files = grep {/_001\.fastq\.gz$/} readdir(DIR);
-			closedir(DIR);
+		#Fastq full path
+		my $fastq_dest = $fastq_parent; $fastq_dest.= $count; 
 			
-			#Create links in the split directories for each fastq file, store in corresponding folder
-			foreach my $file (@fastq_files){
+		#Print message for user to know status
+		print "\n***********************************";
+		print "Creating links and manifest for $runid_unique[$count-1]\n";
+		
+		#add each line to new file
+		foreach (@lines) {
+			my @columns = split('\t',$_);
+			
+			#Forward
+			print $fh2 "$columns[0],";
+			print $fh2 "$columns[7],";
+			print $fh2 "forward\n";
+			
+			#Generate new link name
+			my $link_new = $fastq_dest; $link_new.="\\"; $link_new .= $columns[9]; $link_new .=".lnk";
 				
-				#Original File location
-				my $link_old = $columns[0]; $link_old.= $file;
+			#Create soft links
+			my $lnk_path = $link_new; 
+			my $target_path = $columns[7];
+			my $shcut = $wsh->CreateShortcut($lnk_path) or die "Can't create $lnk_path";
+			$shcut->{'TargetPath'} = $target_path;
+			$shcut->Save;
+			
+			#Reverse
+			print $fh2 "$columns[0],";
+			print $fh2 "$columns[8],";
+			print $fh2 "reverse\n";
+			
+			#Generate new link
+			$link_new = $fastq_dest; $link_new.="\\"; $link_new .= $columns[10]; $link_new .=".lnk";
 				
-				#New File location
-				my $link_new = $FASTQ_DIR; $link_new.= $count; $link_new.="\\"; $link_new .= $file; $link_new .=".lnk";
-				
-				#Create soft links
-				my $lnk_path = $link_new; # path of new .lnk file
-				my $target_path = $link_old;
-				my $shcut = $wsh->CreateShortcut($lnk_path) or die "Can't create $lnk_path";
-				$shcut->{'TargetPath'} = $target_path;
-				$shcut->Save;
-			}
+			#Create soft links
+			$lnk_path = $link_new; 
+			$target_path = $columns[8];
+			$shcut = $wsh->CreateShortcut($lnk_path) or die "Can't create $lnk_path";
+			$shcut->{'TargetPath'} = $target_path;
+			$shcut->Save;
 		}
-		$unique_count= $unique_count-1;
-		$count++;		
+		$count ++;
+		close $fh1;
+		close $fh2;
 	}
+		
+	print "\n***********************************";
+	print "Completed generating QIIME2 split manifests and transferring all files\n";
 }
