@@ -1,20 +1,11 @@
 #!/usr/bin/perl
-
 use strict;
 use warnings;
 use Cwd;
 use CPAN;
-use File::chdir;
 use File::Copy;
 use List::MoreUtils qw(uniq);
-
-BEGIN {
-   if ($^O eq 'MSWin32')
-   {
-      require Win32::Symlink;
-      Win32::Symlink->import();
-   }
-}
+use Win32::OLE;
 
 ######################################################################################
 								##NOTES##
@@ -22,6 +13,7 @@ BEGIN {
 ##This script is to complete the pre-processng tasks needed for the QIIME2 pipeline
 ##Search for ###TESTING to find testing variables
 
+######################################################################################
 								##Main Code##
 ######################################################################################
 my @runid_unique; my @projectid;
@@ -30,14 +22,18 @@ my @runid_unique; my @projectid;
 print "Where is the project directory?\n";
 print "ANS: ";
 #my $PROJECT_DIR = <STDIN>; chomp $PROJECT_DIR;
-my $PROJECT_DIR =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0440-MB3_Baseline_Month1_Repeat"); ###Testing
+#my $PROJECT_DIR =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0440-MB3_Baseline_Month1_Repeat"); ###Testing
+my $PROJECT_DIR =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2"); ###Testing
 
 #Ask user what type of file is being used
 print "\n\nWhat is the name of the manifest file (include .txt)?\n";
 print "ANS: ";
 #my $MANIFEST_ORI=<STDIN>; chomp $MANIFEST_ORI;
-my $MANIFEST_FILE="NP0440-MB3-manifest_withmeta.txt"; ###Testing
+#my $MANIFEST_FILE="NP0440-MB3-manifest_withmeta.txt"; ###Testing
+my $MANIFEST_FILE="NP0501_MB1and2.txt"; ###Testing
 
+
+######################################################################################
 								##Subroutines##
 ######################################################################################
 #Create directories within Input folder
@@ -46,10 +42,10 @@ makedirect_input($PROJECT_DIR);
 #Create manifest for QIIME, and split manifests
 manifest($PROJECT_DIR, $MANIFEST_FILE, @runid_unique, @projectid);
 
-#
+#Creates directories for flowcells
 makedirect_output($PROJECT_DIR,\@runid_unique);
 
-#
+#Finds FastQ files and creates softlinks
 fastq_files($PROJECT_DIR, @runid_unique);
 
 sub makedirect_input{
@@ -108,7 +104,6 @@ sub makedirect_input{
 		#Make new directory
 		mkdir($DIR_NAME);
 	}
-	
 }
 
 sub manifest{
@@ -218,6 +213,8 @@ sub manifest{
 	close $fh1;
 
 	}
+	print "\n***********************************\n";
+	print "Completed generating needed manifests\n";
 }
 
 sub makedirect_output{
@@ -242,15 +239,18 @@ sub makedirect_output{
 		mkdir($DIR_NAME);
 		$count++;
 	}
+	
+	my $length = scalar (@$runid_unique);
+	print "\n***********************************\n";
+	print "Completed generating directories for $length flowcell(s)\n";
 }
 
 sub fastq_files{
 	
 	#Initialize Variables
 	my ($PROJECT_DIR, $runid_unique) =@_;
-	my @foldernames; my @fastqpath;
-	my $b = 0; my $c=0; my $n=0; my $FastP;
 	my (@fastq_files_R1, @fastq_files_R2);
+	my $wsh = new Win32::OLE 'WScript.Shell';
 	
 	#Set Pathway for FastQ files
 	my $MANIFEST_DIR = $PROJECT_DIR;
@@ -258,48 +258,52 @@ sub fastq_files{
 	my $FASTQ_DIR = $PROJECT_DIR;
 		$FASTQ_DIR .= "\\Input\\Fasta\\fasta_dir_split_part_";
 
+	#Set counter to number of unique flow cells
 	my $unique_count = scalar(@runid_unique);
-	my $count=5;
+	my $count=1;
 	
-	while ($unique_count>3){
+	#For each of the flow cells
+	while ($unique_count>0){
 		my $manifest_name = $MANIFEST_DIR;
 		$manifest_name .= "manifest_file_split_parts_fastq_import_";
 		$manifest_name .=$count; $manifest_name .= ".txt";	
 		
+		#Open the manifest with all sample ID's for that flow cell
 		open my $in, "<:encoding(utf8)", $manifest_name or die "$manifest_name: $!";
 		my @lines = <$in>; close $in;
 		chomp @lines;
 		
-		#Run through each directory and copy the file name
+		#Print message for user to know status
+		print "\n***********************************\n";
+		print "Creating links for $manifest_name\n";
+		
+		#Run through each directory and copy the directory
 		foreach (@lines) {
 			my @columns = split('\t',$_);		
 						
-			#Open File Directory and copy fastq files
+			#Open File Directory and copy fastq file names
 			opendir(DIR, $columns[0]) or die "Can't open directory $columns[0]!";
 			my @fastq_files = grep {/_001\.fastq\.gz$/} readdir(DIR);
 			closedir(DIR);
 			
-			my $link_old = $columns[0]; $link_old.= $fastq_files[0];
-			my $link_new = $FASTQ_DIR; $link_new.= $count; $link_new.="\\";
-			print "\n$link_new\n";	
-			print "\n$link_old\n";			
-			symlink($link_old, $link_new);
-			
-			$link_old = $columns[0]; $link_old.= $fastq_files[1];
-			$link_new = $FASTQ_DIR; $link_new.= $count; $link_new.="\\";
-						
-			#symlink($link_old, $link_new);
-			
+			#Create links in the split directories for each fastq file, store in corresponding folder
+			foreach my $file (@fastq_files){
+				
+				#Original File location
+				my $link_old = $columns[0]; $link_old.= $file;
+				
+				#New File location
+				my $link_new = $FASTQ_DIR; $link_new.= $count; $link_new.="\\"; $link_new .= $file; $link_new .=".lnk";
+				
+				#Create soft links
+				my $lnk_path = $link_new; # path of new .lnk file
+				my $target_path = $link_old;
+				my $shcut = $wsh->CreateShortcut($lnk_path) or die "Can't create $lnk_path";
+				$shcut->{'TargetPath'} = $target_path;
+				$shcut->Save;
+			}
 		}
-		
 		$unique_count= $unique_count-1;
 		$count++;		
 	}
-	
-	
-	
-	
-	
 }
-
-
