@@ -21,15 +21,15 @@ my (@runid_unique, @projectid, @fastq_files);
 #Ask user where the project directory is
 print "Where is the project directory?\n";
 print "ANS: ";
-#my $project_dir = <STDIN>; chomp $project_dir;
-my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0440-MB3_Baseline_Month1_Repeat"); ###Testing
+my $project_dir = <STDIN>; chomp $project_dir;
+#my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0440-MB3_Baseline_Month1_Repeat"); ###Testing
 #my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2"); ###Testing
 
 #Ask user what type of file is being used
 print "\n\nWhat is the name of the manifest file (include .txt)?\n";
 print "ANS: ";
-#my $manifest_ori=<STDIN>; chomp $manifest_ori;
-my $manifest_ori="NP0440-MB3-manifest_withmeta.txt"; ###Testing
+my $manifest_ori=<STDIN>; chomp $manifest_ori;
+#my $manifest_ori="NP0440-MB3-manifest_withmeta.txt"; ###Testing
 #my $manifest_ori="NP0501_MB1and2.txt"; ###Testing
 
 
@@ -43,26 +43,26 @@ makedirect_input($project_dir);
 manifest_qiime2($project_dir, $manifest_ori);
 
 #Create split manifests with metadata
-manifest_meta($project_dir, $manifest_ori, @runid_unique);
+#manifest_meta($project_dir, $manifest_ori, @runid_unique);
 
 #Creates directories for flowcells
-makedirect_output($project_dir,\@runid_unique);
+#makedirect_output($project_dir,\@runid_unique);
 
 #Create split manifests with softlinks
-fastqfiles($project_dir, \@runid_unique);
+#fastqfiles($project_dir, \@runid_unique);
 
 sub makedirect_input{
 	#Initialize / Read in variables
 	my ($project_dir)=@_;
 	my $dir_path; 
 	
-	#Make directories nested under Project
+	#Make Input directories nested under Project
 	my $inp_dir = $project_dir;
 	$inp_dir.= "\\Input";
 	mkdir($inp_dir);
 	
 	#Make directories nested under Input
-	my @directory_list = ("\\tmp", "\\Log", "\\manifest_file_split_parts", "\\manifest_file_split_parts_fastq_import", "\\Fasta","\\qza_results", "\\qzv_results");
+	my @directory_list = ("\\tmp", "\\manifest_file_split_parts", "\\manifest_file_split_parts_fastq_import", "\\Fasta");
 		
 	#Create new directories from list	
 	foreach my $dir_new (@directory_list){
@@ -74,19 +74,38 @@ sub makedirect_input{
 		#Make new directory
 		mkdir($dir_path);
 	}
+
+	#MakeOutput directories nested under Project
+	my $outp_dir = $project_dir;
+	$outp_dir .= "\\Output";
+	mkdir($outp_dir);
 	
+	#Make directories nested under Output
+	my @directory_list = ("\\Log", "\\qza_results", "\\qzv_results");
+		
+	#Create new directories from list	
+	foreach my $dir_new (@directory_list){
+		
+		#Add Input to the directory path
+		$dir_path = $outp_dir;
+		$dir_path .= $dir_new;
+		
+		#Make new directory
+		mkdir($dir_path);
+	}
+		
 	#Make QZA directories
-	$inp_dir = $project_dir;
-	$inp_dir.= "\\Input\\qza_results";
+	$outp_dir = $project_dir;
+	$outp_dir.= "\\Output\\qza_results";
 	
 	#Make directories nested under Input \ QZA
-	@directory_list = ("\\abundance_qza_results", "\\core_metrics_results", "\\demux_qza_split_parts", "\\phylogeny_qza_results", "\\repseqs_dada2_qza_merged_parts_final","\\repseqs_dada2_qza_merged_parts_temp", "\\repseqs_dada2_qza_split_parts", "\\table_dada2_qza_merged_parts_final", "\\table_dada2_qza_merged_parts_tmp", "\\table_dada2_qza_split_parts", "\\taxonomy_qza_results");
+	@directory_list = ("\\abundance_qza_results", "\\core_metrics_results", "\\demux_qza_split_parts", "\\phylogeny_qza_results", "\\repseqs_dada2_qza_merged_parts_final","\\repseqs_dada2_qza_merged_parts_tmp", "\\repseqs_dada2_qza_split_parts", "\\table_dada2_qza_merged_parts_final", "\\table_dada2_qza_merged_parts_tmp", "\\table_dada2_qza_split_parts", "\\taxonomy_qza_results");
 	
 	#Create new directories from list
 	foreach my $dir_new (@directory_list){
 		
 		#Add Input to the directory path
-		$dir_path = $inp_dir;
+		$dir_path = $outp_dir;
 		$dir_path .= $dir_new;
 		
 		#Make new directory
@@ -94,22 +113,41 @@ sub makedirect_input{
 	}
 	
 	#Make QZV directories
-	$inp_dir = $project_dir;
-	$inp_dir.= "\\Input\\qzv_results";
+	$outp_dir = $project_dir;
+	$outp_dir.= "\\Output\\qzv_results";
 	
-	#Make directories nested under Input \ QZA
+	#Make directories nested under Input \ QZV
 	@directory_list = ("\\demux_qzv_split_parts", "\\otu_relative_abundance_results", "\\rarefaction_qzv_results", "\\repseqs_dada2_qzv_merged_parts_final", "\\table_dada2_qzv_merged_parts_final","\\taxonomy_qzv_results", "\\taxonomy_relative_abundance_results");
 		
 	#Make new directories from list	
 	foreach my $dir_new (@directory_list){
 		
 		#Add Input to the directory path
-		$dir_path = $inp_dir;
+		$dir_path = $outp_dir;
 		$dir_path .= $dir_new;
 		
 		#Make new directory
 		mkdir($dir_path);
 	}
+	
+	#Make Log directories
+	$outp_dir = $project_dir;
+	$outp_dir.= "\\Output\\Log";
+	
+	#Make directories nested under Input \ Log
+	@directory_list = ("\\stage2_qiime2", "\\stage3_qiime2", "\\stage4_qiime2");
+	
+	#Make new directories from list	
+	foreach my $dir_new (@directory_list){
+		
+		#Add Input to the directory path
+		$dir_path = $outp_dir;
+		$dir_path .= $dir_new;
+		
+		#Make new directory
+		mkdir($dir_path);
+	}
+	
 }
 
 sub manifest_qiime2{
@@ -128,6 +166,9 @@ sub manifest_qiime2{
 	open my $in, "<:encoding(utf8)", $manifest_path or die "$manifest_path: $!";
 	my @lines = <$in>; close $in;
 	chomp @lines;
+	
+	#Print # in first line
+	print $fh "#";
 	
 	#Run through each line and save relevant information
 	foreach (@lines) {
@@ -207,24 +248,32 @@ sub manifest_meta{
 				$sample_name .= $sampleid[$i];
 				
 				#Generate file path
-				my $FastP = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$runid[$i]\\CASAVA\\L1\\Project_$projectid[$i]\\$sample_name\\";
-				
+				my $FastP_rel = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$runid[$i]\\CASAVA\\L1\\Project_$projectid[$i]\\$sample_name\\";
+				my $FastP_abs = "/DCEG/CGF/Sequencing/Illumina/MiSeq/PostRun_Analysis/Data/$runid[$i]/CASAVA/L1/Project_$projectid[$i]/$sample_name/";
+
 				#Open File Directory and copy fastq file names
-				opendir(DIR, $FastP) or die "Can't open directory $FastP!";
+				opendir(DIR, $FastP_rel) or die "Can't open directory $FastP_rel!";
 				my @fastq_temp = grep {/_001\.fastq\.gz$/} readdir(DIR);
 				closedir(DIR);
 				
-				#Create full file path for each fastq file
-				my $FastP1 = $FastP; my $FastP2 = $FastP;
-				$FastP1 .=$fastq_temp[0]; $FastP2 .=$fastq_temp[1]; 
+				#Create full file path for each fastq file - Relative
+				my $FastP1_rel = $FastP_rel; my $FastP2_rel = $FastP_rel;
+				$FastP1_rel .=$fastq_temp[0]; $FastP2_rel .=$fastq_temp[1]; 
+				
+				#Create full file path for each fastq file - Absolute
+				my $FastP1_abs = $FastP_abs; my $FastP2_abs = $FastP_abs;
+				$FastP1_abs .=$fastq_temp[0]; $FastP2_abs .=$fastq_temp[1]; 
 				
 				#Print to file
-				if($FastP1 =~ /R1/){
-					print $fh "$FastP1\t"; print $fh "$FastP2\t";
-					print $fh "$fastq_temp[0]\t"; print $fh "$fastq_temp[1]\n";
+				if($FastP1_rel =~ /R1/){
+					print $fh "$FastP1_rel\t"; print $fh "$FastP2_rel\t"; #Relative
+					print $fh "$fastq_temp[0]\t"; print $fh "$fastq_temp[1]\t"; #File name
+					print $fh "$FastP1_abs\t"; print $fh "$FastP2_abs\n"; #Absolute
+					
 				} else{
-					print $fh "$FastP2\t"; print $fh "$FastP1\t";
-					print $fh "$fastq_temp[1]\t"; print $fh "$fastq_temp[0]\n";
+					print $fh "$FastP2_rel\t"; print $fh "$FastP1_rel\t";
+					print $fh "$fastq_temp[1]\t"; print $fh "$fastq_temp[0]\t";
+					print $fh "$FastP2_abs\t"; print $fh "$FastP1_abs\n"; #Absolute
 				}
 			}
 			$i++;
@@ -308,7 +357,7 @@ sub fastqfiles{
 			
 		#Print message for user to know status
 		print "\n***********************************";
-		print "Creating links and manifest for $runid_unique[$count-1]\n";
+		print "Creating links and manifest for $runid_unique[$count-1]";
 		
 		#add each line to new file
 		foreach (@lines) {
@@ -316,7 +365,7 @@ sub fastqfiles{
 			
 			#Forward
 			print $fh2 "$columns[0],";
-			print $fh2 "$columns[7],";
+			print $fh2 "$columns[11],"; #absolute path
 			print $fh2 "forward\n";
 			
 			#Generate new link name
@@ -324,14 +373,14 @@ sub fastqfiles{
 				
 			#Create soft links
 			my $lnk_path = $link_new; 
-			my $target_path = $columns[7];
+			my $target_path = $columns[7]; #relative path
 			my $shcut = $wsh->CreateShortcut($lnk_path) or die "Can't create $lnk_path";
 			$shcut->{'TargetPath'} = $target_path;
 			$shcut->Save;
 			
 			#Reverse
 			print $fh2 "$columns[0],";
-			print $fh2 "$columns[8],";
+			print $fh2 "$columns[12],"; #relative path
 			print $fh2 "reverse\n";
 			
 			#Generate new link
