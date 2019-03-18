@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./QIIME2_v1_Step3.sh
+. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V1/QIIME2_v1_Step3.sh
 
 input_table_merged_final_qza=$1
 shift

@@ -1,0 +1,39 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(devtools)
+library(qiime2R)
+library(phyloseq)
+library(ggplot2)
+library(ape)
+library(dplyr)
+library(lme4)
+library(plotly)
+library(tidyr)
+library(vegan)
+library(VennDiagram)
+library(scales)
+library(grid)
+library(reshape2)
+library(phyloseq)
+
+```
+
+```{r}
+#OTU table (shared file)
+OTU = read.table("phy/example.final.an.unique_list.0.03.norm.shared", header=TRUE, sep="\t")
+
+#Taxonomy of each OTU
+tax = read.table("phy/example.final.an.unique_list.0.03.cons.taxonomy", header=TRUE, sep="\t")
+
+#Metadata. Since we made this in Excel, not mothur, we can use the "row.names" modifier to automatically name the rows by the values in the first column (sample names)
+meta = read.table("phy/example.metadata.txt", header=TRUE, row.names=1, sep="\t")
+
+#SCFA data
+SCFA = read.table("phy/example.SCFA.txt", header=TRUE, row.names=1, sep="\t")```
+

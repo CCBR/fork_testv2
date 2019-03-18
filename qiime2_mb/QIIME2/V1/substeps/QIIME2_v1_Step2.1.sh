@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./subsets/QIIME2_v1_Step2.sh
+. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V1/QIIME2_v1_Step2.sh
 
 #Set argument directions for QVA and QVZ files
 demux_qza_split_part=$1 #demux_qza_split_part=${demux_qza_split_parts_dir}/paired_end_demux_1.qza

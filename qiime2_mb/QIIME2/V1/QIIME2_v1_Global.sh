@@ -6,14 +6,14 @@ module load miniconda/3
 source activate qiime2-${qiime_version}
 
 #Project Directory TO UPDATE
-PROJECT_DIR=/DCEG/Projects/Microbiome/CGR_MB/MicroBiome/Project_NP0440-MB3_Baseline_Month1_Repeat_newPL
+PROJECT_DIR=/DCEG/Projects/Microbiome/CGR_MB/MicroBiome/Project_NP0501_MB1and2_meta
 
 ##################################################################################################################
 # Stage 1 Directories
 MANIFEST_FILE_qiime2_format=${PROJECT_DIR}/Input/manifest_qiime2.tsv
 TEMP_DIR=${PROJECT_DIR}/Input/tmp
 LOG_DIR=${PROJECT_DIR}/Output/Log
-SCRIPT_DIR=/DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline_V1
+SCRIPT_DIR=/DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V1
 FASTA_DIR=${PROJECT_DIR}/Input/Fasta
 MANIFEST_FILE_SPLIT_PARTS_DIR=${PROJECT_DIR}/Input/manifest_file_split_parts
 MANIFEST_FILE_SPLIT_PARTS_FASTQ_IMPORT_DIR=${PROJECT_DIR}/Input/manifest_file_split_parts_fastq_import

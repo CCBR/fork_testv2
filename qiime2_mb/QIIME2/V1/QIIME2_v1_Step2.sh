@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./QIIME2_v1_Global.sh
+. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V1/QIIME2_v1_Global.sh
 
 for manifest_file_split_parts_fastq_import in $(ls -v $MANIFEST_FILE_SPLIT_PARTS_FASTQ_IMPORT_DIR/*); do
 	
@@ -68,4 +68,3 @@ else
 	echo $cmd
 	eval $cmd
 	echo "All Done"
-done 

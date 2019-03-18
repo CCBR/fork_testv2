@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./subsets/QIIME2_v1_Step2.sh
+. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V1/QIIME2_v1_Step2.sh
 
 #Determine total runs
 TOTAL_RUNS=$(ls -v $MANIFEST_FILE_SPLIT_PARTS_FASTQ_IMPORT_DIR/* | wc -l)
@@ -10,7 +10,6 @@ echo $TOTAL_RUNS
 count=1
 
 #Loop through each of the created split tables and merge QZA files
-###Don't think this is ever used???
 while [ $count -le 1 ]
 do
 	echo $count
@@ -79,7 +78,6 @@ eval $cmd
 count=1
 
 #Loop through each of the created split tables and merge QZA files
-###Don't think this is ever used???
 while [ $count -le 1 ]
 do
 	echo $count
@@ -132,6 +130,7 @@ last_true_part=$count
 echo $last_true_part
 
 #Save final output files
+###don't know if the temp is necessary
 ###don't know if the temp is necessary
 output_repseqs_merged_temp_qza=${repseqs_dada2_qza_merged_parts_tmp_dir}/${repseqs_dada2_merged_temp_param}_${last_true_part}.qza
 output_repseqs_merged_final_qza=${repseqs_dada2_qza_merged_parts_final_dir}/${repseqs_dada2_merged_final_param}.qza
