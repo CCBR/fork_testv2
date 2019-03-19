@@ -72,8 +72,12 @@ row.names(samples_variables_f) <- samples_variables_f$NephID
 #4. OTU Counts by sample
 Read in OTU information, and determine total counts for all samples
 ```{r}
-#Read in OTU database at Genus level
-samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_silva_abrf.csv", row.names = 1)
+#Read in OTU database at Genus level - Silva
+#samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_silva_abrf.csv", row.names = 1)
+
+#GreenGenes
+samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_green_abrf.csv", row.names = 1)
+
 
 #Create a list of all samples and all genus present in at least one sample
 sample_list_complete <- colnames(samples_otu_complete)

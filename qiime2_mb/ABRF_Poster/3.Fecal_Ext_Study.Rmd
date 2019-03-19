@@ -396,8 +396,8 @@ for (a in control_types){
    value <- samples_obs_abund[c,b]
    aliquot<-samples_variables_f[b,"AliquotNumber"]
    
-   #If the value is null or smaller than 1 X10-5, skip
-   if(is.na(value) | is.null(value) | value<0.0000000001){
+   #If the value is null or smaller than 1 X10-7, skip
+   if(is.na(value) | is.null(value) | value<0.000000000001){
     next}
     
    #Otherwise add to datatable
@@ -459,6 +459,63 @@ for (a in control_types){
  i=i+1
 }
 ```
+
+#9 - Plot All Sample Variability in individual kit graphs
+```{r}
+#Create list for plots, start counter
+plot_list <- list()
+i=1
+
+#Create new dataframe and start counter
+temp<-data.frame()
+count=1
+    
+for (a in kit_types){
+ ###Create list of sample ids with specific variables
+ temp2 <- subset(samples_variables_f,Type=="Study" & Kit==a)
+ sample_list <- unique(temp2$NephID)
+ 
+ for (b in sample_list){
+  
+  for (c in genus_found){
+   temp[count,"Value"]<-samples_obs_abund[c,b]
+   temp[count,"Kit"]<-a
+   temp[count,"Aliquot"]<-samples_variables_f[b,"AliquotNumber"]
+   temp[count,"SampleID"]<- paste(a,samples_variables_f[b,"AliquotNumber"],sep="_")
+   temp[count,"ID"]<-b
+   temp[count,"Genus"]<-c
+   count=count+1
+  }
+ }
+}
+write.csv(temp,"temp4.csv")
+#Remove DSP kit samples
+
+
+temp<-read.csv("temp4.csv",header = TRUE)
+
+#Create Graph for the datatable
+graph_title <- "Fecal Samples by Kit by Aliquot ID"
+graph_new<- ggplot(temp,aes(x =SampleID , y = Value, fill = Genus)) + 
+  geom_bar(position = position_fill(), stat = "identity") +
+  scale_y_continuous(labels = percent_format())+
+  labs(title=graph_title, x="Sample ID", y= "Relative Abundance")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  #+ theme(legend.position = "bottom",legend.box = "vertical")
+  theme(legend.position = "none") ##Remove Legend
+  
+plot_list[[i]] = graph_new
+ 
+#Print the plot
+file_name <- "StudyVariability"
+file_name<-paste("Data/Graphs/",file_name,".tiff",sep="")
+tiff(file_name)
+print(plot_list[[i]])
+dev.off()
+
+```
+
+
 
 #10 - Plot all sample variability in one graph
 ```{r}

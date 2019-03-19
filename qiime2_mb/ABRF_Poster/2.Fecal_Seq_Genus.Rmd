@@ -48,8 +48,11 @@ row.names(samples_variables_f) <- samples_variables_f$NephID
 #4. OTU Counts by sample
 Read in OTU information, and determine total counts for all samples
 ```{r}
-#Read in OTU database at Genus level
-samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_silva_abrf.csv", row.names = 1)
+#Read in OTU database at Genus level - Silva
+#samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_silva_abrf.csv", row.names = 1)
+
+#GreenGenes
+samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_green_abrf.csv", row.names = 1)
 
 #Create a list of all samples and all genus present in at least one sample
 sample_list_complete <- colnames(samples_otu_complete)
@@ -383,9 +386,10 @@ for (a in control_types){
    #Create a list of samples that are of the specified control type
    sample_list<- subset(samples_variables_f, Type==a)
    sample_list <- unique(sample_list$NephID)
-   
+
    #Create dataframe
    temp<-data.frame()
+   count=1
    
    #For each Genus in list, determine the samples value
    for (b in genus_temp){
@@ -398,16 +402,17 @@ for (a in control_types){
       temp[count,"Exp_Per"]<-control_expect[b,a]
       count=count+1
      }
-    }
-    
+   }
+  
     graph_title <- paste (a,": Intracontrol Variablity",sep = "")
 
     #Plot Data
-    graph_new <- ggplot(data=temp,mapping=aes(x=Exp_Per,y=Obs_Per,color=Sample))+
+    graph_new <- ggplot(data=temp,mapping=aes(x=Obs_Per,y=Exp_Per,color=Sample))+
      geom_point()+ #Can add points to graph
      geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
-     labs(title=graph_title, x="Expected Percentage", y= "Actual Percentage")+
-     geom_text(mapping=aes(x=Exp_Per,y=Obs_Per,label=Genus),check_overlap = TRUE)
+     labs(title=graph_title, x="Observed Rel. Abundance", y= "Expected Rel. Abundance")+
+     geom_text(mapping=aes(x=Obs_Per,y=Exp_Per,label=Genus),check_overlap = TRUE)
+     
     
     plot_list[[i]] = graph_new
     i=i+1
@@ -425,4 +430,50 @@ for (i in 1:length(control_types)){
  print(plot_list[[i]])
  dev.off()
 }
+```
+
+#12 Plot graph - Actual to Expected - One graph
+For each kit, show variability, and map
+```{r}
+#Create list for plots, start counter
+temp<-data.frame()
+count<-1
+for (a in control_types){
+   #Create genus list of specfic control
+   genus_temp <- control_expect[!is.na(control_expect[,a]),]
+   genus_temp <- (genus_temp[,"Genus"])
+   
+   #Create a list of samples that are of the specified control type
+   sample_list<- subset(samples_variables_f, Type==a)
+   sample_list <- unique(sample_list$NephID)
+
+   #For each Genus in list, determine the samples value
+   for (b in genus_temp){
+    
+     #For each of the samples in the sample list
+     for(c in sample_list){
+      temp[count,"Genus"]<-b
+      temp[count,"Obs_Per"]<- samples_obs_abund[b,c]
+      temp[count,"Sample"]<-c
+      temp[count,"Exp_Per"]<-control_expect[b,a]
+      temp[count,"Type"] <- a
+      count=count+1
+     }
+   }
+}
+
+#Plot graph
+graph_new<- ggplot(data=temp,mapping=aes(x=Obs_Per,y=Exp_Per,color=Type))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Sequencing Control Comparison", x="Observed Rel. Abundance", y= "Expected Rel. Abundance")
+graph_new
+write.csv(temp,"temp2.csv")
+
+file_name =("Data/Graphs/Kit Differences_ZE.tiff")
+tiff(file_name)
+print(graph_new)
+dev.off()
+
+
 ```
