@@ -1,0 +1,121 @@
+,,Genus,Obs_Per,Sample,Kit,Type,
+A,1,Lactobacillus,0.06092747,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext,1
+A,1,Lactobacillus,0.152418015,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext,2
+A,1,Lactobacillus,0.131972429,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext,3
+A,1,Lactobacillus,0.16605398,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext,4
+A,1,Lactobacillus,0.169105581,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext,5
+A,2,Enterococcus,0.082102635,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext,1
+A,2,Enterococcus,0.032963145,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext,2
+A,2,Enterococcus,0.096233138,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext,3
+A,2,Enterococcus,0.067107011,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext,4
+A,2,Enterococcus,0.052765137,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext,5
+A,3,Escherichia-Shigella,0.107313566,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext,1
+A,3,Escherichia-Shigella,0.233187719,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext,2
+A,3,Escherichia-Shigella,0.210623765,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext,3
+A,3,Escherichia-Shigella,0.159164216,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext,4
+A,3,Escherichia-Shigella,0.236368865,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext,5
+A,4,Bacillus,0.183539115,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext,1
+A,4,Bacillus,0.058635329,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext,2
+A,4,Bacillus,0.150767842,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext,3
+A,4,Bacillus,0.137024476,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext,4
+A,4,Bacillus,0.071002013,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext,5
+A,5,Listeria,0.189794554,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext,1
+A,5,Listeria,0.043145881,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext,2
+A,5,Listeria,0.077297693,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext,3
+A,5,Listeria,0.118240679,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext,4
+A,5,Listeria,0.073404273,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext,5
+A,6,Pseudomo0s,0,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext,1
+A,6,Pseudomo0s,0,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext,2
+A,6,Pseudomo0s,0,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext,3
+A,6,Pseudomo0s,0,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext,4
+A,6,Pseudomo0s,0,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext,5
+A,7,Salmonella,0,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext,1
+A,7,Salmonella,0,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext,2
+A,7,Salmonella,0,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext,3
+A,7,Salmonella,0,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext,4
+A,7,Salmonella,0,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext,5
+A,8,Staphylococcus,0.1779521,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext,1
+A,8,Staphylococcus,0.04236141,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext,2
+A,8,Staphylococcus,0.058657871,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext,3
+A,8,Staphylococcus,0.072051987,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext,4
+A,8,Staphylococcus,0.088003925,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext,5
+B,1,Lactobacillus,0.050158468,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext,1
+B,1,Lactobacillus,0.201089178,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext,2
+B,1,Lactobacillus,0.184932161,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext,3
+B,1,Lactobacillus,0.115459736,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext,4
+B,1,Lactobacillus,0.220496894,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext,5
+B,2,Enterococcus,0.107334033,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext,1
+B,2,Enterococcus,0.036606477,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext,2
+B,2,Enterococcus,0.065879992,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext,3
+B,2,Enterococcus,0.102154072,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext,4
+B,2,Enterococcus,0.050578835,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext,5
+B,3,Escherichia-Shigella,0.092769846,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext,1
+B,3,Escherichia-Shigella,0.207749273,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext,2
+B,3,Escherichia-Shigella,0.245700363,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext,3
+B,3,Escherichia-Shigella,0.139911358,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext,4
+B,3,Escherichia-Shigella,0.227889074,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext,5
+B,4,Bacillus,0.17947658,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext,1
+B,4,Bacillus,0.052174749,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext,2
+B,4,Bacillus,0.085037264,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext,3
+B,4,Bacillus,0.110586313,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext,4
+B,4,Bacillus,0.05705246,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext,5
+B,5,Listeria,0.188793844,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext,1
+B,5,Listeria,0.054663268,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext,2
+B,5,Listeria,0.064542328,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext,3
+B,5,Listeria,0.157949594,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext,4
+B,5,Listeria,0.059472779,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext,5
+B,6,Pseudomo0s,0,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext,1
+B,6,Pseudomo0s,0,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext,2
+B,6,Pseudomo0s,0,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext,3
+B,6,Pseudomo0s,0,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext,4
+B,6,Pseudomo0s,0,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext,5
+B,7,Salmonella,0,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext,1
+B,7,Salmonella,0,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext,2
+B,7,Salmonella,0,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext,3
+B,7,Salmonella,0,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext,4
+B,7,Salmonella,0,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext,5
+B,8,Staphylococcus,0.204948008,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext,1
+B,8,Staphylococcus,0.041355101,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext,2
+B,8,Staphylococcus,0.042916746,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext,3
+B,8,Staphylococcus,0.145207332,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext,4
+B,8,Staphylococcus,0.072740793,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext,5
+C,1,Lactobacillus,0.044997128,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext,1
+C,1,Lactobacillus,0.181664673,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext,2
+C,1,Lactobacillus,0.165785284,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext,3
+C,1,Lactobacillus,0.105825935,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext,4
+C,1,Lactobacillus,0.142678853,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext,5
+C,2,Enterococcus,0.112742528,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext,1
+C,2,Enterococcus,0.035221276,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext,2
+C,2,Enterococcus,0.039645517,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext,3
+C,2,Enterococcus,0.085606895,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext,4
+C,2,Enterococcus,0.046972311,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext,5
+C,3,Escherichia-Shigella,0.118648088,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext,1
+C,3,Escherichia-Shigella,0.226778302,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext,2
+C,3,Escherichia-Shigella,0.248483094,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext,3
+C,3,Escherichia-Shigella,0.1460696,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext,4
+C,3,Escherichia-Shigella,0.262942163,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext,5
+C,4,Bacillus,0.180063425,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext,1
+C,4,Bacillus,0.060212482,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext,2
+C,4,Bacillus,0.078400374,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext,3
+C,4,Bacillus,0.160661439,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext,4
+C,4,Bacillus,0.047547382,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext,5
+C,5,Listeria,0.158413864,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext,1
+C,5,Listeria,0.04729473,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext,2
+C,5,Listeria,0.062925151,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext,3
+C,5,Listeria,0.149925475,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext,4
+C,5,Listeria,0.076570128,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext,5
+C,6,Pseudomo0s,0,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext,1
+C,6,Pseudomo0s,0,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext,2
+C,6,Pseudomo0s,0,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext,3
+C,6,Pseudomo0s,0,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext,4
+C,6,Pseudomo0s,0,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext,5
+C,7,Salmonella,0,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext,1
+C,7,Salmonella,0,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext,2
+C,7,Salmonella,0,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext,3
+C,7,Salmonella,0,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext,4
+C,7,Salmonella,0,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext,5
+C,8,Staphylococcus,0.165705296,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext,1
+C,8,Staphylococcus,0.041272075,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext,2
+C,8,Staphylococcus,0.060854366,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext,3
+C,8,Staphylococcus,0.098146588,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext,4
+C,8,Staphylococcus,0.067772761,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext,5

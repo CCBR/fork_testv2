@@ -1,0 +1,764 @@
+,Genus,Obs_Per,Sample,Kit,Type
+1,Subdoligranulum,0.005781454,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+2,Pyramidobacter,0.003360906,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+3,Bilophila,0.015498476,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+4,Alistipes,0.000766217,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+5,Coprobacillus,0.039721376,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+6,Lactobacillus,0.018371789,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+7,Paenibacillus,0.032337832,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+8,Pediococcus,0.027653461,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+9,Anaerostipes,0.026451894,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+10,Bacteroides,0.109899869,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+11,Bifidobacterium,0.009003047,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+12,Collinsella,0.000226382,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+13,Enterococcus,0.023770135,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+14,Escherichia-Shigella,0.105563779,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+15,Lachnoclostridium,NA,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+16,Parabacteroides,0.126808881,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+17,Propionibacterium,0,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+18,Ralstonia,0.02474532,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+19,Fusobacterium,0,SC249358.PC04924.A01,Qiagen DSP Virus,Art.Col
+20,Subdoligranulum,0.00745365,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+21,Pyramidobacter,0.006686758,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+22,Bilophila,0.021809326,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+23,Alistipes,0.006821301,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+24,Coprobacillus,0.034940667,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+25,Lactobacillus,0.040524177,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+26,Paenibacillus,0.034631219,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+27,Pediococcus,0.021890052,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+28,Anaerostipes,0.023195113,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+29,Bacteroides,0.100166833,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+30,Bifidobacterium,0.014396039,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+31,Collinsella,0.000147997,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+32,Enterococcus,0.015754918,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+33,Escherichia-Shigella,0.112786912,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+34,Lachnoclostridium,NA,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+35,Parabacteroides,0.175658585,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+36,Propionibacterium,4.04E-05,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+37,Ralstonia,0.042004144,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+38,Fusobacterium,0,SC249363.PC04924.F01,Qiagen DSP Virus,Art.Col
+39,Subdoligranulum,0.004747615,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+40,Pyramidobacter,0.026167869,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+41,Bilophila,0.028732028,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+42,Alistipes,0.00484839,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+43,Coprobacillus,0.033457249,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+44,Lactobacillus,0.148967618,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+45,Paenibacillus,0.025193712,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+46,Pediococcus,0.013403055,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+47,Anaerostipes,0.019595109,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+48,Bacteroides,0.068448515,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+49,Bifidobacterium,0.018766516,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+50,Collinsella,0,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+51,Enterococcus,0.010111076,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+52,Escherichia-Shigella,0.083979039,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+53,Lachnoclostridium,NA,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+54,Parabacteroides,0.125554262,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+55,Propionibacterium,0.000111972,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+56,Ralstonia,0.025596811,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+57,Fusobacterium,0,SC253848.PC04924.C11,Qiagen DSP Virus,Art.Col
+58,Subdoligranulum,0.006355657,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+59,Pyramidobacter,0.006323231,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+60,Bilophila,0.029043625,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+61,Alistipes,0.004345194,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+62,Coprobacillus,0.036588266,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+63,Lactobacillus,0.033572571,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+64,Paenibacillus,0.032740283,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+65,Pediococcus,0.025703662,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+66,Anaerostipes,0.021996195,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+67,Bacteroides,0.09993947,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+68,Bifidobacterium,0.014375892,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+69,Collinsella,0,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+70,Enterococcus,0.022071858,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+71,Escherichia-Shigella,0.123157076,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+72,Lachnoclostridium,NA,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+73,Parabacteroides,0.147596091,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+74,Propionibacterium,7.57E-05,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+75,Ralstonia,0.043224956,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+76,Fusobacterium,0,SC253851.PC04924.E11,Qiagen DSP Virus,Art.Col
+77,Subdoligranulum,0.009922872,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+78,Pyramidobacter,0.005368843,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+79,Bilophila,0.025571765,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+80,Alistipes,0.010402831,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+81,Coprobacillus,0.027759485,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+82,Lactobacillus,0.01788126,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+83,Paenibacillus,0.03825161,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+84,Pediococcus,0.018115659,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+85,Anaerostipes,0.009699635,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+86,Bacteroides,0.11542454,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+87,Bifidobacterium,0.003995937,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+88,Collinsella,0.000189751,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+89,Enterococcus,0.013260261,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+90,Escherichia-Shigella,0.128963847,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+91,Lachnoclostridium,NA,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+92,Parabacteroides,0.135616301,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+93,Propionibacterium,0,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+94,Ralstonia,0.029154714,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+95,Fusobacterium,0,SC249383.PC04924.E02,Zymo MagBead DNone Kit,Art.Col
+96,Subdoligranulum,0.007798486,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+97,Pyramidobacter,0.00422365,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+98,Bilophila,0.024044272,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+99,Alistipes,0.006768017,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+100,Coprobacillus,0.040773488,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+101,Lactobacillus,0.015520641,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+102,Paenibacillus,0.039577635,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+103,Pediococcus,0.02015139,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+104,Anaerostipes,0.010381019,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+105,Bacteroides,0.106812544,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+106,Bifidobacterium,0.006310031,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+107,Collinsella,0,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+108,Enterococcus,0.014795496,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+109,Escherichia-Shigella,0.174352777,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+110,Lachnoclostridium,NA,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+111,Parabacteroides,0.138668024,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+112,Propionibacterium,0,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+113,Ralstonia,0.029514662,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+114,Fusobacterium,0,SC249388.PC04924.A03,Zymo MagBead DNone Kit,Art.Col
+115,Subdoligranulum,0.012480288,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+116,Pyramidobacter,0.004009912,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+117,Bilophila,0.018900653,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+118,Alistipes,0.018956972,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+119,Coprobacillus,0.02141248,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+120,Lactobacillus,0.017380041,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+121,Paenibacillus,0.043500788,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+122,Pediococcus,0.016625366,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+123,Anaerostipes,0.019238567,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+124,Bacteroides,0.141552151,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+125,Bifidobacterium,0.010419013,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+126,Collinsella,0.000214012,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+127,Enterococcus,0.009968461,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+128,Escherichia-Shigella,0.11977923,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+129,Lachnoclostridium,NA,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+130,Parabacteroides,0.116186078,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+131,Propionibacterium,0,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+132,Ralstonia,0.022505069,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+133,Fusobacterium,0,SC249397.PC04924.B04,Zymo MagBead DNone Kit,Art.Col
+134,Subdoligranulum,0.011573241,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+135,Pyramidobacter,0.002657716,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+136,Bilophila,0.019069905,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+137,Alistipes,0.014442727,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+138,Coprobacillus,0.025804197,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+139,Lactobacillus,0.013023867,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+140,Paenibacillus,0.039304547,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+141,Pediococcus,0.015745113,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+142,Anaerostipes,0.015003918,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+143,Bacteroides,0.113752356,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+144,Bifidobacterium,0.007507253,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+145,Collinsella,0.000338832,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+146,Enterococcus,0.014252134,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+147,Escherichia-Shigella,0.119216027,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+148,Lachnoclostridium,NA,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+149,Parabacteroides,0.118612482,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+150,Propionibacterium,0,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+151,Ralstonia,0.022151162,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+152,Fusobacterium,0,SC249400.PC04924.E04,Zymo MagBead DNone Kit,Art.Col
+153,Subdoligranulum,0.009468742,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+154,Pyramidobacter,0.010852483,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+155,Bilophila,0.025510255,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+156,Alistipes,0.007373363,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+157,Coprobacillus,0.031203361,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+158,Lactobacillus,0.054173462,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+159,Paenibacillus,0.058917717,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+160,Pediococcus,0.014282184,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+161,Anaerostipes,0.018828762,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+162,Bacteroides,0.090476896,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+163,Bifidobacterium,0.018047937,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+164,Collinsella,0.000207561,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+165,Enterococcus,0.026409686,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+166,Escherichia-Shigella,0.122332592,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+167,Lachnoclostridium,NA,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+168,Parabacteroides,0.12273783,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+169,Propionibacterium,8.90E-05,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+170,Ralstonia,0.021606128,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+171,Fusobacterium,0,SC304093.PC07578.A04,Zymo MagBead DNone Kit,Art.Col
+172,Subdoligranulum,0.009073584,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+173,Pyramidobacter,0.012227413,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+174,Bilophila,0.039574655,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+175,Alistipes,0.008474862,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+176,Coprobacillus,0.019150659,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+177,Lactobacillus,0.047366468,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+178,Paenibacillus,0.035763075,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+179,Pediococcus,0.044355995,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+180,Anaerostipes,0.016410032,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+181,Bacteroides,0.089766077,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+182,Bifidobacterium,0.016232945,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+183,Collinsella,0.001104684,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+184,Enterococcus,0.037972442,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+185,Escherichia-Shigella,0.110282833,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+186,Lachnoclostridium,NA,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+187,Parabacteroides,0.124078728,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+188,Propionibacterium,0.000185519,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+189,Ralstonia,0.039481895,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+190,Fusobacterium,0,SC304926.PC07578.E06,Zymo MagBead DNone Kit,Art.Col
+191,Subdoligranulum,0.013118327,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+192,Pyramidobacter,0.003918733,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+193,Bilophila,0.037123189,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+194,Alistipes,0.006150525,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+195,Coprobacillus,0.023648613,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+196,Lactobacillus,0.013348841,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+197,Paenibacillus,0.034011253,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+198,Pediococcus,0.010352162,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+199,Anaerostipes,0.02276847,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+200,Bacteroides,0.100011526,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+201,Bifidobacterium,0.004442628,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+202,Collinsella,0.000806798,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+203,Enterococcus,0.009754922,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+204,Escherichia-Shigella,0.143798657,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+205,Lachnoclostridium,NA,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+206,Parabacteroides,0.173210113,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+207,Propionibacterium,0,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+208,Ralstonia,0.08295351,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+209,Fusobacterium,0,SC249409.PC04924.D05,MagAttract PowerMag Soil,Art.Col
+210,Subdoligranulum,0.013335025,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+211,Pyramidobacter,0.007855668,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+212,Bilophila,0.044042497,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+213,Alistipes,0.010543437,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+214,Coprobacillus,0.029853845,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+215,Lactobacillus,0.036463681,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+216,Paenibacillus,0.044446239,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+217,Pediococcus,0.008097913,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+218,Anaerostipes,0.024593662,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+219,Bacteroides,0.09719803,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+220,Bifidobacterium,0.004798763,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+221,Collinsella,0.000565239,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+222,Enterococcus,0.005986919,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+223,Escherichia-Shigella,0.137364602,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+224,Lachnoclostridium,NA,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+225,Parabacteroides,0.157874702,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+226,Propionibacterium,0,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+227,Ralstonia,0.076411079,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+228,Fusobacterium,0,SC249413.PC04924.H05,MagAttract PowerMag Soil,Art.Col
+229,Subdoligranulum,0.01295858,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+230,Pyramidobacter,0.007100592,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+231,Bilophila,0.043885602,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+232,Alistipes,0.008224852,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+233,Coprobacillus,0.029240631,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+234,Lactobacillus,0.035621302,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+235,Paenibacillus,0.041597633,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+236,Pediococcus,0.006025641,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+237,Anaerostipes,0.02265286,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+238,Bacteroides,0.09918146,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+239,Bifidobacterium,0.00530572,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+240,Collinsella,0.000295858,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+241,Enterococcus,0.006203156,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+242,Escherichia-Shigella,0.13438856,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+243,Lachnoclostridium,NA,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+244,Parabacteroides,0.152554241,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+245,Propionibacterium,0,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+246,Ralstonia,0.079753452,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+247,Fusobacterium,0,SC249427.PC04924.E07,MagAttract PowerMag Soil,Art.Col
+248,Subdoligranulum,0.012362862,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+249,Pyramidobacter,0.007341302,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+250,Bilophila,0.043242727,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+251,Alistipes,0.007832542,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+252,Coprobacillus,0.031698597,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+253,Lactobacillus,0.021246111,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+254,Paenibacillus,0.033008569,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+255,Pediococcus,0.008555756,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+256,Anaerostipes,0.023020032,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+257,Bacteroides,0.109669232,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+258,Bifidobacterium,0.005430926,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+259,Collinsella,0.000545822,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+260,Enterococcus,0.005253534,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+261,Escherichia-Shigella,0.123696851,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+262,Lachnoclostridium,NA,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+263,Parabacteroides,0.167458108,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+264,Propionibacterium,0,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+265,Ralstonia,0.078584684,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+266,Fusobacterium,0,SC249428.PC04924.F07,MagAttract PowerMag Soil,Art.Col
+267,Subdoligranulum,0.012769442,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+268,Pyramidobacter,0.023031504,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+269,Bilophila,0.053918793,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+270,Alistipes,0.008421968,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+271,Coprobacillus,0.015003842,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+272,Lactobacillus,0.076171796,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+273,Paenibacillus,0.020817325,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+274,Pediococcus,0.069276499,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+275,Anaerostipes,0.01145509,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+276,Bacteroides,0.075787601,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+277,Bifidobacterium,0.020291584,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+278,Collinsella,0.005136086,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+279,Enterococcus,0.055910543,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+280,Escherichia-Shigella,0.096362276,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+281,Lachnoclostridium,NA,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+282,Parabacteroides,0.116016905,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+283,Propionibacterium,0.000192098,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+284,Ralstonia,0.065818741,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+285,Fusobacterium,0,SC249434.PC04924.C08,MagAttract PowerMag Microbiome,Art.Col
+286,Subdoligranulum,0.021460364,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+287,Pyramidobacter,0.005734307,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+288,Bilophila,0.036249376,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+289,Alistipes,0.008963038,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+290,Coprobacillus,0.012110286,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+291,Lactobacillus,0.027255783,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+292,Paenibacillus,0.019341828,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+293,Pediococcus,0.062099592,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+294,Anaerostipes,0.011611208,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+295,Bacteroides,0.066306108,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+296,Bifidobacterium,0.017773296,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+297,Collinsella,0.005510231,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+298,Enterococcus,0.054531936,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+299,Escherichia-Shigella,0.07956733,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+300,Lachnoclostridium,NA,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+301,Parabacteroides,0.074220063,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+302,Propionibacterium,0.00017315,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+303,Ralstonia,0.053085628,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+304,Fusobacterium,0,SC249439.PC04924.H08,MagAttract PowerMag Microbiome,Art.Col
+305,Subdoligranulum,0.02158424,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+306,Pyramidobacter,0.00696119,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+307,Bilophila,0.038318395,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+308,Alistipes,0.008835707,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+309,Coprobacillus,0.015460212,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+310,Lactobacillus,0.023413258,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+311,Paenibacillus,0.019646026,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+312,Pediococcus,0.060712498,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+313,Anaerostipes,0.00786205,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+314,Bacteroides,0.055580327,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+315,Bifidobacterium,0.020565085,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+316,Collinsella,0.008226034,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+317,Enterococcus,0.047454388,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+318,Escherichia-Shigella,0.069266118,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+319,Lachnoclostridium,NA,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+320,Parabacteroides,0.090459075,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+321,Propionibacterium,0.000191091,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+322,Ralstonia,0.052622958,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+323,Fusobacterium,0,SC249439.PC07578.G07,MagAttract PowerMag Microbiome,Art.Col
+324,Subdoligranulum,0.030961727,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+325,Pyramidobacter,0.007713445,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+326,Bilophila,0.034092247,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+327,Alistipes,0.007065751,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+328,Coprobacillus,0.011766438,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+329,Lactobacillus,0.039823356,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+330,Paenibacillus,0.013562316,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+331,Pediococcus,0.091020608,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+332,Anaerostipes,0.014749755,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+333,Bacteroides,0.051187439,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+334,Bifidobacterium,0.025034347,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+335,Collinsella,0.010736016,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+336,Enterococcus,0.095652601,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+337,Escherichia-Shigella,0.09218842,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+338,Lachnoclostridium,NA,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+339,Parabacteroides,0.086918548,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+340,Propionibacterium,0.000107949,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+341,Ralstonia,0.052737978,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+342,Fusobacterium,0,SC249443.PC04924.D09,MagAttract PowerMag Microbiome,Art.Col
+343,Subdoligranulum,0.0280872,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+344,Pyramidobacter,0.008507503,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+345,Bilophila,0.033350559,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+346,Alistipes,0.007081611,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+347,Coprobacillus,0.011780355,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+348,Lactobacillus,0.039015847,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+349,Paenibacillus,0.015426428,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+350,Pediococcus,0.083170648,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+351,Anaerostipes,0.014431174,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+352,Bacteroides,0.056030853,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+353,Bifidobacterium,0.025302404,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+354,Collinsella,0.013024422,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+355,Enterococcus,0.108492191,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+356,Escherichia-Shigella,0.08234765,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+357,Lachnoclostridium,NA,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+358,Parabacteroides,0.07746708,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+359,Propionibacterium,0.000449778,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+360,Ralstonia,0.050623947,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+361,Fusobacterium,0,SC249443.PC07578.E05,MagAttract PowerMag Microbiome,Art.Col
+362,Subdoligranulum,0.067032518,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+363,Pyramidobacter,0.002437752,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+364,Bilophila,0.027178103,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+365,Alistipes,0.008174974,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+366,Coprobacillus,0.007177196,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+367,Lactobacillus,0.007664747,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+368,Paenibacillus,0.011519797,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+369,Pediococcus,0.055671459,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+370,Anaerostipes,0.010680756,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+371,Bacteroides,0.051623656,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+372,Bifidobacterium,0.006281464,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+373,Collinsella,0.008174974,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+374,Enterococcus,0.072531634,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+375,Escherichia-Shigella,0.075649689,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+376,Lachnoclostridium,NA,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+377,Parabacteroides,0.052281283,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+378,Propionibacterium,0,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+379,Ralstonia,0.038493809,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+380,Fusobacterium,0,SC249446.PC04924.F09,MagAttract PowerMag Microbiome,Art.Col
+381,Subdoligranulum,0.0104684,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+382,Pyramidobacter,0.004421605,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+383,Bilophila,0.03524573,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+384,Alistipes,0.004557794,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+385,Coprobacillus,0.038586902,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+386,Lactobacillus,0.013836809,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+387,Paenibacillus,0.045814002,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+388,Pediococcus,0.015906883,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+389,Anaerostipes,0.013873126,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+390,Bacteroides,0.087433381,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+391,Bifidobacterium,0.006119429,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+392,Collinsella,0,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+393,Enterococcus,0.014726578,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+394,Escherichia-Shigella,0.157543512,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+395,Lachnoclostridium,NA,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+396,Parabacteroides,0.139067196,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+397,Propionibacterium,3.63E-05,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+398,Ralstonia,0.120899574,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+399,Fusobacterium,0,SC253185.PC04925.C06,Qiagen QIAamp  Modified,Art.Col
+400,Subdoligranulum,0.010830895,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+401,Pyramidobacter,0.004495843,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+402,Bilophila,0.03862338,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+403,Alistipes,0.008517951,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+404,Coprobacillus,0.026919326,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+405,Lactobacillus,0.016339232,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+406,Paenibacillus,0.045227811,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+407,Pediococcus,0.036579815,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+408,Anaerostipes,0.018670754,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+409,Bacteroides,0.101927453,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+410,Bifidobacterium,0.0071339,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+411,Collinsella,0.001783475,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+412,Enterococcus,0.034963541,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+413,Escherichia-Shigella,0.123737866,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+414,Lachnoclostridium,NA,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+415,Parabacteroides,0.137206818,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+416,Propionibacterium,4.64E-05,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+417,Ralstonia,0.10543867,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+418,Fusobacterium,0,SC253192.PC04925.B07,Qiagen QIAamp  Modified,Art.Col
+419,Subdoligranulum,0.010295974,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+420,Pyramidobacter,0.005561126,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+421,Bilophila,0.029226084,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+422,Alistipes,0.005886067,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+423,Coprobacillus,0.026385175,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+424,Lactobacillus,0.023070781,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+425,Paenibacillus,0.043931967,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+426,Pediococcus,0.030442291,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+427,Anaerostipes,0.018670157,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+428,Bacteroides,0.072610294,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+429,Bifidobacterium,0.023107917,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+430,Collinsella,0.003899287,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+431,Enterococcus,0.038036616,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+432,Escherichia-Shigella,0.10810309,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+433,Lachnoclostridium,NA,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+434,Parabacteroides,0.122484031,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+435,Propionibacterium,0.000148544,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+436,Ralstonia,0.08454954,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+437,Fusobacterium,0,SC253195.PC04925.E07,Qiagen QIAamp  Modified,Art.Col
+438,Subdoligranulum,0.009307237,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+439,Pyramidobacter,0.003883982,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+440,Bilophila,0.026883597,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+441,Alistipes,0.016761976,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+442,Coprobacillus,0.025406968,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+443,Lactobacillus,0.019545198,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+444,Paenibacillus,0.032306852,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+445,Pediococcus,0.02794856,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+446,Anaerostipes,0.018345997,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+447,Bacteroides,0.142633411,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+448,Bifidobacterium,0.018856105,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+449,Collinsella,0.002523693,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+450,Enterococcus,0.032995946,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+451,Escherichia-Shigella,0.085832416,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+452,Lachnoclostridium,NA,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+453,Parabacteroides,0.112474383,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+454,Propionibacterium,0.00012529,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+455,Ralstonia,0.059825847,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+456,Fusobacterium,0,SC253195.PC07578.E07,Qiagen QIAamp  Modified,Art.Col
+457,Subdoligranulum,0.011535962,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+458,Pyramidobacter,0.005470104,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+459,Bilophila,0.04395039,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+460,Alistipes,0.008232236,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+461,Coprobacillus,0.025075823,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+462,Lactobacillus,0.016004116,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+463,Paenibacillus,0.043787912,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+464,Pediococcus,0.041404896,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+465,Anaerostipes,0.013160745,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+466,Bacteroides,0.076337738,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+467,Bifidobacterium,0.015327123,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+468,Collinsella,0.002789211,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+469,Enterococcus,0.044762782,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+470,Escherichia-Shigella,0.111487218,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+471,Lachnoclostridium,NA,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+472,Parabacteroides,0.112651646,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+473,Propionibacterium,0,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+474,Ralstonia,0.081185009,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+475,Fusobacterium,0,SC253204.PC04925.A09,Qiagen QIAamp  Modified,Art.Col
+476,Lactobacillus,0.131972429,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext
+477,Enterococcus,0.096233138,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext
+478,Escherichia-Shigella,0.210623765,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext
+479,Bacillus,0.150767842,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext
+480,Listeria,0.077297693,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext
+481,Pseudomonas,0,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext
+482,Salmonella,NA,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext
+483,Staphylococcus,0.058657871,SC249362.PC04924.E01,Qiagen DSP Virus,Zymo.Ext
+484,Lactobacillus,0.157797643,SC249362.PC07578.H08,Qiagen DSP Virus,Zymo.Ext
+485,Enterococcus,0.105460343,SC249362.PC07578.H08,Qiagen DSP Virus,Zymo.Ext
+486,Escherichia-Shigella,0.182360645,SC249362.PC07578.H08,Qiagen DSP Virus,Zymo.Ext
+487,Bacillus,0.179502363,SC249362.PC07578.H08,Qiagen DSP Virus,Zymo.Ext
+488,Listeria,0.084381939,SC249362.PC07578.H08,Qiagen DSP Virus,Zymo.Ext
+489,Pseudomonas,0,SC249362.PC07578.H08,Qiagen DSP Virus,Zymo.Ext
+490,Salmonella,NA,SC249362.PC07578.H08,Qiagen DSP Virus,Zymo.Ext
+491,Staphylococcus,0.073643455,SC249362.PC07578.H08,Qiagen DSP Virus,Zymo.Ext
+492,Lactobacillus,0.184932161,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext
+493,Enterococcus,0.065879992,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext
+494,Escherichia-Shigella,0.245700363,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext
+495,Bacillus,0.085037264,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext
+496,Listeria,0.064542328,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext
+497,Pseudomonas,0,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext
+498,Salmonella,NA,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext
+499,Staphylococcus,0.042916746,SC249368.PC04924.B02,Qiagen DSP Virus,Zymo.Ext
+500,Lactobacillus,0.193306182,SC249368.PC07578.C10,Qiagen DSP Virus,Zymo.Ext
+501,Enterococcus,0.068703008,SC249368.PC07578.C10,Qiagen DSP Virus,Zymo.Ext
+502,Escherichia-Shigella,0.223517126,SC249368.PC07578.C10,Qiagen DSP Virus,Zymo.Ext
+503,Bacillus,0.107758981,SC249368.PC07578.C10,Qiagen DSP Virus,Zymo.Ext
+504,Listeria,0.079333751,SC249368.PC07578.C10,Qiagen DSP Virus,Zymo.Ext
+505,Pseudomonas,0,SC249368.PC07578.C10,Qiagen DSP Virus,Zymo.Ext
+506,Salmonella,NA,SC249368.PC07578.C10,Qiagen DSP Virus,Zymo.Ext
+507,Staphylococcus,0.069298246,SC249368.PC07578.C10,Qiagen DSP Virus,Zymo.Ext
+508,Lactobacillus,0.165785284,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext
+509,Enterococcus,0.039645517,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext
+510,Escherichia-Shigella,0.248483094,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext
+511,Bacillus,0.078400374,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext
+512,Listeria,0.062925151,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext
+513,Pseudomonas,0,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext
+514,Salmonella,NA,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext
+515,Staphylococcus,0.060854366,SC253844.PC04924.G10,Qiagen DSP Virus,Zymo.Ext
+516,Lactobacillus,0.146166928,SC253854.PC04924.H11,Qiagen DSP Virus,Zymo.Ext
+517,Enterococcus,0.057070919,SC253854.PC04924.H11,Qiagen DSP Virus,Zymo.Ext
+518,Escherichia-Shigella,0.206694348,SC253854.PC04924.H11,Qiagen DSP Virus,Zymo.Ext
+519,Bacillus,0.115146763,SC253854.PC04924.H11,Qiagen DSP Virus,Zymo.Ext
+520,Listeria,0.077058992,SC253854.PC04924.H11,Qiagen DSP Virus,Zymo.Ext
+521,Pseudomonas,0,SC253854.PC04924.H11,Qiagen DSP Virus,Zymo.Ext
+522,Salmonella,NA,SC253854.PC04924.H11,Qiagen DSP Virus,Zymo.Ext
+523,Staphylococcus,0.10661042,SC253854.PC04924.H11,Qiagen DSP Virus,Zymo.Ext
+524,Lactobacillus,0.169105581,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext
+525,Enterococcus,0.052765137,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext
+526,Escherichia-Shigella,0.236368865,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext
+527,Bacillus,0.071002013,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext
+528,Listeria,0.073404273,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext
+529,Pseudomonas,0,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext
+530,Salmonella,NA,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext
+531,Staphylococcus,0.088003925,SC249390.PC04924.C03,Zymo MagBead DNone Kit,Zymo.Ext
+532,Lactobacillus,0.220496894,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext
+533,Enterococcus,0.050578835,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext
+534,Escherichia-Shigella,0.227889074,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext
+535,Bacillus,0.05705246,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext
+536,Listeria,0.059472779,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext
+537,Pseudomonas,0,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext
+538,Salmonella,NA,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext
+539,Staphylococcus,0.072740793,SC249391.PC04924.D03,Zymo MagBead DNone Kit,Zymo.Ext
+540,Lactobacillus,0.197578761,SC249391.PC04925.H01,Zymo MagBead DNone Kit,Zymo.Ext
+541,Enterococcus,0.042647788,SC249391.PC04925.H01,Zymo MagBead DNone Kit,Zymo.Ext
+542,Escherichia-Shigella,0.235879646,SC249391.PC04925.H01,Zymo MagBead DNone Kit,Zymo.Ext
+543,Bacillus,0.057061947,SC249391.PC04925.H01,Zymo MagBead DNone Kit,Zymo.Ext
+544,Listeria,0.061522124,SC249391.PC04925.H01,Zymo MagBead DNone Kit,Zymo.Ext
+545,Pseudomonas,0,SC249391.PC04925.H01,Zymo MagBead DNone Kit,Zymo.Ext
+546,Salmonella,NA,SC249391.PC04925.H01,Zymo MagBead DNone Kit,Zymo.Ext
+547,Staphylococcus,0.078230088,SC249391.PC04925.H01,Zymo MagBead DNone Kit,Zymo.Ext
+548,Lactobacillus,0.142678853,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext
+549,Enterococcus,0.046972311,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext
+550,Escherichia-Shigella,0.262942163,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext
+551,Bacillus,0.047547382,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext
+552,Listeria,0.076570128,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext
+553,Pseudomonas,0,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext
+554,Salmonella,NA,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext
+555,Staphylococcus,0.067772761,SC249395.PC04924.H03,Zymo MagBead DNone Kit,Zymo.Ext
+556,Lactobacillus,0.139038754,SC249404.PC04924.H04,Zymo MagBead DNone Kit,Zymo.Ext
+557,Enterococcus,0.04554023,SC249404.PC04924.H04,Zymo MagBead DNone Kit,Zymo.Ext
+558,Escherichia-Shigella,0.255963911,SC249404.PC04924.H04,Zymo MagBead DNone Kit,Zymo.Ext
+559,Bacillus,0.050103353,SC249404.PC04924.H04,Zymo MagBead DNone Kit,Zymo.Ext
+560,Listeria,0.09517557,SC249404.PC04924.H04,Zymo MagBead DNone Kit,Zymo.Ext
+561,Pseudomonas,0,SC249404.PC04924.H04,Zymo MagBead DNone Kit,Zymo.Ext
+562,Salmonella,NA,SC249404.PC04924.H04,Zymo MagBead DNone Kit,Zymo.Ext
+563,Staphylococcus,0.065469768,SC249404.PC04924.H04,Zymo MagBead DNone Kit,Zymo.Ext
+564,Lactobacillus,0.168548016,SC304092.PC07578.A03,Zymo MagBead DNone Kit,Zymo.Ext
+565,Enterococcus,0.054837516,SC304092.PC07578.A03,Zymo MagBead DNone Kit,Zymo.Ext
+566,Escherichia-Shigella,0.209295026,SC304092.PC07578.A03,Zymo MagBead DNone Kit,Zymo.Ext
+567,Bacillus,0.101189342,SC304092.PC07578.A03,Zymo MagBead DNone Kit,Zymo.Ext
+568,Listeria,0.078411371,SC304092.PC07578.A03,Zymo MagBead DNone Kit,Zymo.Ext
+569,Pseudomonas,0,SC304092.PC07578.A03,Zymo MagBead DNone Kit,Zymo.Ext
+570,Salmonella,NA,SC304092.PC07578.A03,Zymo MagBead DNone Kit,Zymo.Ext
+571,Staphylococcus,0.106569965,SC304092.PC07578.A03,Zymo MagBead DNone Kit,Zymo.Ext
+572,Lactobacillus,0.139345963,SC304097.PC07578.A09,Zymo MagBead DNone Kit,Zymo.Ext
+573,Enterococcus,0.060403016,SC304097.PC07578.A09,Zymo MagBead DNone Kit,Zymo.Ext
+574,Escherichia-Shigella,0.213189441,SC304097.PC07578.A09,Zymo MagBead DNone Kit,Zymo.Ext
+575,Bacillus,0.114757825,SC304097.PC07578.A09,Zymo MagBead DNone Kit,Zymo.Ext
+576,Listeria,0.076067084,SC304097.PC07578.A09,Zymo MagBead DNone Kit,Zymo.Ext
+577,Pseudomonas,0,SC304097.PC07578.A09,Zymo MagBead DNone Kit,Zymo.Ext
+578,Salmonella,NA,SC304097.PC07578.A09,Zymo MagBead DNone Kit,Zymo.Ext
+579,Staphylococcus,0.110162373,SC304097.PC07578.A09,Zymo MagBead DNone Kit,Zymo.Ext
+580,Lactobacillus,0.149523335,SC304924.PC07578.B.07.PC07578.B07,Zymo MagBead DNone Kit,Zymo.Ext
+581,Enterococcus,0.064975897,SC304924.PC07578.B.07.PC07578.B07,Zymo MagBead DNone Kit,Zymo.Ext
+582,Escherichia-Shigella,0.141457733,SC304924.PC07578.B.07.PC07578.B07,Zymo MagBead DNone Kit,Zymo.Ext
+583,Bacillus,0.172939165,SC304924.PC07578.B.07.PC07578.B07,Zymo MagBead DNone Kit,Zymo.Ext
+584,Listeria,0.087402041,SC304924.PC07578.B.07.PC07578.B07,Zymo MagBead DNone Kit,Zymo.Ext
+585,Pseudomonas,0,SC304924.PC07578.B.07.PC07578.B07,Zymo MagBead DNone Kit,Zymo.Ext
+586,Salmonella,NA,SC304924.PC07578.B.07.PC07578.B07,Zymo MagBead DNone Kit,Zymo.Ext
+587,Staphylococcus,0.079423963,SC304924.PC07578.B.07.PC07578.B07,Zymo MagBead DNone Kit,Zymo.Ext
+588,Lactobacillus,0.127228903,SC304927.PC07578.B02,Zymo MagBead DNone Kit,Zymo.Ext
+589,Enterococcus,0.071765499,SC304927.PC07578.B02,Zymo MagBead DNone Kit,Zymo.Ext
+590,Escherichia-Shigella,0.173595273,SC304927.PC07578.B02,Zymo MagBead DNone Kit,Zymo.Ext
+591,Bacillus,0.184506531,SC304927.PC07578.B02,Zymo MagBead DNone Kit,Zymo.Ext
+592,Listeria,0.111095273,SC304927.PC07578.B02,Zymo MagBead DNone Kit,Zymo.Ext
+593,Pseudomonas,0,SC304927.PC07578.B02,Zymo MagBead DNone Kit,Zymo.Ext
+594,Salmonella,NA,SC304927.PC07578.B02,Zymo MagBead DNone Kit,Zymo.Ext
+595,Staphylococcus,0.084711279,SC304927.PC07578.B02,Zymo MagBead DNone Kit,Zymo.Ext
+596,Lactobacillus,0.179780907,SC249408.PC04924.C05,MagAttract PowerMag Soil,Zymo.Ext
+597,Enterococcus,0.035337137,SC249408.PC04924.C05,MagAttract PowerMag Soil,Zymo.Ext
+598,Escherichia-Shigella,0.2233568,SC249408.PC04924.C05,MagAttract PowerMag Soil,Zymo.Ext
+599,Bacillus,0.060614796,SC249408.PC04924.C05,MagAttract PowerMag Soil,Zymo.Ext
+600,Listeria,0.052603629,SC249408.PC04924.C05,MagAttract PowerMag Soil,Zymo.Ext
+601,Pseudomonas,0,SC249408.PC04924.C05,MagAttract PowerMag Soil,Zymo.Ext
+602,Salmonella,NA,SC249408.PC04924.C05,MagAttract PowerMag Soil,Zymo.Ext
+603,Staphylococcus,0.039069612,SC249408.PC04924.C05,MagAttract PowerMag Soil,Zymo.Ext
+604,Lactobacillus,0.152418015,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext
+605,Enterococcus,0.032963145,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext
+606,Escherichia-Shigella,0.233187719,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext
+607,Bacillus,0.058635329,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext
+608,Listeria,0.043145881,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext
+609,Pseudomonas,0,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext
+610,Salmonella,NA,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext
+611,Staphylococcus,0.04236141,SC249408.PC04925.E02,MagAttract PowerMag Soil,Zymo.Ext
+612,Lactobacillus,0.160509,SC249408.PC07578.E02,MagAttract PowerMag Soil,Zymo.Ext
+613,Enterococcus,0.035460993,SC249408.PC07578.E02,MagAttract PowerMag Soil,Zymo.Ext
+614,Escherichia-Shigella,0.222405715,SC249408.PC07578.E02,MagAttract PowerMag Soil,Zymo.Ext
+615,Bacillus,0.057275264,SC249408.PC07578.E02,MagAttract PowerMag Soil,Zymo.Ext
+616,Listeria,0.044537471,SC249408.PC07578.E02,MagAttract PowerMag Soil,Zymo.Ext
+617,Pseudomonas,0,SC249408.PC07578.E02,MagAttract PowerMag Soil,Zymo.Ext
+618,Salmonella,NA,SC249408.PC07578.E02,MagAttract PowerMag Soil,Zymo.Ext
+619,Staphylococcus,0.046688174,SC249408.PC07578.E02,MagAttract PowerMag Soil,Zymo.Ext
+620,Lactobacillus,0.201089178,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext
+621,Enterococcus,0.036606477,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext
+622,Escherichia-Shigella,0.207749273,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext
+623,Bacillus,0.052174749,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext
+624,Listeria,0.054663268,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext
+625,Pseudomonas,0,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext
+626,Salmonella,NA,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext
+627,Staphylococcus,0.041355101,SC249412.PC04924.G05,MagAttract PowerMag Soil,Zymo.Ext
+628,Lactobacillus,0.182352047,SC249420.PC04924.G06,MagAttract PowerMag Soil,Zymo.Ext
+629,Enterococcus,0.027572734,SC249420.PC04924.G06,MagAttract PowerMag Soil,Zymo.Ext
+630,Escherichia-Shigella,0.234760128,SC249420.PC04924.G06,MagAttract PowerMag Soil,Zymo.Ext
+631,Bacillus,0.062281389,SC249420.PC04924.G06,MagAttract PowerMag Soil,Zymo.Ext
+632,Listeria,0.056139817,SC249420.PC04924.G06,MagAttract PowerMag Soil,Zymo.Ext
+633,Pseudomonas,0,SC249420.PC04924.G06,MagAttract PowerMag Soil,Zymo.Ext
+634,Salmonella,NA,SC249420.PC04924.G06,MagAttract PowerMag Soil,Zymo.Ext
+635,Staphylococcus,0.034509786,SC249420.PC04924.G06,MagAttract PowerMag Soil,Zymo.Ext
+636,Lactobacillus,0.192399962,SC249420.PC07578.H07,MagAttract PowerMag Soil,Zymo.Ext
+637,Enterococcus,0.043297188,SC249420.PC07578.H07,MagAttract PowerMag Soil,Zymo.Ext
+638,Escherichia-Shigella,0.205565685,SC249420.PC07578.H07,MagAttract PowerMag Soil,Zymo.Ext
+639,Bacillus,0.069216006,SC249420.PC07578.H07,MagAttract PowerMag Soil,Zymo.Ext
+640,Listeria,0.063295269,SC249420.PC07578.H07,MagAttract PowerMag Soil,Zymo.Ext
+641,Pseudomonas,0,SC249420.PC07578.H07,MagAttract PowerMag Soil,Zymo.Ext
+642,Salmonella,NA,SC249420.PC07578.H07,MagAttract PowerMag Soil,Zymo.Ext
+643,Staphylococcus,0.039334037,SC249420.PC07578.H07,MagAttract PowerMag Soil,Zymo.Ext
+644,Lactobacillus,0.181664673,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext
+645,Enterococcus,0.035221276,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext
+646,Escherichia-Shigella,0.226778302,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext
+647,Bacillus,0.060212482,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext
+648,Listeria,0.04729473,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext
+649,Pseudomonas,0,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext
+650,Salmonella,NA,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext
+651,Staphylococcus,0.041272075,SC249425.PC04924.C07,MagAttract PowerMag Soil,Zymo.Ext
+652,Lactobacillus,0.058550827,SC249432.PC04924.A08,MagAttract PowerMag Microbiome,Zymo.Ext
+653,Enterococcus,0.096357261,SC249432.PC04924.A08,MagAttract PowerMag Microbiome,Zymo.Ext
+654,Escherichia-Shigella,0.10678814,SC249432.PC04924.A08,MagAttract PowerMag Microbiome,Zymo.Ext
+655,Bacillus,0.124715755,SC249432.PC04924.A08,MagAttract PowerMag Microbiome,Zymo.Ext
+656,Listeria,0.199316345,SC249432.PC04924.A08,MagAttract PowerMag Microbiome,Zymo.Ext
+657,Pseudomonas,0,SC249432.PC04924.A08,MagAttract PowerMag Microbiome,Zymo.Ext
+658,Salmonella,NA,SC249432.PC04924.A08,MagAttract PowerMag Microbiome,Zymo.Ext
+659,Staphylococcus,0.204113669,SC249432.PC04924.A08,MagAttract PowerMag Microbiome,Zymo.Ext
+660,Lactobacillus,0.06092747,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext
+661,Enterococcus,0.082102635,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext
+662,Escherichia-Shigella,0.107313566,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext
+663,Bacillus,0.183539115,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext
+664,Listeria,0.189794554,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext
+665,Pseudomonas,0,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext
+666,Salmonella,NA,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext
+667,Staphylococcus,0.1779521,SC249432.PC04925.B04,MagAttract PowerMag Microbiome,Zymo.Ext
+668,Lactobacillus,0.050158468,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext
+669,Enterococcus,0.107334033,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext
+670,Escherichia-Shigella,0.092769846,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext
+671,Bacillus,0.17947658,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext
+672,Listeria,0.188793844,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext
+673,Pseudomonas,0,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext
+674,Salmonella,NA,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext
+675,Staphylococcus,0.204948008,SC249437.PC04924.F08,MagAttract PowerMag Microbiome,Zymo.Ext
+676,Lactobacillus,0.052905321,SC249437.PC04925.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+677,Enterococcus,0.088913962,SC249437.PC04925.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+678,Escherichia-Shigella,0.116446744,SC249437.PC04925.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+679,Bacillus,0.158839798,SC249437.PC04925.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+680,Listeria,0.143704336,SC249437.PC04925.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+681,Pseudomonas,0,SC249437.PC04925.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+682,Salmonella,NA,SC249437.PC04925.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+683,Staphylococcus,0.232852209,SC249437.PC04925.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+684,Lactobacillus,0.060489214,SC249437.PC07578.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+685,Enterococcus,0.088621207,SC249437.PC07578.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+686,Escherichia-Shigella,0.111724198,SC249437.PC07578.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+687,Bacillus,0.135783025,SC249437.PC07578.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+688,Listeria,0.153151,SC249437.PC07578.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+689,Pseudomonas,0,SC249437.PC07578.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+690,Salmonella,NA,SC249437.PC07578.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+691,Staphylococcus,0.246258119,SC249437.PC07578.F04,MagAttract PowerMag Microbiome,Zymo.Ext
+692,Lactobacillus,0.045425492,SC249442.PC04924.C09,MagAttract PowerMag Microbiome,Zymo.Ext
+693,Enterococcus,0.109082193,SC249442.PC04924.C09,MagAttract PowerMag Microbiome,Zymo.Ext
+694,Escherichia-Shigella,0.120819896,SC249442.PC04924.C09,MagAttract PowerMag Microbiome,Zymo.Ext
+695,Bacillus,0.192204887,SC249442.PC04924.C09,MagAttract PowerMag Microbiome,Zymo.Ext
+696,Listeria,0.147142567,SC249442.PC04924.C09,MagAttract PowerMag Microbiome,Zymo.Ext
+697,Pseudomonas,0,SC249442.PC04924.C09,MagAttract PowerMag Microbiome,Zymo.Ext
+698,Salmonella,NA,SC249442.PC04924.C09,MagAttract PowerMag Microbiome,Zymo.Ext
+699,Staphylococcus,0.158110346,SC249442.PC04924.C09,MagAttract PowerMag Microbiome,Zymo.Ext
+700,Lactobacillus,0.044997128,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext
+701,Enterococcus,0.112742528,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext
+702,Escherichia-Shigella,0.118648088,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext
+703,Bacillus,0.180063425,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext
+704,Listeria,0.158413864,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext
+705,Pseudomonas,0,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext
+706,Salmonella,NA,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext
+707,Staphylococcus,0.165705296,SC249451.PC04924.C10,MagAttract PowerMag Microbiome,Zymo.Ext
+708,Lactobacillus,0.055483871,SC249451.PC07578.F06,MagAttract PowerMag Microbiome,Zymo.Ext
+709,Enterococcus,0.116747312,SC249451.PC07578.F06,MagAttract PowerMag Microbiome,Zymo.Ext
+710,Escherichia-Shigella,0.10327957,SC249451.PC07578.F06,MagAttract PowerMag Microbiome,Zymo.Ext
+711,Bacillus,0.212365591,SC249451.PC07578.F06,MagAttract PowerMag Microbiome,Zymo.Ext
+712,Listeria,0.147379032,SC249451.PC07578.F06,MagAttract PowerMag Microbiome,Zymo.Ext
+713,Pseudomonas,0,SC249451.PC07578.F06,MagAttract PowerMag Microbiome,Zymo.Ext
+714,Salmonella,NA,SC249451.PC07578.F06,MagAttract PowerMag Microbiome,Zymo.Ext
+715,Staphylococcus,0.150887097,SC249451.PC07578.F06,MagAttract PowerMag Microbiome,Zymo.Ext
+716,Lactobacillus,0.170127758,SC253181.PC04925.G05,Qiagen QIAamp  Modified,Zymo.Ext
+717,Enterococcus,0.070506614,SC253181.PC04925.G05,Qiagen QIAamp  Modified,Zymo.Ext
+718,Escherichia-Shigella,0.171754111,SC253181.PC04925.G05,Qiagen QIAamp  Modified,Zymo.Ext
+719,Bacillus,0.114803569,SC253181.PC04925.G05,Qiagen QIAamp  Modified,Zymo.Ext
+720,Listeria,0.111494458,SC253181.PC04925.G05,Qiagen QIAamp  Modified,Zymo.Ext
+721,Pseudomonas,0,SC253181.PC04925.G05,Qiagen QIAamp  Modified,Zymo.Ext
+722,Salmonella,NA,SC253181.PC04925.G05,Qiagen QIAamp  Modified,Zymo.Ext
+723,Staphylococcus,0.061237344,SC253181.PC04925.G05,Qiagen QIAamp  Modified,Zymo.Ext
+724,Lactobacillus,0.201002763,SC253181.PC07578.G05,Qiagen QIAamp  Modified,Zymo.Ext
+725,Enterococcus,0.076987619,SC253181.PC07578.G05,Qiagen QIAamp  Modified,Zymo.Ext
+726,Escherichia-Shigella,0.1546608,SC253181.PC07578.G05,Qiagen QIAamp  Modified,Zymo.Ext
+727,Bacillus,0.103305024,SC253181.PC07578.G05,Qiagen QIAamp  Modified,Zymo.Ext
+728,Listeria,0.121293359,SC253181.PC07578.G05,Qiagen QIAamp  Modified,Zymo.Ext
+729,Pseudomonas,0,SC253181.PC07578.G05,Qiagen QIAamp  Modified,Zymo.Ext
+730,Salmonella,NA,SC253181.PC07578.G05,Qiagen QIAamp  Modified,Zymo.Ext
+731,Staphylococcus,0.067205566,SC253181.PC07578.G05,Qiagen QIAamp  Modified,Zymo.Ext
+732,Lactobacillus,0.16605398,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext
+733,Enterococcus,0.067107011,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext
+734,Escherichia-Shigella,0.159164216,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext
+735,Bacillus,0.137024476,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext
+736,Listeria,0.118240679,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext
+737,Pseudomonas,0,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext
+738,Salmonella,NA,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext
+739,Staphylococcus,0.072051987,SC253189.PC04925.F06,Qiagen QIAamp  Modified,Zymo.Ext
+740,Lactobacillus,0.115459736,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext
+741,Enterococcus,0.102154072,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext
+742,Escherichia-Shigella,0.139911358,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext
+743,Bacillus,0.110586313,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext
+744,Listeria,0.157949594,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext
+745,Pseudomonas,0,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext
+746,Salmonella,NA,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext
+747,Staphylococcus,0.145207332,SC253194.PC04925.D07,Qiagen QIAamp  Modified,Zymo.Ext
+748,Lactobacillus,0.105825935,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext
+749,Enterococcus,0.085606895,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext
+750,Escherichia-Shigella,0.1460696,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext
+751,Bacillus,0.160661439,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext
+752,Listeria,0.149925475,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext
+753,Pseudomonas,0,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext
+754,Salmonella,NA,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext
+755,Staphylococcus,0.098146588,SC253196.PC04925.F07,Qiagen QIAamp  Modified,Zymo.Ext
+756,Lactobacillus,0.118658709,SC253196.PC07578.F07,Qiagen QIAamp  Modified,Zymo.Ext
+757,Enterococcus,0.087266373,SC253196.PC07578.F07,Qiagen QIAamp  Modified,Zymo.Ext
+758,Escherichia-Shigella,0.140980839,SC253196.PC07578.F07,Qiagen QIAamp  Modified,Zymo.Ext
+759,Bacillus,0.149216664,SC253196.PC07578.F07,Qiagen QIAamp  Modified,Zymo.Ext
+760,Listeria,0.161280823,SC253196.PC07578.F07,Qiagen QIAamp  Modified,Zymo.Ext
+761,Pseudomonas,0,SC253196.PC07578.F07,Qiagen QIAamp  Modified,Zymo.Ext
+762,Salmonella,NA,SC253196.PC07578.F07,Qiagen QIAamp  Modified,Zymo.Ext
+763,Staphylococcus,0.104788362,SC253196.PC07578.F07,Qiagen QIAamp  Modified,Zymo.Ext

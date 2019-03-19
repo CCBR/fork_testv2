@@ -1,131 +1,41 @@
-"","NephID","Type","O.R","Instrument","Kit","Batch","Seq.Plate","Subject","VialID","CGRID","AliquotNumber","SampleName","GenusObs"
-"SC249360.PC04924.C01","SC249360.PC04924.C01","RG","Original","QIASymphony","Qiagen DSP Virus",2,"PC04924","DZ35298","DZ35298 0093","SC249360","None","DZ35298_0093_01_PC04924_C_01",29
-"SC249360.PC07578.B09","SC249360.PC07578.B09","RG","Original","QIASymphony","Qiagen DSP Virus",2,"PC07578","DZ35298","DZ35298 0093","SC249360","None","DZ35298_0093_01_PC07578_B_09",33
-"SC249365.PC04924.H01","SC249365.PC04924.H01","RG","Original","QIASymphony","Qiagen DSP Virus",2,"PC04924","DZ35298","DZ35298 0092","SC249365","None","DZ35298_0092_02_PC04924_H_01",29
-"SC249365.PC07578.E09","SC249365.PC07578.E09","RG","Original","QIASymphony","Qiagen DSP Virus",2,"PC07578","DZ35298","DZ35298 0092","SC249365","None","DZ35298_0092_02_PC07578_E_09",39
-"SC249382.PC04924.D02","SC249382.PC04924.D02","RG","Original","Manual","Zymo MagBead DNone Kit",1,"PC04924","DZ35298","DZ35298 0014","SC249382-PC04924-D-02","None","sFEMB_001_R_003_PC04924_D_02",35
-"SC249382.PC07578.H05","SC249382.PC07578.H05","RG","Original","Manual","Zymo MagBead DNone Kit",1,"PC07578","DZ35298","DZ35298 0014","SC249382","None","sFEMB_001_R_003_PC07578_H_05",42
-"SC249385.PC04924.G02","SC249385.PC04924.G02","RG","Original","Manual","Zymo MagBead DNone Kit",1,"PC04924","DZ35298","DZ35298 0098","SC249385","None","sFEMB_001_R_003_PC04924_G_02",33
-"SC249385.PC07578.C07","SC249385.PC07578.C07","RG","Original","Manual","Zymo MagBead DNone Kit",1,"PC07578","DZ35298","DZ35298 0098","SC249385","None","sFEMB_001_R_003_PC07578_C_07",38
-"SC249394.PC04924.G03","SC249394.PC04924.G03","RG","Original","Manual","Zymo MagBead DNone Kit",2,"PC04924","DZ35298","DZ35298 0098","SC249394","None","sFEMB_001_R_004_PC04924_G_03",36
-"SC249398.PC04924.C04","SC249398.PC04924.C04","RG","Original","Manual","Zymo MagBead DNone Kit",2,"PC04924","DZ35298","DZ35298 0092","SC249398","None","sFEMB_001_R_004_PC04924_C_04",33
-"SC249410.PC04924.E05","SC249410.PC04924.E05","RG","Original","KingFisher","MagAttract PowerMag Soil",1,"PC04924","DZ35298","DZ35298 0013","SC249410-PC04924-E-05","None","DZ35298_0013_01_PC04924_E_05",32
-"SC249410.PC04925.F02","SC249410.PC04925.F02","RG","Original","KingFisher","MagAttract PowerMag Soil",1,"PC04925","DZ35298","DZ35298 0013","SC249410-PC04925-F-02","None","DZ35298_0013_01_PC04925_F_02",34
-"SC249410.PC07578.B01","SC249410.PC07578.B01","RG","Original","KingFisher","MagAttract PowerMag Soil",1,"PC07578","DZ35298","DZ35298 0013","SC249410","None","DZ35298_0013_01_PC07578_B_01",35
-"SC249417.PC04924.D06","SC249417.PC04924.D06","RG","Original","KingFisher","MagAttract PowerMag Soil",1,"PC04924","DZ35298","DZ35298 0047","SC249417","None","DZ35298_0047_02_PC04924_D_06",33
-"SC249421.PC04924.H06","SC249421.PC04924.H06","RG","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04924","DZ35298","DZ35298 0010","SC249421","None","DZ35298_0010_02_PC04924_H_06",31
-"SC249421.PC07578.F02","SC249421.PC07578.F02","RG","Original","KingFisher","MagAttract PowerMag Soil",2,"PC07578","DZ35298","DZ35298 0010","SC249421","None","DZ35298_0010_02_PC07578_F_02",40
-"SC249426.PC04924.D07","SC249426.PC04924.D07","RG","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04924","DZ35298","DZ35298 0047","SC249426-PC04924-D-07","None","DZ35298_0047_01_PC04924_D_07",28
-"SC249426.PC04925.F03","SC249426.PC04925.F03","RG","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04925","DZ35298","DZ35298 0047","SC249426-PC04925-F-03","None","DZ35298_0047_01_PC04925_F_03",32
-"SC249426.PC07578.F03","SC249426.PC07578.F03","RG","Original","KingFisher","MagAttract PowerMag Soil",2,"PC07578","DZ35298","DZ35298 0047","SC249426","None","DZ35298_0047_01_PC07578_F_03",37
-"SC249433.PC04924.B08","SC249433.PC04924.B08","RG","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04924","DZ35298","DZ35298 0046","SC249433-PC04924-B-08","None","DZ35298_0040_01_PC04924_B_08",34
-"SC249433.PC04925.C04","SC249433.PC04925.C04","RG","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04925","DZ35298","DZ35298 0046","SC249433-PC04925-C-04","None","DZ35298_0040_01_PC04925_C_04",36
-"SC249433.PC07578.G08","SC249433.PC07578.G08","RG","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC07578","DZ35298","DZ35298 0046","SC249433","None","DZ35298_0040_01_PC07578_G_08",35
-"SC249436.PC04924.E08","SC249436.PC04924.E08","RG","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04924","DZ35298","DZ35298 0080","SC249436-PC04924-E-08","None","DZ35298_0080_02_PC04924_E_08",31
-"SC249436.PC04925.E04","SC249436.PC04925.E04","RG","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04925","DZ35298","DZ35298 0080","SC249436-PC04925-E-04","None","DZ35298_0080_02_PC04925_E_04",35
-"SC249436.PC07578.E04","SC249436.PC07578.E04","RG","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC07578","DZ35298","DZ35298 0080","SC249436","None","DZ35298_0080_02_PC07578_E_04",39
-"SC249447.PC04924.G09","SC249447.PC04924.G09","RG","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04924","DZ35298","DZ35298 0036","SC249447-PC04924-G-09","None","DZ35298_0036_02_PC04924_G_09",43
-"SC249447.PC04925.C05","SC249447.PC04925.C05","RG","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04925","DZ35298","DZ35298 0036","SC249447-PC04925-C-05","None","DZ35298_0036_02_PC04925_C_05",44
-"SC249452.PC04924.D10","SC249452.PC04924.D10","RG","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04924","DZ35298","DZ35298 0014","SC249452","None","DZ35298_0014_01_PC04924_D_10",37
-"SC253182.PC04925.H05","SC253182.PC04925.H05","RG","Original","Manual","Qiagen QIAamp  Modified",1,"PC04925","DZ35298","DZ35298 0080","SC253182","None","DZ35298_0080_01_PC04925_H_05",31
-"SC253182.PC07578.A01","SC253182.PC07578.A01","RG","Original","Manual","Qiagen QIAamp  Modified",1,"PC07578","DZ35298","DZ35298 0080","SC253182","None","DZ35298_0080_01_PC07578_A_01",28
-"SC253186.PC04925.D06","SC253186.PC04925.D06","RG","Original","Manual","Qiagen QIAamp  Modified",1,"PC04925","DZ35298","DZ35298 0010","SC253186","None","DZ35298_0010_01_PC04925_D_06",33
-"SC253186.PC07578.D06","SC253186.PC07578.D06","RG","Original","Manual","Qiagen QIAamp  Modified",1,"PC07578","DZ35298","DZ35298 0010","SC253186","None","DZ35298_0010_01_PC07578_D_06",42
-"SC253193.PC04925.C07","SC253193.PC04925.C07","RG","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","DZ35298","DZ35298 0021","SC253193","None","DZ35298_0021_02_PC04925_C_07",33
-"SC253200.PC04925.C08","SC253200.PC04925.C08","RG","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","DZ35298","DZ35298 0036","SC253200","None","DZ35298_0036_01_PC04925_C_08",37
-"SC253200.PC07578.C08","SC253200.PC07578.C08","RG","Original","Manual","Qiagen QIAamp  Modified",2,"PC07578","DZ35298","DZ35298 0036","SC253200","None","DZ35298_0036_01_PC07578_C_08",38
-"SC253845.PC04924.H10","SC253845.PC04924.H10","RG","Original","QIASymphony","Qiagen DSP Virus",1,"PC04924","DZ35298","DZ35298 0013","SC253845-PC04924-H-10","None","DZ35298_0013_02_PC04924_H_10",30
-"SC253845.PC07578.C09","SC253845.PC07578.C09","RG","Original","QIASymphony","Qiagen DSP Virus",1,"PC07578","DZ35298","DZ35298 0013","SC253845","None","DZ35298_0013_02_PC07578_C_09",34
-"SC253846.PC04924.A11","SC253846.PC04924.A11","RG","Original","QIASymphony","Qiagen DSP Virus",1,"PC04924","DZ35298","DZ35298 0032","SC253846-PC04924-A-11","None","DZ35298_0032_02_PC04924_A_11",29
-"SC253846.PC04925.D09","SC253846.PC04925.D09","RG","Original","QIASymphony","Qiagen DSP Virus",1,"PC04925","DZ35298","DZ35298 0032","SC253846-PC04925-D-09","None","DZ35298_0032_02_PC04925_D_09",35
-"SC253846.PC07578.D09","SC253846.PC07578.D09","RG","Original","QIASymphony","Qiagen DSP Virus",1,"PC07578","DZ35298","DZ35298 0032","SC253846","None","DZ35298_0032_02_PC07578_D_09",38
-"SC261516.PC04925.H10","SC261516.PC04925.H10","RG","Residual","Manual","Zymo MagBead DNone Kit",1,"PC04925","DZ35298","DZ35298 0098","SC261516","None","DZ35298_0098_01_PC04925_H_10",42
-"SC261516.PC07578.H10","SC261516.PC07578.H10","RG","Residual","Manual","Zymo MagBead DNone Kit",1,"PC07578","DZ35298","DZ35298 0098","SC261516","None","DZ35298_0098_01_PC07578_H_10",39
-"SC261528.PC04925.E10","SC261528.PC04925.E10","RG","Residual","KingFisher","MagAttract PowerMag Soil",1,"PC04925","DZ35298","DZ35298 0047","SC261528","None","DZ35298_0047_02_PC04925_E_10",30
-"SC261528.PC07578.E11","SC261528.PC07578.E11","RG","Residual","KingFisher","MagAttract PowerMag Soil",1,"PC07578","DZ35298","DZ35298 0047","SC261528","None","DZ35298_0047_02_PC07578_E_11",39
-"SC304090.PC07578.G04","SC304090.PC07578.G04","RG","Original","Manual","Zymo MagBead DNone Kit",3,"PC07578","DZ35298","DZ35298 0032","SC304090","None","DZ35298_0032_01_PC07578_G_04",46
-"SC304940.PC07578.C03","SC304940.PC07578.C03","RG","Residual","Manual","Zymo MagBead DNone Kit",4,"PC07578","DZ35298","DZ35298 0093","SC304940","None","DZ35298_0093_02_PC07578_C_03",37
-"SC249364.PC04925.C01","SC249364.PC04925.C01","Study","Original","QIASymphony","Qiagen DSP Virus",2,"PC04925","Stool","Stool","SC249364-PC04925-C-01","4.00","Stool_4_PC04925_C_01",2
-"SC249369.PC07578.E01","SC249369.PC07578.E01","Study","Original","QIASymphony","Qiagen DSP Virus",2,"PC07578","Stool","Stool","SC249369","13.00","Stool_13_PC07578_E_01",0
-"SC249396.PC04924.A04","SC249396.PC04924.A04","Study","Original","Manual","Zymo MagBead DNone Kit",2,"PC04924","Stool","Stool","SC249396-PC04924-A-04","28.00","sFEMB_001_R_004_PC04924_A_04",36
-"SC249396.PC04925.A02","SC249396.PC04925.A02","Study","Original","Manual","Zymo MagBead DNone Kit",2,"PC04925","Stool","Stool","SC249396-PC04925-A-02","28.00","sFEMB_001_R_004_PC04925_A_02",44
-"SC249399.PC04924.D04","SC249399.PC04924.D04","Study","Original","Manual","Zymo MagBead DNone Kit",2,"PC04924","Stool","Stool","SC249399-PC04924-D-04","2.00","sFEMB_001_R_004_PC04924_D_04",37
-"SC249401.PC04924.F04","SC249401.PC04924.F04","Study","Original","Manual","Zymo MagBead DNone Kit",2,"PC04924","Stool","Stool","SC249401","59.00","sFEMB_001_R_004_PC04924_F_04",35
-"SC249405.PC04924.A05","SC249405.PC04924.A05","Study","Original","Manual","Zymo MagBead DNone Kit",2,"PC04924","Stool","Stool","SC249405-PC04924-A-05","10.00","sFEMB_001_R_004_PC04924_A_05",39
-"SC249405.PC04925.C02","SC249405.PC04925.C02","Study","Original","Manual","Zymo MagBead DNone Kit",2,"PC04925","Stool","Stool","SC249405-PC04925-C-02","10.00","sFEMB_001_R_004_PC04925_C_02",40
-"SC249407.PC04924.B05","SC249407.PC04924.B05","Study","Original","KingFisher","MagAttract PowerMag Soil",1,"PC04924","Stool","Stool","SC249407","39.00","Stool_39_PC04924_B_05",35
-"SC249411.PC04924.F05","SC249411.PC04924.F05","Study","Original","KingFisher","MagAttract PowerMag Soil",1,"PC04924","Stool","Stool","SC249411-PC04924-F-05","14.00","Stool_14_PC04924_F_05",38
-"SC249411.PC04925.G02","SC249411.PC04925.G02","Study","Original","KingFisher","MagAttract PowerMag Soil",1,"PC04925","Stool","Stool","SC249411-PC04925-G-02","14.00","Stool_14_PC04925_G_02",45
-"SC249411.PC07578.G02","SC249411.PC07578.G02","Study","Original","KingFisher","MagAttract PowerMag Soil",1,"PC07578","Stool","Stool","SC249411","14.00","Stool_14_PC07578_G_02",36
-"SC249414.PC04924.A06","SC249414.PC04924.A06","Study","Original","KingFisher","MagAttract PowerMag Soil",1,"PC04924","Stool","Stool","SC249414-PC04924-A-06","50.00","Stool_50_PC04924_A_06",35
-"SC249414.PC04925.H02","SC249414.PC04925.H02","Study","Original","KingFisher","MagAttract PowerMag Soil",1,"PC04925","Stool","Stool","SC249414-PC04925-H-02","50.00","Stool_50_PC04925_H_02",42
-"SC249414.PC07578.H02","SC249414.PC07578.H02","Study","Original","KingFisher","MagAttract PowerMag Soil",1,"PC07578","Stool","Stool","SC249414","50.00","Stool_50_PC07578_H_02",37
-"SC249418.PC04924.E06","SC249418.PC04924.E06","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04924","Stool","Stool","SC249418-PC04924-E-06","5.00","Stool_5_PC04924_E_06",35
-"SC249418.PC04925.B03","SC249418.PC04925.B03","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04925","Stool","Stool","SC249418-PC04925-B-03","5.00","Stool_5_PC04925_B_03",43
-"SC249419.PC04924.F06","SC249419.PC04924.F06","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04924","Stool","Stool","SC249419-PC04924-F-06","32.00","Stool_32_PC04924_F_06",39
-"SC249419.PC04925.C03","SC249419.PC04925.C03","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04925","Stool","Stool","SC249419-PC04925-C-03","32.00","Stool_32_PC04925_C_03",39
-"SC249424.PC04924.B07","SC249424.PC04924.B07","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04924","Stool","Stool","SC249424-PC04924-B-07","52.00","Stool_52_PC04924_B_07",41
-"SC249424.PC04925.E03","SC249424.PC04925.E03","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04925","Stool","Stool","SC249424-PC04925-E-03","52.00","Stool_52_PC04925_E_03",42
-"SC249424.PC07578.E03","SC249424.PC07578.E03","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC07578","Stool","Stool","SC249424","52.00","Stool_52_PC07578_E_03",38
-"SC249429.PC04924.G07","SC249429.PC04924.G07","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04924","Stool","Stool","SC249429-PC04924-G-07","36.00","Stool_36_PC04924_G_07",35
-"SC249429.PC04925.G03","SC249429.PC04925.G03","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC04925","Stool","Stool","SC249429-PC04925-G-03","36.00","Stool_36_PC04925_G_03",42
-"SC249429.PC07578.G03","SC249429.PC07578.G03","Study","Original","KingFisher","MagAttract PowerMag Soil",2,"PC07578","Stool","Stool","SC249429","36.00","Stool_36_PC07578_G_03",38
-"SC249430.PC04924.H07","SC249430.PC04924.H07","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04924","Stool","Stool","SC249430-PC04924-H-07","53.00","Stool_53_PC04924_H_07",38
-"SC249430.PC04925.H03","SC249430.PC04925.H03","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04925","Stool","Stool","SC249430-PC04925-H-03","53.00","Stool_53_PC04925_H_03",39
-"SC249430.PC07578.H03","SC249430.PC07578.H03","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC07578","Stool","Stool","SC249430","53.00","Stool_53_PC07578_H_03",37
-"SC249435.PC04924.D08","SC249435.PC04924.D08","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04924","Stool","Stool","SC249435-PC04924-D-08","42.00","Stool_42_PC04924_D_08",35
-"SC249435.PC04925.D04","SC249435.PC04925.D04","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04925","Stool","Stool","SC249435-PC04925-D-04","42.00","Stool_42_PC04925_D_04",42
-"SC249440.PC04924.A09","SC249440.PC04924.A09","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04924","Stool","Stool","SC249440-PC04924-A-09","33.00","Stool_33_PC04924_A_09",33
-"SC249440.PC04925.G04","SC249440.PC04925.G04","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04925","Stool","Stool","SC249440-PC04925-G-04","33.00","Stool_33_PC04925_G_04",43
-"SC249441.PC04924.B09","SC249441.PC04924.B09","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04924","Stool","Stool","SC249441-PC04924-B-09","9.00","Stool_9_PC04924_B_09",30
-"SC249441.PC04925.H04","SC249441.PC04925.H04","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC04925","Stool","Stool","SC249441-PC04925-H-04","9.00","Stool_9_PC04925_H_04",38
-"SC249441.PC07578.H04","SC249441.PC07578.H04","Study","Original","KingFisher","MagAttract PowerMag Microbiome",1,"PC07578","Stool","Stool","SC249441","9.00","Stool_9_PC07578_H_04",35
-"SC249445.PC04924.E09","SC249445.PC04924.E09","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04924","Stool","Stool","SC249445-PC04924-E-09","25.00","Stool_25_PC04924_E_09",34
-"SC249445.PC04925.B05","SC249445.PC04925.B05","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04925","Stool","Stool","SC249445-PC04925-B-05","25.00","Stool_25_PC04925_B_05",41
-"SC249448.PC04924.H09","SC249448.PC04924.H09","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04924","Stool","Stool","SC249448-PC04924-H-09","21.00","Stool_21_PC04924_H_09",34
-"SC249448.PC04925.A11","SC249448.PC04925.A11","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04925","Stool","Stool","SC249448-PC04925-A-11","21.00","Stool_21_PC04925_A_11",40
-"SC249448.PC04925.D05","SC249448.PC04925.D05","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04925","Stool","Stool","SC249448-PC04925-D-05","21.00","Stool_21_PC04925_D_05",39
-"SC249448.PC07578.D05","SC249448.PC07578.D05","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC07578","Stool","Stool","SC249448","21.00","Stool_21_PC07578_D_05",39
-"SC249449.PC04924.A10","SC249449.PC04924.A10","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04924","Stool","Stool","SC249449-PC04924-A-10","31.00","Stool_31_PC04924_A_10",35
-"SC249449.PC04925.E05","SC249449.PC04925.E05","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04925","Stool","Stool","SC249449-PC04925-E-05","31.00","Stool_31_PC04925_E_05",41
-"SC249453.PC04924.E10","SC249453.PC04924.E10","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04924","Stool","Stool","SC249453-PC04924-E-10","1.00","Stool_1_PC04924_E_10",34
-"SC249453.PC04925.F05","SC249453.PC04925.F05","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC04925","Stool","Stool","SC249453-PC04925-F-05","1.00","Stool_1_PC04925_F_05",38
-"SC249453.PC07578.F05","SC249453.PC07578.F05","Study","Original","KingFisher","MagAttract PowerMag Microbiome",2,"PC07578","Stool","Stool","SC249453","1.00","Stool_1_PC07578_F_05",38
-"SC253183.PC04925.A06","SC253183.PC04925.A06","Study","Original","Manual","Qiagen QIAamp  Modified",1,"PC04925","Stool","Stool","SC253183","58.00","Stool_58_PC04925_A_06",45
-"SC253183.PC07578.D08","SC253183.PC07578.D08","Study","Original","Manual","Qiagen QIAamp  Modified",1,"PC07578","Stool","Stool","SC253183","58.00","Stool_58_PC07578_D_08",37
-"SC253184.PC04925.B06","SC253184.PC04925.B06","Study","Original","Manual","Qiagen QIAamp  Modified",1,"PC04925","Stool","Stool","SC253184","27.00","Stool_27_PC04925_B_06",40
-"SC253184.PC07578.G06","SC253184.PC07578.G06","Study","Original","Manual","Qiagen QIAamp  Modified",1,"PC07578","Stool","Stool","SC253184","27.00","Stool_27_PC07578_G_06",39
-"SC253188.PC04925.E06","SC253188.PC04925.E06","Study","Original","Manual","Qiagen QIAamp  Modified",1,"PC04925","Stool","Stool","SC253188","34.00","Stool_34_PC04925_E_06",43
-"SC253190.PC04925.G06","SC253190.PC04925.G06","Study","Original","Manual","Qiagen QIAamp  Modified",1,"PC04925","Stool","Stool","SC253190-PC04925-G-06","45.00","Stool_45_PC04925_G_06",43
-"SC253190.PC04925.H06","SC253190.PC04925.H06","Study","Original","Manual","Qiagen QIAamp  Modified",1,"PC04925","Stool","Stool","SC253190-PC04925-H-06","45.00","Stool_45_PC04925_H_06",44
-"SC253197.PC04925.G07","SC253197.PC04925.G07","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","Stool","Stool","SC253197-PC04925-G-07","55.00","Stool_55_PC04925_G_07",44
-"SC253197.PC04925.H07","SC253197.PC04925.H07","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","Stool","Stool","SC253197-PC04925-H-07","55.00","Stool_55_PC04925_H_07",45
-"SC253199.PC04925.A08","SC253199.PC04925.A08","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","Stool","Stool","SC253199-PC04925-A-08","30.00","Stool_30_PC04925_A_08",41
-"SC253199.PC04925.B08","SC253199.PC04925.B08","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","Stool","Stool","SC253199-PC04925-B-08","30.00","Stool_30_PC04925_B_08",42
-"SC253199.PC04925.E11","SC253199.PC04925.E11","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","Stool","Stool","SC253199-PC04925-E-11","30.00","Stool_30_PC04925_E_11",44
-"SC253201.PC04925.D08","SC253201.PC04925.D08","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","Stool","Stool","SC253201-PC04925-D-08","6.00","Stool_6_PC04925_D_08",46
-"SC253201.PC04925.E08","SC253201.PC04925.E08","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","Stool","Stool","SC253201-PC04925-E-08","6.00","Stool_6_PC04925_E_08",42
-"SC253201.PC07578.E08","SC253201.PC07578.E08","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC07578","Stool","Stool","SC253201","6.00","Stool_6_PC07578_E_08",45
-"SC253203.PC04925.G08","SC253203.PC04925.G08","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","Stool","Stool","SC253203-PC04925-G-08","46.00","Stool_46_PC04925_G_08",43
-"SC253203.PC04925.H08","SC253203.PC04925.H08","Study","Original","Manual","Qiagen QIAamp  Modified",2,"PC04925","Stool","Stool","SC253203-PC04925-H-08","46.00","Stool_46_PC04925_H_08",43
-"SC253849.PC04924.D11","SC253849.PC04924.D11","Study","Original","QIASymphony","Qiagen DSP Virus",1,"PC04924","Stool","Stool","SC253849-PC04924-D-11","29.00","Stool_29_PC04924_D_11",1
-"SC253849.PC07578.F09","SC253849.PC07578.F09","Study","Original","QIASymphony","Qiagen DSP Virus",1,"PC07578","Stool","Stool","SC253849","29.00","Stool_29_PC07578_F_09",0
-"SC261515.PC07578.H11","SC261515.PC07578.H11","Study","Residual","Manual","Zymo MagBead DNone Kit",1,"PC07578","Stool","Stool","SC261515","40.00","Stool_40_PC07578_H_11",0
-"SC261517.PC07578.F01","SC261517.PC07578.F01","Study","Residual","Manual","Zymo MagBead DNone Kit",1,"PC07578","Stool","Stool","SC261517","26.00","Stool_26_PC07578_F_01",35
-"SC261523.PC04925.G10","SC261523.PC04925.G10","Study","Residual","Manual","Zymo MagBead DNone Kit",1,"PC04925","Stool","Stool","SC261523","11.00","Stool_11_PC04925_G_10",45
-"SC261523.PC07578.G10","SC261523.PC07578.G10","Study","Residual","Manual","Zymo MagBead DNone Kit",1,"PC07578","Stool","Stool","SC261523","11.00","Stool_11_PC07578_G_10",39
-"SC261526.PC04925.C11","SC261526.PC04925.C11","Study","Residual","KingFisher","MagAttract PowerMag Soil",1,"PC04925","Stool","Stool","SC261526","50.00","Stool_50_PC04925_C_11",41
-"SC261526.PC07578.C11","SC261526.PC07578.C11","Study","Residual","KingFisher","MagAttract PowerMag Soil",1,"PC07578","Stool","Stool","SC261526","50.00","Stool_50_PC07578_C_11",41
-"SC261527.PC04925.B10","SC261527.PC04925.B10","Study","Residual","KingFisher","MagAttract PowerMag Soil",1,"PC04925","Stool","Stool","SC261527","54.00","Stool_54_PC04925_B_10",43
-"SC261531.PC04925.G11","SC261531.PC04925.G11","Study","Residual","KingFisher","MagAttract PowerMag Microbiome",1,"PC04925","Stool","Stool","SC261531","33.00","Stool_33_PC04925_G_11",38
-"SC261531.PC07578.G11","SC261531.PC07578.G11","Study","Residual","KingFisher","MagAttract PowerMag Microbiome",1,"PC07578","Stool","Stool","SC261531","33.00","Stool_33_PC07578_G_11",35
-"SC261532.PC04925.D11","SC261532.PC04925.D11","Study","Residual","KingFisher","MagAttract PowerMag Microbiome",1,"PC04925","Stool","Stool","SC261532","9.00","Stool_9_PC04925_D_11",37
-"SC261532.PC07578.D11","SC261532.PC07578.D11","Study","Residual","KingFisher","MagAttract PowerMag Microbiome",1,"PC07578","Stool","Stool","SC261532","9.00","Stool_9_PC07578_D_11",35
-"SC304095.PC07578.A06","SC304095.PC07578.A06","Study","Original","Manual","Zymo MagBead DNone Kit",3,"PC07578","Stool","Stool","SC304095","49.00","Stool_49_PC07578_A_06",33
-"SC304096.PC07578.A07","SC304096.PC07578.A07","Study","Original","Manual","Zymo MagBead DNone Kit",3,"PC07578","Stool","Stool","SC304096","12.00","Stool_12_PC07578_A_07",41
-"SC304098.PC07578.A08","SC304098.PC07578.A08","Study","Original","Manual","Zymo MagBead DNone Kit",3,"PC07578","Stool","Stool","SC304098","37.00","Stool_37_PC07578_A_08",41
-"SC304925.PC07578.D.07.PC07578.D07","SC304925.PC07578.D.07.PC07578.D07","Study","Original","Manual","Zymo MagBead DNone Kit",4,"PC07578","Stool","Stool","SC304925-PC07578-D-07","60.00","Stool_60_PC07578_D_07",1
-"SC304929.PC07578.B04","SC304929.PC07578.B04","Study","Original","Manual","Zymo MagBead DNone Kit",4,"PC07578","Stool","Stool","SC304929","35.00","Stool_35_PC07578_B_04",35
-"SC304931.PC07578.B06","SC304931.PC07578.B06","Study","Original","Manual","Zymo MagBead DNone Kit",4,"PC07578","Stool","Stool","SC304931","47.00","Stool_47_PC07578_B_06",37
-"SC304935.PC07578.B.10.PC07578.B10","SC304935.PC07578.B.10.PC07578.B10","Study","Residual","Manual","Zymo MagBead DNone Kit",4,"PC07578","Stool","Stool","SC304935-PC07578-B-10","60.00","Stool_60_PC07578_B_10",40
-"SC304941.PC07578.C04","SC304941.PC07578.C04","Study","Residual","Manual","Zymo MagBead DNone Kit",4,"PC07578","Stool","Stool","SC304941","47.00","Stool_47_PC07578_C_04",0
+,Exp_Per,Genus,Obs_Per,Kit,,,,,,Genus,Exp_Per
+1,0.188,Lactobacillus,0.164128737,Qiagen DSP Virus - Zymo.Ext,,,,,,Lactobacillus,0.188
+2,0.104,Enterococcus,0.07105864,Qiagen DSP Virus - Zymo.Ext,,,,,,Enterococcus,0.104
+3,0.1,Escherichia-Shigella,0.21877043,Qiagen DSP Virus - Zymo.Ext,,,,,,Escherichia-Shigella,0.1
+4,0.157,Bacillus,0.119305442,Qiagen DSP Virus - Zymo.Ext,,,,,,Bacillus,0.157
+5,0.159,Listeria,0.074657293,Qiagen DSP Virus - Zymo.Ext,,,,,,Listeria,0.159
+6,0.046,Pseudomonas,0,Qiagen DSP Virus - Zymo.Ext,,,,,,Pseudomonas,0.046
+7,0.113,Salmonella,NA,Qiagen DSP Virus - Zymo.Ext,,,,,,Salmonella,0.113
+8,0.133,Staphylococcus,0.070645212,Qiagen DSP Virus - Zymo.Ext,,,,,,Staphylococcus,0.133
+9,0.188,Lactobacillus,0.147201444,Zymo MagBead DNone Kit - Zymo.Ext,,,,,,,
+10,0.104,Enterococcus,0.058048541,Zymo MagBead DNone Kit - Zymo.Ext,,,,,,,
+11,0.1,Escherichia-Shigella,0.198159693,Zymo MagBead DNone Kit - Zymo.Ext,,,,,,,
+12,0.157,Bacillus,0.126767233,Zymo MagBead DNone Kit - Zymo.Ext,,,,,,,
+13,0.159,Listeria,0.085457335,Zymo MagBead DNone Kit - Zymo.Ext,,,,,,,
+14,0.046,Pseudomonas,0,Zymo MagBead DNone Kit - Zymo.Ext,,,,,,,
+15,0.113,Salmonella,NA,Zymo MagBead DNone Kit - Zymo.Ext,,,,,,,
+16,0.133,Staphylococcus,0.090358057,Zymo MagBead DNone Kit - Zymo.Ext,,,,,,,
+17,0.188,Lactobacillus,0.180064524,MagAttract PowerMag Soil - Zymo.Ext,,,,,,,
+18,0.104,Enterococcus,0.0355514,MagAttract PowerMag Soil - Zymo.Ext,,,,,,,
+19,0.1,Escherichia-Shigella,0.220880186,MagAttract PowerMag Soil - Zymo.Ext,,,,,,,
+20,0.157,Bacillus,0.060467581,MagAttract PowerMag Soil - Zymo.Ext,,,,,,,
+21,0.159,Listeria,0.052541349,MagAttract PowerMag Soil - Zymo.Ext,,,,,,,
+22,0.046,Pseudomonas,0,MagAttract PowerMag Soil - Zymo.Ext,,,,,,,
+23,0.113,Salmonella,NA,MagAttract PowerMag Soil - Zymo.Ext,,,,,,,
+24,0.133,Staphylococcus,0.040504617,MagAttract PowerMag Soil - Zymo.Ext,,,,,,,
+25,0.188,Lactobacillus,0.053704733,MagAttract PowerMag Microbiome - Zymo.Ext,,,,,,,
+26,0.104,Enterococcus,0.100100021,MagAttract PowerMag Microbiome - Zymo.Ext,,,,,,,
+27,0.1,Escherichia-Shigella,0.109217775,MagAttract PowerMag Microbiome - Zymo.Ext,,,,,,,
+28,0.157,Bacillus,0.170644736,MagAttract PowerMag Microbiome - Zymo.Ext,,,,,,,
+29,0.159,Listeria,0.166339086,MagAttract PowerMag Microbiome - Zymo.Ext,,,,,,,
+30,0.046,Pseudomonas,0,MagAttract PowerMag Microbiome - Zymo.Ext,,,,,,,
+31,0.113,Salmonella,NA,MagAttract PowerMag Microbiome - Zymo.Ext,,,,,,,
+32,0.133,Staphylococcus,0.194222617,MagAttract PowerMag Microbiome - Zymo.Ext,,,,,,,
+33,0.188,Lactobacillus,0.145789255,Qiagen QIAamp  Modified - Zymo.Ext,,,,,,,
+34,0.104,Enterococcus,0.08208217,Qiagen QIAamp  Modified - Zymo.Ext,,,,,,,
+35,0.1,Escherichia-Shigella,0.152010995,Qiagen QIAamp  Modified - Zymo.Ext,,,,,,,
+36,0.157,Bacillus,0.128466113,Qiagen QIAamp  Modified - Zymo.Ext,,,,,,,
+37,0.159,Listeria,0.137120897,Qiagen QIAamp  Modified - Zymo.Ext,,,,,,,
+38,0.046,Pseudomonas,0,Qiagen QIAamp  Modified - Zymo.Ext,,,,,,,
+39,0.113,Salmonella,NA,Qiagen QIAamp  Modified - Zymo.Ext,,,,,,,
+40,0.133,Staphylococcus,0.092272453,Qiagen QIAamp  Modified - Zymo.Ext,,,,,,,
