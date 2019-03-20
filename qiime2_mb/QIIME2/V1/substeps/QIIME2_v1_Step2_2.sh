@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V1/QIIME2_v1_Step2.sh
+#. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/ss_scripts_microbiome_analysis/sc_scripts_qiime2_pipeline/V1/QIIME2_v1_Step2.sh
 
 #Determine total runs
 TOTAL_RUNS=$(ls -v $MANIFEST_FILE_SPLIT_PARTS_FASTQ_IMPORT_DIR/* | wc -l)

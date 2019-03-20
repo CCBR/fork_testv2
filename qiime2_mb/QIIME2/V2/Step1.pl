@@ -26,9 +26,10 @@ my $project_dir = <STDIN>; chomp $project_dir;
 #my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2"); ###Testing
 
 #Ask user what type of file is being used
-print "\n\nWhat is the name of the manifest file (include .txt)?\n";
+print "\n\nWhat is the name of the manifest file (without .txt)?\n";
 print "ANS: ";
 my $manifest_ori=<STDIN>; chomp $manifest_ori;
+$manifest_ori .=".txt";
 #my $manifest_ori="NP0440-MB3-manifest_withmeta.txt"; ###Testing
 #my $manifest_ori="NP0501_MB1and2.txt"; ###Testing
 
@@ -81,7 +82,7 @@ sub makedirect_input{
 	mkdir($outp_dir);
 	
 	#Make directories nested under Output
-	my @directory_list = ("\\Log", "\\qza_results", "\\qzv_results");
+	@directory_list = ("\\Log", "\\qza_results", "\\qzv_results");
 		
 	#Create new directories from list	
 	foreach my $dir_new (@directory_list){
@@ -99,7 +100,7 @@ sub makedirect_input{
 	$outp_dir.= "\\Output\\qza_results";
 	
 	#Make directories nested under Input \ QZA
-	@directory_list = ("\\abundance_qza_results", "\\core_metrics_results", "\\demux_qza_split_parts", "\\phylogeny_qza_results", "\\repseqs_dada2_qza_merged_parts_final","\\repseqs_dada2_qza_merged_parts_tmp", "\\repseqs_dada2_qza_split_parts", "\\table_dada2_qza_merged_parts_final", "\\table_dada2_qza_merged_parts_tmp", "\\table_dada2_qza_split_parts", "\\taxonomy_qza_results");
+	@directory_list = ("\\abundance_qza_results", "\\demux_qza_split_parts", "\\phylogeny_qza_results", "\\repseqs_dada2_qza_merged_parts_final","\\repseqs_dada2_qza_merged_parts_tmp", "\\repseqs_dada2_qza_split_parts", "\\table_dada2_qza_merged_parts_final", "\\table_dada2_qza_merged_parts_tmp", "\\table_dada2_qza_split_parts", "\\taxonomy_qza_results");
 	
 	#Create new directories from list
 	foreach my $dir_new (@directory_list){
@@ -135,7 +136,7 @@ sub makedirect_input{
 	$outp_dir.= "\\Output\\Log";
 	
 	#Make directories nested under Input \ Log
-	@directory_list = ("\\stage2_qiime2", "\\stage3_qiime2", "\\stage4_qiime2");
+	@directory_list = ("\\stage2_qiime2", "\\stage3_qiime2", "\\stage4_qiime2", "\\stage5_qiime2");
 	
 	#Make new directories from list	
 	foreach my $dir_new (@directory_list){
@@ -153,6 +154,7 @@ sub makedirect_input{
 sub manifest_qiime2{
 	#Initialize variables / Read in variables
 	my ($project_dir, $manifest_ori)=@_;
+	my $i=1;
 
 	#Set pathway for original manifest
 	my $manifest_path=$project_dir; $manifest_path.="\\";
@@ -168,16 +170,46 @@ sub manifest_qiime2{
 	chomp @lines;
 	
 	#Print # in first line
-	print $fh "#";
+	
 	
 	#Run through each line and save relevant information
 	foreach (@lines) {
 		my @columns = split('\t',$_);
 		
-		#Print information to QIIME2 File
-		print $fh "$columns[0] \t";
-		print $fh "$columns[2]\t";
-		print $fh "$columns[3]\n";
+		#For the header row
+		if ($i==1){
+			print $fh "#SampleID\t";
+			print $fh "CGR ID\t";
+			print $fh "$columns[2]\t";
+			print $fh "$columns[3]\t";
+			print $fh "$columns[9]\t";
+			print $fh "$columns[10]\t";
+			print $fh "$columns[11]\t";
+			print $fh "$columns[12]\t";
+			print $fh "$columns[13]\t";
+			print $fh "$columns[14]\t";
+			print $fh "$columns[15]\n";
+			$i++;
+		} else{
+		
+			#Match ID created name to QIIME2 File
+			print $fh "$columns[1]";
+			print $fh "_";
+			print $fh "$columns[6]\t";
+			
+			#Print information to QIIME2 File
+			print $fh "$columns[0]\t";
+			print $fh "$columns[2]\t";
+			print $fh "$columns[3]\t";
+			print $fh "$columns[9]\t";
+			print $fh "$columns[10]\t";
+			print $fh "$columns[11]\t";
+			print $fh "$columns[12]\t";
+			print $fh "$columns[13]\t";
+			print $fh "$columns[14]\t";
+			print $fh "$columns[15]\n";
+			$i++;
+			}
 	}
 	
 	print "\n\n***********************************";

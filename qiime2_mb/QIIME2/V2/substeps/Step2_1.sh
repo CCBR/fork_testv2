@@ -1,8 +1,5 @@
 #!/bin/bash
 
-. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V1/QIIME2_v1_Step2.sh
-
-#Set argument directions for QVA and QVZ files
 demux_qza_split_part=$1 #demux_qza_split_part=${demux_qza_split_parts_dir}/paired_end_demux_1.qza
 shift
 
@@ -29,7 +26,6 @@ cmd="qiime tools import \
   	--input-path ${pe_manifest} \
   	--output-path ${demux_qza_split_part} \
   	--source-format PairedEndFastqManifestPhred${Phred_score}"
-  	
   	
 echo $cmd
 eval $cmd

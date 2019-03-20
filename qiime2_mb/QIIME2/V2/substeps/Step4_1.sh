@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V1/QIIME2_v1_Step3.sh
+. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V2/Global.sh
 
 input_table_merged_final_qza=$1
 shift
@@ -25,8 +25,8 @@ echo
 
 cmd="qiime feature-table summarize \
   	--i-table ${input_table_merged_final_qza} \
-  	--o-visualization ${output_table_merged_final_qzv}"
-#  	--m-sample-metadata-file ${Manifest_File}
+  	--o-visualization ${output_table_merged_final_qzv} \
+  	--m-sample-metadata-file ${Manifest_File}"
   	
 echo $cmd
 eval $cmd
@@ -54,3 +54,5 @@ echo
 date
 echo "Done"
 echo
+	
+	

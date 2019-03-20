@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/sc_scripts_qiime2_pipeline/V1/QIIME2_v1_Global.sh
+. /DCEG/Projects/Microbiome/CGR_MB/MicroBiome/ss_scripts_microbiome_analysis/sc_scripts_qiime2_pipeline/Global.sh
 
 ##################################################################################################################
 input_repseqs_merged_final_qza=${repseqs_dada2_qza_merged_parts_final_dir}/${repseqs_dada2_merged_final_param}.qza
@@ -16,16 +16,14 @@ sampling_depth=$sampling_depth
 alpha_rarefaction_qzv=${rarefaction_qzv_dir}/${rarefaction_param}.qzv
 max_depth=${max_depth}
 
-rm -rf ${output_dir}
-
 cmd="qsub -cwd \
 	-pe by_node 10 \
 	-q ${QUEUE} \
 	-o ${log_dir_stage_4}/stage4.1_qiime2.stdout \
 	-e ${log_dir_stage_4}/stage4.1_qiime2.stderr \
-	-N stage4.1_qiime2 \
+	-N stage4_1_qiime2 \
 	-S /bin/sh \
-	${SCRIPT_DIR}/substeps/QIIME2_v1_Step4.1.sh \
+	${SCRIPT_DIR}/substeps/QIIME2_v1_Step4_1.sh \
 	$input_repseqs_merged_final_qza \
 	$output1_qza \
 	$output2_qza \
@@ -58,9 +56,9 @@ cmd="qsub -cwd \
 	-q ${QUEUE} \
 	-o ${log_dir_stage_4}/stage4.2_qiime2.stdout \
 	-e ${log_dir_stage_4}/stage4.2_qiime2.stderr \
-	-N stage4.2_qiime2 \
+	-N stage4_2_qiime2 \
 	-S /bin/sh \
-	${SCRIPT_DIR}/substeps/QIIME2_v1_Step4.2.sh \
+	${SCRIPT_DIR}/substeps/QIIME2_v1_Step4_2.sh \
 	$input_table_merged_final_qza \
 	$input_repseqs_merged_final_qza \
 	$Manifest_File \
