@@ -1,0 +1,316 @@
+---
+title: "R Notebook"
+output: word_document
+editor_options: 
+  chunk_output_type: console
+---
+#1. Load required libraries
+```{r}
+#Old version of vegan
+#require(devtools)
+#install_version("vegan", version ="2.4-5", repos = "http://cran.us.r-project.org")
+library(vegan)
+
+library("biom")
+library(tidyr)
+library(ggplot2)
+library(cowplot)
+library(scales)
+library(phyloseq)
+library(qiime2R)
+
+#Source MiSeqR
+#http://deneflab.github.io/MicrobeMiseq/
+source("miseqR.R")
+```
+
+#2 Create PhySeq Object
+```{r}
+#https://github.com/jbisanz/qiime2R
+otus <- read_qza("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2_meta\\Output\\qza_results\\table_dada2_qza_merged_parts_final\\table_dada2_merged_final.qza")
+
+tree <- read_qza("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2_meta\\Output\\qza_results\\phylogeny_qza_results\\rooted_tree.qza")
+
+taxonomy <- read_qza("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2_meta\\Output\\qza_results\\\\taxonomy_qza_results\\taxonomy_greengenes.qza")
+tax_table<-do.call(rbind, strsplit(as.character(taxonomy$data$Taxon), "; "))
+  colnames(tax_table)<-c("Kingdom","Phylum","Class","Order","Family","Genus","Species")
+  rownames(tax_table)<-taxonomy$data$Feature.ID
+
+metadata <-read.table("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2_meta\\Input\\manifest_qiime2.tsv",sep='\t', header=T, row.names=1, comment="")
+metadata<-metadata[-1,]#remove the second line that specifies the data type
+
+physeq_complete<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree$data), tax_table(tax_table), sample_data(metadata))
+
+physeq_complete
+```
+
+#3 Prune
+```{r}
+#Only bacteria
+physeq_filt <- physeq_complete %>%
+  subset_taxa(
+    Kingdom == "k__Bacteria" &
+    Family  != "k__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rickettsiales; f__mitochondria" &
+    Class   != "k__Bacteria; p__Cyanobacteria; c__Chloroplast"
+  )
+physeq_filt
+
+#Only samples
+physeq_filt_samples <- physeq_filt %>%
+  subset_samples(
+    SampleType == "Study" 
+  )
+physeq_filt_samples
+
+#Only controls
+physeq_filt_cont <- physeq_filt %>%
+  subset_samples(
+    SampleType != "Study"
+  )
+physeq_filt_cont
+```
+
+#3. Determine read counts and plot
+```{r}
+# Make a data frame with a column for the read counts of each sample
+sample_sum_df <- data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
+colnames(sample_sum_df)
+
+# Histogram of sample read counts by input
+p1<-ggplot(sample_sum_df, aes(x = sum, color=Input_Cycles)) + 
+  geom_histogram(fill="white",binwidth = 2500) +
+  xlab("Read counts") +
+  theme(axis.title.y = element_blank())
+
+# Histogram of sample read counts by sample type
+p2<-ggplot(sample_sum_df, aes(x = sum, color=SampleType)) + 
+  geom_histogram(fill="white",binwidth = 2500) +
+  xlab("Read counts") +
+  theme(axis.title.y = element_blank())
+
+#Title
+title <- ggdraw() + draw_label("Distribution of sample sequencing depth", fontface='bold')
+
+#plot
+p <- plot_grid(p1, p2)
+plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1)) # rel_heights values control title
+```
+
+#4A Plot PCOA Data - All samples
+```{r}
+# Scale reads to even depth 
+physeq_scale <- physeq_filt %>%
+  scale_reads(n=1000) 
+
+# Fix sample type levels in sample_data
+sample_data(physeq_scale)$SampleType <- factor(
+  sample_data(physeq_scale)$SampleType, 
+  levels = c("robogut", "artificialcolony", "PCRNTCBlank", "Study", "PCRWaterBlank")
+)
+# Fix patient levels in sample_data
+sample_data(physeq_scale)$Patient <- factor(
+  sample_data(physeq_scale)$Patient, 
+  levels = c("DZ35304", "DZ35315", "DZ35316", "NTC", "P1", "P2", "P3", "P4", "P5", "Water")
+)
+
+#######################
+## Bray-Curtis
+#######################
+# Ordinate
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale, 
+  method = "PCoA", 
+  distance = "bray"
+)
+
+# Plot by SampleType
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "SampleType",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Bray-Curtis)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff", "darkorchid3", "magenta")
+  ) +
+  geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+
+# Plot by Patient
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "Patient",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Bray-Curtis)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff", "darkorchid3", "magenta", "blue", "green", "yellow")
+  ) +
+  geom_point(aes(color = Patient), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+
+#######################
+## Weighted
+#######################
+# Ordinate
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale, 
+  method = "PCoA", 
+  distance = "wunifrac"
+)
+
+# Plot by SampleType
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "SampleType",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Weighted Unifrac)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff", "darkorchid3", "magenta")
+  ) +
+  geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+
+# Plot by Patient
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "Patient",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Weighted Unifrac)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff", "darkorchid3", "magenta", "blue", "green", "yellow")
+  ) +
+  geom_point(aes(color = Patient), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+
+```
+
+#4B Plot PCOA Data - Study
+```{r}
+# Scale reads to even depth 
+physeq_scale <- physeq_filt_samples %>%
+  scale_reads(n=1000) 
+
+# Fix sample type levels in sample_data
+sample_data(physeq_scale)$SampleType <- factor(
+  sample_data(physeq_scale)$SampleType, 
+  levels = c("Study")
+)
+# Fix patient levels in sample_data
+sample_data(physeq_scale)$Patient <- factor(
+  sample_data(physeq_scale)$Patient, 
+  levels = c("P1", "P2", "P3", "P4", "P5")
+)
+#######################
+## Bray-Curtis
+#######################
+# Ordinate
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale, 
+  method = "PCoA", 
+  distance = "bray"
+)
+
+# Plot by Patient
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "Patient",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Bray-Curtis)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff")
+  ) +
+  geom_point(aes(color = Patient), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+
+#######################
+## Weighted Unifrac
+#######################
+# Ordinate
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale, 
+  method = "PCoA", 
+  distance = "wunifrac"
+)
+
+# Plot by Patient
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "Patient",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Weighted Unifrac)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff")
+  ) +
+  geom_point(aes(color = Patient), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+```
+
+#4C Plot PCOA Data - Study
+```{r}
+# Scale reads to even depth 
+physeq_scale <- physeq_filt_cont %>%
+  scale_reads(n=1000) 
+
+# Fix sample type levels in sample_data
+sample_data(physeq_scale)$SampleType <- factor(
+  sample_data(physeq_scale)$SampleType, 
+  levels = c("robogut", "artificialcolony", "PCRNTCBlank", "PCRWaterBlank")
+)
+#######################
+## Bray-Curtis
+#######################
+# Ordinate
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale, 
+  method = "PCoA", 
+  distance = "bray"
+)
+
+# Plot by Sample Type
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "SampleType",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Bray-Curtis)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff")
+  ) +
+  geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+#######################
+## Weighted
+#######################
+#Ordinate
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale, 
+  method = "PCoA", 
+  distance = "w"
+)
+
+# Plot by Patient
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "SampleType",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Weighted Unifrac)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff")
+  ) +
+  geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+```
