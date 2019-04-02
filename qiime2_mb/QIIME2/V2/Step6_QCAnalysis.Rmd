@@ -9,8 +9,9 @@ editor_options:
 #Old version of vegan
 #require(devtools)
 #install_version("vegan", version ="2.4-5", repos = "http://cran.us.r-project.org")
-library(vegan)
 
+library(tm)
+library(vegan)
 library("biom")
 library(tidyr)
 library(ggplot2)
@@ -18,10 +19,16 @@ library(cowplot)
 library(scales)
 library(phyloseq)
 library(qiime2R)
+library(tibble)
 
 #Source MiSeqR
 #http://deneflab.github.io/MicrobeMiseq/
-source("miseqR.R")
+source("sources/miseqR.R")
+source("sources/Microbiome.Barplot.R")
+source("sources/Summarize.Taxa.R")
+source("sources/Make.Percent.R")
+source("sources/TidyConvert.R")
+
 ```
 
 #2 Create PhySeq Object
@@ -70,7 +77,7 @@ physeq_filt_cont <- physeq_filt %>%
 physeq_filt_cont
 ```
 
-#3. Determine read counts and plot
+#4. Determine read counts and plot
 ```{r}
 # Make a data frame with a column for the read counts of each sample
 sample_sum_df <- data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
@@ -96,7 +103,7 @@ p <- plot_grid(p1, p2)
 plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1)) # rel_heights values control title
 ```
 
-#4A Plot PCOA Data - All samples
+#5A Plot PCOA Data - All samples
 ```{r}
 # Scale reads to even depth 
 physeq_scale <- physeq_filt %>%
@@ -107,9 +114,9 @@ sample_data(physeq_scale)$SampleType <- factor(
   sample_data(physeq_scale)$SampleType, 
   levels = c("robogut", "artificialcolony", "PCRNTCBlank", "Study", "PCRWaterBlank")
 )
-# Fix patient levels in sample_data
-sample_data(physeq_scale)$Patient <- factor(
-  sample_data(physeq_scale)$Patient, 
+# Fix SubjectID levels in sample_data
+sample_data(physeq_scale)$SubjectID <- factor(
+  sample_data(physeq_scale)$SubjectID, 
   levels = c("DZ35304", "DZ35315", "DZ35316", "NTC", "P1", "P2", "P3", "P4", "P5", "Water")
 )
 
@@ -137,18 +144,18 @@ plot_ordination(
   geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
   geom_point(colour = "grey90", size = 1.5) 
 
-# Plot by Patient
+# Plot by SubjectID
 plot_ordination(
   physeq = physeq_scale,
   ordination = physeq_pcoa,
-  color = "Patient",
+  color = "SubjectID",
   shape = "Input_Cycles",
   title = "PCoA of NP0501 Communities (Bray-Curtis)"
 ) + 
   scale_color_manual(values = c("#a65628", "red", "#ffae19",
     "#4daf4a", "#1919ff", "darkorchid3", "magenta", "blue", "green", "yellow")
   ) +
-  geom_point(aes(color = Patient), alpha = 0.7, size = 6) +
+  geom_point(aes(color = SubjectID), alpha = 0.7, size = 6) +
   geom_point(colour = "grey90", size = 1.5) 
 
 #######################
@@ -175,23 +182,23 @@ plot_ordination(
   geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
   geom_point(colour = "grey90", size = 1.5) 
 
-# Plot by Patient
+# Plot by SubjectID
 plot_ordination(
   physeq = physeq_scale,
   ordination = physeq_pcoa,
-  color = "Patient",
+  color = "SubjectID",
   shape = "Input_Cycles",
   title = "PCoA of NP0501 Communities (Weighted Unifrac)"
 ) + 
   scale_color_manual(values = c("#a65628", "red", "#ffae19",
     "#4daf4a", "#1919ff", "darkorchid3", "magenta", "blue", "green", "yellow")
   ) +
-  geom_point(aes(color = Patient), alpha = 0.7, size = 6) +
+  geom_point(aes(color = SubjectID), alpha = 0.7, size = 6) +
   geom_point(colour = "grey90", size = 1.5) 
 
 ```
 
-#4B Plot PCOA Data - Study
+#5B Plot PCOA Data - By Subject
 ```{r}
 # Scale reads to even depth 
 physeq_scale <- physeq_filt_samples %>%
@@ -202,9 +209,9 @@ sample_data(physeq_scale)$SampleType <- factor(
   sample_data(physeq_scale)$SampleType, 
   levels = c("Study")
 )
-# Fix patient levels in sample_data
-sample_data(physeq_scale)$Patient <- factor(
-  sample_data(physeq_scale)$Patient, 
+# Fix SubjectID levels in sample_data
+sample_data(physeq_scale)$SubjectID <- factor(
+  sample_data(physeq_scale)$SubjectID, 
   levels = c("P1", "P2", "P3", "P4", "P5")
 )
 #######################
@@ -217,18 +224,18 @@ physeq_pcoa <- ordinate(
   distance = "bray"
 )
 
-# Plot by Patient
+# Plot by SubjectID
 plot_ordination(
   physeq = physeq_scale,
   ordination = physeq_pcoa,
-  color = "Patient",
+  color = "SubjectID",
   shape = "Input_Cycles",
   title = "PCoA of NP0501 Communities (Bray-Curtis)"
 ) + 
   scale_color_manual(values = c("#a65628", "red", "#ffae19",
     "#4daf4a", "#1919ff")
   ) +
-  geom_point(aes(color = Patient), alpha = 0.7, size = 6) +
+  geom_point(aes(color = SubjectID), alpha = 0.7, size = 6) +
   geom_point(colour = "grey90", size = 1.5) 
 
 #######################
@@ -241,22 +248,22 @@ physeq_pcoa <- ordinate(
   distance = "wunifrac"
 )
 
-# Plot by Patient
+# Plot by SubjectID
 plot_ordination(
   physeq = physeq_scale,
   ordination = physeq_pcoa,
-  color = "Patient",
+  color = "Donation",
   shape = "Input_Cycles",
   title = "PCoA of NP0501 Communities (Weighted Unifrac)"
 ) + 
   scale_color_manual(values = c("#a65628", "red", "#ffae19",
     "#4daf4a", "#1919ff")
   ) +
-  geom_point(aes(color = Patient), alpha = 0.7, size = 6) +
+  geom_point(aes(color = Donation), alpha = 0.7, size = 6) +
   geom_point(colour = "grey90", size = 1.5) 
 ```
 
-#4C Plot PCOA Data - Study
+#5C Plot PCOA Data - Controls
 ```{r}
 # Scale reads to even depth 
 physeq_scale <- physeq_filt_cont %>%
@@ -300,7 +307,7 @@ physeq_pcoa <- ordinate(
   distance = "w"
 )
 
-# Plot by Patient
+# Plot by SubjectID
 plot_ordination(
   physeq = physeq_scale,
   ordination = physeq_pcoa,
@@ -313,4 +320,91 @@ plot_ordination(
   ) +
   geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
   geom_point(colour = "grey90", size = 1.5) 
+```
+
+#5D Plot PCOA Data - Subject P1 by donation
+```{r}
+# Scale reads to even depth 
+physeq_scale <- physeq_filt_samples %>%
+  scale_reads(n=1000) 
+
+# Fix sample type levels in sample_data
+sample_data(physeq_scale)$SampleType <- factor(
+  sample_data(physeq_scale)$SampleType, 
+  levels = c("Study")
+)
+# Fix SubjectID levels in sample_data
+sample_data(physeq_scale)$SubjectID <- factor(
+  sample_data(physeq_scale)$SubjectID, 
+  levels = c("P1","P2","P3","P4","P5")
+)
+
+#Subset only for P1
+physeq_scale<-subset_samples(physeq_scale, Patient=="P1")
+
+#######################
+## Bray-Curtis
+#######################
+# Ordinate
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale, 
+  method = "PCoA", 
+  distance = "bray"
+)
+
+# Plot by SubjectID
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "Donation",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Bray-Curtis) - P1 by Donation"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff")
+  ) +
+  geom_point(aes(color = Donation), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+
+#######################
+## Weighted Unifrac
+#######################
+# Ordinate
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale, 
+  method = "PCoA", 
+  distance = "wunifrac"
+)
+
+# Plot by SubjectID
+plot_ordination(
+  physeq = physeq_scale,
+  ordination = physeq_pcoa,
+  color = "Donation",
+  shape = "Input_Cycles",
+  title = "PCoA of NP0501 Communities (Weighted Unifrac) - P1 by Donation"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff")
+  ) +
+  geom_point(aes(color = Donation), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5) 
+```
+
+#6 Alpha Diversity
+```{r}
+#https://joey711.github.io/phyloseq/plot_bar-examples.html
+# Scale reads to even depth 
+physeq_scale <- physeq_filt_samples %>%
+  scale_reads(n=1000) 
+
+#Filter just subjects
+physeq_scale<-subset_samples(physeq_scale, SampleType=="Study")
+
+#Plot Alpha diversity by subject by donation by input - Genus
+plot_bar(physeq_scale, "Input_Cycles", fill="Genus", facet_grid=~Donation~Patient, title="Alpha Diversity by Patient/Donation/Input&Cycles at Genus")+ theme(legend.position = "none")
+
+#Plot Alpha diversity by subject by donation by input - Family
+plot_bar(physeq_scale, "Input_Cycles", fill="Family", facet_grid=~Donation~Patient,title="Alpha Diversity by Patient/Donation/Input&Cycles at Family")+ theme(legend.position = "none")
+
 ```
