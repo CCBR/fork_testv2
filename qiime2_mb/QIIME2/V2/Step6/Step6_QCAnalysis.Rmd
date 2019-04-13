@@ -51,7 +51,7 @@ physeq_complete<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree
 physeq_complete
 ```
 
-#3 Prune
+#3 Prune only study and only controls
 ```{r}
 #Only bacteria
 physeq_filt <- physeq_complete %>%
