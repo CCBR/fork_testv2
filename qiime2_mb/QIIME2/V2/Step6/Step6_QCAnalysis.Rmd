@@ -4,6 +4,18 @@ output: word_document
 editor_options: 
   chunk_output_type: console
 ---
+#############################################################################################
+#Background
+##Project ID: NP0440-MB04
+##Date: 5/19/19
+##Project info: Stability study of sTVOM data, to include comparisons between collection methods (OMNI and SCOPE), storage temperatures (-80 or -20), and storage times (baseline, month 1, month 6, month 12). Standard comparison of controls to study subjects, and intersubject variability also included.
+
+#############################################################################################
+#To Update
+```{r}
+project_name="Project_NP0440_MB4_SSC"
+```
+
 #1. Load required libraries
 ```{r}
 #Old version of vegan
@@ -24,31 +36,45 @@ library(tibble)
 #Source MiSeqR
 #http://deneflab.github.io/MicrobeMiseq/
 source("sources/miseqR.R")
-source("sources/Microbiome.Barplot.R")
-source("sources/Summarize.Taxa.R")
-source("sources/Make.Percent.R")
-source("sources/TidyConvert.R")
+#source("sources/Microbiome.Barplot.R")
+#source("sources/Summarize.Taxa.R")
+#source("sources/Make.Percent.R")
+#source("sources/TidyConvert.R")
 
 ```
 
 #2 Create PhySeq Object
 ```{r}
 #https://github.com/jbisanz/qiime2R
-otus <- read_qza("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2_meta\\Output\\qza_results\\table_dada2_qza_merged_parts_final\\table_dada2_merged_final.qza")
+#Create location link
+project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Testing\\",project_name,sep="")
 
-tree <- read_qza("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2_meta\\Output\\qza_results\\phylogeny_qza_results\\rooted_tree.qza")
+#Read OTUS
+otus <- read_qza(paste(project_location,"\\Output\\qza_results\\table_dada2_qza_merged_parts_final\\table_dada2_merged_final.qza",sep=""))
 
-taxonomy <- read_qza("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2_meta\\Output\\qza_results\\\\taxonomy_qza_results\\taxonomy_greengenes.qza")
+#Read rooted tree
+tree <- read_qza(paste(project_location,"\\Output\\qza_results\\phylogeny_qza_results\\rooted_tree.qza",sep=""))
+
+#Read Greengenes taxonomy file
+taxonomy <- read_qza(paste(project_location,"\\Output\\qza_results\\taxonomy_qza_results\\taxonomy_greengenes.qza",sep=""))
+##Edit dtable
 tax_table<-do.call(rbind, strsplit(as.character(taxonomy$data$Taxon), "; "))
   colnames(tax_table)<-c("Kingdom","Phylum","Class","Order","Family","Genus","Species")
   rownames(tax_table)<-taxonomy$data$Feature.ID
 
-metadata <-read.table("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2_meta\\Input\\manifest_qiime2.tsv",sep='\t', header=T, row.names=1, comment="")
+#read metadata
+metadata <-read.table(paste(project_location,"\\Input\\manifest_qiime2.tsv",sep=""),sep='\t', header=T, row.names=1, comment="")
 metadata<-metadata[-1,]#remove the second line that specifies the data type
 
+#Create phylo object
 physeq_complete<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree$data), tax_table(tax_table), sample_data(metadata))
 
-physeq_complete
+physeq_complete #verify results are as expected
+
+s<-summary(sample_data(physeq_complete))
+capture.output(s, file = "Data/summary_prefilter.txt")
+
+
 ```
 
 #3 Prune only study and only controls
@@ -67,14 +93,21 @@ physeq_filt_samples <- physeq_filt %>%
   subset_samples(
     SampleType == "Study" 
   )
-physeq_filt_samples
+physeq_filt_samples #verify sample number
 
 #Only controls
 physeq_filt_cont <- physeq_filt %>%
   subset_samples(
     SampleType != "Study"
   )
-physeq_filt_cont
+physeq_filt_cont #verify sample number
+
+#Print summaries
+a<-summary(sample_data(physeq_filt)$SampleType)
+capture.output(a, file = "Data/summary_sampletype.txt")
+a<-summary(sample_data(physeq_filt)$Subject)
+capture.output(a, file = "Data/summary_subject.txt")
+
 ```
 
 #4. Determine read counts and plot
@@ -83,14 +116,14 @@ physeq_filt_cont
 sample_sum_df <- data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
 colnames(sample_sum_df)
 
-# Histogram of sample read counts by input
-p1<-ggplot(sample_sum_df, aes(x = sum, color=Input_Cycles)) + 
+# Histogram of sample read counts by sampletype
+p1<-ggplot(sample_sum_df, aes(x = sum, color=SampleType)) + 
   geom_histogram(fill="white",binwidth = 2500) +
   xlab("Read counts") +
   theme(axis.title.y = element_blank())
 
 # Histogram of sample read counts by sample type
-p2<-ggplot(sample_sum_df, aes(x = sum, color=SampleType)) + 
+p2<-ggplot(sample_sum_df, aes(x = sum, color=Subject)) + 
   geom_histogram(fill="white",binwidth = 2500) +
   xlab("Read counts") +
   theme(axis.title.y = element_blank())
@@ -100,24 +133,79 @@ title <- ggdraw() + draw_label("Distribution of sample sequencing depth", fontfa
 
 #plot
 p <- plot_grid(p1, p2)
-plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1)) # rel_heights values control title
+
+# send to CL
+p_final <- plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1)) # rel_heights values control title
+
+#Save file
+file_name =("Graphs/SeqDepth_prefilter.tiff")
+tiff(file_name, width=800)
+print(p_final)
+dev.off()
 ```
 
-#5A Plot PCOA Data - All samples
+#5. Filter taxa >.001 and samples with less than 500 reads
+```{r}
+physeq_filt #note taxa number
+physeq_filt = filter_taxa(physeq_filt, function(x) mean(x) > 1e-2, TRUE)
+physeq_filt #note new taxa number and sample number
+
+
+physeq_filt = prune_samples(sample_sums(physeq_filt) > 10000, physeq_filt)
+physeq_filt #note new sample number
+```
+
+#6. Review filtered read counts and plot
+```{r}
+# Make a data frame with a column for the read counts of each sample
+sample_sum_df <- data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
+colnames(sample_sum_df)
+
+# Histogram of sample read counts by sampletype
+p1<-ggplot(sample_sum_df, aes(x = sum, color=SampleType)) + 
+  geom_histogram(fill="white",binwidth = 2500) +
+  xlab("Read counts") +
+  theme(axis.title.y = element_blank())
+
+# Histogram of sample read counts by sample type
+p2<-ggplot(sample_sum_df, aes(x = sum, color=Subject)) + 
+  geom_histogram(fill="white",binwidth = 2500) +
+  xlab("Read counts") +
+  theme(axis.title.y = element_blank())
+
+#Title
+title <- ggdraw() + draw_label("Distribution of sample sequencing depth - Post Filtering", fontface='bold')
+
+#plot
+p <- plot_grid(p1, p2)
+
+#Print to CL
+p_final<- plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1)) # rel_heights values control title
+
+#Save file
+file_name =("Graphs/SeqDepth_filter.tiff")
+tiff(file_name, width=800)
+print(p_final)
+dev.off()
+
+s<-summary(sample_data(physeq_filt))
+capture.output(s, file = "Data/summary_filter.txt")
+```
+
+#7 Plot PCOA Data - All samples (Sample Type, Subject)
 ```{r}
 # Scale reads to even depth 
-physeq_scale <- physeq_filt %>%
-  scale_reads(n=1000) 
+physeq_scale <- physeq_filt %>% scale_reads(n=1000) 
 
 # Fix sample type levels in sample_data
 sample_data(physeq_scale)$SampleType <- factor(
   sample_data(physeq_scale)$SampleType, 
-  levels = c("robogut", "artificialcolony", "PCRNTCBlank", "Study", "PCRWaterBlank")
+  levels = unique(sample_data(physeq_scale)$SampleType)
 )
 # Fix SubjectID levels in sample_data
-sample_data(physeq_scale)$SubjectID <- factor(
-  sample_data(physeq_scale)$SubjectID, 
-  levels = c("DZ35304", "DZ35315", "DZ35316", "NTC", "P1", "P2", "P3", "P4", "P5", "Water")
+sample_data(physeq_scale)$Subject <- factor(
+  sample_data(physeq_scale)$Subject, 
+  levels = unique(sample_data(physeq_scale)$Subject)
 )
 
 #######################
@@ -131,32 +219,39 @@ physeq_pcoa <- ordinate(
 )
 
 # Plot by SampleType
-plot_ordination(
+p<- plot_ordination(
   physeq = physeq_scale,
   ordination = physeq_pcoa,
   color = "SampleType",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Bray-Curtis)"
+  title = "PCoA of Sample Type (Bray-Curtis)"
 ) + 
   scale_color_manual(values = c("#a65628", "red", "#ffae19",
     "#4daf4a", "#1919ff", "darkorchid3", "magenta")
   ) +
   geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
-  geom_point(colour = "grey90", size = 1.5) 
+  geom_point(colour = "grey90", size = 1.5)
+
+#Save file
+file_name =("Graphs/sampletype_bray.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
 
 # Plot by SubjectID
-plot_ordination(
+p<- plot_ordination(
   physeq = physeq_scale,
   ordination = physeq_pcoa,
-  color = "SubjectID",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Bray-Curtis)"
-) + 
-  scale_color_manual(values = c("#a65628", "red", "#ffae19",
-    "#4daf4a", "#1919ff", "darkorchid3", "magenta", "blue", "green", "yellow")
-  ) +
-  geom_point(aes(color = SubjectID), alpha = 0.7, size = 6) +
-  geom_point(colour = "grey90", size = 1.5) 
+  color = "Subject",
+  title = "PCoA by Subject (Bray-Curtis)"
+)  +
+  geom_point(aes(color = Subject), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5)
+
+#Save file
+file_name =("Graphs/subjectid_bray.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
 
 #######################
 ## Weighted
@@ -169,12 +264,11 @@ physeq_pcoa <- ordinate(
 )
 
 # Plot by SampleType
-plot_ordination(
+p<- plot_ordination(
   physeq = physeq_scale,
   ordination = physeq_pcoa,
   color = "SampleType",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Weighted Unifrac)"
+  title = "PCoA of Sample Type (Weighted Unifrac)"
 ) + 
   scale_color_manual(values = c("#a65628", "red", "#ffae19",
     "#4daf4a", "#1919ff", "darkorchid3", "magenta")
@@ -182,229 +276,139 @@ plot_ordination(
   geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
   geom_point(colour = "grey90", size = 1.5) 
 
-# Plot by SubjectID
-plot_ordination(
+#Save file
+file_name =("Graphs/sampletype_weightunifrac.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
+# Plot by Subject
+p<- plot_ordination(
   physeq = physeq_scale,
   ordination = physeq_pcoa,
-  color = "SubjectID",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Weighted Unifrac)"
-) + 
-  scale_color_manual(values = c("#a65628", "red", "#ffae19",
-    "#4daf4a", "#1919ff", "darkorchid3", "magenta", "blue", "green", "yellow")
-  ) +
-  geom_point(aes(color = SubjectID), alpha = 0.7, size = 6) +
+  color = "Subject",
+  title = "PCoA by Subject ID (Weighted Unifrac)"
+) +
+  geom_point(aes(color = Subject), alpha = 0.7, size = 6) +
   geom_point(colour = "grey90", size = 1.5) 
 
+#Save file
+file_name =("Graphs/subjectid_weightunifrac.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
 ```
 
-#5B Plot PCOA Data - By Subject
+#8 Alpha Diversity - All samples
 ```{r}
+#https://joey711.github.io/phyloseq/plot_bar-examples.html
 # Scale reads to even depth 
-physeq_scale <- physeq_filt_samples %>%
-  scale_reads(n=1000) 
+physeq_scale <- physeq_filt %>% scale_reads(n=1000) 
 
-# Fix sample type levels in sample_data
-sample_data(physeq_scale)$SampleType <- factor(
-  sample_data(physeq_scale)$SampleType, 
-  levels = c("Study")
-)
-# Fix SubjectID levels in sample_data
-sample_data(physeq_scale)$SubjectID <- factor(
-  sample_data(physeq_scale)$SubjectID, 
-  levels = c("P1", "P2", "P3", "P4", "P5")
-)
-#######################
-## Bray-Curtis
-#######################
-# Ordinate
-physeq_pcoa <- ordinate(
-  physeq = physeq_scale, 
-  method = "PCoA", 
-  distance = "bray"
-)
+#Sample Type
+p<- plot_richness(physeq_scale, x="SampleType") + geom_boxplot()
+file_name =("Graphs/sampletype_alphadiv.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
 
-# Plot by SubjectID
-plot_ordination(
-  physeq = physeq_scale,
-  ordination = physeq_pcoa,
-  color = "SubjectID",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Bray-Curtis)"
-) + 
-  scale_color_manual(values = c("#a65628", "red", "#ffae19",
-    "#4daf4a", "#1919ff")
-  ) +
-  geom_point(aes(color = SubjectID), alpha = 0.7, size = 6) +
-  geom_point(colour = "grey90", size = 1.5) 
-
-#######################
-## Weighted Unifrac
-#######################
-# Ordinate
-physeq_pcoa <- ordinate(
-  physeq = physeq_scale, 
-  method = "PCoA", 
-  distance = "wunifrac"
-)
-
-# Plot by SubjectID
-plot_ordination(
-  physeq = physeq_scale,
-  ordination = physeq_pcoa,
-  color = "Donation",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Weighted Unifrac)"
-) + 
-  scale_color_manual(values = c("#a65628", "red", "#ffae19",
-    "#4daf4a", "#1919ff")
-  ) +
-  geom_point(aes(color = Donation), alpha = 0.7, size = 6) +
-  geom_point(colour = "grey90", size = 1.5) 
+#SubjectID
+p<- plot_richness(physeq_scale, x="Subject") + geom_boxplot()
+file_name =("Graphs/subjectid_alphadiv.tiff")
+tiff(file_name, width=1000)
+print(p)
+dev.off()
 ```
 
-#5C Plot PCOA Data - Controls
+#9 View top Genus - All samples  by Subject
 ```{r}
-# Scale reads to even depth 
-physeq_scale <- physeq_filt_cont %>%
-  scale_reads(n=1000) 
+#Filter the top Genus
+TopNOTUs = names(sort(taxa_sums(physeq_filt_samples), TRUE)[1:100])
+physeq_scale10 = prune_taxa(TopNOTUs, physeq_filt_samples)
 
-# Fix sample type levels in sample_data
-sample_data(physeq_scale)$SampleType <- factor(
-  sample_data(physeq_scale)$SampleType, 
-  levels = c("robogut", "artificialcolony", "PCRNTCBlank", "PCRWaterBlank")
-)
-#######################
-## Bray-Curtis
-#######################
-# Ordinate
-physeq_pcoa <- ordinate(
-  physeq = physeq_scale, 
-  method = "PCoA", 
-  distance = "bray"
-)
+#Create sample list
+sample_list<-unique(sample_data(physeq_filt_samples)$Subject)
 
-# Plot by Sample Type
-plot_ordination(
-  physeq = physeq_scale,
-  ordination = physeq_pcoa,
-  color = "SampleType",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Bray-Curtis)"
-) + 
-  scale_color_manual(values = c("#a65628", "red", "#ffae19",
-    "#4daf4a", "#1919ff")
-  ) +
-  geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
-  geom_point(colour = "grey90", size = 1.5) 
-#######################
-## Weighted
-#######################
-#Ordinate
-physeq_pcoa <- ordinate(
-  physeq = physeq_scale, 
-  method = "PCoA", 
-  distance = "w"
-)
+#Create plot list
+plot_list <- list()
+i = 1
 
-# Plot by SubjectID
-plot_ordination(
-  physeq = physeq_scale,
-  ordination = physeq_pcoa,
-  color = "SampleType",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Weighted Unifrac)"
-) + 
-  scale_color_manual(values = c("#a65628", "red", "#ffae19",
-    "#4daf4a", "#1919ff")
-  ) +
-  geom_point(aes(color = SampleType), alpha = 0.7, size = 6) +
-  geom_point(colour = "grey90", size = 1.5) 
+#Iterate through each subject and create bar graph of the top 10 Genus
+for (a in sample_list){
+ 
+ #Create sample phylo object
+ physeq_subset<- subset_samples(physeq_scale10, Subject==a)
+ 
+ #Create graph of this object
+ p<- plot_bar(physeq_subset, "Genus", fill = "Genus", facet_grid = ~SampleType, title=a)+geom_bar(stat="identity")+theme(legend.position = "none")
+
+ #Save to plot list and iterate
+ plot_list[[i]] = p
+ i=i+1
+}
+
+#Print the final image
+n<- length(plot_list)
+nCol <- floor(sqrt(n))
+p_final <- marrangeGrob(plot_list,nrow=2, ncol=3)
+ggsave("Graphs/subjectid_topgenus.pdf",p_final)
 ```
 
-#5D Plot PCOA Data - Subject P1 by donation
-```{r}
-# Scale reads to even depth 
-physeq_scale <- physeq_filt_samples %>%
-  scale_reads(n=1000) 
+###################################################
+#Varied by Project
 
-# Fix sample type levels in sample_data
-sample_data(physeq_scale)$SampleType <- factor(
-  sample_data(physeq_scale)$SampleType, 
-  levels = c("Study")
-)
-# Fix SubjectID levels in sample_data
-sample_data(physeq_scale)$SubjectID <- factor(
-  sample_data(physeq_scale)$SubjectID, 
-  levels = c("P1","P2","P3","P4","P5")
-)
-
-#Subset only for P1
-physeq_scale<-subset_samples(physeq_scale, Patient=="P1")
-
-#######################
-## Bray-Curtis
-#######################
-# Ordinate
-physeq_pcoa <- ordinate(
-  physeq = physeq_scale, 
-  method = "PCoA", 
-  distance = "bray"
-)
-
-# Plot by SubjectID
-plot_ordination(
-  physeq = physeq_scale,
-  ordination = physeq_pcoa,
-  color = "Donation",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Bray-Curtis) - P1 by Donation"
-) + 
-  scale_color_manual(values = c("#a65628", "red", "#ffae19",
-    "#4daf4a", "#1919ff")
-  ) +
-  geom_point(aes(color = Donation), alpha = 0.7, size = 6) +
-  geom_point(colour = "grey90", size = 1.5) 
-
-#######################
-## Weighted Unifrac
-#######################
-# Ordinate
-physeq_pcoa <- ordinate(
-  physeq = physeq_scale, 
-  method = "PCoA", 
-  distance = "wunifrac"
-)
-
-# Plot by SubjectID
-plot_ordination(
-  physeq = physeq_scale,
-  ordination = physeq_pcoa,
-  color = "Donation",
-  shape = "Input_Cycles",
-  title = "PCoA of NP0501 Communities (Weighted Unifrac) - P1 by Donation"
-) + 
-  scale_color_manual(values = c("#a65628", "red", "#ffae19",
-    "#4daf4a", "#1919ff")
-  ) +
-  geom_point(aes(color = Donation), alpha = 0.7, size = 6) +
-  geom_point(colour = "grey90", size = 1.5) 
-```
-
-#6 Alpha Diversity
+#1 Alpha Diversity
 ```{r}
 #https://joey711.github.io/phyloseq/plot_bar-examples.html
 # Scale reads to even depth 
 physeq_scale <- physeq_filt_samples %>%
   scale_reads(n=1000) 
 
-#Filter just subjects
-physeq_scale<-subset_samples(physeq_scale, SampleType=="Study")
+#Month
+p<- plot_richness(physeq_scale, x="Month") + geom_boxplot()
+file_name =("Graphs/alpha_month.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
 
-#Plot Alpha diversity by subject by donation by input - Genus
-plot_bar(physeq_scale, "Input_Cycles", fill="Genus", facet_grid=~Donation~Patient, title="Alpha Diversity by Patient/Donation/Input&Cycles at Genus")+ theme(legend.position = "none")
+#Instrument
+p<- plot_richness(physeq_scale, x="Instrument") + geom_boxplot()
+file_name =("Graphs/alpha_instrument.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
 
-#Plot Alpha diversity by subject by donation by input - Family
-plot_bar(physeq_scale, "Input_Cycles", fill="Family", facet_grid=~Donation~Patient,title="Alpha Diversity by Patient/Donation/Input&Cycles at Family")+ theme(legend.position = "none")
+#Collection Method
+p<- plot_richness(physeq_scale, x="Collection.Method") + geom_boxplot()
+file_name =("Graphs/alpha_collection.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
 
+#Overall comparison at -80*C
+physeq_subset<- subset_samples(physeq_scale10, Storage=="80")
+p<- plot_bar(physeq_subset, "Instrument", fill="Genus", facet_grid=~Collection.Method~Month, title="Genus Abundances by Collection Type/ Month/ Instrument")+geom_bar(stat="identity")
+
+#Save file
+file_name =("Graphs/summary_genus_all.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
+#Overall comparison at -20*C
+physeq_subset<- subset_samples(physeq_scale10, Month=="ExtMonth0")
+p<- plot_bar(physeq_subset, "Instrument", fill="Genus", facet_grid=~Storage~Collection.Method, title="Genus Abundances by Collection Type/ Month/ Instrument")+geom_bar(stat="identity")
+
+#Save file
+
+file_name =("Graphs/summary_genus_-20C.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
+```
+
+#Save workspace
+```{r}
+save.image("workspace.RData")
 ```

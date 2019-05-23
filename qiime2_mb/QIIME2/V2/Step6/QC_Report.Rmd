@@ -1,0 +1,73 @@
+---
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+editor_options: 
+  chunk_output_type: console
+---
+#1. Load required libraries
+```{r, include=FALSE}
+#Old version of vegan
+#require(devtools)
+#install_version("vegan", version ="2.4-5", repos = "http://cran.us.r-project.org")
+
+library(tm)
+library(vegan)
+library("biom")
+library(tidyr)
+library(ggplot2)
+library(cowplot)
+library(scales)
+library(phyloseq)
+library(qiime2R)
+library(tibble)
+
+#Source MiSeqR
+#http://deneflab.github.io/MicrobeMiseq/
+source("sources/miseqR.R")
+load("workspace.RData")
+```
+QC Report
+
+
+#Project Information
+ProjectID: NP0440-MB4
+Source: sTVOM
+Report: 
+
+#Metadata
+##Summary
+Before filtering
+
+After Filtering
+
+Treatment Group
+
+Subject
+
+#Analysis Parameters
+Beta diversity was measured using both quantitative (weighted UniFrac and Bray-Curtis) and qualitative measures (unweighted UniFrac and Binomial). Quantitative measures (weighted unifrac) are ideally suited to revealing community differences that are due to changes in relative taxon abundance (e.g., when a particular set of taxa flourish because a limiting nutrient source becomes abundant). Qualitative measures (unweighted unifrac) are most informative when communities differ primarily by what can live in them (e.g., at high temperatures), in part because abundance information can obscure significant patterns of variation in which taxa are present. Binomial index is derived from Binomial deviance under null hypothesis that the two compared communities are equal.
+
+#Results
+##Sequencing Depth
+This image shows the sequencing depth prior to filtering:
+![](Graphs/SeqDepth_prefilter.tiff)
+
+This image shows the depth after filtering:
+![](Graphs/SeqDepth_filter.tiff)
+
+##Alpha Diversity - Subjects and Sample Types
+
+![](Graphs/sampletype_alphadiv.tiff)
+
+
+![](Graphs/subjectid_alphadiv.tiff)
+
+
+![](Graphs/.tiff)
+
+
+
+
+
