@@ -21,22 +21,35 @@ my (@runid_unique, @projectid, @fastq_files);
 #Ask user where the project directory is
 print "Where is the project directory?\n";
 print "ANS: ";
-my $project_dir = <STDIN>; chomp $project_dir;
-#my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0440-MB3_Baseline_Month1_Repeat"); ###Testing
-#my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0501_MB1and2"); ###Testing
+#my $project_dir = <STDIN>; chomp $project_dir;
 
 #Ask user what type of file is being used
 print "\n\nWhat is the name of the manifest file (without .txt)?\n";
 print "ANS: ";
-my $manifest_ori=<STDIN>; chomp $manifest_ori;
-$manifest_ori .=".txt";
-#my $manifest_ori="NP0440-MB3-manifest_withmeta.txt"; ###Testing
-#my $manifest_ori="NP0501_MB1and2.txt"; ###Testing
+#my $manifest_ori=<STDIN>; chomp $manifest_ori;
+#$manifest_ori .=".txt";
 
+###Testing
+my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Testing\\Project_NP0440_MB4_SSC");
+my $manifest_ori="NP0440_MB4.txt";
 
 ######################################################################################
 								##Subroutines##
 ######################################################################################
+print "######################################\n";
+print "#              Workflow               #\n";
+print "######################################\n";
+print "1) Create directories\n";
+print "2) QIIME2 manifest generation\n";
+print "3) Create meta-data split manifests\n";
+print "4) Create directories for FASTQ files\n";
+print "5) Create and place links for FASTQ files in directories\n";
+print "######################################\n\n";
+
+print "######################################\n";
+print "#              Process                #\n";
+print "######################################\n";
+
 #Create directories within Input folder
 makedirect_input($project_dir);
 
@@ -44,13 +57,13 @@ makedirect_input($project_dir);
 manifest_qiime2($project_dir, $manifest_ori);
 
 #Create split manifests with metadata
-#manifest_meta($project_dir, $manifest_ori, @runid_unique);
+manifest_meta($project_dir, $manifest_ori, @runid_unique);
 
 #Creates directories for flowcells
-#makedirect_output($project_dir,\@runid_unique);
+makedirect_output($project_dir,\@runid_unique);
 
 #Create split manifests with softlinks
-#fastqfiles($project_dir, \@runid_unique);
+fastqfiles($project_dir, \@runid_unique);
 
 sub makedirect_input{
 	#Initialize / Read in variables
@@ -148,7 +161,8 @@ sub makedirect_input{
 		#Make new directory
 		mkdir($dir_path);
 	}
-	
+	print "\n\n***********************************";
+	print "Step 1 COMPLETE - Generated directories";
 }
 
 sub manifest_qiime2{
@@ -169,9 +183,6 @@ sub manifest_qiime2{
 	my @lines = <$in>; close $in;
 	chomp @lines;
 	
-	#Print # in first line
-	print $fh "#";
-	
 	#Run through each line and save relevant information
 	foreach (@lines) {
 		my @columns = split('\t',$_);
@@ -180,40 +191,34 @@ sub manifest_qiime2{
 		if ($i==1){
 			print $fh "#SampleID\t";
 			print $fh "CGR ID\t";
-			print $fh "$columns[2]\t";
-			print $fh "$columns[3]\t";
-			print $fh "$columns[9]\t";
-			print $fh "$columns[10]\t";
-			print $fh "$columns[11]\t";
-			print $fh "$columns[12]\t";
-			print $fh "$columns[13]\t";
-			print $fh "$columns[14]\t";
-			print $fh "$columns[15]\n";
+			
+			my $n=1; #Skip "SampleID header - changed to CGR ID"
+			until ($n+1 > scalar(@columns)){
+				print $fh "$columns[$n]\t";
+				$n++;
+			}
+			print $fh "\n";
 			$i++;
 		} else{
 		
-			#Match ID created name to QIIME2 File
+			#Created new SampleID name from ExternalID (col1)_ SourcePCRPlate (col4), print to QIIME2 file
 			print $fh "$columns[1]";
 			print $fh "_";
-			print $fh "$columns[6]\t";
+			print $fh "$columns[4]\t";
 			
-			#Print information to QIIME2 File
-			print $fh "$columns[0]\t";
-			print $fh "$columns[2]\t";
-			print $fh "$columns[3]\t";
-			print $fh "$columns[9]\t";
-			print $fh "$columns[10]\t";
-			print $fh "$columns[11]\t";
-			print $fh "$columns[12]\t";
-			print $fh "$columns[13]\t";
-			print $fh "$columns[14]\t";
-			print $fh "$columns[15]\n";
-			$i++;
+			#Print other data to QIIME2 File
+			my $n=0;
+			until ($n+1 > scalar(@columns)){
+				print $fh "$columns[$n]\t";
+				$n++;
 			}
+			print $fh "\n";
+			$i++;
+		} 
 	}
 	
 	print "\n\n***********************************";
-	print "Completed generating QIIME2 manifest\n";
+	print "Step 2 COMPLETE - Generated QIIME2 manifest\n";
 }
 
 sub manifest_meta{
@@ -237,9 +242,9 @@ sub manifest_meta{
 		push (@externalid, $columns[1]); #External ID
 		push(@sampletype, $columns[2]); #Sample Type
 		push(@sourcematerial, $columns[3]); #Source Material
-		push(@sourcepcrplate, $columns[6]); #Souce Plate ID
-		push (@runid, $columns[7]); #RunID
-		push (@projectid, $columns[9]); #Project ID
+		push(@sourcepcrplate, $columns[5]); #Souce Plate ID - skip #4 Extraction Batch ID
+		push (@runid, $columns[6]); #RunID
+		push (@projectid, $columns[7]); #Project ID
 	}
 	
 	#Find all unique run ID's
@@ -296,12 +301,12 @@ sub manifest_meta{
 				my $FastP1_abs = $FastP_abs; my $FastP2_abs = $FastP_abs;
 				$FastP1_abs .=$fastq_temp[0]; $FastP2_abs .=$fastq_temp[1]; 
 				
-				#Print to file
+				#Print to file - if R1 was selected first
 				if($FastP1_rel =~ /R1/){
 					print $fh "$FastP1_rel\t"; print $fh "$FastP2_rel\t"; #Relative
 					print $fh "$fastq_temp[0]\t"; print $fh "$fastq_temp[1]\t"; #File name
 					print $fh "$FastP1_abs\t"; print $fh "$FastP2_abs\n"; #Absolute
-					
+				#otherwise, if R2 was selected first	
 				} else{
 					print $fh "$FastP2_rel\t"; print $fh "$FastP1_rel\t";
 					print $fh "$fastq_temp[1]\t"; print $fh "$fastq_temp[0]\t";
@@ -315,7 +320,7 @@ sub manifest_meta{
 		$count++;
 	}
 	print "\n***********************************";
-	print "Completed generating metadata split manifests\n";
+	print "Step 3 COMPLETE - Generated metadata split manifests\n";
 }
 
 sub makedirect_output{
@@ -343,7 +348,7 @@ sub makedirect_output{
 	
 	my $length = scalar (@$runid_unique);
 	print "\n***********************************";
-	print "Completed generating directories for $length flowcell(s)\n";
+	print "Step 4 COMPLETE - Generated directories for $length flowcell(s)\n";
 }
 
 sub fastqfiles{
@@ -431,5 +436,5 @@ sub fastqfiles{
 	}
 		
 	print "\n***********************************";
-	print "Completed generating QIIME2 split manifests and transferring all files\n";
+	print "Step 5 COMPLETE - Generated QIIME2 split manifests and transferring all FASTQ files\n";
 }
