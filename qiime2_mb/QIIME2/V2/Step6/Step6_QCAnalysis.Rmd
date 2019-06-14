@@ -21,6 +21,7 @@ project_name="Project_NP0440_MB4_SSC"
 #Old version of vegan
 #require(devtools)
 #install_version("vegan", version ="2.4-5", repos = "http://cran.us.r-project.org")
+#http://joey711.github.io/phyloseq-demo/phyloseq-demo.html
 
 library(tm)
 library(vegan)
@@ -32,6 +33,7 @@ library(scales)
 library(phyloseq)
 library(qiime2R)
 library(tibble)
+library(gridExtra)
 
 #Source MiSeqR
 #http://deneflab.github.io/MicrobeMiseq/
@@ -104,9 +106,9 @@ physeq_filt_cont #verify sample number
 
 #Print summaries
 a<-summary(sample_data(physeq_filt)$SampleType)
-capture.output(a, file = "Data/summary_sampletype.txt")
+capture.output(a, file = "Data/summary_sampletype_prefilter.txt")
 a<-summary(sample_data(physeq_filt)$Subject)
-capture.output(a, file = "Data/summary_subject.txt")
+capture.output(a, file = "Data/summary_subject_prefilter.txt")
 
 ```
 
@@ -142,6 +144,7 @@ file_name =("Graphs/SeqDepth_prefilter.tiff")
 tiff(file_name, width=800)
 print(p_final)
 dev.off()
+
 ```
 
 #5. Filter taxa >.001 and samples with less than 500 reads
@@ -188,8 +191,13 @@ tiff(file_name, width=800)
 print(p_final)
 dev.off()
 
+#Print summaries
 s<-summary(sample_data(physeq_filt))
 capture.output(s, file = "Data/summary_filter.txt")
+a<-summary(sample_data(physeq_filt)$SampleType)
+capture.output(a, file = "Data/summary_sampletype_postfilter.txt")
+a<-summary(sample_data(physeq_filt)$Subject)
+capture.output(a, file = "Data/summary_subject_postfilter.txt")
 ```
 
 #7 Plot PCOA Data - All samples (Sample Type, Subject)
@@ -211,13 +219,12 @@ sample_data(physeq_scale)$Subject <- factor(
 #######################
 ## Bray-Curtis
 #######################
-# Ordinate
+# Ordinate for sample type
 physeq_pcoa <- ordinate(
   physeq = physeq_scale, 
   method = "PCoA", 
   distance = "bray"
 )
-
 # Plot by SampleType
 p<- plot_ordination(
   physeq = physeq_scale,
@@ -237,9 +244,20 @@ tiff(file_name, width=800)
 print(p)
 dev.off()
 
+#Ordinate for subject
+physeq_scale_samples <- physeq_filt %>%
+  subset_samples(
+    Subject != "Control" 
+  )
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale_samples, 
+  method = "PCoA", 
+  distance = "bray"
+)
+
 # Plot by SubjectID
 p<- plot_ordination(
-  physeq = physeq_scale,
+  physeq = physeq_scale_samples,
   ordination = physeq_pcoa,
   color = "Subject",
   title = "PCoA by Subject (Bray-Curtis)"
@@ -282,9 +300,16 @@ tiff(file_name, width=800)
 print(p)
 dev.off()
 
+#Ordinate for subject
+physeq_pcoa <- ordinate(
+  physeq = physeq_scale_samples, 
+  method = "PCoA", 
+  distance = "wunifrac"
+)
+
 # Plot by Subject
 p<- plot_ordination(
-  physeq = physeq_scale,
+  physeq = physeq_scale_samples,
   ordination = physeq_pcoa,
   color = "Subject",
   title = "PCoA by Subject ID (Weighted Unifrac)"
@@ -340,18 +365,67 @@ for (a in sample_list){
  physeq_subset<- subset_samples(physeq_scale10, Subject==a)
  
  #Create graph of this object
- p<- plot_bar(physeq_subset, "Genus", fill = "Genus", facet_grid = ~SampleType, title=a)+geom_bar(stat="identity")+theme(legend.position = "none")
+ p<- plot_bar(physeq_subset, "Genus", fill = "Genus", facet_grid = ~SampleType, title=a)+geom_bar(stat="identity")+theme(legend.position = "none", axis.text.x=element_blank())
 
  #Save to plot list and iterate
  plot_list[[i]] = p
  i=i+1
 }
 
-#Print the final image
-n<- length(plot_list)
-nCol <- floor(sqrt(n))
+#Print all graphs to a PDF
+
 p_final <- marrangeGrob(plot_list,nrow=2, ncol=3)
 ggsave("Graphs/subjectid_topgenus.pdf",p_final)
+
+#Print each page to a JPEG
+a=1
+pagenum=1
+n<- length(plot_list)
+npages <- ceiling(n/6)
+while (a<6*npages-1){
+
+ #If the page is not complete with images
+ if(a+5 > n){
+  partialplot_list <- plot_list[a:n]
+  p_final <- marrangeGrob(partialplot_list,nrow=2, ncol=3)
+  filename<- paste("Graphs/subjectid_topgenus_",pagenum,sep="")
+  filename<- paste(filename,".jpeg",sep="")
+  ggsave(filename,p_final)
+ } else{
+  end = a+5
+  partialplot_list <- plot_list[a:end]
+  p_final <- marrangeGrob(partialplot_list,nrow=2, ncol=3)
+  filename<- paste("Graphs/subjectid_topgenus_",pagenum,sep="")
+  filename<- paste(filename,".jpeg",sep="")
+  ggsave(filename,p_final)
+ }
+ a=a+6
+ pagenum=pagenum+1
+}
+
+
+```
+
+#10 Alpha Metrics
+```{r}
+# Scale reads to even depth 
+physeq_scale <- physeq_filt_samples %>%
+  scale_reads(n=1000) 
+
+#Extraction Batch
+p<- plot_richness(physeq_scale, x="Extraction.Batch.ID") + geom_boxplot()
+file_name =("Graphs/alpha_extractionbatch.tiff")
+tiff(file_name, width=1500)
+print(p)
+dev.off()
+
+#Sequencing Batch
+p<- plot_richness(physeq_scale, x="Run.ID") + geom_boxplot()
+file_name =("Graphs/alpha_sequencingbatch.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
 ```
 
 ###################################################
@@ -406,6 +480,12 @@ tiff(file_name, width=800)
 print(p)
 dev.off()
 
+```
+
+#Data values
+```{r}
+a<-sample_data(physeq_filt)
+write.table(a,"Data/Tab_input.txt")
 ```
 
 #Save workspace
