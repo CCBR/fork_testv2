@@ -15,8 +15,8 @@ Phred_score=33
 
 #################################################
 # TO UPDATE
-PROJECT_DIR=/DCEG/Projects/Microbiome/CGR_MB/MicroBiome/Testing/Project_NP0440_MB4_SSC
-MANIFEST_FILE=${PROJECT_DIR}/NP0440_MB4.txt
+PROJECT_DIR=/DCEG/Projects/Microbiome/CGR_MB/MicroBiome/Project_NP0084_MB6
+MANIFEST_FILE=${PROJECT_DIR}/NP0084-MB6.txt
 
 #################################################
 # Input Directories/Files
@@ -86,7 +86,7 @@ taxonomy_qzv_dir=${QZV_RESULTS_DIR}/taxonomy_qzv_results
 # Stage 5 Parameters
 sampling_depth=10000
 rarefaction_param=rarefaction
-max_depth=54000
+max_depth=51210
 refernce_1=${RESOURCES_DIR}/gg-13-8-99-nb-classifier.qza
 refernce_2=${RESOURCES_DIR}/silva-119-99-nb-classifier.qza
 taxonomy_1=taxonomy_greengenes

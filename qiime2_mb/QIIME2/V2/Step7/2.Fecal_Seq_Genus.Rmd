@@ -1,0 +1,479 @@
+---
+title: "R Notebook"
+output: word_document
+editor_options: 
+  chunk_output_type: console
+---
+#1. Load required libraries
+```{r}
+library("biom")
+library(data.table)
+library(ggplot2)
+```
+
+#2. Taxonomy Reference - Expected frequencies
+```{r}
+#Read in controls taxonomy file, grouped by Genus
+control_expect <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Controls\\Taxonomy\\Taxonomy_Genus_ABRF.txt",sep="\t",header=TRUE)
+
+#Create list of expected genus; add as the row names for control_expect
+control_select <- subset(control_expect, !(MSA1000=='NA')|!(MSA1001=='NA')|!(MSA1002=='NA')|!(MSA1003=='NA')|!(Zymo.Seq.200=='NA')|!(Zymo.Seq.2000=='NA'))
+genus_expect <- unique(control_select[,"Genus"])
+rownames(control_expect) <- unique(control_expect[,"Genus"])
+```
+
+#3. Filtering of samples, control variable information
+```{r}
+#Read in database with variable information
+samples_variables_complete <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\Manifests\\sampledata_abrf.txt",sep="\t",header=TRUE)
+
+#Read in database of failed samples
+samples_failed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\samplesfailed_q2.txt",sep="\t")
+
+#Remove failed samples from info database
+samples_filtered <-subset(samples_variables_complete, !(NephID %in% samples_failed$V1))
+
+#Verify filtering - numbers should match
+nrow(samples_variables_complete) - nrow(samples_failed)
+nrow(samples_filtered)
+
+#Only include Seq Controls
+control_types <- c("MSA1000","MSA1001","MSA1002","MSA1003","Zymo.Seq.200","Zymo.Seq.2000")
+samples_variables_f <- samples_filtered[samples_filtered$Type %in% control_types,]
+
+#Add sample ID's as row names
+row.names(samples_variables_f) <- samples_variables_f$NephID
+```
+
+#4. OTU Counts by sample
+Read in OTU information, and determine total counts for all samples
+```{r}
+#Read in OTU database at Genus level - Silva
+#samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_silva_abrf.csv", row.names = 1)
+
+#GreenGenes
+samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_green_abrf.csv", row.names = 1)
+
+#Create a list of all samples and all genus present in at least one sample
+sample_list_complete <- colnames(samples_otu_complete)
+genus_found <- rownames(samples_otu_complete)
+
+#For each sample, determine the total read counts
+for (a in sample_list_complete){
+ #Set sum to 0
+ sum=0
+ 
+ #For each genus
+ for (b in genus_found){
+  #Add the number of counts together
+  sum <- samples_otu_complete[b,a] + sum
+ }
+ 
+ #When complete, push the sum to a new "Total_Reads" row
+ samples_otu_complete["Total_Reads",a] <- sum
+}
+```
+
+#5. OTU Counts by Control Type
+Determine genus count for each sample, average across control type
+```{r}
+#Create control sample list, control type list
+sample_list_f <- unique(samples_variables_f$NephID)
+control_types
+
+#Create a missing list for non-annotated Genus
+missing_anno <- list()
+
+##For each control type
+for (a in control_types){
+ 
+ ##For each sample in filtered list
+ for (b in sample_list_f){
+  
+  #Set count to 0
+  count_present = 0
+  count_absent = 0
+  
+  #Create control type groups
+  valid <- samples_variables_f[b,"Type"]
+
+  if (valid==a){
+   #Create genus list of specfic control
+   genus_temp <- control_expect[!is.na(control_expect[,a]),]
+   genus_temp <- (genus_temp[,"Genus"])
+   
+   #For each genus is generated list, determine number of reads
+   for (c in genus_temp){
+    value <- samples_otu_complete[c,b]
+  
+    #If value is NA (meaning that the genus was not found in sample), add to the absent count
+    #If reads are >0 then count_presence increases by 1
+    #If reads are =0 then count_absence increases by 1 
+  
+    if(is.na(value) | is.null(value)) {
+     missing_anno[[c]] <- "No Annotations"
+     count_absent = count_absent +1
+     next
+    } else if (value>0) {
+     count_present = count_present +1
+    } else if (value==0){
+     count_absent = count_absent +1
+    } else{
+     next
+     }
+   }
+   
+   #Add final count and length of the list to samples_variables_f dataframe
+   samples_variables_f[b,"GenusObs"] <- count_present
+   samples_variables_f[b,"GenusAbs"] <- count_absent
+   samples_variables_f[b,"GenusExp"] <- length(genus_temp)
+   
+  } else{ 
+   genus_temp <- data.frame()
+  }
+ }
+}
+
+#List of Genus that no samples contained
+missing_anno
+
+###Testing
+write.csv(samples_variables_f,"temp1.csv")
+
+#New Database to store final Genus information
+samples_obs_count_type <- data.frame()
+
+#For each of the control types
+for (a in control_types){
+ 
+ #Reset counts
+ genus=0
+ count=0
+ 
+ #For each of the samples in the sample list
+ for(b in sample_list_f){
+  
+  #Create control type groups
+  valid <- samples_variables_f[b,"Type"]
+  
+  #If the current samples control type matches the control type of the iteration
+  if(valid==a){
+   
+   #Count the number of genus in the sample
+   genus <- genus + samples_variables_f[b,"GenusObs"]
+   count <- count + 1
+  } else{
+    next
+  }
+  #Find number of genus expected
+  genus_expect_count <- samples_variables_f[b,"GenusExp"]
+ }
+ 
+ #Find the average of the genus and totals
+ genus_average <- genus/count
+
+ #Push the totals to the new database 
+ samples_obs_count_type[1,a] <- genus_average
+ samples_obs_count_type[2,a] <- genus_expect_count
+
+ #Add Row names
+ row.names(samples_obs_count_type) <- c("Genus Count", "Expected")
+}
+
+###Testing
+write.csv(samples_obs_count_type,"temp2.csv")
+```
+
+#6. OTU Percent - Analysis Genus OTU Abundance
+```{r}
+#Create new table
+samples_obs_abund = data.frame()
+
+#Determine which genus_expect to use
+##Run through each sample
+for (a in sample_list_f){
+ 
+ #Check for each of the expected genus
+ for (b in genus_expect){
+  
+  #Determine the reads for the genus, and the total reads for the sample
+  reads <- samples_otu_complete[b,a]
+  total <- samples_otu_complete["Total_Reads",a]
+
+  #If value is NA (meaning that the genus was not found in sample), skip
+  #If reads are >0 then add the read count to reads_total
+
+  if(is.na(reads) | is.null(reads)) {
+   next
+  } else {
+   percent_exp <- (reads/total)
+   
+   #Add percent to the samples_obs_abund database
+   samples_obs_abund[b,a] <- percent_exp
+  }
+ }
+}
+
+#Output the table of all samples
+write.csv(samples_obs_abund,"Data/seq_obs_abund.csv")
+```
+
+#7. OTU Percent - Analysis Genus OTU Abundance by Control Type
+```{r}
+#New Database to store final Genus information
+samples_obs_abund_vari <- data.frame()
+
+#For each of the control types
+for (a in control_types){
+ 
+  #For each Genus in list
+  for (b in genus_expect){
+   
+   #Reset Counter
+   reads <- 0
+   total <- 0
+   
+   #Create a list of samples that are of the specified control type
+   sample_list_temp<- subset(samples_variables_f, Type==a)
+   sample_list_temp <- unique(sample_list_temp$NephID)
+   
+   #For each of the samples in the sample list
+   for(c in sample_list_temp){
+    
+    #Add up the total percentages from samples_obs_abund [genus,sampleID]
+    reads <- samples_otu_complete [b,c] + reads
+    total <- samples_otu_complete["Total_Reads",c] + total
+   }
+   
+   #average of genus level by taking total number of reads of that genus divded by total number of reads for samples included
+   #Push value to new dataframe
+   percent_obs <- reads / total
+   samples_obs_abund_vari[b,a] <- percent_obs
+  }
+ }
+
+#Output to text file
+write.csv(samples_obs_abund_vari,"Data/seq_obs_abund_vari.csv")
+```
+**********************
+#9. OTU Percent - Analysis Exp OTU Rel Abun % Diff by Control
+```{r}
+#Add expected frequencies and gram positive status to data table
+for (a in control_types){
+ 
+ #For each of the genus
+ for (b in genus_expect){
+  
+  #Add gram pos/neg information
+  samples_obs_abund_vari[b,"Gram"] <- control_expect[b,10]
+  
+  #Find value and pass to database
+  value <- control_expect[b,a]
+  
+  if(is.na(value) | is.null(value)){
+  } else{
+   #Create new column
+   col_name <- paste(a,"_Exp",sep="")
+   samples_obs_abund_vari[b,col_name] <- value
+  }
+  }
+}
+
+#Output to text file
+write.csv(samples_obs_abund_vari,"Data/seq_obs_abund_vari.csv")
+
+#Start counter
+count=1
+
+#For each of the Seq Controls
+for (i in 1:6){
+ 
+ #For each genus
+ for (a in genus_expect){
+ 
+  #Find the value for the observe rel abund and the expected rel abund
+  value1 <- samples_obs_abund_vari[a,i]
+  value2 <- samples_obs_abund_vari[a,i+7]
+  
+  #Calculate percent difference
+  if(is.na(value1) | is.null(value1)| is.na(value2) | is.null(value2)){
+   value <- "NA"
+  } else{
+   value <- ((value1 - value2)/ value2)
+  } 
+  
+  #Create new column name
+  col_name <- paste((colnames(samples_obs_abund_vari[i])),"-Df",sep="")
+  
+  #Pass values
+  samples_obs_abund_vari[a,col_name]<- value
+  
+ }
+ 
+ #Move the counter to the next control type
+ if(count==length(control_types)){
+   count=1
+ } else{count=count+1}
+}
+
+#Output to text file
+write.csv(samples_obs_abund_vari,"Data/seq_obs_abund_vari.csv")
+```
+
+#10. OTU Percent - Analysis Unexp OTU Rel Abun by Control
+```{r}
+#Create full list of genus present
+genus_present <- rownames(samples_otu_complete)
+genus_expect<-as.character(genus_expect)
+
+#Create list of unexpected
+genus_unexpect <- genus_present[which(!genus_present %in% genus_expect)]
+
+#Remove Total_reads from list
+genus_unexpect <- genus_unexpect[genus_unexpect !="Total_Reads"]
+
+#Create new dataframe
+samples_obs_abund_vari_unexp <- data.frame()
+
+#For each of the control types
+for (a in control_types){
+ 
+  #For each Genus in list
+  for (b in genus_unexpect){
+   
+   #Reset Counter
+   reads <- 0
+   total <- 0
+   
+   #Create a list of samples that are of the specified control type
+   sample_list_temp<- subset(samples_variables_f, Type==a)
+   sample_list_temp <- unique(sample_list_temp$NephID)
+   
+   #For each of the samples in the sample list
+   for(c in sample_list_temp){
+    
+    #Add total reads from samples_otu_complete [genus,sampleID]
+    reads <- samples_otu_complete [b,c] + reads
+    total <- samples_otu_complete["Total_Reads",c] + total
+   }
+   
+   #Calc Rel abund (total number of reads / total number of reads)
+   #Push value to new dataframe
+   percent_obs <- reads / total
+   samples_obs_abund_vari_unexp[b,a] <- percent_obs
+  }
+}
+
+#Remove repeated Clostriudium row
+samples_obs_abund_vari_unexp<- samples_obs_abund_vari_unexp[!rownames(samples_obs_abund_vari_unexp) %in% "Clostridium sensu stricto 1", ]
+
+#Output to text file
+write.csv(samples_obs_abund_vari_unexp,"Data/seq_obs_abund_vari_unexp.csv")
+```
+
+#11 Plot graph - Actual to Expected - IntraControl Variability
+For each kit, show variability, and map
+```{r}
+#Create list for plots, start counter
+plot_list <- list()
+i=1
+
+for (a in control_types){
+   #Create genus list of specfic control
+   genus_temp <- control_expect[!is.na(control_expect[,a]),]
+   genus_temp <- (genus_temp[,"Genus"])
+   
+   #Create a list of samples that are of the specified control type
+   sample_list<- subset(samples_variables_f, Type==a)
+   sample_list <- unique(sample_list$NephID)
+
+   #Create dataframe
+   temp<-data.frame()
+   count=1
+   
+   #For each Genus in list, determine the samples value
+   for (b in genus_temp){
+    
+     #For each of the samples in the sample list
+     for(c in sample_list){
+      temp[count,"Genus"]<-b
+      temp[count,"Obs_Per"]<- samples_obs_abund[b,c]
+      temp[count,"Sample"]<-c
+      temp[count,"Exp_Per"]<-control_expect[b,a]
+      count=count+1
+     }
+   }
+  
+    graph_title <- paste (a,": Intracontrol Variablity",sep = "")
+
+    #Plot Data
+    graph_new <- ggplot(data=temp,mapping=aes(x=Obs_Per,y=Exp_Per,color=Sample))+
+     geom_point()+ #Can add points to graph
+     geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+     labs(title=graph_title, x="Observed Rel. Abundance", y= "Expected Rel. Abundance")+
+     geom_text(mapping=aes(x=Obs_Per,y=Exp_Per,label=Genus),check_overlap = TRUE)
+     
+    
+    plot_list[[i]] = graph_new
+    i=i+1
+}
+
+#Save all plots
+for (i in 1:length(control_types)){
+ 
+ #ID which control is being run
+ a <- control_types[i]
+ 
+ #Save the file
+ file_name = paste("Data/Graphs/Intracontrol Variability_",a, ".tiff", sep="")
+ tiff(file_name)
+ print(plot_list[[i]])
+ dev.off()
+}
+```
+
+#12 Plot graph - Actual to Expected - One graph
+For each kit, show variability, and map
+```{r}
+#Create list for plots, start counter
+temp<-data.frame()
+count<-1
+for (a in control_types){
+   #Create genus list of specfic control
+   genus_temp <- control_expect[!is.na(control_expect[,a]),]
+   genus_temp <- (genus_temp[,"Genus"])
+   
+   #Create a list of samples that are of the specified control type
+   sample_list<- subset(samples_variables_f, Type==a)
+   sample_list <- unique(sample_list$NephID)
+
+   #For each Genus in list, determine the samples value
+   for (b in genus_temp){
+    
+     #For each of the samples in the sample list
+     for(c in sample_list){
+      temp[count,"Genus"]<-b
+      temp[count,"Obs_Per"]<- samples_obs_abund[b,c]
+      temp[count,"Sample"]<-c
+      temp[count,"Exp_Per"]<-control_expect[b,a]
+      temp[count,"Type"] <- a
+      count=count+1
+     }
+   }
+}
+
+#Plot graph
+graph_new<- ggplot(data=temp,mapping=aes(x=Obs_Per,y=Exp_Per,color=Type))+
+ #geom_point()+ #Can add points to graph
+ geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ labs(title="Sequencing Control Comparison", x="Observed Rel. Abundance", y= "Expected Rel. Abundance")
+graph_new
+write.csv(temp,"temp2.csv")
+
+file_name =("Data/Graphs/Kit Differences_ZE.tiff")
+tiff(file_name)
+print(graph_new)
+dev.off()
+
+
+```

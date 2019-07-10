@@ -21,17 +21,17 @@ my (@runid_unique, @projectid, @fastq_files);
 #Ask user where the project directory is
 print "Where is the project directory?\n";
 print "ANS: ";
-#my $project_dir = <STDIN>; chomp $project_dir;
+my $project_dir = <STDIN>; chomp $project_dir;
 
 #Ask user what type of file is being used
 print "\n\nWhat is the name of the manifest file (without .txt)?\n";
 print "ANS: ";
-#my $manifest_ori=<STDIN>; chomp $manifest_ori;
-#$manifest_ori .=".txt";
+my $manifest_ori=<STDIN>; chomp $manifest_ori;
+$manifest_ori .=".txt";
 
 ###Testing
-my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0440_MB4_Complete");
-my $manifest_ori="NP0440_MB4.txt";
+#my $project_dir =("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0440_MB4_Complete");
+#my $manifest_ori="NP0440_MB4.txt";
 
 ######################################################################################
 								##Subroutines##
@@ -245,9 +245,9 @@ sub manifest_meta{
 		push (@externalid, $columns[1]); #External ID
 		push(@sampletype, $columns[2]); #Sample Type
 		push(@sourcematerial, $columns[3]); #Source Material
-		push(@sourcepcrplate, $columns[5]); #Souce Plate ID - skip #4 Extraction Batch ID
-		push (@runid, $columns[6]); #RunID
-		push (@projectid, $columns[7]); #Project ID
+		push(@sourcepcrplate, $columns[4]); #Souce Plate ID
+		push (@runid, $columns[5]); #RunID
+		push (@projectid, $columns[6]); #Project ID
 	}
 	
 	#Find all unique run ID's
@@ -441,3 +441,5 @@ sub fastqfiles{
 	print "\n***********************************";
 	print "Step 5 COMPLETE - Generated QIIME2 split manifests and transferring all FASTQ files\n";
 }
+
+#7/10/19 - fixed columns to remove skips in old manifest format

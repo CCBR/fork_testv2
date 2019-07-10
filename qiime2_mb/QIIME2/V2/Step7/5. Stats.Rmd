@@ -1,0 +1,184 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+#Load libraries
+```{r}
+#https://rdrr.io/github/jbisanz/qiime2R/
+#https://github.com/jbisanz/qiime2R
+install.packages("devtools")
+install_github("jbisanz/qiime2R")
+install_github("michberr/MicrobeMiseq")
+
+
+library(devtools)
+library(qiime2R)
+library(phyloseq)
+library(ggplot2)
+library(ape)
+library(dplyr)
+library(lme4)
+library(plotly)
+library(tidyr)
+library(vegan)
+library(VennDiagram)
+library(scales)
+library(grid)
+library(reshape2)
+library(phyloseq)
+
+```
+#Clean data
+```{r}
+#OTU table (shared file)
+OTU = read.table("example.final.an.unique_list.0.03.norm.shared", header=TRUE, sep="\t")
+
+#Taxonomy of each OTU
+tax = read.table("example.final.an.unique_list.0.03.cons.taxonomy", header=TRUE, sep="\t")
+
+#Metadata. Since we made this in Excel, not mothur, we can use the "row.names" modifier to automatically name the rows by the values in the first column (sample names)
+meta = read.table("example.metadata.txt", header=TRUE, row.names=1, sep="\t")
+
+#SCFA data
+SCFA = read.table("example.SCFA.txt", header=TRUE, row.names=1, sep="\t")
+
+```
+
+
+#Create PhyloSeq Object
+```{r}
+#Read in OTU table (merged, compelte)
+otus<-read_qza("phy/table_dada2_merged_final.qza")
+
+#Read in rooted tree
+tree<-read_qza("phy/rooted_tree.qza")
+
+#Read in taxonomy information and format
+taxonomy<-read_qza("phy/taxonomy_greengenes.qza")
+tax_table<-do.call(rbind, strsplit(as.character(taxonomy$data$Taxon), "; "))
+colnames(tax_table)<-c("Kingdom","Phylum","Class","Order","Family","Genus","Species")
+rownames(tax_table)<-taxonomy$data$Feature.ID
+
+#Read in the metadata  
+metadata<-read.table("phy/manifest_qiime2.tsv", sep='\t', header=T, row.names=1, comment="")
+metadata<-metadata[-1,]#remove the second line that specifies the data type
+
+#Create phyloseq object
+phy_full<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree$data), tax_table(tax_table), sample_data(metadata))
+
+#Review full dataset
+phy_full
+
+#
+```
+
+#Sample Summary
+```{r}
+# Histogram of sample read counts
+sample_sum_df <- data.frame(sum = sample_sums(phy_full))
+ggplot(sample_sum_df, aes(x = sum)) + 
+  geom_histogram(color = "black", fill = "indianred", binwidth = 2500) +
+  ggtitle("Distribution of sample sequencing depth") + 
+  xlab("Read counts") +
+  theme(axis.title.y = element_blank())
+
+
+erie <- phy_full
+
+# Scale reads to even depth 
+erie_scale <- erie %>%
+  scale_reads(round = "round") 
+
+# Fix month levels in sample_data
+sample_data(erie_scale)$ExtKit <- factor(
+  sample_data(erie_scale)$ExtKit, 
+  levels = c("Qiagen.QIAamp..Modified", "Zymo.MagBead.DNA.Kit", "MagAttract.PowerMag.Soil", "MagAttract.PowerMag.Microbiome", "Qiagen.DSP.Virus")
+)
+
+dist.matrix <- t(data.frame(otu_table(erie_scale)))
+bray.not.na <- vegdist(dist.matrix, method = "bray")
+
+
+
+# Ordinate
+full_pcoa <- ordinate(
+  physeq = erie_scale, 
+  method = "DPCoA", 
+  distance = "bray"
+)
+
+# Plot 
+plot_ordination(
+  physeq = erie_scale,
+  ordination = erie_pcoa,
+  color = "Month",
+  shape = "Station",
+  title = "PCoA of Lake Erie bacterial Communities"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff", "darkorchid3", "magenta")
+  ) +
+  geom_point(aes(color = Month), alpha = 0.7, size = 4) +
+  geom_point(colour = "grey90", size = 1.5) 
+
+```
+
+#Richness
+```{r}
+#Measure for all samples
+estimate_richness(phy_full,measures=c("Observed", "Chao1", "ACE", "Shannon", "Simpson", "InvSimpson"))
+
+
+
+plot_richness(physeq, x = "ExtKit", measures = "Observed")  + geom_boxplot(aes(x = ExtKit, y = value, color = NULL), alpha = 0.1)
+
+```
+
+#Random
+```{r}
+#https://joey711.github.io/phyloseq/preprocess.html
+GlobalPatterns <- physeq
+
+GP = GlobalPatterns
+wh0 = genefilter_sample(GP, filterfun_sample(function(x) x > 5), A=0.5*nsamples(GP))
+GP1 = prune_taxa(wh0, GP)
+GP1 = transform_sample_counts(GP1, function(x) 1E6 * x/sum(x))
+
+phylum.sum = tapply(taxa_sums(GP1), tax_table(GP1)[, "Phylum"], sum, na.rm=TRUE)
+top5phyla = names(sort(phylum.sum, TRUE))[1:5]
+GP1 = prune_taxa((tax_table(GP1)[, "Phylum"] %in% top5phyla), GP1)
+ac = get_variable(GP1, "SampleType") %in% c("artificialcolony")
+sample_data(GP1)$ac <- factor(ac)
+
+GP.ord <- ordinate(GP1, "NMDS", "bray")
+p1 = plot_ordination(GP1, GP.ord, type="taxa", color="Phylum", title="taxa")
+print(p1)
+p1 + facet_wrap(~Phylum, 3)
+plot_richness(GP)
+plot_richness(GP, measures=c("Chao1", "Shannon"))
+
+plot_richness(GP, x="SampleType", measures=c("Chao1", "Shannon"))
+
+
+
+phy_tree(GlobalPatterns)$node.label = substr(phy_tree(GlobalPatterns)$node.label, 1, 4)
+physeq = prune_taxa(taxa_names(GlobalPatterns)[1:50], GlobalPatterns)
+plot_tree(physeq)
+plot_tree(physeq, "treeonly")
+
+
+plot_tree(GP1, nodelabf=nodeplotboot(), ladderize="left", color="ExtKit")
+
+plot_tree(physeq, nodelabf=nodeplotboot(), ladderize="left", color="Class")
+plot_tree(GP1, nodelabf=nodeplotboot(), ladderize="left", color="SampleType", shape="ExtKit")
+plot_tree(physeq, nodelabf=nodeplotboot(80,0,3), color="SampleType", ladderize="left")
+
+plot_bar(physeq, x="SampleType", fill="Genus")
+
+
+
+
+```
