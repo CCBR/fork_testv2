@@ -42,19 +42,19 @@ use File::Copy;
 		if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
 			exit;}
 	print "Do you only need the manifest (1) or do you need to create the manifest and move FASTQ files (2)? ";
-		#my $man_only = <STDIN>; chomp $man_only;
+		my $man_only = <STDIN>; chomp $man_only;
 	print "Do you want to include study samples (Y or N)? ";
-		#my $StudyAns = <STDIN>; chomp $StudyAns;
+		my $StudyAns = <STDIN>; chomp $StudyAns;
 	print "What is the date to assoicate with analysis (04_10_17)? ";
-		#my $date = <STDIN>; chomp $date;
+		my $date = <STDIN>; chomp $date;
 	print "What is the name of your project? (NP0452-MB3) ";
-		#my $ProjName = <STDIN>; chomp $ProjName;
+		my $ProjName = <STDIN>; chomp $ProjName;
 	
 	###Testing
-	my $man_only = 1;
-	my $StudyAns = "Y";
-	my $date = "07_17_19";
-	my $ProjName = "NP0084-MB4"; 
+	#my $man_only = 1;
+	#my $StudyAns = "Y";
+	#my $date = "07_17_19";
+	#my $ProjName = "NP0084-MB4"; 
 
 #Call subroutines
 	qc_mb_dir(\$ProjName, \$MRName, \$QCPath, \$ManPath);
@@ -322,7 +322,7 @@ sub FastQ_File{
 			if (-e $line){
 				#if it does copy the file and update status
 				copy ($tempfile_R1, $fastqnewpath);
-				copy ($tempfile_R2, $fastqnewpath)
+				copy ($tempfile_R2, $fastqnewpath);
 				$copystatus[$c] = "Y";
 				$c++;
 			} else{
@@ -350,7 +350,7 @@ sub FastQ_Man {
 	
 	#Create Nephele txt file in Nephele Directory
 	$CWD = $Nephpath; 
-	my $manfile= "$ProjName\_Nephele_Input\_$date.txt";
+	my $manfile= "$ProjName\_Nephele\_Input\_$date.txt";
 	my $statfile= "$ProjName\_status\_$date.txt";
 
 	#Confirmations
@@ -416,8 +416,13 @@ sub FastQ_Man {
 				push(@temparray, "");
 			}
 			
+			#Convert "-" in sample ID to "."
+			my $temp = $SampleID_Neph[$n];
+			$temp =~ s/-/./g;
+			
+			#Push data to file
 			push(@temparray, $unique[$n]);
-			push(@temparray, $sample);
+			push(@temparray, $temp);
 			push(@temparray, $fastqpath[$n]);
 			push(@temparray, $filename_R1[$n]);
 			push(@temparray, $filename_R2[$n]);
