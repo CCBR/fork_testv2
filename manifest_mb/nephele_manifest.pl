@@ -21,58 +21,54 @@ use File::chdir;
 use File::Copy;
 
 #Determine if the modules are up to date for user
-eval "use File::chdir" 
-	or do { 
-		CPAN::install("File::chdir");
-	};
-	
-#eval "use File::Copy" 
+#eval "use File::chdir" 
 #	or do { 
-#		CPAN::install("File::Copy");
+#		CPAN::install("File::chdir");
 #	};
 	
 #Intialize variables
-	my @QCPath; my @ManPath; my $Nephpath; my $MRName;
+	my $QCPath; my $ManPath; my $Nephpath; my $MRName;
 	my @SampleID; my @ExternalID; my @SourceMaterial;
 	my @SampleType;	my @ExtractionBatchID; my @RunID; 
-	my @SourcePCRPlate; my @ProjectID; my @Proj_List;
+	my @SourcePCRPlate; my @ProjectID; my @fastqpath;
 	my @AssayPlate_Neph; my @SampleID_Neph; 
 	my @Treatment_Neph;	my @VialLab_Neph; 
 	my @ExtractBatch_Neph; my @Descrip_Neph;
-	my @filename_R1; my @filename_R2;
+	my @filename_R1; my @filename_R2; my @copystatus;
 	
 #Take in Directory from Command Line and format for CWD
 	print "\nHave you downloaded the Microbiome manifest from LIMS (Y or N) ";
 		my $ManiAns = <STDIN>; chomp $ManiAns;
 		if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
 			exit;}
-	print "Do you only need the manifest? (Y or N) ";
-		my $man_only = <STDIN>; chomp $man_only;
+	print "Do you only need the manifest (1) or do you need to create the manifest and move FASTQ files (2)? ";
+		#my $man_only = <STDIN>; chomp $man_only;
 	print "Do you want to include study samples (Y or N)? ";
-		my $StudyAns = <STDIN>; chomp $StudyAns;
-	print "What is the date to assoicate with analysis(04_10_17)? ";
-		my $date = <STDIN>; chomp $date;
-	print "How many projects would you like to include? ";
-		my $Proj_Num = <STDIN>; chomp $Proj_Num;
-		until($Proj_Num == 0){
-			print "What is the name of your project? (NP0452-MB3) ";
-			my $ProjName = <STDIN>; chomp $ProjName;
-			push(@Proj_List,$ProjName);
-			$Proj_Num = $Proj_Num - 1;
-		}
+		#my $StudyAns = <STDIN>; chomp $StudyAns;
+	print "What is the date to assoicate with analysis (04_10_17)? ";
+		#my $date = <STDIN>; chomp $date;
+	print "What is the name of your project? (NP0452-MB3) ";
+		#my $ProjName = <STDIN>; chomp $ProjName;
+	
+	###Testing
+	my $man_only = 1;
+	my $StudyAns = "Y";
+	my $date = "07_17_19";
+	my $ProjName = "NP0084-MB4"; 
 
 #Call subroutines
-	qc_mb_dir(\@Proj_List, \$MRName, \$Proj_Num, \@QCPath, \@ManPath);
-		$CWD = $QCPath[0];
+	qc_mb_dir(\$ProjName, \$MRName, \$QCPath, \$ManPath);
+		$CWD = $QCPath;
 	Neph_Dir(\$Nephpath, $date); 
-		$CWD = $ManPath[0];
-	read_MB_Man($StudyAns, @Proj_List, @ManPath, \@SampleID, \@ExternalID, \@SampleType, \@SourceMaterial, \@ExtractionBatchID, \@SourcePCRPlate, 
+		$CWD = $ManPath;
+	read_MB_Man($StudyAns, $ProjName, $ManPath, \@SampleID, \@ExternalID, \@SampleType, \@SourceMaterial, \@ExtractionBatchID, \@SourcePCRPlate, 
 		\@RunID, \@ProjectID);
 	neph_variables(@SampleID, @ExternalID, @SampleType, @SourceMaterial, @ExtractionBatchID, 
 		@SourcePCRPlate, \@AssayPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph, \@ExtractBatch_Neph, \@Descrip_Neph);
-	FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2);
-	FastQ_Man($Nephpath, $date, @Proj_List, @SampleID_Neph, @Treatment_Neph, @SourceMaterial, @VialLab_Neph, @AssayPlate_Neph, 
-		@ExtractBatch_Neph, @Descrip_Neph, @filename_R1, @filename_R2);
+		$CWD = $Nephpath;
+	FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
+	FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @SourceMaterial, @VialLab_Neph, @AssayPlate_Neph, 
+		@ExtractBatch_Neph, @Descrip_Neph, @filename_R1, @filename_R2, @copystatus, @fastqpath);
 
 ######################################################################################
 								##Subroutines##
@@ -82,22 +78,17 @@ eval "use File::chdir"
 sub qc_mb_dir {
 
 	#Initiate variables
-	my ($Proj_List, $MRName, $Proj_Num, $QCPath, $ManPath)=@_;
-	my $n=0; my $tempQC; my $tempMan;
+	my ($ProjName, $MRName, $QCPath, $ManPath)=@_;
+	my $tempQC; my $tempMan;
 	
-	foreach (@Proj_List){
-		$$MRName = $Proj_List[$n];
-		$$MRName =~ s/NP//g;
-		$$MRName =~ s/-.*$//g;
-		$$MRName = "MR-$$MRName";
+	$$MRName = $$ProjName;
+	$$MRName =~ s/NP//g;
+	$$MRName =~ s/-.*$//g;
+	$$MRName = "MR-$$MRName";
 
-		#Create pathway for QIIME Folder (QCPath) and Manifest (Manpath)
-		$tempQC = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$Proj_List[$n]\\QC Data";
-		$tempMan = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$Proj_List[$n]\\Analysis Manifests";
-		$n++;
-		push (@$QCPath, $tempQC);
-		push (@$ManPath, $tempMan);
-	}
+	#Create pathway for QIIME Folder (QCPath) and Manifest (Manpath)
+	$$QCPath = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$ProjName\\QC Data";
+	$$ManPath = "T:\\DCEG\\CGF\\Laboratory\\Projects\\$$MRName\\$$ProjName\\Analysis Manifests";
 }
 
 #Creates Nephele Directory, if necessary using variables created in QC_MB_DIR
@@ -121,72 +112,73 @@ sub Neph_Dir {
 sub read_MB_Man {
 	
 	#Initialize Variables
-	my ($StudyAns, $Proj_List, $ManPath, $SampleID, $ExternalID, $SampleType, $SourceMaterial, 
+	my ($StudyAns, $ProjName, $ManPath, $SampleID, $ExternalID, $SampleType, $SourceMaterial, 
 		$ExtractionBatchID, $SourcePCRPlate, $RunID, $ProjectID) =@_;
-	my $manifile=""; my $n=0;
-	my @filedata; my @QCdata;
+	my $manifile=""; my @filedata; my @QCdata;
 
 	#Create a loop for each Study included, to read in manifest and save data into array variables
-	foreach (@Proj_List){
-		$CWD = $ManPath[$n];
+	$CWD = $ManPath;
 		
-		#Create Manifest File name from Project Info;
-		$manifile = $Proj_List[$n]; $manifile =~ s/\\//g;
-		$manifile .= "-manifest.txt";
+	#Create Manifest File name from Project Info;
+	$manifile = $ProjName; $manifile =~ s/\\//g;
+	$manifile .= "-manifest.txt";
 		
-		#If filename not provided, give error message and close
-		unless (open(READ_FILE, $manifile)) {
-			print "Cannot open file $manifile provided\n\n";
-			exit;
-		}
-
-		#Read in the file, and close
-		@filedata= <READ_FILE>;
-		close READ_FILE;
-		
-		#Create database with ("Y") or without ("N") study samples
-		if (lc $StudyAns eq lc "Y") {
-			foreach my $line (@filedata) {
-				push (@QCdata, $line);
-				next; 
-			}
-		} else{ 
-			for(my $i=0; $i < @filedata; $i++) {
-				if ($filedata[$i] =~ m/Study/) {
-					next;
-				} elsif($filedata[$i] =~ m/SACCOMANNOFLUID/){
-					next;
-				} elsif($filedata[$i] =~ m/ORALRNS_TEBUFFER/){
-					next;
-				} elsif($filedata[$i] =~ m/ExtractionReplicate/){
-					push(@QCdata,$filedata[$i-1]); ##To include the study matches for replicate sample
-					push(@QCdata,$filedata[$i]);
-				} else {
-					push (@QCdata, $filedata[$i]);
-					next;
-				}
-			}
-		} 
-		shift @QCdata;
-
-		#Create arrays with sample line data separated by tabs
-		foreach (@QCdata) {
-			my @columns = split('\t',$_);
-			if(length $columns[7]>0){
-				push(@SampleID, $columns[0]);
-				push(@ExternalID, $columns[1]);
-				push(@SampleType, $columns[2]);
-				push(@SourceMaterial, $columns[3]);
-				push(@ExtractionBatchID, $columns[5]);
-				push(@SourcePCRPlate, $columns[6]);
-				push(@RunID,$columns[7]);
-				push(@ProjectID,$columns[9]);
-			} else {next;}
-		}
-		
-		#Move through studys, clearing QC data to avoid repeats
-		$n++; @QCdata=();
+	#If filename not provided, give error message and close
+	unless (open(READ_FILE, $manifile)) {
+		print "Cannot open file $manifile \n\n";
+		exit;
 	}
+	
+	#Confirmations
+	print "\n\n******************************\nReading in manifest file\n";
+
+	#Read in the file, and close
+	@filedata= <READ_FILE>;
+	close READ_FILE;
+		
+	#Create database with ("Y") or without ("N") study samples
+	if (lc $StudyAns eq lc "Y") {
+		foreach my $line (@filedata) {
+			push (@QCdata, $line);
+			next; 
+		}
+	} else{ 
+		for(my $i=0; $i < @filedata; $i++) {
+			if ($filedata[$i] =~ m/Study/) {
+				next;
+			} elsif($filedata[$i] =~ m/SACCOMANNOFLUID/){
+				next;
+			} elsif($filedata[$i] =~ m/ORALRNS_TEBUFFER/){
+				next;
+			} elsif($filedata[$i] =~ m/ExtractionReplicate/){
+				push(@QCdata,$filedata[$i-1]); ##To include the study matches for replicate sample
+				push(@QCdata,$filedata[$i]);
+			} else {
+				push (@QCdata, $filedata[$i]);
+				next;
+			}
+		}
+	} 
+	shift @QCdata;
+
+	#Create arrays with sample line data separated by tabs
+	foreach (@QCdata) {
+		my @columns = split('\t',$_);
+		if(length $columns[7]>0){
+			push(@SampleID, $columns[0]);
+			push(@ExternalID, $columns[1]);
+			push(@SampleType, $columns[2]);
+			push(@SourceMaterial, $columns[3]);
+			push(@ExtractionBatchID, $columns[5]);
+			push(@SourcePCRPlate, $columns[6]);
+			push(@RunID,$columns[7]);
+			push(@ProjectID,$columns[9]);
+		} else {next;}
+	}
+		
+	#Move through studys, clearing QC data to avoid repeats
+	@QCdata=();
+	
 }
 
 #Creates variables needed for Neph Manifest
@@ -256,8 +248,8 @@ sub neph_variables{
 sub FastQ_File{
 	
 	#Initialize Variables
-	my ($Nephpath, $man_only, $RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2) =@_;
-	my @foldernames; my @fastqpath;
+	my ($Nephpath, $man_only, $RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2, $copystatus, $fastqpath) =@_;
+	my @foldernames;  my $a=0;
 	my $b = 0; my $c=0; my $n=0; my $FastP;
 
 	#Create Folder Names from Sample ID's IF RunID is not blank (allows partial runs)
@@ -279,7 +271,6 @@ sub FastQ_File{
 		push (@fastqpath, $FastP);
 		$n++;
 	}
-	print "\n****************************** \nMoving Files\n";
 	
 	#Run through each directory, find paths for FASTQ Files
 	foreach my $line (@fastqpath){
@@ -305,21 +296,41 @@ sub FastQ_File{
 			} else{next;}
 		}
 	}
-
+	
 	#Create copies and move FASTQ File to Nephele Folder
-	if($man_only=~'N'){
+	if($man_only==2){
+		#Confirmations
+		print "\n\n******************************\nMoving FastQ files\n";		
+		
+		#Create folder for FASTQ Files
+		my $fastqdir = "FASTQ";
+		mkdir $fastqdir unless -d $fastqdir;
+		my $fastqnewpath= "$CWD\\$fastqdir";
+		
+		#Move to new folder
 		opendir (NDIR, $Nephpath);
+		
+		#Move files
 		foreach my $line(@fastqpath) {
 			
 			#Open directory with FastQ folders
 			$CWD = $line;
-			my $tempfile_R1 = $filename_R1[$b];
-			my $tempfile_R2 = $filename_R2[$c];
-		
-		#Create loop for files to be copied and pasted to nephele
-			copy ($tempfile_R1, $Nephpath) or die;
-			copy ($tempfile_R2, $Nephpath) or die;
-			$b++; $c++;
+			my $tempfile_R1 = $filename_R1[$a];
+			my $tempfile_R2 = $filename_R2[$b];
+
+			#Check if file exists
+			if (-e $line){
+				#if it does copy the file and update status
+				copy ($tempfile_R1, $fastqnewpath);
+				copy ($tempfile_R2, $fastqnewpath)
+				$copystatus[$c] = "Y";
+				$c++;
+			} else{
+				$copystatus[$c]= "N";
+				$c++;
+				print "file failed $tempfile_R1\n";
+			}
+			$a++; $b++;
 		}
 		closedir(NDIR);
 		print "\nCompleted moving FastQ files";
@@ -329,23 +340,29 @@ sub FastQ_File{
 #Creates the Manifest for Nephele input
 sub FastQ_Man {
 	#Initialize Variables
-	my ($Nephpath, $date, @Proj_List, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $AssayPlate_Neph, 
-		$ExtractBatch_Neph, $Descrip_Neph, $filename_R1, $filename_R2)= @_;
-	my $n =0; 
+	my ($Nephpath, $date, $ProjName, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $AssayPlate_Neph, 
+		$ExtractBatch_Neph, $Descrip_Neph, $filename_R1, $filename_R2, $copystatus, $fastqpath)= @_;
+	my $n =0; my @unique;
 	
 	#Create headers for text file
 	my @headers = ("\#SampleID", "ForwardFastqFile", "ReverseFastqFile", "TreatmentGroup", "VialLabel", "AssayPlate", "ExtractionBatch", "Description");
+	my @statusheadters = ("Copy Status", "Unique", "SampleID", "FASTQ Path",  "File name R1", "File name R2", "PlateID");
 	
 	#Create Nephele txt file in Nephele Directory
-	$CWD = $Nephpath; my $newfile= "$Proj_List[0]\_Nephele_Input\_$date.txt";
+	$CWD = $Nephpath; 
+	my $manfile= "$ProjName\_Nephele_Input\_$date.txt";
+	my $statfile= "$ProjName\_status\_$date.txt";
+
+	#Confirmations
+	print "\n\n******************************\nGenerating manifest and status files\n";
 	
 	#Print data to Nephele txt file
-	open (FILE, ">$newfile") or die;
+	open (FILE, ">$manfile") or die;
 		
 		#Print headers to file
 		print FILE join ("\t", @headers), "\n";
 		
-		#Print sample data to file for completed file lines only
+		#Print data to manifest file
 		foreach my $sample (@SampleID_Neph) {
 			my @temparray;
 			
@@ -365,11 +382,52 @@ sub FastQ_Man {
 			print FILE join("\t",@temparray), "\n";
 			$n++;
 		}
-	#Confirmations
-	print "\n\n******************************\nFinished generating TXT file\n";
+
+	#Determine if files are unique
+	$n=0; my $count=0;
+	foreach my $file (@filename_R1){
+		foreach my $file2 (@filename_R1){
+			if($file=~$file2){
+				$count++;
+			} 
+		}
+		
+		if($count>1){
+			$unique[$n]="N";
+		} else {
+			$unique[$n]="Y";
+		}
+		$n++;
+		$count=0;
+	}
 	
+	#Print data to status file
+	$n=0; 
+	open (FILE2, ">$statfile") or die;
+		print FILE2 join ("\t", @statusheadters), "\n";
+		
+		foreach my $sample (@SampleID_Neph) {
+			my @temparray;
+			
+			#If not copying files, no copy status to include
+			if($man_only==2){
+				push(@temparray, $copystatus[$n]);
+			} else {
+				push(@temparray, "");
+			}
+			
+			push(@temparray, $unique[$n]);
+			push(@temparray, $sample);
+			push(@temparray, $fastqpath[$n]);
+			push(@temparray, $filename_R1[$n]);
+			push(@temparray, $filename_R2[$n]);
+			push(@temparray, $AssayPlate_Neph[$n]);
+			print FILE2 join("\t",@temparray), "\n";
+			$n++;
+		}
+
 	my $total = scalar @SampleID_Neph*2;
-	print "\n******************************\nThere should be $total FASTQ files in the folder\n\n";
+	print "\n******************************\nThere should be $total FASTQ files in the FASTQ folder\n\n";
 }
 
 exit;
@@ -393,3 +451,5 @@ exit;
 		## 2) change all "-" in sample ID to "."
 		## 3) remove code that previously removed .gz from file name of FastQ - required now
 ##12/13/18: Change directory name from qiime to nephele
+##7/17/19: Changed name of the file, changed question for manifest only, removed project lists - multiple projects read through one manifest file, updates to fastq location, create status file to update file locations + 
+##whether copying was successful or if fastq files are named uniquely
