@@ -60,7 +60,8 @@ use File::Copy;
 	dupsample_check(@SourcePCRPlate,@SampleID,\@SampleID_DupCheck,\@Unique);
 	neph_variables(@SampleID_DupCheck, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
-	#FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
+	FastQ_FilePath($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
+	#FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
 	#FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath);
 	
 	
@@ -250,8 +251,62 @@ sub neph_variables{
 	}
 }
 
+#Creates paths for the FastQfiles
+sub FastQ_FilePath{
+	
+	#Initialize Variables
+	my ($RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2, $fastqpath) =@_;
+	my @foldernames;  my $a=0;
+	my $b = 0; my $c=0; my $n=0; my $FastP;
+
+	#Create Folder Names from Sample ID's IF RunID is not blank (allows partial runs)
+	foreach my $line(@SampleID) {
+		my $Sample = "Sample_";
+		$Sample .=$line;
+		push (@foldernames, $Sample);
+	}
+
+	#Create Directory paths for all samples
+	foreach my $line (@foldernames) {
+		my $tempRun = $RunID[$n];
+		my $tempProj= $ProjectID[$n];
+		chomp $tempProj;
+
+		#Create pathway for FastQ files, second pass
+		$FastP = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$tempProj\\$line\\";
+		$FastP =~ s/_MB/-MB/g;
+		push (@fastqpath, $FastP);
+		$n++;
+	}
+	
+	#Run through each directory, find paths for FASTQ Files
+	foreach my $line (@fastqpath){
+	
+		#Open File Directory and copy fastq files
+		opendir(DIR, $line) or die "Can't open directory $line!";
+		my @files = grep {/_001\.fastq\.gz$/} readdir(DIR);
+		closedir(DIR);
+
+		#Read through each file of the directory
+		for my $file (@files) {
+							
+			#If the file is an R1 FASTQ File, save
+			if ($file =~ /R1/) {
+                
+				#Push file names and directory locations
+				push(@filename_R1, $file);
+			}
+			
+			#If the file is an R2 FASTQ File, save
+			elsif ($file =~ /R2/){
+                push(@filename_R2, $file);
+			} else{next;}
+		}
+	}
+}
+
 #Creates paths for the FastQfiles and copies them into Nephele folder
-sub FastQ_File{
+sub FastQ_FileMove{
 	
 	#Initialize Variables
 	my ($Nephpath, $man_only, $RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2, $copystatus, $fastqpath) =@_;
@@ -342,6 +397,7 @@ sub FastQ_File{
 		print "\nCompleted moving FastQ files";
 	}
 }
+
 
 #Creates the Manifest for Nephele input
 sub FastQ_Man {
