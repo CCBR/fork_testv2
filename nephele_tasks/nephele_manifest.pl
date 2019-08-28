@@ -20,12 +20,6 @@ use CPAN;
 use File::chdir;
 use File::Copy;
 
-#Determine if the modules are up to date for user
-#eval "use File::chdir" 
-#	or do { 
-#		CPAN::install("File::chdir");
-#	};
-	
 #Intialize variables
 	my $QCPath; my $ManPath; my $Nephpath; my $MRName;
 	my @SampleID; my @ExternalID; my @SourceMaterial;
