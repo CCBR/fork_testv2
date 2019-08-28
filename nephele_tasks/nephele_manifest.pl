@@ -46,7 +46,7 @@ use File::Copy;
 	#	my $ProjName = <STDIN>; chomp $ProjName;
 	
 	###Testing
-	my $man_only = 1;
+	my $man_only = 2;
 	my $StudyAns = "Y";
 	my $date = "08_28_19";
 	my $ProjName = "NP0084-MB4"; 
@@ -60,8 +60,8 @@ use File::Copy;
 	dupsample_check(@SourcePCRPlate,@SampleID,\@SampleID_DupCheck,\@Unique);
 	neph_variables(@SampleID_DupCheck, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
-	FastQ_FilePath($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
-	#FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
+	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
+	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
 	#FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath);
 	
 	
@@ -302,62 +302,18 @@ sub FastQ_FilePath{
                 push(@filename_R2, $file);
 			} else{next;}
 		}
-	}
+	}	
 }
 
 #Creates paths for the FastQfiles and copies them into Nephele folder
 sub FastQ_FileMove{
 	
 	#Initialize Variables
-	my ($Nephpath, $man_only, $RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2, $copystatus, $fastqpath) =@_;
-	my @foldernames;  my $a=0;
-	my $b = 0; my $c=0; my $n=0; my $FastP;
+	my ($Nephpath, $man_only, $SampleID_DupCheck, $Unique, $filename_R1, $filename_R2, $copystatus, $fastqpath) =@_;
+	my @foldernames;  
+	my $a=0; my $b = 0; my $c=0; my $n=0; 
+	my $FastP;
 
-	#Create Folder Names from Sample ID's IF RunID is not blank (allows partial runs)
-	foreach my $line(@SampleID) {
-		my $Sample = "Sample_";
-		$Sample .=$line;
-		push (@foldernames, $Sample);
-	}
-
-	#Create Directory paths for all samples
-	foreach my $line (@foldernames) {
-		my $tempRun = $RunID[$n];
-		my $tempProj= $ProjectID[$n];
-		chomp $tempProj;
-
-		#Create pathway for FastQ files, second pass
-		$FastP = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$tempProj\\$line\\";
-		$FastP =~ s/_MB/-MB/g;
-		push (@fastqpath, $FastP);
-		$n++;
-	}
-	
-	#Run through each directory, find paths for FASTQ Files
-	foreach my $line (@fastqpath){
-	
-		#Open File Directory and copy fastq files
-		opendir(DIR, $line) or die "Can't open directory $line!";
-		my @files = grep {/_001\.fastq\.gz$/} readdir(DIR);
-		closedir(DIR);
-
-		#Read through each file of the directory
-		for my $file (@files) {
-							
-			#If the file is an R1 FASTQ File, save
-			if ($file =~ /R1/) {
-                
-				#Push file names and directory locations
-				push(@filename_R1, $file);
-			}
-			
-			#If the file is an R2 FASTQ File, save
-			elsif ($file =~ /R2/){
-                push(@filename_R2, $file);
-			} else{next;}
-		}
-	}
-	
 	#Create copies and move FASTQ File to Nephele Folder
 	if($man_only==2){
 		#Confirmations
@@ -367,8 +323,6 @@ sub FastQ_FileMove{
 		my $fastqdir = "FASTQ";
 		mkdir $fastqdir unless -d $fastqdir;
 		my $fastqnewpath= "$CWD\\$fastqdir";
-		
-		#Move to new folder
 		opendir (NDIR, $Nephpath);
 		
 		#Move files
@@ -379,11 +333,22 @@ sub FastQ_FileMove{
 			my $tempfile_R1 = $filename_R1[$a];
 			my $tempfile_R2 = $filename_R2[$b];
 
-			#Check if file exists
 			if (-e $line){
-				#if it does copy the file and update status
 				#copy ($tempfile_R1, $fastqnewpath);
 				#copy ($tempfile_R2, $fastqnewpath);
+			
+				if($Unique[$c]=~"N"){
+					my $newfile= $SampleID_DupCheck[$c];
+					my $newfile_R1=$tempfile_R1; $newfile_R1 =~ s/^[^_]*_/_/;
+					$newfile.=$newfile_R1;
+					rename ("$fastqnewpath\\$tempfile_R1","$fastqnewpath\\$newfile");
+					
+					$newfile= $SampleID_DupCheck[$c];
+					my $newfile_R2=$tempfile_R2; $newfile_R2 =~ s/^[^_]*_/_/;
+					$newfile.=$newfile_R2;
+					rename ("$fastqnewpath\\$tempfile_R1","$fastqnewpath\\$newfile");										
+				}
+
 				$copystatus[$c] = "Y";
 				$c++;
 			} else{
