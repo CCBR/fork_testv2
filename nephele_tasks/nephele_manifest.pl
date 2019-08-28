@@ -56,8 +56,7 @@ use File::Copy;
 	Neph_Dir(\$Nephpath, $date); 
 		$CWD = $ManPath;
 	read_MB_Man($StudyAns, $ProjName, $ManPath, \@SampleID, \@ExternalID, \@SampleType, \@ExtractionBatchID, \@SourcePCRPlate, \@RunID, \@ProjectID);
-	neph_variables(@SampleID, @ExternalID, @SampleType, @ExtractionBatchID, 
-		@SourcePCRPlate, \@AssayPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph, \@ExtractBatch_Neph, \@Descrip_Neph);
+	neph_variables(@SampleID, @ExternalID, @SampleType, @SourcePCRPlate, \@AssayPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
 	FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
 	FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @AssayPlate_Neph, 
@@ -172,7 +171,7 @@ sub read_MB_Man {
 sub neph_variables{
 	
 	#Initialize variables
-	my ($SampleID, $ExternalID, $SampleType, $SourceMaterial, $ExtractionBatchID, $SourcePCRPlate, $AssayPlate_Neph, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $ExtractBatch_Neph, $Descrip_Neph)=@_;
+	my ($SampleID, $ExternalID, $SampleType, $SourcePCRPlate, $AssayPlate_Neph, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph)=@_;
  	my @tempSampleID; my $n = 0;
 	
 	#Replace _ with . in Source PCR Plate and concatonate to Sample ID
@@ -223,12 +222,6 @@ sub neph_variables{
 		$line =~ s/_/./g;
 		push (@VialLab_Neph, $line);
 	}
-	
-	#Set Extraction Batch ID as Extraction Batch
-	@ExtractBatch_Neph = @ExtractionBatchID;
-
-	#Set SourceMaterial as Description
-	@Descrip_Neph = @SourceMaterial;
 }
 
 #Creates paths for the FastQfiles and copies them into Nephele folder
