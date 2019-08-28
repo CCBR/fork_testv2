@@ -58,7 +58,7 @@ use File::Copy;
 		$CWD = $ManPath;
 	read_MB_Man($StudyAns, $ProjName, $ManPath, \@SampleID, \@ExternalID, \@SampleType, \@ExtractionBatchID, \@SourcePCRPlate, \@RunID, \@ProjectID);
 	dupsample_check(@SourcePCRPlate,@SampleID,\@SampleID_DupCheck,\@Unique);
-	neph_variables(@SampleID, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
+	neph_variables(@SampleID_DupCheck, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
 	#FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
 	#FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath);
@@ -196,7 +196,59 @@ sub dupsample_check{
 	}	
 }
 
+#Creates variables needed for Neph Manifest
+sub neph_variables{
+	
+	#Initialize variables
+	my ($SampleID_DupCheck, $ExternalID, $SampleType, $SourcePCRPlate, $SourcePCRPlate_Neph, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph)=@_;
+ 	my @tempSampleID; my $n = 0;
+	
+	#Format Sample IDs
+	foreach my $line (@SampleID_DupCheck) {
+		my $templine=$SampleID_DupCheck[$n];
+		print "$templine--";
+		if($templine =~ m/NTC/){
+			$templine = "NTC";
+		} elsif($templine =~ m/Water/){
+			$templine = "Water";
+		} 
+		$templine .= ".$SourcePCRPlate[$n]";
+		
+		$templine =~ s/_/./g; $templine =~ s/-/./g;
+		$templine =~ s/\.0/0/g;
+		$templine =~ s/\.1/1/g;
+		
+		push(@SampleID_Neph, $templine);
+		$n++; print "$templine\n";
+	}
+	
+	#Remove _ from Source PCR Plate and save PB# as AssayPlate for Nephele
+	foreach my $line (@SourcePCRPlate) {
+		$line =~ s/\..*//g;
+		push (@SourcePCRPlate_Neph, $line);
+	}	
 
+	#Format treatment groups and assign
+	foreach my $line (@SampleType){
+		if($line =~ /ExtractionReplicate/){
+			$line = "Extraction.Replicate";
+		} elsif($line =~ /ExtractionBlank/){
+			$line = "Extraction.Blank";
+		} elsif($line =~/PCRNTCBlank/){
+			$line = "PCRNTC";
+		} elsif($line=~/PCRWaterBlank/){
+			$line = "PCRWATER";
+		} elsif($line=~/artificialcolony/){
+			$line = "artificial.colony";
+		} push (@Treatment_Neph, $line);
+	}
+
+	#Set External ID as Vial Label and format with ".", remove "_"
+	foreach my $line (@ExternalID){
+		$line =~ s/_/./g;
+		push (@VialLab_Neph, $line);
+	}
+}
 
 #Creates paths for the FastQfiles and copies them into Nephele folder
 sub FastQ_File{
