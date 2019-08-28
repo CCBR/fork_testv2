@@ -60,7 +60,7 @@ use File::Copy;
 		$CWD = $Nephpath;
 	FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
 	FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @AssayPlate_Neph, 
-		@ExtractBatch_Neph, @Descrip_Neph, @filename_R1, @filename_R2, @copystatus, @fastqpath);
+		@ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath);
 
 ######################################################################################
 								##Subroutines##
@@ -321,7 +321,7 @@ sub FastQ_File{
 sub FastQ_Man {
 	#Initialize Variables
 	my ($Nephpath, $date, $ProjName, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $AssayPlate_Neph, 
-		$ExtractBatch_Neph, $Descrip_Neph, $filename_R1, $filename_R2, $copystatus, $fastqpath)= @_;
+		$ExtractionBatchID, $filename_R1, $filename_R2, $copystatus, $fastqpath)= @_;
 	my $n =0; my @unique;
 	
 	#Create headers for text file
@@ -357,8 +357,7 @@ sub FastQ_Man {
 			push(@temparray, $Treatment_Neph[$n]);
 			push(@temparray, $VialLab_Neph[$n]);
 			push(@temparray, $AssayPlate_Neph[$n]);
-			push(@temparray, $ExtractBatch_Neph[$n]);
-			push(@temparray, $Descrip_Neph[0]);
+			push(@temparray, $ExtractionBatchID[$n]);
 			print FILE join("\t",@temparray), "\n";
 			$n++;
 		}
