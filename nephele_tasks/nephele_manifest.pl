@@ -25,16 +25,17 @@ use File::Copy;
 	my @SampleID; my @ExternalID; my @SourceMaterial;
 	my @SampleType;	my @ExtractionBatchID; my @RunID; 
 	my @SourcePCRPlate; my @ProjectID; my @fastqpath;
-	my @AssayPlate_Neph; my @SampleID_Neph; 
+	my @SourcePCRPlate_Neph; my @SampleID_Neph; my @SampleID_DupCheck;
 	my @Treatment_Neph;	my @VialLab_Neph; 
 	my @ExtractBatch_Neph; my @Descrip_Neph;
 	my @filename_R1; my @filename_R2; my @copystatus;
+	my @Unique;
 	
 #Take in Directory from Command Line and format for CWD
 	print "\nHave you downloaded the Microbiome manifest from LIMS - Will be placed in the AnalysisManifest folder of Project (Y or N) ";
 	#	my $ManiAns = <STDIN>; chomp $ManiAns;
 	#	if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
-			exit;}
+	#		exit;}
 	print "Do you only need the manifest (1) or do you need to create the manifest and move FASTQ files (2)? ";
 	#	my $man_only = <STDIN>; chomp $man_only;
 	print "Do you want to include study samples (Y or N)? ";
@@ -47,7 +48,7 @@ use File::Copy;
 	###Testing
 	my $man_only = 1;
 	my $StudyAns = "Y";
-	my $date = "07_17_19";
+	my $date = "08_28_19";
 	my $ProjName = "NP0084-MB4"; 
 
 #Call subroutines
@@ -56,12 +57,13 @@ use File::Copy;
 	Neph_Dir(\$Nephpath, $date); 
 		$CWD = $ManPath;
 	read_MB_Man($StudyAns, $ProjName, $ManPath, \@SampleID, \@ExternalID, \@SampleType, \@ExtractionBatchID, \@SourcePCRPlate, \@RunID, \@ProjectID);
-	neph_variables(@SampleID, @ExternalID, @SampleType, @SourcePCRPlate, \@AssayPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
+	dupsample_check(@SourcePCRPlate,@SampleID,\@SampleID_DupCheck,\@Unique);
+	neph_variables(@SampleID, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
-	FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
-	FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @AssayPlate_Neph, 
-		@ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath);
-
+	#FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
+	#FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath);
+	
+	
 ######################################################################################
 								##Subroutines##
 ######################################################################################
@@ -155,7 +157,7 @@ sub read_MB_Man {
 	#Create arrays with sample line data separated by tabs
 	foreach (@QCdata) {
 		my @columns = split('\t',$_);
-		if(length $columns[7]>0){
+		if(length $columns[6]>0){
 			push(@SampleID, $columns[0]);
 			push(@ExternalID, $columns[1]);
 			push(@SampleType, $columns[2]);
@@ -167,62 +169,34 @@ sub read_MB_Man {
 	}
 }
 
-#Creates variables needed for Neph Manifest
-sub neph_variables{
+#Dup Check
+sub dupsample_check{
+	my ($SourcePCRPlate, $SampleID,$SampleID_DupCheck, $Unique)=@_;
+	my $n=0;
 	
-	#Initialize variables
-	my ($SampleID, $ExternalID, $SampleType, $SourcePCRPlate, $AssayPlate_Neph, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph)=@_;
- 	my @tempSampleID; my $n = 0;
-	
-	#Replace _ with . in Source PCR Plate and concatonate to Sample ID
-	foreach my $line (@SourcePCRPlate) {
-		$line =~ s/_/./g;
-		$line =~ s/\.0/0/g;
-		$line =~ s/\.1/1/g;
-		push (@tempSampleID, $line);
-	}
-	
-	#Format NTC and Water samples
-	foreach my $line (@tempSampleID) {
-		my $templine = $SampleID[$n];
-		if($templine =~ m/NTC/){
-			$templine = "NTC";
-		} elsif($templine =~ m/Water/){
-			$templine = "Water";
-		} 
-		$templine .= ".$line";
-		push(@SampleID_Neph, $templine);
+	#Samples may have duplicate ID names and need to be individualized
+	$n=0; my $count=0;
+	foreach my $line1 (@SampleID){
+		foreach my $line2 (@SampleID){
+			if($line1=~$line2){
+				$count++;
+			} 
+		}
+		
+		if($count>1){
+			$Unique[$n]="N";
+			$SampleID_DupCheck[$n]=$SampleID[$n];
+			$SampleID_DupCheck.=$SourcePCRPlate[$n]; #add PCR plate ID and location as this will be unique for the duplicates
+		} else {
+			$Unique[$n]="Y";
+			$SampleID_DupCheck[$n]=$SampleID[$n];
+		}
 		$n++;
-		next;
-	}
-	
-	#Remove _ from Source PCR Plate and save PB# as AssayPlate for Nephele
-	foreach my $line (@SourcePCRPlate) {
-		$line =~ s/\..*//g;
-		push (@AssayPlate_Neph, $line);
+		$count=0;
 	}	
-
-	#Format treatment groups and assign
-	foreach my $line (@SampleType){
-		if($line =~ /ExtractionReplicate/){
-			$line = "Extraction.Replicate";
-		} elsif($line =~ /ExtractionBlank/){
-			$line = "Extraction.Blank";
-		} elsif($line =~/PCRNTCBlank/){
-			$line = "PCRNTC";
-		} elsif($line=~/PCRWaterBlank/){
-			$line = "PCRWATER";
-		} elsif($line=~/artificialcolony/){
-			$line = "artificial.colony";
-		} push (@Treatment_Neph, $line);
-	}
-
-	#Set External ID as Vial Label and format with ".", remove "_"
-	foreach my $line (@ExternalID){
-		$line =~ s/_/./g;
-		push (@VialLab_Neph, $line);
-	}
 }
+
+
 
 #Creates paths for the FastQfiles and copies them into Nephele folder
 sub FastQ_File{
@@ -301,8 +275,8 @@ sub FastQ_File{
 			#Check if file exists
 			if (-e $line){
 				#if it does copy the file and update status
-				copy ($tempfile_R1, $fastqnewpath);
-				copy ($tempfile_R2, $fastqnewpath);
+				#copy ($tempfile_R1, $fastqnewpath);
+				#copy ($tempfile_R2, $fastqnewpath);
 				$copystatus[$c] = "Y";
 				$c++;
 			} else{
@@ -320,9 +294,9 @@ sub FastQ_File{
 #Creates the Manifest for Nephele input
 sub FastQ_Man {
 	#Initialize Variables
-	my ($Nephpath, $date, $ProjName, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $AssayPlate_Neph, 
+	my ($Nephpath, $date, $ProjName, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $SourcePCRPlate_Neph, 
 		$ExtractionBatchID, $filename_R1, $filename_R2, $copystatus, $fastqpath)= @_;
-	my $n =0; my @unique;
+	my $n =0; 
 	
 	#Create headers for text file
 	my @headers = ("\#SampleID", "ForwardFastqFile", "ReverseFastqFile", "TreatmentGroup", "VialLabel", "AssayPlate", "ExtractionBatch", "Description");
@@ -356,57 +330,9 @@ sub FastQ_Man {
 			push(@temparray, $filename_R2[$n]);
 			push(@temparray, $Treatment_Neph[$n]);
 			push(@temparray, $VialLab_Neph[$n]);
-			push(@temparray, $AssayPlate_Neph[$n]);
+			push(@temparray, $SourcePCRPlate_Neph[$n]);
 			push(@temparray, $ExtractionBatchID[$n]);
 			print FILE join("\t",@temparray), "\n";
-			$n++;
-		}
-
-	#Determine if files are unique
-	$n=0; my $count=0;
-	foreach my $file (@filename_R1){
-		foreach my $file2 (@filename_R1){
-			if($file=~$file2){
-				$count++;
-			} 
-		}
-		
-		if($count>1){
-			$unique[$n]="N";
-		} else {
-			$unique[$n]="Y";
-		}
-		$n++;
-		$count=0;
-	}
-	
-	#Print data to status file
-	$n=0; 
-	open (FILE2, ">$statfile") or die;
-		print FILE2 join ("\t", @statusheadters), "\n";
-		
-		foreach my $sample (@SampleID_Neph) {
-			my @temparray;
-			
-			#If not copying files, no copy status to include
-			if($man_only==2){
-				push(@temparray, $copystatus[$n]);
-			} else {
-				push(@temparray, "");
-			}
-			
-			#Convert "-" in sample ID to "."
-			my $temp = $SampleID_Neph[$n];
-			$temp =~ s/-/./g;
-			
-			#Push data to file
-			push(@temparray, $unique[$n]);
-			push(@temparray, $temp);
-			push(@temparray, $fastqpath[$n]);
-			push(@temparray, $filename_R1[$n]);
-			push(@temparray, $filename_R2[$n]);
-			push(@temparray, $AssayPlate_Neph[$n]);
-			print FILE2 join("\t",@temparray), "\n";
 			$n++;
 		}
 
