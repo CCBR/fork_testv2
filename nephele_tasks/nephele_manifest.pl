@@ -31,37 +31,36 @@ use File::Copy;
 	my @filename_R1; my @filename_R2; my @copystatus;
 	
 #Take in Directory from Command Line and format for CWD
-	print "\nHave you downloaded the Microbiome manifest from LIMS (Y or N) ";
-		my $ManiAns = <STDIN>; chomp $ManiAns;
-		if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
+	print "\nHave you downloaded the Microbiome manifest from LIMS - Will be placed in the AnalysisManifest folder of Project (Y or N) ";
+	#	my $ManiAns = <STDIN>; chomp $ManiAns;
+	#	if($ManiAns =~ "N") {print "\n**Generate Microbiome Manifest for Project from LIMS, then re-run**\n";
 			exit;}
 	print "Do you only need the manifest (1) or do you need to create the manifest and move FASTQ files (2)? ";
-		my $man_only = <STDIN>; chomp $man_only;
+	#	my $man_only = <STDIN>; chomp $man_only;
 	print "Do you want to include study samples (Y or N)? ";
-		my $StudyAns = <STDIN>; chomp $StudyAns;
+	#	my $StudyAns = <STDIN>; chomp $StudyAns;
 	print "What is the date to assoicate with analysis (04_10_17)? ";
-		my $date = <STDIN>; chomp $date;
+	#	my $date = <STDIN>; chomp $date;
 	print "What is the name of your project? (NP0452-MB3) ";
-		my $ProjName = <STDIN>; chomp $ProjName;
+	#	my $ProjName = <STDIN>; chomp $ProjName;
 	
 	###Testing
-	#my $man_only = 1;
-	#my $StudyAns = "Y";
-	#my $date = "07_17_19";
-	#my $ProjName = "NP0084-MB4"; 
+	my $man_only = 1;
+	my $StudyAns = "Y";
+	my $date = "07_17_19";
+	my $ProjName = "NP0084-MB4"; 
 
 #Call subroutines
 	qc_mb_dir(\$ProjName, \$MRName, \$QCPath, \$ManPath);
 		$CWD = $QCPath;
 	Neph_Dir(\$Nephpath, $date); 
 		$CWD = $ManPath;
-	read_MB_Man($StudyAns, $ProjName, $ManPath, \@SampleID, \@ExternalID, \@SampleType, \@SourceMaterial, \@ExtractionBatchID, \@SourcePCRPlate, 
-		\@RunID, \@ProjectID);
-	neph_variables(@SampleID, @ExternalID, @SampleType, @SourceMaterial, @ExtractionBatchID, 
+	read_MB_Man($StudyAns, $ProjName, $ManPath, \@SampleID, \@ExternalID, \@SampleType, \@ExtractionBatchID, \@SourcePCRPlate, \@RunID, \@ProjectID);
+	neph_variables(@SampleID, @ExternalID, @SampleType, @ExtractionBatchID, 
 		@SourcePCRPlate, \@AssayPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph, \@ExtractBatch_Neph, \@Descrip_Neph);
 		$CWD = $Nephpath;
 	FastQ_File($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
-	FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @SourceMaterial, @VialLab_Neph, @AssayPlate_Neph, 
+	FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @AssayPlate_Neph, 
 		@ExtractBatch_Neph, @Descrip_Neph, @filename_R1, @filename_R2, @copystatus, @fastqpath);
 
 ######################################################################################
@@ -102,12 +101,11 @@ sub Neph_Dir {
 	$$Nephpath = "$CWD\\$nephele_vers";
 }
 
-#Reads in Microbiome Manifest, and parses for data
+#Reads in Microbiome Manifest from LIMS, and parses for data
 sub read_MB_Man {
 	
 	#Initialize Variables
-	my ($StudyAns, $ProjName, $ManPath, $SampleID, $ExternalID, $SampleType, $SourceMaterial, 
-		$ExtractionBatchID, $SourcePCRPlate, $RunID, $ProjectID) =@_;
+	my ($StudyAns, $ProjName, $ManPath, $SampleID, $ExternalID, $SampleType, $ExtractionBatchID, $SourcePCRPlate, $RunID, $ProjectID) =@_;
 	my $manifile=""; my @filedata; my @QCdata;
 
 	#Create a loop for each Study included, to read in manifest and save data into array variables
@@ -162,17 +160,12 @@ sub read_MB_Man {
 			push(@SampleID, $columns[0]);
 			push(@ExternalID, $columns[1]);
 			push(@SampleType, $columns[2]);
-			push(@SourceMaterial, $columns[3]);
-			push(@ExtractionBatchID, $columns[5]);
-			push(@SourcePCRPlate, $columns[6]);
-			push(@RunID,$columns[7]);
-			push(@ProjectID,$columns[9]);
+			push(@ExtractionBatchID, $columns[3]);
+			push(@SourcePCRPlate, $columns[4]);
+			push(@RunID,$columns[5]);
+			push(@ProjectID,$columns[6]);
 		} else {next;}
 	}
-		
-	#Move through studys, clearing QC data to avoid repeats
-	@QCdata=();
-	
 }
 
 #Creates variables needed for Neph Manifest
