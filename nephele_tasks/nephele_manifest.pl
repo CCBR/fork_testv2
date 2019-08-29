@@ -63,7 +63,7 @@ use File::Copy;
 	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
 	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
 	Neph_Man($Nephpath, $date, $ProjName, @SampleID_DupCheck, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID, @filename_R1, @filename_R2, @fastqpath_sampledir);	
-	
+	Metadata_Man($Nephpath, $date, $ProjName, @SampleID_DupCheck, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID, @RunID);	
 ######################################################################################
 								##Subroutines##
 ######################################################################################
@@ -387,7 +387,7 @@ sub Neph_Man {
 	my $manfile= "$ProjName\_Nephele\_$date.txt";
 	
 	#Confirmations
-	print "\n\n******************************\nGenerating manifest and status files\n";
+	print "\n\n******************************\nGenerating Nephele input manifest and status files\n";
 	
 	#Print data to Nephele txt file
 	open (FILE, ">$manfile") or die;
@@ -418,6 +418,47 @@ sub Neph_Man {
 
 	my $total = scalar @SampleID_DupCheck*2;
 	print "\n******************************\nThere should be $total FASTQ files in the FASTQ folder\n\n";
+}
+
+sub Metadata_Man{
+		#Initialize Variables
+	my ($Nephpath, $date, $ProjName, $SampleID_DupCheck, $Treatment_Neph, $VialLab_Neph, $SourcePCRPlate_Neph, $ExtractionBatchID, $RunID)= @_;
+	my $n =0; 
+	
+	#Create headers for text file
+	my @headers = ("#SampleID", "External-ID", "Sample-Type","Source-PCR-Plate", "ExtractionBatch", "Run-ID");
+	
+	#Create Metadata txt file in Nephele Directory
+	$CWD = $Nephpath; 
+	my $manfile= "$ProjName\_$date\_metadata.txt";
+	
+	#Confirmations
+	print "\n\n******************************\nGenerating metadata manifest - saving to Nephele Directory\n";
+	
+	#Print data to Nephele txt file
+	open (FILE, ">$manfile") or die;
+		
+		#Print headers to file
+		print FILE join ("\t", @headers), "\n";
+		
+		#Print data to manifest file
+		foreach my $sample (@SampleID_DupCheck) {
+			my @temparray;
+			
+			#Convert "-" in sample ID to "."
+			my $temp = $SampleID_DupCheck[$n];
+			$temp =~ s/\./-/g;
+			push(@temparray, $temp);
+			
+			#Add remaining columns
+			push(@temparray, $VialLab_Neph[$n]);
+			push(@temparray, $Treatment_Neph[$n]);
+			push(@temparray, $SourcePCRPlate_Neph[$n]);
+			push (@temparray, $ExtractionBatchID[$n]);
+			push(@temparray, $RunID[$n]);
+			print FILE join("\t",@temparray), "\n";
+			$n++;
+		}
 }
 
 my $statfile= "$ProjName\_status\_$date.txt";
