@@ -122,7 +122,7 @@ sub read_MB_Man {
 	}
 	
 	#Confirmations
-	print "\n\n******************************\nReading in manifest file\n";
+	print "\n\n******************************\nReading LIMS manifest file\n";
 
 	#Read in the file, and close
 	@filedata= <READ_FILE>;
@@ -318,7 +318,7 @@ sub FastQ_FileMove{
 	#Create copies and move FASTQ File to Nephele Folder
 	if($man_only==2){
 		#Confirmations
-		print "\n\n******************************\nMoving FastQ files to Nephele folder, renaming duplicate samples (if necessary)\n";		
+		print "\n******************************\nMoving FastQ files to Nephele folder, renaming duplicate samples (if necessary)\n";		
 		
 		#Create folder for FASTQ Files
 		my $fastqdir = "FASTQ";
@@ -387,7 +387,7 @@ sub Neph_Man {
 	my $manfile= "$ProjName\_$date\_Nephele.txt";
 	
 	#Confirmations
-	print "\n\n******************************\nGenerating Nephele input manifest - saving to Nephele Directory\n";
+	print "\n******************************\nGenerating Nephele input manifest - saving to Nephele Directory\n";
 	
 	#Print data to Nephele txt file
 	open (FILE, ">$manfile") or die;
@@ -431,7 +431,7 @@ sub Metadata_Man{
 	my $manfile= "$ProjName\_$date\_metadata.txt";
 	
 	#Confirmations
-	print "\n\n******************************\nGenerating metadata manifest - saving to Nephele Directory\n";
+	print "\n******************************\nGenerating metadata manifest - saving to Nephele Directory\n";
 	
 	#Print data to Nephele txt file
 	open (FILE, ">$manfile") or die;
@@ -465,7 +465,7 @@ sub dupsample_manifest{
 	my $n=0;
 
 	#Confirmations
-	print "\n\n******************************\nGenerating duplicate summary file - saving to Nephele Directory\n";
+	print "\n******************************\nGenerating duplicate summary file - saving to Nephele Directory\n";
 	
 	#Print data to duplicate txt file
 	my $manfile= "$ProjName\_$date\_duplicatesummary.txt";
