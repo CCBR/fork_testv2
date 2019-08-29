@@ -60,9 +60,9 @@ use File::Copy;
 	dupsample_check(@SourcePCRPlate,@SampleID,\@SampleID_DupCheck,\@Unique);
 	neph_variables(@SampleID_DupCheck, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
-	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir, \@fastqpath);
-	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir, \@fastqpath);
-	Neph_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath_sampledir);	
+	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
+	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
+	Neph_Man($Nephpath, $date, $ProjName, @SampleID_DupCheck, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID, @filename_R1, @filename_R2, @fastqpath_sampledir);	
 	
 ######################################################################################
 								##Subroutines##
@@ -347,10 +347,12 @@ sub FastQ_FileMove{
 
 					my $fastq_nameupdate_R1= $SampleID_DupCheck[$c];
 					$fastq_nameupdate_R1.=$fastq_seqtag_R1;
+					$filename_R1[$a]=$fastq_nameupdate_R1;
 					rename ("$fastqnewpath\\$tempfile_R1","$fastqnewpath\\$fastq_nameupdate_R1");
 					
 					my $fastq_nameupdate_R2= $SampleID_DupCheck[$c];
 					$fastq_nameupdate_R2.=$fastq_seqtag_R2;
+					$filename_R2[$b]=$fastq_nameupdate_R2;
 					rename ("$fastqnewpath\\$tempfile_R2","$fastqnewpath\\$fastq_nameupdate_R2");
 
 					$CWD = $fastqpath[$c]; #To avoid problems with file naming in Q2, create a new folder and move renamed files to the folder
@@ -373,19 +375,17 @@ sub FastQ_FileMove{
 #Creates the Manifest for Nephele input
 sub Neph_Man {
 	#Initialize Variables
-	my ($Nephpath, $date, $ProjName, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $SourcePCRPlate_Neph, 
-		$ExtractionBatchID, $filename_R1, $filename_R2, $copystatus, $fastqpath_sampledir)= @_;
+	my ($Nephpath, $date, $ProjName, $SampleID_DupCheck, $Treatment_Neph, $VialLab_Neph, $SourcePCRPlate_Neph, $ExtractionBatchID, $filename_R1, $filename_R2, $fastqpath_sampledir)= @_;
 	my $n =0; 
 	
 	#Create headers for text file
 	my @headers = ("\#SampleID", "ForwardFastqFile", "ReverseFastqFile", "TreatmentGroup", "VialLabel", "AssayPlate", "ExtractionBatch", "Description");
-	my @statusheadters = ("Copy Status", "Unique", "SampleID", "FASTQ Path",  "File name R1", "File name R2", "PlateID");
+	
 	
 	#Create Nephele txt file in Nephele Directory
 	$CWD = $Nephpath; 
-	my $manfile= "$ProjName\_Nephele\_Input\_$date.txt";
-	my $statfile= "$ProjName\_status\_$date.txt";
-
+	my $manfile= "$ProjName\_Nephele\_$date.txt";
+	
 	#Confirmations
 	print "\n\n******************************\nGenerating manifest and status files\n";
 	
@@ -396,11 +396,11 @@ sub Neph_Man {
 		print FILE join ("\t", @headers), "\n";
 		
 		#Print data to manifest file
-		foreach my $sample (@SampleID_Neph) {
+		foreach my $sample (@SampleID_DupCheck) {
 			my @temparray;
 			
 			#Convert "-" in sample ID to "."
-			my $temp = $SampleID_Neph[$n];
+			my $temp = $SampleID_DupCheck[$n];
 			$temp =~ s/-/./g;
 			push(@temparray, $temp);
 			
@@ -411,14 +411,17 @@ sub Neph_Man {
 			push(@temparray, $VialLab_Neph[$n]);
 			push(@temparray, $SourcePCRPlate_Neph[$n]);
 			push(@temparray, $ExtractionBatchID[$n]);
+			push (@temparray, "gdna");
 			print FILE join("\t",@temparray), "\n";
 			$n++;
 		}
 
-	my $total = scalar @SampleID_Neph*2;
+	my $total = scalar @SampleID_DupCheck*2;
 	print "\n******************************\nThere should be $total FASTQ files in the FASTQ folder\n\n";
 }
 
+my $statfile= "$ProjName\_status\_$date.txt";
+my @statusheadters = ("Copy Status", "Unique", "SampleID", "FASTQ Path",  "File name R1", "File name R2", "PlateID");
 exit;
 
 ##################################################################################################################
