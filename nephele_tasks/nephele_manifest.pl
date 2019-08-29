@@ -62,8 +62,7 @@ use File::Copy;
 		$CWD = $Nephpath;
 	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir, \@fastqpath);
 	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir, \@fastqpath);
-	#FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath_sampledir);
-	
+	Neph_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath_sampledir);	
 	
 ######################################################################################
 								##Subroutines##
@@ -371,9 +370,8 @@ sub FastQ_FileMove{
 	}
 }
 
-
 #Creates the Manifest for Nephele input
-sub FastQ_Man {
+sub Neph_Man {
 	#Initialize Variables
 	my ($Nephpath, $date, $ProjName, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $SourcePCRPlate_Neph, 
 		$ExtractionBatchID, $filename_R1, $filename_R2, $copystatus, $fastqpath_sampledir)= @_;
