@@ -58,7 +58,7 @@ use File::Copy;
 	neph_variables(@SampleID_DupCheck, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
 	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
-	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
+	#FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
 	Neph_Man($Nephpath, $date, $ProjName, @SampleID_DupCheck, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID, @filename_R1, @filename_R2, @fastqpath_sampledir);	
 	Metadata_Man($Nephpath, $date, $ProjName, @SampleID_DupCheck, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID, @RunID);	
 	dupsample_manifest(@Unique, @SampleID, @SampleID_DupCheck, @filename_R1, @filename_R2, @SourcePCRPlate_Neph, @RunID);
@@ -174,15 +174,14 @@ sub dupsample_check{
 	my $n=0;
 	
 	#Samples may have duplicate ID names and need to be individualized
-	$n=0; my $count=0;
-	foreach my $line1 (@SampleID){
-		foreach my $line2 (@SampleID){
-			if($line1=~$line2){
-				$count++;
-			} 
-		}
-		
-		if($count>1){
+	$n=0; my %seen;
+	
+	foreach my $sample (@SampleID){
+		$seen{$sample}++;
+	}
+
+	foreach my $sample (@SampleID){
+		if ($seen{$sample}>1){
 			$Unique[$n]="N";
 			$SampleID_DupCheck[$n]=$SampleID[$n];
 			$SampleID_DupCheck[$n].="-$SourcePCRPlate[$n]"; #add - PCR plate ID.location to sample ID, as this will be unique for the duplicates
@@ -192,8 +191,7 @@ sub dupsample_check{
 			$SampleID_DupCheck[$n]=$SampleID[$n];
 		}
 		$n++;
-		$count=0;
-	}	
+	}
 }
 
 #Creates variables needed for Neph Manifest
