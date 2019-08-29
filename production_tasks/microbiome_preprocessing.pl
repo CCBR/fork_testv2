@@ -22,14 +22,11 @@ use File::Copy;
 
 #Intialize variables
 	my $QCPath; my $ManPath; my $Nephpath; my $MRName;
-	my @SampleID; my @ExternalID; my @SourceMaterial;
-	my @SampleType;	my @ExtractionBatchID; my @RunID; 
-	my @SourcePCRPlate; my @ProjectID; my @fastqpath_sampledir;
-	my @SourcePCRPlate_Neph; my @SampleID_Neph; my @SampleID_DupCheck;
-	my @Treatment_Neph;	my @VialLab_Neph; 
-	my @ExtractBatch_Neph; my @Descrip_Neph;
-	my @filename_R1; my @filename_R2; my @copystatus;
-	my @Unique; my @fastqpath;
+	my @SampleID; my @ExternalID; my @SampleType;	my @ExtractionBatchID; my @RunID; 
+	my @SourcePCRPlate; my @ProjectID; my @SourcePCRPlate_Neph; my @SampleID_Neph; my @SampleID_DupCheck;
+	my @Treatment_Neph;	my @VialLab_Neph; 	my @Unique;
+	my @fastqpath; my @fastqpath_sampledir;
+	my @filename_R1; my @filename_R2;
 	
 #Take in Directory from Command Line and format for CWD
 	print "\nHave you downloaded the Microbiome manifest from LIMS - Will be placed in the AnalysisManifest folder of Project (Y or N) ";
@@ -116,7 +113,7 @@ sub read_MB_Man {
 		
 	#Create Manifest File name from Project Info;
 	$manifile = $ProjName; $manifile =~ s/\\//g;
-	$manifile .= "-manifest_test.txt";
+	$manifile .= "-manifest.txt";
 		
 	#If filename not provided, give error message and close
 	unless (open(READ_FILE, $manifile)) {
