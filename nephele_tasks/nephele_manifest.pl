@@ -495,25 +495,3 @@ sub dupsample_manifest{
 }
 
 exit;
-
-##################################################################################################################
-################################################# Updates ####################################################
-##################################################################################################################
-
-##6/19/17: Changed the file GREP from .gz to include 001.fastq.gz to eliminate incorrect files from being copied
-##6/20/17: Added a require install of chdir
-##6/21/17: Add sample type to description column to ensure it is not left blank; Add validation to RunID length to allow for partial runs
-##7/6/17: Modifications to print screens
-##8/4/17: Changed MR input to search, allowed for second study input
-##8/6/17: Continued with 8/4 changes, fixed bugs for second and third study input
-##9/11/17: Added feature to compare Study sample that pairs with Extraction Replicate
-##4/23/18: Added option to only create manifest file
-##12/4/18: Formatting edits to initial questions, remove testing information
-##12/6/18: Disable eval of File::Copy until new perl module downloaded, add confirmations to file moving, and final file count
-		# Updated Manifest subroutine to match new Nephele file parameters 
-		## 1)remove Barcode and Linker Seq columns
-		## 2) change all "-" in sample ID to "."
-		## 3) remove code that previously removed .gz from file name of FastQ - required now
-##12/13/18: Change directory name from qiime to nephele
-##7/17/19: Changed name of the file, changed question for manifest only, removed project lists - multiple projects read through one manifest file, updates to fastq location, create status file to update file locations + 
-##whether copying was successful or if fastq files are named uniquely
