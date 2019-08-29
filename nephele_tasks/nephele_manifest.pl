@@ -384,10 +384,10 @@ sub Neph_Man {
 	
 	#Create Nephele txt file in Nephele Directory
 	$CWD = $Nephpath; 
-	my $manfile= "$ProjName\_Nephele\_$date.txt";
+	my $manfile= "$ProjName\_$date\_Nephele.txt";
 	
 	#Confirmations
-	print "\n\n******************************\nGenerating Nephele input manifest and status files\n";
+	print "\n\n******************************\nGenerating Nephele input manifest - saving to Nephele Directory\n";
 	
 	#Print data to Nephele txt file
 	open (FILE, ">$manfile") or die;
