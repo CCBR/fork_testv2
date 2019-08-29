@@ -24,7 +24,7 @@ use File::Copy;
 	my $QCPath; my $ManPath; my $Nephpath; my $MRName;
 	my @SampleID; my @ExternalID; my @SourceMaterial;
 	my @SampleType;	my @ExtractionBatchID; my @RunID; 
-	my @SourcePCRPlate; my @ProjectID; my @fastqpath;
+	my @SourcePCRPlate; my @ProjectID; my @fastqpath_sampledir;
 	my @SourcePCRPlate_Neph; my @SampleID_Neph; my @SampleID_DupCheck;
 	my @Treatment_Neph;	my @VialLab_Neph; 
 	my @ExtractBatch_Neph; my @Descrip_Neph;
@@ -60,9 +60,9 @@ use File::Copy;
 	dupsample_check(@SourcePCRPlate,@SampleID,\@SampleID_DupCheck,\@Unique);
 	neph_variables(@SampleID_DupCheck, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
-	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
-	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath);
-	#FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath);
+	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir, \@$fastqpath);
+	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir);
+	#FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath_sampledir);
 	
 	
 ######################################################################################
@@ -115,7 +115,7 @@ sub read_MB_Man {
 		
 	#Create Manifest File name from Project Info;
 	$manifile = $ProjName; $manifile =~ s/\\//g;
-	$manifile .= "-manifest.txt";
+	$manifile .= "-manifest_test.txt";
 		
 	#If filename not provided, give error message and close
 	unless (open(READ_FILE, $manifile)) {
@@ -187,7 +187,8 @@ sub dupsample_check{
 		if($count>1){
 			$Unique[$n]="N";
 			$SampleID_DupCheck[$n]=$SampleID[$n];
-			$SampleID_DupCheck.=$SourcePCRPlate[$n]; #add PCR plate ID and location as this will be unique for the duplicates
+			$SampleID_DupCheck[$n].="-$SourcePCRPlate[$n]"; #add - PCR plate ID.location to sample ID, as this will be unique for the duplicates
+			$SampleID_DupCheck[$n] =~ s/_/-/g;
 		} else {
 			$Unique[$n]="Y";
 			$SampleID_DupCheck[$n]=$SampleID[$n];
@@ -207,7 +208,7 @@ sub neph_variables{
 	#Format Sample IDs
 	foreach my $line (@SampleID_DupCheck) {
 		my $templine=$SampleID_DupCheck[$n];
-		print "$templine--";
+		
 		if($templine =~ m/NTC/){
 			$templine = "NTC";
 		} elsif($templine =~ m/Water/){
@@ -220,7 +221,7 @@ sub neph_variables{
 		$templine =~ s/\.1/1/g;
 		
 		push(@SampleID_Neph, $templine);
-		$n++; print "$templine\n";
+		$n++;
 	}
 	
 	#Remove _ from Source PCR Plate and save PB# as AssayPlate for Nephele
@@ -255,9 +256,10 @@ sub neph_variables{
 sub FastQ_FilePath{
 	
 	#Initialize Variables
-	my ($RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2, $fastqpath) =@_;
-	my @foldernames;  my $a=0;
-	my $b = 0; my $c=0; my $n=0; my $FastP;
+	my ($RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2, $fastqpath_sampledir, $fastqpath) =@_;
+	my @foldernames;  
+	my $a=0; my $b = 0; my $c=0; my $n=0; 
+	my $FQPath; my $$FQPath_sampledir;
 
 	#Create Folder Names from Sample ID's IF RunID is not blank (allows partial runs)
 	foreach my $line(@SampleID) {
@@ -273,14 +275,16 @@ sub FastQ_FilePath{
 		chomp $tempProj;
 
 		#Create pathway for FastQ files, second pass
-		$FastP = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$tempProj\\$line\\";
-		$FastP =~ s/_MB/-MB/g;
-		push (@fastqpath, $FastP);
+		$FQPath = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$tempProj\\";
+		$FQPath =~ s/_MB/-MB/g;
+		$FQPath_sampledir=$FQPath; $FQPath_sampledir"\\$line\\";
+		push (@fastqpath_sampledir, $FQPath_sampledir);
+		push (@fastqpath, $FQPath);
 		$n++;
 	}
 	
 	#Run through each directory, find paths for FASTQ Files
-	foreach my $line (@fastqpath){
+	foreach my $line (@fastqpath_sampledir){
 	
 		#Open File Directory and copy fastq files
 		opendir(DIR, $line) or die "Can't open directory $line!";
@@ -309,10 +313,10 @@ sub FastQ_FilePath{
 sub FastQ_FileMove{
 	
 	#Initialize Variables
-	my ($Nephpath, $man_only, $SampleID_DupCheck, $Unique, $filename_R1, $filename_R2, $copystatus, $fastqpath) =@_;
+	my ($Nephpath, $man_only, $SampleID_DupCheck, $Unique, $filename_R1, $filename_R2, $copystatus, $fastqpath_sampledir) =@_;
 	my @foldernames;  
 	my $a=0; my $b = 0; my $c=0; my $n=0; 
-	my $FastP;
+	my $FQPath;
 
 	#Create copies and move FASTQ File to Nephele Folder
 	if($man_only==2){
@@ -324,29 +328,37 @@ sub FastQ_FileMove{
 		mkdir $fastqdir unless -d $fastqdir;
 		my $fastqnewpath= "$CWD\\$fastqdir";
 		opendir (NDIR, $Nephpath);
+		my $FQPath = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$tempProj\\";
 		
 		#Move files
-		foreach my $line(@fastqpath) {
+		foreach my $line(@fastqpath_sampledir) {
 			
 			#Open directory with FastQ folders
 			$CWD = $line;
 			my $tempfile_R1 = $filename_R1[$a];
 			my $tempfile_R2 = $filename_R2[$b];
-
+			print "$line\n";
 			if (-e $line){
-				#copy ($tempfile_R1, $fastqnewpath);
-				#copy ($tempfile_R2, $fastqnewpath);
+				copy ($tempfile_R1, $fastqnewpath);
+				copy ($tempfile_R2, $fastqnewpath);
 			
 				if($Unique[$c]=~"N"){
+					#Need to generate unique to ID for replicates that do not have plate or location id 
+					#Grab all characters after the _ to eliminate the original sample ID name
+					my $newfile_R1=$tempfile_R1; $newfile_R1 =~ s/^[^_]*_/_/; 
+					my $newfile_R2=$tempfile_R2; $newfile_R2 =~ s/^[^_]*_/_/;
+
 					my $newfile= $SampleID_DupCheck[$c];
-					my $newfile_R1=$tempfile_R1; $newfile_R1 =~ s/^[^_]*_/_/;
 					$newfile.=$newfile_R1;
 					rename ("$fastqnewpath\\$tempfile_R1","$fastqnewpath\\$newfile");
 					
 					$newfile= $SampleID_DupCheck[$c];
-					my $newfile_R2=$tempfile_R2; $newfile_R2 =~ s/^[^_]*_/_/;
 					$newfile.=$newfile_R2;
-					rename ("$fastqnewpath\\$tempfile_R1","$fastqnewpath\\$newfile");										
+					rename ("$fastqnewpath\\$tempfile_R2","$fastqnewpath\\$newfile");
+
+					#To avoid problems with file naming in Q2 downstream, create a new folder and move renamed files to the folder
+					$CWD = $FQPath;
+					mkdir ("Sample_$SampleID_DupCheck[$c]");
 				}
 
 				$copystatus[$c] = "Y";
@@ -368,7 +380,7 @@ sub FastQ_FileMove{
 sub FastQ_Man {
 	#Initialize Variables
 	my ($Nephpath, $date, $ProjName, $SampleID_Neph, $Treatment_Neph, $VialLab_Neph, $SourcePCRPlate_Neph, 
-		$ExtractionBatchID, $filename_R1, $filename_R2, $copystatus, $fastqpath)= @_;
+		$ExtractionBatchID, $filename_R1, $filename_R2, $copystatus, $fastqpath_sampledir)= @_;
 	my $n =0; 
 	
 	#Create headers for text file
