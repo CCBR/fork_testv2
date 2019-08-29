@@ -29,7 +29,7 @@ use File::Copy;
 	my @Treatment_Neph;	my @VialLab_Neph; 
 	my @ExtractBatch_Neph; my @Descrip_Neph;
 	my @filename_R1; my @filename_R2; my @copystatus;
-	my @Unique;
+	my @Unique; my @fastqpath;
 	
 #Take in Directory from Command Line and format for CWD
 	print "\nHave you downloaded the Microbiome manifest from LIMS - Will be placed in the AnalysisManifest folder of Project (Y or N) ";
@@ -60,7 +60,7 @@ use File::Copy;
 	dupsample_check(@SourcePCRPlate,@SampleID,\@SampleID_DupCheck,\@Unique);
 	neph_variables(@SampleID_DupCheck, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
-	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir, \@$fastqpath);
+	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir, \@fastqpath);
 	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir);
 	#FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath_sampledir);
 	
@@ -259,7 +259,7 @@ sub FastQ_FilePath{
 	my ($RunID, $ProjectID, $SampleID, $filename_R1, $filename_R2, $fastqpath_sampledir, $fastqpath) =@_;
 	my @foldernames;  
 	my $a=0; my $b = 0; my $c=0; my $n=0; 
-	my $FQPath; my $$FQPath_sampledir;
+	my $FQPath; my $FQPath_sampledir;
 
 	#Create Folder Names from Sample ID's IF RunID is not blank (allows partial runs)
 	foreach my $line(@SampleID) {
@@ -277,7 +277,7 @@ sub FastQ_FilePath{
 		#Create pathway for FastQ files, second pass
 		$FQPath = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$tempProj\\";
 		$FQPath =~ s/_MB/-MB/g;
-		$FQPath_sampledir=$FQPath; $FQPath_sampledir"\\$line\\";
+		$FQPath_sampledir=$FQPath; $FQPath_sampledir.="\\$line\\";
 		push (@fastqpath_sampledir, $FQPath_sampledir);
 		push (@fastqpath, $FQPath);
 		$n++;
@@ -328,7 +328,6 @@ sub FastQ_FileMove{
 		mkdir $fastqdir unless -d $fastqdir;
 		my $fastqnewpath= "$CWD\\$fastqdir";
 		opendir (NDIR, $Nephpath);
-		my $FQPath = "T:\\DCEG\\CGF\\Sequencing\\Illumina\\MiSeq\\PostRun_Analysis\\Data\\$tempRun\\CASAVA\\L1\\Project_$tempProj\\";
 		
 		#Move files
 		foreach my $line(@fastqpath_sampledir) {
@@ -358,7 +357,7 @@ sub FastQ_FileMove{
 
 					#To avoid problems with file naming in Q2 downstream, create a new folder and move renamed files to the folder
 					$CWD = $FQPath;
-					mkdir ("Sample_$SampleID_DupCheck[$c]");
+					#mkdir ("Sample_$SampleID_DupCheck[$c]");
 				}
 
 				$copystatus[$c] = "Y";
