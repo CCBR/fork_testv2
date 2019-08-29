@@ -319,7 +319,7 @@ sub FastQ_FileMove{
 	#Create copies and move FASTQ File to Nephele Folder
 	if($man_only==2){
 		#Confirmations
-		print "\n\n******************************\nMoving FastQ files\n";		
+		print "\n\n******************************\nMoving FastQ files to Nephele folder, renaming duplicate samples (if necessary)\n";		
 		
 		#Create folder for FASTQ Files
 		my $fastqdir = "FASTQ";
@@ -368,7 +368,8 @@ sub FastQ_FileMove{
 			$a++; $b++;
 		}
 		closedir(NDIR);
-		print "\nCompleted moving FastQ files";
+		my $total = scalar @SampleID_DupCheck*2;
+		print "\nThere should be $total FASTQ files in the FASTQ folder\n";
 	}
 }
 
@@ -415,11 +416,9 @@ sub Neph_Man {
 			print FILE join("\t",@temparray), "\n";
 			$n++;
 		}
-
-	my $total = scalar @SampleID_DupCheck*2;
-	print "\n******************************\nThere should be $total FASTQ files in the FASTQ folder\n\n";
 }
 
+#Creates metadata manifest
 sub Metadata_Man{
 		#Initialize Variables
 	my ($Nephpath, $date, $ProjName, $SampleID_DupCheck, $Treatment_Neph, $VialLab_Neph, $SourcePCRPlate_Neph, $ExtractionBatchID, $RunID)= @_;
