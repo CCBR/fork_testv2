@@ -45,7 +45,7 @@ use File::Copy;
 	###Testing
 	my $man_only = 2;
 	my $StudyAns = "Y";
-	my $date = "08_28_19";
+	my $date = "08_29_19";
 	my $ProjName = "NP0084-MB4"; 
 
 #Call subroutines
@@ -58,7 +58,7 @@ use File::Copy;
 	neph_variables(@SampleID_DupCheck, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
 	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
-	#FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
+	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
 	Neph_Man($Nephpath, $date, $ProjName, @SampleID_DupCheck, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID, @filename_R1, @filename_R2, @fastqpath_sampledir);	
 	Metadata_Man($Nephpath, $date, $ProjName, @SampleID_DupCheck, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID, @RunID);	
 	dupsample_manifest(@Unique, @SampleID, @SampleID_DupCheck, @filename_R1, @filename_R2, @SourcePCRPlate_Neph, @RunID);
@@ -335,7 +335,7 @@ sub FastQ_FileMove{
 			if (-e $line){
 				copy ($tempfile_R1, $fastqnewpath);
 				copy ($tempfile_R2, $fastqnewpath);
-			
+	
 				if($Unique[$c]=~"N"){
 					#Need to generate unique to ID for replicates that do not have plate or location id 
 					#Grab all characters after the _ to eliminate the original sample ID name
