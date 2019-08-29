@@ -64,6 +64,8 @@ use File::Copy;
 	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@fastqpath_sampledir, \@fastqpath);
 	Neph_Man($Nephpath, $date, $ProjName, @SampleID_DupCheck, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID, @filename_R1, @filename_R2, @fastqpath_sampledir);	
 	Metadata_Man($Nephpath, $date, $ProjName, @SampleID_DupCheck, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID, @RunID);	
+	dupsample_manifest(@Unique, @SampleID, @SampleID_DupCheck, @filename_R1, @filename_R2, @SourcePCRPlate_Neph, @RunID);
+
 ######################################################################################
 								##Subroutines##
 ######################################################################################
@@ -420,7 +422,7 @@ sub Neph_Man {
 
 #Creates metadata manifest
 sub Metadata_Man{
-		#Initialize Variables
+	#Initialize Variables
 	my ($Nephpath, $date, $ProjName, $SampleID_DupCheck, $Treatment_Neph, $VialLab_Neph, $SourcePCRPlate_Neph, $ExtractionBatchID, $RunID)= @_;
 	my $n =0; 
 	
@@ -460,8 +462,38 @@ sub Metadata_Man{
 		}
 }
 
-my $statfile= "$ProjName\_status\_$date.txt";
-my @statusheadters = ("Copy Status", "Unique", "SampleID", "FASTQ Path",  "File name R1", "File name R2", "PlateID");
+#Creates Duplicate file with file name changes
+sub dupsample_manifest{
+	my ($Unique, $SampleID, $SampleID_DupCheck, $filename_R1, $filename_R2, $SourcePCRPlate_Neph, $RunID) =@_;
+	my $n=0;
+
+	#Confirmations
+	print "\n\n******************************\nGenerating duplicate summary file - saving to Nephele Directory\n";
+	
+	#Print data to duplicate txt file
+	my $manfile= "$ProjName\_$date\_duplicatesummary.txt";
+	open (FILE, ">$manfile") or die;
+		
+	#Print data to manifest file
+	my @headers = ("UniqueStatus","Old-ID","New-ID","New-R1Name", "New-R2Name","PCR-Plate", "RunID");
+	print FILE join ("\t", @headers), "\n";
+	foreach my $status (@Unique) {
+		my @temparray;
+		
+		if($status=~"N"){
+			push(@temparray, $status);
+			push(@temparray, $SampleID[$n]);
+			push(@temparray, $SampleID_DupCheck[$n]);
+			push(@temparray, $filename_R1[$n]);
+			push(@temparray, $filename_R2[$n]);
+			push(@temparray, $SourcePCRPlate_Neph[$n]);
+			push(@temparray, $RunID[$n]);			
+			print FILE join("\t",@temparray), "\n";
+		}		
+		$n++;
+	}
+}
+
 exit;
 
 ##################################################################################################################
