@@ -61,7 +61,7 @@ use File::Copy;
 	neph_variables(@SampleID_DupCheck, @ExternalID, @SampleType, @SourcePCRPlate, \@SourcePCRPlate_Neph, \@SampleID_Neph, \@Treatment_Neph, \@VialLab_Neph);
 		$CWD = $Nephpath;
 	FastQ_FilePath($Nephpath, $man_only, @SampleID_DupCheck, @Unique, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir, \@fastqpath);
-	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir);
+	FastQ_FileMove($Nephpath, $man_only, @RunID, @ProjectID, @SampleID, \@filename_R1, \@filename_R2, \@copystatus, \@fastqpath_sampledir, \@fastqpath);
 	#FastQ_Man($Nephpath, $date, $ProjName, @SampleID_Neph, @Treatment_Neph, @VialLab_Neph, @SourcePCRPlate_Neph, @ExtractionBatchID,@filename_R1, @filename_R2, @copystatus, @fastqpath_sampledir);
 	
 	
@@ -313,10 +313,9 @@ sub FastQ_FilePath{
 sub FastQ_FileMove{
 	
 	#Initialize Variables
-	my ($Nephpath, $man_only, $SampleID_DupCheck, $Unique, $filename_R1, $filename_R2, $copystatus, $fastqpath_sampledir) =@_;
+	my ($Nephpath, $man_only, $SampleID_DupCheck, $Unique, $filename_R1, $filename_R2, $fastqpath_sampledir, $fastqpath) =@_;
 	my @foldernames;  
 	my $a=0; my $b = 0; my $c=0; my $n=0; 
-	my $FQPath;
 
 	#Create copies and move FASTQ File to Nephele Folder
 	if($man_only==2){
@@ -336,7 +335,7 @@ sub FastQ_FileMove{
 			$CWD = $line;
 			my $tempfile_R1 = $filename_R1[$a];
 			my $tempfile_R2 = $filename_R2[$b];
-			print "$line\n";
+			
 			if (-e $line){
 				copy ($tempfile_R1, $fastqnewpath);
 				copy ($tempfile_R2, $fastqnewpath);
@@ -344,28 +343,26 @@ sub FastQ_FileMove{
 				if($Unique[$c]=~"N"){
 					#Need to generate unique to ID for replicates that do not have plate or location id 
 					#Grab all characters after the _ to eliminate the original sample ID name
-					my $newfile_R1=$tempfile_R1; $newfile_R1 =~ s/^[^_]*_/_/; 
-					my $newfile_R2=$tempfile_R2; $newfile_R2 =~ s/^[^_]*_/_/;
+					my $fastq_seqtag_R1=$tempfile_R1; $fastq_seqtag_R1 =~ s/^[^_]*_/_/; 
+					my $fastq_seqtag_R2=$tempfile_R2; $fastq_seqtag_R2 =~ s/^[^_]*_/_/;
 
-					my $newfile= $SampleID_DupCheck[$c];
-					$newfile.=$newfile_R1;
-					rename ("$fastqnewpath\\$tempfile_R1","$fastqnewpath\\$newfile");
+					my $fastq_nameupdate_R1= $SampleID_DupCheck[$c];
+					$fastq_nameupdate_R1.=$fastq_seqtag_R1;
+					rename ("$fastqnewpath\\$tempfile_R1","$fastqnewpath\\$fastq_nameupdate_R1");
 					
-					$newfile= $SampleID_DupCheck[$c];
-					$newfile.=$newfile_R2;
-					rename ("$fastqnewpath\\$tempfile_R2","$fastqnewpath\\$newfile");
+					my $fastq_nameupdate_R2= $SampleID_DupCheck[$c];
+					$fastq_nameupdate_R2.=$fastq_seqtag_R2;
+					rename ("$fastqnewpath\\$tempfile_R2","$fastqnewpath\\$fastq_nameupdate_R2");
 
-					#To avoid problems with file naming in Q2 downstream, create a new folder and move renamed files to the folder
-					$CWD = $FQPath;
-					#mkdir ("Sample_$SampleID_DupCheck[$c]");
+					$CWD = $fastqpath[$c]; #To avoid problems with file naming in Q2, create a new folder and move renamed files to the folder
+					mkdir ("Sample_$SampleID_DupCheck[$c]") unless -d $SampleID_DupCheck[$c];
+					copy ("$fastqnewpath\\$fastq_nameupdate_R1","$fastqpath[$c]\\Sample_$SampleID_DupCheck[$c]");
+					copy ("$fastqnewpath\\$fastq_nameupdate_R2","$fastqpath[$c]\\Sample_$SampleID_DupCheck[$c]");
 				}
-
-				$copystatus[$c] = "Y";
 				$c++;
 			} else{
-				$copystatus[$c]= "N";
 				$c++;
-				print "file failed $tempfile_R1\n";
+				print "Failed transfer of $tempfile_R1 and $tempfile_R2\n";
 			}
 			$a++; $b++;
 		}
