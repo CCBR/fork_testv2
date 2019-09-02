@@ -1,0 +1,231 @@
+---
+title: "R Notebook"
+output: word_document
+editor_options: 
+  chunk_output_type: console
+---
+
+---
+title: "Fecal_Blanks_Genus_Neph"
+author: "NHI"
+date: "July 3, 2018"
+output: word_document
+editor_options: 
+  chunk_output_type: console
+---
+
+---
+title: "R Notebook"
+output: word_document
+editor_options: 
+  chunk_output_type: console
+---
+Database information
+
+
+#1. Load required libraries
+```{r}
+library("biom")
+library(data.table)
+```
+
+#2. Taxonomy Reference - Control Annotations
+Read in controls taxonomy file, grouped by Genus
+```{r}
+genus_percent <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Controls\\Taxonomy\\Taxonomy_Genus.txt",sep="\t",header=TRUE)
+
+#Add row names to genus full
+genus_list <- unique(genus_percent[,"Genus"])
+rownames(genus_percent) <- genus_list
+```
+
+#3. Variable info
+Read in the entire control variable database, and controls that failed threshold QC. 
+Filter database removing all failed samples, and any that are not a control
+```{r}
+#Read in database with variable information and list of samples that did not meet the sequencing #threshold
+variable_info <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\Manifests\\sampledata.txt",sep="\t",header=TRUE)
+samples_failed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\samplesfailed_nephele1.txt",sep="\t")
+
+#Review filtered samples to determine if any NTC's, PCR or Extraction blanks were removed
+filtered_info <-subset(variable_info, (NephID %in% samples_failed$V1))
+filtered_info
+write.csv(filtered_info,"test.csv")
+
+blank_info <- subset(filtered_info,Type=="Water" | Type=="NTC" | Type=="EB")
+blank_info
+
+#Create database of only NTC's, PCR and Extraction Blanks
+filtered_info <-subset(variable_info, !(NephID %in% samples_failed$V1))
+
+control_info <- subset(filtered_info,Type=="Water" | Type=="NTC" | Type=="EB")
+control_info
+nrow(control_info)
+
+#Add Row names to dataframe
+row.names(control_info) <- control_info$NephID
+
+write.csv(control_info, "temp.csv")
+```
+
+#4. OTU Counts - OTU's by Genus (raw data)
+Read in OTU information, and determine total Genus counts
+```{r}
+#Read in OTU database at Genus level
+genus_otu <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fresh Fecal Optimization_2017.08\\Analysis\\Run1&2\\TaxaCounts\\nephele1_taxa_counts_Genus.csv", row.names = 1)
+
+#Create a total row for each sample
+sample_list <- colnames(genus_otu)
+genus_list <- rownames(genus_otu)
+
+#For each sample
+for (a in sample_list){
+ #Set sum to 0
+ sum=0
+ 
+ #For each genus
+ for (b in genus_list){
+  #Add the number of counts together
+  sum <- genus_otu[b,a] + sum
+ }
+ 
+ #When complete, push to a "Total_Reads" row
+ genus_otu["Total_Reads",a] <- sum
+}
+```
+
+#5. OTU Percent - Analysis Genus OTU Abundance (All Samples)
+```{r}
+#Create sample list
+sample_list <- unique(control_info$NephID)
+genus_list <- rownames(genus_otu[1:nrow(genus_otu)-1,])
+
+#Create new table
+genus_otuabund_sample = data.frame()
+
+#Determine which genus_list to use
+##Run through each sample
+for (a in sample_list){
+ 
+ for (b in genus_list){
+  
+  #Determine the reads for the genus, and the total reads for the sample
+  reads <- genus_otu[b,a]
+  total <- genus_otu["Total_Reads",a]
+
+  #If value is NA (meaning that the genus was not found in sample), skip
+  #If reads are >0 then add the read count to reads_total
+
+  if(is.na(reads) | is.null(reads)) {
+   next
+  } else {
+   percent <- (reads/total)
+   
+   #Add out count percent to the genus_otuabund_sample database
+   genus_otuabund_sample[b,a] <- percent
+  }
+ }
+}
+
+#Output the table of all samples
+write.csv(genus_otuabund_sample,"Data/genus_otuabund_blank.csv")
+
+```
+
+#6. OTU Percent - Analysis Genus OTU Abundance by Control Type
+```{r}
+#Unique Types of controls and all genus
+control_types <- unique(control_info$Type)
+genus_list <- rownames(genus_otu[1:nrow(genus_otu)-1,])
+
+#New Database to store final Genus information
+genus_otuabund_control <- data.frame()
+
+#For each of the control types
+for (a in control_types){
+ 
+  #For each Genus in list
+  for (b in genus_list){
+   
+   #Reset Counter
+   reads <- 0
+   total <- 0
+   
+   #Create a list of samples that are of the specified control type
+   sample_list<- subset(control_info, Type==a)
+   sample_list <- unique(sample_list$NephID)
+   
+   #For each of the samples in the sample list
+   for(c in sample_list){
+    
+    #Add up the total percentages from otupercent_sample table [genus,sampleID]
+    reads <- genus_otu [b,c] + reads
+    total <- genus_otu["Total_Reads",c] + total
+   }
+   
+   #average of genus level by taking total number of reads of that genus divded by 
+   #total number of reads for samples included
+   #Push value to new dataframe
+   percent <- reads / total
+   genus_otuabund_control[b,a] <- percent
+  }
+ }
+
+#Output to text file
+write.csv(genus_otuabund_control,"Data/genus_otuabund_blank.csv")
+```
+
+#7. OTU Percent - Analysis Genus OTU Abundance by Control Type by Kit (Ext Control Only)
+```{r}
+#Unique Types of controls and all genus
+kit_types <- unique(control_info$Kit)
+kit_types <- kit_types[-6] #Removing the None group
+genus_list <- rownames(genus_otu[1:nrow(genus_otu)-1,])
+
+#Store column number
+cols <- ncol(genus_percent)
+
+#For each of the kits types
+for (a in kit_types){
+ 
+  #For each Genus in list
+  for (b in genus_list){
+   
+   #Reset Counter
+   reads <- 0
+   total <- 0
+   
+   #Create a list of samples that are of the specified control type
+   sample_list<- subset(control_info, Kit==a)
+   sample_list <- unique(sample_list$NephID)
+   
+   #For each of the samples in the sample list
+   for(c in sample_list){
+    
+    #Add up the total percentages from otupercent_sample table [genus,sampleID]
+    reads <- genus_otu [b,c] + reads
+    total <- genus_otu["Total_Reads",c] + total
+   }
+   
+   #average of genus level by taking total number of reads of that genus divded by 
+   #total number of reads for samples included
+   #Push value to new dataframe
+   percent <- reads / total
+   genus_percent[b,a] <- percent
+  }
+}
+
+i<- cols+1
+#Add column names
+new_colnames<- c("Zymo MagBead DNone Kit_OB","MagAttract PowerMag Soil_OB",
+                 "MagAttract PowerMag Microbiome_OB","Qiagen QIAamp  Modified_OB")
+
+#for each header name, apply it to the recently created columns
+for (a in new_colnames){
+ colnames(genus_percent)[i]<- a
+ i=i+1
+}
+
+#Output to text file
+write.csv(genus_percent,"Data/genus_outabund_kit_blank.csv")
+```
