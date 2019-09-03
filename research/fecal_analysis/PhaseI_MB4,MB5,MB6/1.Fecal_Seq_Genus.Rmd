@@ -14,35 +14,29 @@ library(ggplot2)
 #2. Taxonomy Reference - Expected frequencies
 ```{r}
 #Read in controls taxonomy file, grouped by Genus
-control_expect <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Controls\\Taxonomy\\Taxonomy_Genus_ABRF.txt",sep="\t",header=TRUE)
-
-#Create list of expected genus; add as the row names for control_expect
-control_select <- subset(control_expect, !(MSA1000=='NA')|!(MSA1001=='NA')|!(MSA1002=='NA')|!(MSA1003=='NA')|!(Zymo.Seq.200=='NA')|!(Zymo.Seq.2000=='NA'))
-genus_expect <- unique(control_select[,"Genus"])
+control_expect <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Controls\\Taxonomy\\Taxonomy_Genus_2019.txt",sep="\t",header=TRUE)
 rownames(control_expect) <- unique(control_expect[,"Genus"])
 ```
 
-#3. Filtering of samples, control variable information
+#3. Filtering of samples to include project set only
 ```{r}
 #Read in database with variable information
-samples_variables_complete <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\Manifests\\sampledata_abrf.txt",sep="\t",header=TRUE)
+metadata_baseline_complete <- read.table("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084-MB4_5_pt6\\NP0084-MB4_08_29_19_metadata.txt",sep="\t",header = TRUE)
 
 #Read in database of failed samples
-samples_failed <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\samplesfailed_q2.txt",sep="\t")
+samplelist_failed_baseline <- read.table("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084-MB4_5_pt6\\samplelist_failed_baseline.txt")
 
 #Remove failed samples from info database
-samples_filtered <-subset(samples_variables_complete, !(NephID %in% samples_failed$V1))
-
-#Verify filtering - numbers should match
-nrow(samples_variables_complete) - nrow(samples_failed)
-nrow(samples_filtered)
+metadata_baseline_filtered <-subset(metadata_baseline_complete, !(SampleID %in% samplelist_failed_baseline$V1))
+nrow(metadata_baseline_complete) - nrow(samplelist_failed_baseline) ==nrow(metadata_baseline_filtered) #should be true
 
 #Only include Seq Controls
-control_types <- c("MSA1000","MSA1001","MSA1002","MSA1003","Zymo.Seq.200","Zymo.Seq.2000")
-samples_variables_f <- samples_filtered[samples_filtered$Type %in% control_types,]
+control_types <- c("SeqControl","SeqBlank")
+metadata_baseline_filtered <- metadata_baseline_filtered[metadata_baseline_filtered$Sample.Type %in% control_types,]
+nrow(metadata_baseline_filtered)
 
 #Add sample ID's as row names
-row.names(samples_variables_f) <- samples_variables_f$NephID
+row.names(metadata_baseline_filtered) <- metadata_baseline_filtered$SampleID
 ```
 
 #4. OTU Counts by sample
@@ -78,7 +72,7 @@ for (a in sample_list_complete){
 Determine genus count for each sample, average across control type
 ```{r}
 #Create control sample list, control type list
-sample_list_f <- unique(samples_variables_f$NephID)
+sample_list_f <- unique(metadata_baseline_filtered$SampleID)
 control_types
 
 #Create a missing list for non-annotated Genus
@@ -95,7 +89,7 @@ for (a in control_types){
   count_absent = 0
   
   #Create control type groups
-  valid <- samples_variables_f[b,"Type"]
+  valid <- metadata_baseline_filtered[b,"Type"]
 
   if (valid==a){
    #Create genus list of specfic control
@@ -123,10 +117,10 @@ for (a in control_types){
      }
    }
    
-   #Add final count and length of the list to samples_variables_f dataframe
-   samples_variables_f[b,"GenusObs"] <- count_present
-   samples_variables_f[b,"GenusAbs"] <- count_absent
-   samples_variables_f[b,"GenusExp"] <- length(genus_temp)
+   #Add final count and length of the list to metadata_baseline_filtered dataframe
+   metadata_baseline_filtered[b,"GenusObs"] <- count_present
+   metadata_baseline_filtered[b,"GenusAbs"] <- count_absent
+   metadata_baseline_filtered[b,"GenusExp"] <- length(genus_temp)
    
   } else{ 
    genus_temp <- data.frame()
@@ -138,7 +132,7 @@ for (a in control_types){
 missing_anno
 
 ###Testing
-write.csv(samples_variables_f,"temp1.csv")
+write.csv(metadata_baseline_filtered,"temp1.csv")
 
 #New Database to store final Genus information
 samples_obs_count_type <- data.frame()
@@ -154,19 +148,19 @@ for (a in control_types){
  for(b in sample_list_f){
   
   #Create control type groups
-  valid <- samples_variables_f[b,"Type"]
+  valid <- metadata_baseline_filtered[b,"Type"]
   
   #If the current samples control type matches the control type of the iteration
   if(valid==a){
    
    #Count the number of genus in the sample
-   genus <- genus + samples_variables_f[b,"GenusObs"]
+   genus <- genus + metadata_baseline_filtered[b,"GenusObs"]
    count <- count + 1
   } else{
     next
   }
   #Find number of genus expected
-  genus_expect_count <- samples_variables_f[b,"GenusExp"]
+  genus_expect_count <- metadata_baseline_filtered[b,"GenusExp"]
  }
  
  #Find the average of the genus and totals
@@ -234,8 +228,8 @@ for (a in control_types){
    total <- 0
    
    #Create a list of samples that are of the specified control type
-   sample_list_temp<- subset(samples_variables_f, Type==a)
-   sample_list_temp <- unique(sample_list_temp$NephID)
+   sample_list_temp<- subset(metadata_baseline_filtered, Type==a)
+   sample_list_temp <- unique(sample_list_temp$SampleID)
    
    #For each of the samples in the sample list
    for(c in sample_list_temp){
@@ -346,8 +340,8 @@ for (a in control_types){
    total <- 0
    
    #Create a list of samples that are of the specified control type
-   sample_list_temp<- subset(samples_variables_f, Type==a)
-   sample_list_temp <- unique(sample_list_temp$NephID)
+   sample_list_temp<- subset(metadata_baseline_filtered, Type==a)
+   sample_list_temp <- unique(sample_list_temp$SampleID)
    
    #For each of the samples in the sample list
    for(c in sample_list_temp){
@@ -384,8 +378,8 @@ for (a in control_types){
    genus_temp <- (genus_temp[,"Genus"])
    
    #Create a list of samples that are of the specified control type
-   sample_list<- subset(samples_variables_f, Type==a)
-   sample_list <- unique(sample_list$NephID)
+   sample_list<- subset(metadata_baseline_filtered, Type==a)
+   sample_list <- unique(sample_list$SampleID)
 
    #Create dataframe
    temp<-data.frame()
@@ -444,8 +438,8 @@ for (a in control_types){
    genus_temp <- (genus_temp[,"Genus"])
    
    #Create a list of samples that are of the specified control type
-   sample_list<- subset(samples_variables_f, Type==a)
-   sample_list <- unique(sample_list$NephID)
+   sample_list<- subset(metadata_baseline_filtered, Type==a)
+   sample_list <- unique(sample_list$SampleID)
 
    #For each Genus in list, determine the samples value
    for (b in genus_temp){
