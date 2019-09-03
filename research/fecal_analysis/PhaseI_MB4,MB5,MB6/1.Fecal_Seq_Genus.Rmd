@@ -40,17 +40,14 @@ row.names(metadata_baseline_filtered) <- metadata_baseline_filtered$SampleID
 ```
 
 #4. OTU Counts by sample
-Read in OTU information, and determine total counts for all samples
+Read in OTU information, and determine total OTUs
 ```{r}
-#Read in OTU database at Genus level - Silva
-#samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_silva_abrf.csv", row.names = 1)
-
 #GreenGenes
-samples_otu_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_green_abrf.csv", row.names = 1)
+otu_complete <- read.csv("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084-MB4_5_pt6\\Output\\otu_relative_abundance_results\\qiime2_taxa_counts_genus_green.csv", row.names = 1)
 
 #Create a list of all samples and all genus present in at least one sample
-sample_list_complete <- colnames(samples_otu_complete)
-genus_found <- rownames(samples_otu_complete)
+sample_list_complete <- colnames(otu_complete)
+genus_found <- rownames(otu_complete)
 
 #For each sample, determine the total read counts
 for (a in sample_list_complete){
@@ -60,11 +57,11 @@ for (a in sample_list_complete){
  #For each genus
  for (b in genus_found){
   #Add the number of counts together
-  sum <- samples_otu_complete[b,a] + sum
+  sum <- otu_complete[b,a] + sum
  }
  
- #When complete, push the sum to a new "Total_Reads" row
- samples_otu_complete["Total_Reads",a] <- sum
+ #When complete, push the sum to a new "Total_OTUs" row
+ otu_complete["Total_OTUs",a] <- sum
 }
 ```
 
@@ -98,7 +95,7 @@ for (a in control_types){
    
    #For each genus is generated list, determine number of reads
    for (c in genus_temp){
-    value <- samples_otu_complete[c,b]
+    value <- otu_complete[c,b]
   
     #If value is NA (meaning that the genus was not found in sample), add to the absent count
     #If reads are >0 then count_presence increases by 1
@@ -191,8 +188,8 @@ for (a in sample_list_f){
  for (b in genus_expect){
   
   #Determine the reads for the genus, and the total reads for the sample
-  reads <- samples_otu_complete[b,a]
-  total <- samples_otu_complete["Total_Reads",a]
+  reads <- otu_complete[b,a]
+  total <- otu_complete["Total_OTUs",a]
 
   #If value is NA (meaning that the genus was not found in sample), skip
   #If reads are >0 then add the read count to reads_total
@@ -235,8 +232,8 @@ for (a in control_types){
    for(c in sample_list_temp){
     
     #Add up the total percentages from samples_obs_abund [genus,sampleID]
-    reads <- samples_otu_complete [b,c] + reads
-    total <- samples_otu_complete["Total_Reads",c] + total
+    reads <- otu_complete [b,c] + reads
+    total <- otu_complete["Total_OTUs",c] + total
    }
    
    #average of genus level by taking total number of reads of that genus divded by total number of reads for samples included
@@ -317,14 +314,14 @@ write.csv(samples_obs_abund_vari,"Data/seq_obs_abund_vari.csv")
 #10. OTU Percent - Analysis Unexp OTU Rel Abun by Control
 ```{r}
 #Create full list of genus present
-genus_present <- rownames(samples_otu_complete)
+genus_present <- rownames(otu_complete)
 genus_expect<-as.character(genus_expect)
 
 #Create list of unexpected
 genus_unexpect <- genus_present[which(!genus_present %in% genus_expect)]
 
-#Remove Total_reads from list
-genus_unexpect <- genus_unexpect[genus_unexpect !="Total_Reads"]
+#Remove Total_OTUs from list
+genus_unexpect <- genus_unexpect[genus_unexpect !="Total_OTUs"]
 
 #Create new dataframe
 samples_obs_abund_vari_unexp <- data.frame()
@@ -346,9 +343,9 @@ for (a in control_types){
    #For each of the samples in the sample list
    for(c in sample_list_temp){
     
-    #Add total reads from samples_otu_complete [genus,sampleID]
-    reads <- samples_otu_complete [b,c] + reads
-    total <- samples_otu_complete["Total_Reads",c] + total
+    #Add total reads from otu_complete [genus,sampleID]
+    reads <- otu_complete [b,c] + reads
+    total <- otu_complete["Total_OTUs",c] + total
    }
    
    #Calc Rel abund (total number of reads / total number of reads)
