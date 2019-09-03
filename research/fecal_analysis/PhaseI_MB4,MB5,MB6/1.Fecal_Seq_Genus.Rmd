@@ -33,10 +33,11 @@ nrow(metadata_baseline_complete) - nrow(samplelist_failed_baseline) ==nrow(metad
 #Only include Seq Controls
 control_types <- c("SeqControl","SeqBlank")
 metadata_baseline_filtered <- metadata_baseline_filtered[metadata_baseline_filtered$Sample.Type %in% control_types,]
-nrow(metadata_baseline_filtered)
-
-#Add sample ID's as row names
 row.names(metadata_baseline_filtered) <- metadata_baseline_filtered$SampleID
+
+samplelist_filtered <- unique(metadata_baseline_filtered$SampleID)
+
+nrow(metadata_baseline_filtered)
 ```
 
 #4. OTU Counts by sample
@@ -68,8 +69,6 @@ for (a in sample_list_complete){
 #5. OTU Counts by Control Type
 Determine genus count for each sample, average across control type
 ```{r}
-#Create control sample list, control type list
-sample_list_f <- unique(metadata_baseline_filtered$SampleID)
 control_types
 
 #Create a missing list for non-annotated Genus
@@ -79,7 +78,7 @@ missing_anno <- list()
 for (a in control_types){
  
  ##For each sample in filtered list
- for (b in sample_list_f){
+ for (b in samplelist_filtered){
   
   #Set count to 0
   count_present = 0
@@ -142,7 +141,7 @@ for (a in control_types){
  count=0
  
  #For each of the samples in the sample list
- for(b in sample_list_f){
+ for(b in samplelist_filtered){
   
   #Create control type groups
   valid <- metadata_baseline_filtered[b,"Type"]
@@ -182,7 +181,7 @@ samples_obs_abund = data.frame()
 
 #Determine which genus_expect to use
 ##Run through each sample
-for (a in sample_list_f){
+for (a in samplelist_filtered){
  
  #Check for each of the expected genus
  for (b in genus_expect){
