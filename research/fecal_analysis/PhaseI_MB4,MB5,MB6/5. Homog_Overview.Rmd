@@ -202,3 +202,23 @@ print(p)
 dev.off()
 
 ```
+
+#9 Save data tables for downstream use
+```{r}
+# Extract abundance matrix from the phyloseq object
+OTU1 = as(otu_table(physeq_filt_extcontrols), "matrix")
+# transpose if necessary
+if(taxa_are_rows(physeq_filt_extcontrols)){OTU1 <- t(OTU1)}
+# Coerce to data.frame
+OTUdf = as.data.frame(OTU1)
+write.csv(OTUdf,"/OTUs/otu_homog_extcontrols.csv")
+
+# Extract abundance matrix from the phyloseq object
+OTU1 = as(otu_table(physeq_filt_study), "matrix")
+# transpose if necessary
+if(taxa_are_rows(physeq_filt_study)){OTU1 <- t(OTU1)}
+# Coerce to data.frame
+OTUdf = as.data.frame(OTU1)
+write.csv(OTUdf,"/OTUs/otu_homog_study.csv")
+
+```
