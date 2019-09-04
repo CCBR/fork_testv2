@@ -159,8 +159,7 @@ write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontro
 
 #8. Relative Abundance  - Seq Controls
 ```{r}
-subjectlist_baseline_seqcontrol
-
+#Complete Relative Abundance
 for (a in subjectlist_baseline_seqcontrol){
  
  for (b in ncol(otu_baseline_filtered)-1){
@@ -173,9 +172,58 @@ for (a in subjectlist_baseline_seqcontrol){
  }
  
 }
+write.csv(relab_baseline_seqcontrols,"/datatables/relabun_baseline_seqcontrols.csv")
 
-write.csv(relab_baseline_blanks,"/datatables/relabun_baseline_seqcontrols.csv")
+#Expected relative abundance
+for (a in subjectlist_baseline_seqcontrol){
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+  
+ for (b in samplelist_baseline_seqcontrol){
+  subject.id <- metadata_baseline_filtered[b,"SubjectID"]
+  
+  if(a==subject.id){
+   
+   for (c in genus_temp){
+    rel_abund_observed <- relab_baseline_seqcontrols[b,c]
+    rel_abund_expected <- control_expect[c,a]
+    gram_stain <- control_expect[c,"Gram"]
+    
+    relab_baseline_seqcontrols_expected[b,"Observed"]<-rel_abund_observed
+    relab_baseline_seqcontrols_expected[b,"Expected"]<-rel_abund_expected
+    relab_baseline_seqcontrols_expected[b,"GramStain"]<-gram_stain
+    relab_baseline_seqcontrols_expected[b,"SubjectID"]<-a
+   }
+   
+  }
 
+ }
+ 
+}
+
+write.csv(relab_baseline_seqcontrols_expected,"/datatables/relab_baseline_seqcontrols_expected.csv")
+
+#Average by SubjectID
+
+count=0
+
+for (a in subjectlist_baseline_seqcontrol){
+ for (b in samplelist_baseline_seqcontrol){
+  subject.id <- relab_baseline_seqcontrols_expected[b,"SubjectID"]
+  
+  if(a=subject.id){
+   observed_count<-relab_baseline_seqcontrols_expected[b,"Observed"]+observed_count
+   expected_count<-relab_baseline_seqcontrols_expected[b,"Expected"]
+   gram_stain <- relab_baseline_seqcontrols_expected[b,"GramStain"]
+   count = count+1
+  }
+ }
+ relab_baseline_seqcontrols_expected[a,"Observed"]<-observed_count/count
+ relab_baseline_seqcontrols_expected[a,"Expected"]<-expected_count
+ relab_baseline_seqcontrols_expected[a,"GramStain"]<-gram_stain
+ relab_baseline_seqcontrols_expected[a,"SubjectID"]<-a
+ count=0
+}
 
 ```
 
