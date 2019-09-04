@@ -99,19 +99,21 @@ genus_sequence_remove <- c("")
 #7. Observed to Expected Counts - Seq Controls
 ```{r}
 samplelist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
+
 subjectlist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
 subjectlist_baseline_seqcontrol <- unique(subjectlist_baseline_seqcontrol$SubjectID)
 
 observed_count =0
 
+#Individual Samples
 for (a in subjectlist_baseline_seqcontrol){
  genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
  genus_temp <- genus_temp$Genus
   
  for (b in samplelist_baseline_seqcontrol){
-  sample.type <- metadata_baseline_filtered[b,"SubjectID"]
+  subject.id <- metadata_baseline_filtered[b,"SubjectID"]
   
-  if(a==sample.type){
+  if(a==subject.id){
    
    for (c in genus_temp){
     otu_count <- otu_baseline_filtered[b,c]
@@ -126,12 +128,32 @@ for (a in subjectlist_baseline_seqcontrol){
   
   observed_baseline_seqcontrols[b,"Observed"] <- observed_count
   observed_baseline_seqcontrols[b,"Expected"] <- length(genus_temp)
-  observed_baseline_seqcontrol[b,"Sample.Type"] <- sample.type
+  observed_baseline_seqcontrol[b,"SubjectID"] <- subject.id
   observed_count =0
  
  }
  
 }
+
+write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
+
+#Average by sample type
+for (a in subjectlist_baseline_seqcontrol){
+ for (b in samplelist_baseline_seqcontrol){
+  subject.id <- observed_baseline_seqcontrols[b,"SubjectID"]
+  
+  if(a=subject.id){
+   observed_count<-observed_baseline_seqcontrols[b,"Observed"]+observed_count
+   expected_count<-observed_baseline_seqcontrols[b,"Expected"]
+   count = count+1
+  }
+ }
+ observed_baseline_seqcontrols[a,"Observed"]<-observed_count/count
+ observed_baseline_seqcontrols[a,"Expected"]<-expected_count
+ observed_baseline_seqcontrol[a,"SubjectID"]<-a
+}
+
+write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
 
 ```
 
