@@ -95,7 +95,13 @@ for (a in samplelist_baseline_filtered){
 }
 ```
 
-#5 Relative Abundance - Blanks
+#5. Genus Filter List - From Seq Blanks
+```{r}
+genus_sequence_remove <- c("")
+
+```
+
+#6 Relative Abundance - Blanks
 ```{r}
 samplelist_baseline_water <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Source.Descrip == "Water"))
 samplelist_baseline_water <- (samplelist_baseline_water$SampleID)
@@ -117,7 +123,7 @@ for (a in samplelist_baseline_water){
 write.csv(relab_baseline_extblanks,"/datatables/relabun_baseline_extblanks.csv")
 ```
 
-#6. Genus Filter List - From Seq Blanks
+#7. Genus Filter List - From Ext Blanks
 ```{r}
 genus_sequence_remove <- c("")
 
