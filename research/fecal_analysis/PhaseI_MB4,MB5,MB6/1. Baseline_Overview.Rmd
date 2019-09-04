@@ -183,3 +183,30 @@ physeq_filt_study <- physeq_filt_study %>% scale_reads(n=sample_depth)
 
 ```
 
+#7 Alpha Diversity - All samples
+```{r}
+# Scale reads to even depth 
+physeq_scale <- physeq_filt %>% scale_reads(n=1000) 
+
+#Sample Type
+p<- plot_richness(physeq_scale, x="Sample.Type") + geom_boxplot()
+file_name =("/Graphs/sampletype_alphadiv.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
+```
+
+#8 Alpha Metrics
+```{r}
+# Scale reads to even depth 
+physeq_scale <- physeq_filt_samples %>%
+  scale_reads(n=1000) 
+
+#Sequencing Batch
+p<- plot_richness(physeq_scale, x="RunID") + geom_boxplot() + theme(axis.text.x=element_blank())
+file_name =("/Graphs/alpha_sequencingbatch.tiff")
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
+```
