@@ -25,7 +25,7 @@ library(tidyr)
 library(ggplot2)
 library(cowplot)
 library(scales)
-library(phyloseq)
+library(phyloext)
 library(qiime2R)
 library(tibble)
 library(gridExtra)
@@ -62,7 +62,7 @@ otu_baseline_complete <- read.csv("/OTUs/otu_baseline_extontrols.csv", row.names
 metadata_baseline_filtered <-subset(metadata_baseline_complete, !(SampleID %in% samplelist_baseline_failed$V1))
 nrow(metadata_baseline_complete) - nrow(samplelist_baseline_failed) ==nrow(metadata_baseline_filtered) #should be true
 
-#Only include Seq Controls
+#Only include ext Controls
 control_types <- c("ExtControl","ExtBlank")
 metadata_baseline_filtered <- metadata_baseline_filtered[metadata_baseline_filtered$Sample.Type %in% control_types,]
 row.names(metadata_baseline_filtered) <- metadata_baseline_filtered$SampleID
@@ -95,9 +95,9 @@ for (a in samplelist_baseline_filtered){
 }
 ```
 
-#5. Genus Filter List - From Seq Blanks
+#5. Genus Filter List - From ext Blanks
 ```{r}
-genus_sequence_remove <- c("")
+genus_extuence_remove <- c("")
 
 ```
 
@@ -125,25 +125,25 @@ write.csv(relab_baseline_extblanks,"/datatables/relabun_baseline_extblanks.csv")
 
 #7. Genus Filter List - From Ext Blanks
 ```{r}
-genus_sequence_remove <- c("")
+genus_extuence_remove <- c("")
 
 ```
 
-#7. Observed to Expected Counts - Seq Controls
+#8. Observed to Expected Counts - Ext Controls
 ```{r}
-samplelist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
+samplelist_baseline_extcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "ExtControl"))
 
-subjectlist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
-subjectlist_baseline_seqcontrol <- unique(subjectlist_baseline_seqcontrol$SubjectID)
+subjectlist_baseline_extcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "ExtControl"))
+subjectlist_baseline_extcontrol <- unique(subjectlist_baseline_extcontrol$SubjectID)
 
 observed_count =0
 
 #Individual Samples
-for (a in subjectlist_baseline_seqcontrol){
+for (a in subjectlist_baseline_extcontrol){
  genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
  genus_temp <- genus_temp$Genus
   
- for (b in samplelist_baseline_seqcontrol){
+ for (b in samplelist_baseline_extcontrol){
   subject.id <- metadata_baseline_filtered[b,"SubjectID"]
   
   if(a==subject.id){
@@ -159,75 +159,103 @@ for (a in subjectlist_baseline_seqcontrol){
    
   }
   
-  observed_baseline_seqcontrols[b,"Observed"] <- observed_count
-  observed_baseline_seqcontrols[b,"Expected"] <- length(genus_temp)
-  observed_baseline_seqcontrol[b,"SubjectID"] <- subject.id
+  observed_baseline_extcontrols[b,"Observed"] <- observed_count
+  observed_baseline_extcontrols[b,"Expected"] <- length(genus_temp)
+  observed_baseline_extcontrol[b,"SubjectID"] <- subject.id
+  observed_baseline_extcontrol[b,"Ext.Kit"] <- metadata_baseline_filtered[b,"Ext.Kit"]
   observed_count =0
  
  }
  
 }
 
-write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
+write.csv(observed_baseline_extcontrols,"/datatables/observed_baseline_extcontrols.csv")
 
 #Average by SubjectID
 count =0
-for (a in subjectlist_baseline_seqcontrol){
- for (b in samplelist_baseline_seqcontrol){
-  subject.id <- observed_baseline_seqcontrols[b,"SubjectID"]
+for (a in subjectlist_baseline_extcontrol){
+ for (b in samplelist_baseline_extcontrol){
+  subject.id <- observed_baseline_extcontrols[b,"SubjectID"]
   
   if(a=subject.id){
-   observed_count<-observed_baseline_seqcontrols[b,"Observed"]+observed_count
-   expected_count<-observed_baseline_seqcontrols[b,"Expected"]
+   observed_count<-observed_baseline_extcontrols[b,"Observed"]+observed_count
+   expected_count<-observed_baseline_extcontrols[b,"Expected"]
+   kit_temp <- metadata_baseline_filtered[b,"Ext.Kit"]
    count = count+1
   }
  }
- observed_baseline_seqcontrols[a,"Observed"]<-observed_count/count
- observed_baseline_seqcontrols[a,"Expected"]<-expected_count
- observed_baseline_seqcontrol[a,"SubjectID"]<-a
+ observed_baseline_extcontrols[a,"Observed"]<-observed_count/count
+ observed_baseline_extcontrols[a,"Expected"]<-expected_count
+ observed_baseline_extcontrol[a,"SubjectID"]<-a
+ observed_baseline_extcontrol[a,"Ext.Kit"] <- kit_temp
  count =0
 }
 
-write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
+write.csv(observed_baseline_extcontrols,"/datatables/observed_baseline_extcontrols.csv")
+
+#Average by Kit
+count =0
+kit_list <- unique(metadata_baseline_filtered$Ext.Kit)
+
+for (a in kit_list){
+ 
+ for (b in subjectlist_baseline_extcontrol){
+  kit_temp <- observed_baseline_extcontrols[b,"Ext.Kit"]
+  
+  if(a=kit_temp){
+   observed_count<-observed_baseline_extcontrols[b,"Observed"]+observed_count
+   expected_count<-observed_baseline_extcontrols[b,"Expected"]
+   kit_temp <- metadata_baseline_filtered[b,"Ext.Kit"]
+   count = count+1
+  }
+ }
+ observed_baseline_extcontrols[a,"Observed"]<-observed_count/count
+ observed_baseline_extcontrols[a,"Expected"]<-expected_count
+ observed_baseline_extcontrol[a,"SubjectID"]<-a
+ observed_baseline_extcontrol[a,"Ext.Kit"] <- kit_temp
+ count =0
+}
+
+write.csv(observed_baseline_extcontrols,"/datatables/observed_baseline_extcontrols.csv")
 
 ```
 
-#8. Relative Abundance  - Seq Controls
+#8. Relative Abundance  - ext Controls
 ```{r}
 #Complete Relative Abundance
-for (a in subjectlist_baseline_seqcontrol){
+for (a in subjectlist_baseline_extcontrol){
  
  for (b in ncol(otu_baseline_filtered)-1){
    relab <- otu_baseline_filtered[a,b]
    
    if(!(is.na(relab) | is.null(relab))){
-     relab_baseline_seqcontrols[a,b] <- otu_baseline_filtered[a,b]/otu_baseline_filtered[a,"Total_OTUs"]
+     relab_baseline_extcontrols[a,b] <- otu_baseline_filtered[a,b]/otu_baseline_filtered[a,"Total_OTUs"]
    }
 
  }
  
 }
-write.csv(relab_baseline_seqcontrols,"/datatables/relabun_baseline_seqcontrols.csv")
+write.csv(relab_baseline_extcontrols,"/datatables/relabun_baseline_extcontrols.csv")
 
 #Expected relative abundance
-for (a in subjectlist_baseline_seqcontrol){
+for (a in subjectlist_baseline_extcontrol){
  genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
  genus_temp <- genus_temp$Genus
   
- for (b in samplelist_baseline_seqcontrol){
+ for (b in samplelist_baseline_extcontrol){
   subject.id <- metadata_baseline_filtered[b,"SubjectID"]
   
   if(a==subject.id){
    
    for (c in genus_temp){
-    rel_abund_observed <- relab_baseline_seqcontrols[b,c]
+    rel_abund_observed <- relab_baseline_extcontrols[b,c]
     rel_abund_expected <- control_expect[c,a]
     gram_stain <- control_expect[c,"Gram"]
     
-    relab_baseline_seqcontrols_expected[b,paste(c,".Obs",sep="")]<-rel_abund_observed
-    relab_baseline_seqcontrols_expected[b,paste(c,".Exp",sep="")]<-rel_abund_expected
-    relab_baseline_seqcontrols_expected[b,"GramStain"]<-gram_stain
-    relab_baseline_seqcontrols_expected[b,"SubjectID"]<-a
+    relab_baseline_extcontrols_expected[b,paste(c,".Obs",sep="")]<-rel_abund_observed
+    relab_baseline_extcontrols_expected[b,paste(c,".Exp",sep="")]<-rel_abund_expected
+    relab_baseline_extcontrols_expected[b,"GramStain"]<-gram_stain
+    relab_baseline_extcontrols_expected[b,"SubjectID"]<-a
    }
    
   }
@@ -236,64 +264,64 @@ for (a in subjectlist_baseline_seqcontrol){
  
 }
 
-write.csv(relab_baseline_seqcontrols_expected,"/datatables/relab_baseline_seqcontrols_expected.csv")
+write.csv(relab_baseline_extcontrols_expected,"/datatables/relab_baseline_extcontrols_expected.csv")
 
 #Expected Average by SubjectID
 
 count=0
 observed_count=0
 
-for (a in subjectlist_baseline_seqcontrol){
+for (a in subjectlist_baseline_extcontrol){
  genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
  genus_temp <- genus_temp$Genus
  
  for (b in genus_temp){
   
-  for (c in samplelist_baseline_seqcontrol){
+  for (c in samplelist_baseline_extcontrol){
    
-   subject.id <- relab_baseline_seqcontrols_expected[b,"SubjectID"]
+   subject.id <- relab_baseline_extcontrols_expected[b,"SubjectID"]
    
    if(a=subject.id){
-    observed_count<-relab_baseline_seqcontrols_expected[c,paste(b,".Obs",sep="")]+observed_count
-    expected_count<-relab_baseline_seqcontrols_expected[c,paste(b,".Exp",sep="")]
-    gram_stain <- relab_baseline_seqcontrols_expected[c,"GramStain"]
+    observed_count<-relab_baseline_extcontrols_expected[c,paste(b,".Obs",sep="")]+observed_count
+    expected_count<-relab_baseline_extcontrols_expected[c,paste(b,".Exp",sep="")]
+    gram_stain <- relab_baseline_extcontrols_expected[c,"GramStain"]
     count = count+1
     
    }
    
   }
   
-  relab_baseline_seqcontrols_expected[a,paste(b,".Obs",sep="")]<-observed_count/count
-  relab_baseline_seqcontrols_expected[a,paste(b,".Exp",sep="")]<-expected_count
-  relab_baseline_seqcontrols_expected[a,"GramStain"]<-gram_stain
-  relab_baseline_seqcontrols_expected[a,"SubjectID"]<-a
+  relab_baseline_extcontrols_expected[a,paste(b,".Obs",sep="")]<-observed_count/count
+  relab_baseline_extcontrols_expected[a,paste(b,".Exp",sep="")]<-expected_count
+  relab_baseline_extcontrols_expected[a,"GramStain"]<-gram_stain
+  relab_baseline_extcontrols_expected[a,"SubjectID"]<-a
   count=0
   observed_count=0
  }
 }
   
-write.csv(relab_baseline_seqcontrols_expected,"/datatables/relab_baseline_seqcontrols_expected.csv")
+write.csv(relab_baseline_extcontrols_expected,"/datatables/relab_baseline_extcontrols_expected.csv")
 
 #Unexpected relative abundance
-for (a in subjectlist_baseline_seqcontrol){
+for (a in subjectlist_baseline_extcontrol){
  genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
  genus_temp <- genus_temp$Genus
  
- genus_found <- relab_baseline_seqcontrols$Genus
+ genus_found <- relab_baseline_extcontrols$Genus
  genus_temp <- subset(genus_found,!genus_temp$V1)
   
- for (b in samplelist_baseline_seqcontrol){
+ for (b in samplelist_baseline_extcontrol){
   subject.id <- metadata_baseline_filtered[b,"SubjectID"]
   
   if(a==subject.id){
    
    for (c in genus_temp){
-    rel_abund_observed <- relab_baseline_seqcontrols[b,c]
+    rel_abund_observed <- relab_baseline_extcontrols[b,c]
     gram_stain <- control_expect[c,"Gram"]
     
-    relab_baseline_seqcontrols_unexpected[b,paste(c,".Obs",sep="")]<-rel_abund_observed
-    relab_baseline_seqcontrols_unexpected[b,"GramStain"]<-gram_stain
-    relab_baseline_seqcontrols_unexpected[b,"SubjectID"]<-a
+    relab_baseline_extcontrols_unexpected[b,paste(c,".Obs",sep="")]<-rel_abund_observed
+    relab_baseline_extcontrols_unexpected[b,"GramStain"]<-gram_stain
+    relab_baseline_extcontrols_unexpected[b,"SubjectID"]<-a
    }
    
   }
@@ -302,66 +330,66 @@ for (a in subjectlist_baseline_seqcontrol){
  
 }
 
-write.csv(relab_baseline_seqcontrols_unexpected,"/datatables/relab_baseline_seqcontrols_unexpected.csv")
+write.csv(relab_baseline_extcontrols_unexpected,"/datatables/relab_baseline_extcontrols_unexpected.csv")
 
 #Expected Average by SubjectID
 
 count=0
 observed_count=0
 
-for (a in subjectlist_baseline_seqcontrol){
+for (a in subjectlist_baseline_extcontrol){
  genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
  genus_temp <- genus_temp$Genus
  
- genus_found <- relab_baseline_seqcontrols$Genus
+ genus_found <- relab_baseline_extcontrols$Genus
  genus_temp <- subset(genus_found,!genus_temp$V1)
  
  for (b in genus_temp){
   
-  for (c in samplelist_baseline_seqcontrol){
+  for (c in samplelist_baseline_extcontrol){
    
-   subject.id <- relab_baseline_seqcontrols_unexpected[b,"SubjectID"]
+   subject.id <- relab_baseline_extcontrols_unexpected[b,"SubjectID"]
    
    if(a=subject.id){
-    observed_count<-relab_baseline_seqcontrols_unexpected[c,paste(b,".Obs",sep="")]+observed_count
-    gram_stain <- relab_baseline_seqcontrols_unexpected[c,"GramStain"]
+    observed_count<-relab_baseline_extcontrols_unexpected[c,paste(b,".Obs",sep="")]+observed_count
+    gram_stain <- relab_baseline_extcontrols_unexpected[c,"GramStain"]
     count = count+1
     
    }
    
   }
   
-  relab_baseline_seqcontrols_unexpected[a,paste(b,".Obs",sep="")]<-observed_count/count
-  relab_baseline_seqcontrols_unexpected[a,"GramStain"]<-gram_stain
-  relab_baseline_seqcontrols_unexpected[a,"SubjectID"]<-a
+  relab_baseline_extcontrols_unexpected[a,paste(b,".Obs",sep="")]<-observed_count/count
+  relab_baseline_extcontrols_unexpected[a,"GramStain"]<-gram_stain
+  relab_baseline_extcontrols_unexpected[a,"SubjectID"]<-a
   count=0
   observed_count=0
  }
 }
   
-write.csv(relab_baseline_seqcontrols_unexpected,"/datatables/relab_baseline_seqcontrols_unexpected.csv")
+write.csv(relab_baseline_extcontrols_unexpected,"/datatables/relab_baseline_extcontrols_unexpected.csv")
 
 ```
 
 #9 Relative Abundance % Difference
 ```{r}
-for (a in subjectlist_baseline_seqcontrol){
+for (a in subjectlist_baseline_extcontrol){
  
  genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
  genus_temp <- genus_temp$Genus
   
  for (b in genus_temp){
-  observed_count<-relab_baseline_seqcontrols_expected[a,paste(b,".Obs",sep="")]
-  expected_count<-relab_baseline_seqcontrols_expected[a,paste(b,".Exp",sep="")]
+  observed_count<-relab_baseline_extcontrols_expected[a,paste(b,".Obs",sep="")]
+  expected_count<-relab_baseline_extcontrols_expected[a,paste(b,".Exp",sep="")]
   
    if(!(is.na(observed_count)|is.null(observed_count)|is.na(observed_count)|is.null(observed_count)|observed_count=0|expected_count=0)){
 
-    relab_baseline_seqcontrols_percdiff[a,b]<- ((observed_count-expected_count)/expected_count)*100
+    relab_baseline_extcontrols_percdiff[a,b]<- ((observed_count-expected_count)/expected_count)*100
    }
  }
 }
 
-write.csv(relab_baseline_seqcontrols_percdiff,"/datatables/relab_baseline_seqcontrols_percdiff.csv")
+write.csv(relab_baseline_extcontrols_percdiff,"/datatables/relab_baseline_extcontrols_percdiff.csv")
 
 ```
 
