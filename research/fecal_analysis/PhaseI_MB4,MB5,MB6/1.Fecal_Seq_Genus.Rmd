@@ -205,7 +205,7 @@ for (a in subjectlist_baseline_seqcontrol){
 
 write.csv(relab_baseline_seqcontrols_expected,"/datatables/relab_baseline_seqcontrols_expected.csv")
 
-#Average by SubjectID
+#Expected Average by SubjectID
 
 count=0
 observed_count=0
@@ -240,6 +240,73 @@ for (a in subjectlist_baseline_seqcontrol){
 }
   
 write.csv(relab_baseline_seqcontrols_expected,"/datatables/relab_baseline_seqcontrols_expected.csv")
+
+#Unexpected relative abundance
+for (a in subjectlist_baseline_seqcontrol){
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+ 
+ genus_found <- relab_baseline_seqcontrols$Genus
+ genus_temp <- subset(genus_found,!genus_temp$V1)
+  
+ for (b in samplelist_baseline_seqcontrol){
+  subject.id <- metadata_baseline_filtered[b,"SubjectID"]
+  
+  if(a==subject.id){
+   
+   for (c in genus_temp){
+    rel_abund_observed <- relab_baseline_seqcontrols[b,c]
+    gram_stain <- control_expect[c,"Gram"]
+    
+    relab_baseline_seqcontrols_unexpected[b,paste(c,".Obs",sep="")]<-rel_abund_observed
+    relab_baseline_seqcontrols_unexpected[b,"GramStain"]<-gram_stain
+    relab_baseline_seqcontrols_unexpected[b,"SubjectID"]<-a
+   }
+   
+  }
+
+ }
+ 
+}
+
+write.csv(relab_baseline_seqcontrols_unexpected,"/datatables/relab_baseline_seqcontrols_unexpected.csv")
+
+#Expected Average by SubjectID
+
+count=0
+observed_count=0
+
+for (a in subjectlist_baseline_seqcontrol){
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+ 
+ genus_found <- relab_baseline_seqcontrols$Genus
+ genus_temp <- subset(genus_found,!genus_temp$V1)
+ 
+ for (b in genus_temp){
+  
+  for (c in samplelist_baseline_seqcontrol){
+   
+   subject.id <- relab_baseline_seqcontrols_unexpected[b,"SubjectID"]
+   
+   if(a=subject.id){
+    observed_count<-relab_baseline_seqcontrols_unexpected[c,paste(b,".Obs",sep="")]+observed_count
+    gram_stain <- relab_baseline_seqcontrols_unexpected[c,"GramStain"]
+    count = count+1
+    
+   }
+   
+  }
+  
+  relab_baseline_seqcontrols_unexpected[a,paste(b,".Obs",sep="")]<-observed_count/count
+  relab_baseline_seqcontrols_unexpected[a,"GramStain"]<-gram_stain
+  relab_baseline_seqcontrols_unexpected[a,"SubjectID"]<-a
+  count=0
+  observed_count=0
+ }
+}
+  
+write.csv(relab_baseline_seqcontrols_unexpected,"/datatables/relab_baseline_seqcontrols_unexpected.csv")
 
 ```
 
