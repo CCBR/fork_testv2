@@ -230,8 +230,8 @@ for (a in subjectlist_baseline_seqcontrol){
    
   }
   
-  relab_baseline_seqcontrols_expected[a,"Observed"]<-observed_count/count
-  relab_baseline_seqcontrols_expected[a,"Expected"]<-expected_count
+  relab_baseline_seqcontrols_expected[a,paste(b,".Obs",sep="")]<-observed_count/count
+  relab_baseline_seqcontrols_expected[a,paste(b,".Exp",sep="")]<-expected_count
   relab_baseline_seqcontrols_expected[a,"GramStain"]<-gram_stain
   relab_baseline_seqcontrols_expected[a,"SubjectID"]<-a
   count=0
@@ -251,15 +251,17 @@ for (a in subjectlist_baseline_seqcontrol){
  genus_temp <- genus_temp$Genus
   
  for (b in genus_temp){
+  observed_count<-relab_baseline_seqcontrols_expected[a,paste(b,".Obs",sep="")]
+  expected_count<-relab_baseline_seqcontrols_expected[a,paste(b,".Exp",sep="")]
   
-  
- }
- observed_count<-relab_baseline_seqcontrols_expected[a,"Observed"]
- expected_count<-relab_baseline_seqcontrols_expected[a,"Expected"]
- 
- if(!(is.na(observed_count)|is.null(observed_count)|is.na(observed_count)|is.null(observed_count)|observed_count=0|expected_count=0))
+   if(!(is.na(observed_count)|is.null(observed_count)|is.na(observed_count)|is.null(observed_count)|observed_count=0|expected_count=0)){
 
+    relab_baseline_seqcontrols_percdiff[a,b]<- ((observed_count-expected_count)/expected_count)*100
+   }
+ }
 }
+
+write.csv(relab_baseline_seqcontrols_percdiff,"/datatables/relab_baseline_seqcontrols_percdiff.csv")
 
 ```
 
