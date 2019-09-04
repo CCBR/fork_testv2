@@ -31,7 +31,6 @@ library(phyloseq)
 library(qiime2R)
 library(tibble)
 library(gridExtra)
-library("../Data.table")
 ```
 
 #Pre-Processing
@@ -61,7 +60,7 @@ physeq_complete<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree
 physeq_complete #verify results are as expected
 
 s<-summary(sample_data(physeq_complete))
-capture.output(s, file = "/Data/summary_prefilter.txt")
+capture.output(s, file = "/Data/Baseline/summary_prefilter.txt")
 ```
 
 #2 Prune for bacteria only, Create prefilter summary files
@@ -77,7 +76,7 @@ physeq_filt
 
 #Print summaries
 a<-summary(sample_data(physeq_filt)$Sample.Type)
-capture.output(a, file = "/Data/summary_sampletype_prefilter.txt")
+capture.output(a, file = "/Data/Baseline/summary_sampletype_prefilter.txt")
 ```
 
 #3. Determine read counts and plot
@@ -100,7 +99,7 @@ p2<-ggplot(sample_sum_df, aes(x = sum, color=SubjectID)) +
   theme(axis.title.y = element_blank())
 
 #Save file
-file_name =("/Graphs/SeqDepth_prefilter.tiff")
+file_name =("/Graphs/Baseline/SeqDepth_prefilter.tiff")
 tiff(file_name, width=800)
 print(p1)
 dev.off()
@@ -138,18 +137,18 @@ p2<-ggplot(sample_sum_df, aes(x = sum, color=SubjectID)) +
   theme(axis.title.y = element_blank())
 
 #Save file
-file_name =("/Graphs/SeqDepth_filter.tiff")
+file_name =("/Graphs/Baseline/SeqDepth_filter.tiff")
 tiff(file_name, width=800)
 print(p1)
 dev.off()
 
 #Print summaries
 s<-summary(sample_data(physeq_filt))
-capture.output(s, file = "/Data/summary_filter.txt")
+capture.output(s, file = "/Data/Baseline/summary_filter.txt")
 a<-summary(sample_data(physeq_filt)$SampleType)
-capture.output(a, file = "/Data/summary_sampletype_postfilter.txt")
+capture.output(a, file = "/Data/Baseline/summary_sampletype_postfilter.txt")
 a<-summary(sample_data(physeq_filt)$Subject)
-capture.output(a, file = "/Data/summary_subject_postfilter.txt")
+capture.output(a, file = "/Data/Baseline/summary_subject_postfilter.txt")
 ```
 
 #6. Subset filtered data, sample to specified depth
@@ -190,7 +189,7 @@ physeq_scale <- physeq_filt %>% scale_reads(n=1000)
 
 #Sample Type
 p<- plot_richness(physeq_scale, x="Sample.Type") + geom_boxplot()
-file_name =("/Graphs/sampletype_alphadiv.tiff")
+file_name =("/Graphs/Baseline/sampletype_alphadiv.tiff")
 tiff(file_name, width=800)
 print(p)
 dev.off()
@@ -204,7 +203,7 @@ physeq_scale <- physeq_filt_samples %>%
 
 #Sequencing Batch
 p<- plot_richness(physeq_scale, x="RunID") + geom_boxplot() + theme(axis.text.x=element_blank())
-file_name =("/Graphs/alpha_sequencingbatch.tiff")
+file_name =("/Graphs/Baseline/alpha_sequencingbatch.tiff")
 tiff(file_name, width=800)
 print(p)
 dev.off()
