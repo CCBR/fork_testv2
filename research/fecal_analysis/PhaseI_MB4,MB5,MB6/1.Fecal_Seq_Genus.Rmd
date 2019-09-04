@@ -68,7 +68,7 @@ for (a in samplelist_baseline_filtered){
 }
 ```
 
-#5 Relative abundance blanks
+#5 Relative Abundance - Blanks
 ```{r}
 samplelist_baseline_water <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Source.Descrip == "Water"))
 samplelist_baseline_water <- (samplelist_baseline_water$SampleID)
@@ -137,7 +137,7 @@ for (a in subjectlist_baseline_seqcontrol){
 
 write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
 
-#Average by sample type
+#Average by SubjectID
 for (a in subjectlist_baseline_seqcontrol){
  for (b in samplelist_baseline_seqcontrol){
   subject.id <- observed_baseline_seqcontrols[b,"SubjectID"]
@@ -156,6 +156,29 @@ for (a in subjectlist_baseline_seqcontrol){
 write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
 
 ```
+
+#8. Relative Abundance  - Seq Controls
+```{r}
+subjectlist_baseline_seqcontrol
+
+for (a in subjectlist_baseline_seqcontrol){
+ 
+ for (b in ncol(otu_baseline_filtered)-1){
+   relab <- otu_baseline_filtered[a,b]
+   
+   if(!(is.na(relab) | is.null(relab))){
+     relab_baseline_seqcontrols[a,b] <- otu_baseline_filtered[a,b]
+   }
+
+ }
+ 
+}
+
+write.csv(relab_baseline_blanks,"/datatables/relab_baseline_seqcontrols.csv")
+
+
+```
+
 
 #5. OTU Counts by Control Type
 Determine genus count for each sample, average across control type
