@@ -107,14 +107,14 @@ for (a in samplelist_baseline_water){
    relab <- otu_baseline_filtered[a,b]
    
    if(!(is.na(relab) | is.null(relab))){
-     relab_baseline_blanks[a,b] <- otu_baseline_filtered[a,b]/otu_baseline_filtered[a,"Total_OTUs"]
+     relab_baseline_seqblanks[a,b] <- otu_baseline_filtered[a,b]/otu_baseline_filtered[a,"Total_OTUs"]
    }
 
  }
  
 }
 
-write.csv(relab_baseline_blanks,"/datatables/relabun_baseline_blanks.csv")
+write.csv(relab_baseline_seqblanks,"/datatables/relabun_seqbaseline_blanks.csv")
 
 ```
 
