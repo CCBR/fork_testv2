@@ -120,7 +120,7 @@ for (a in samplelist_baseline_water){
  
 }
 
-write.csv(relab_baseline_extblanks,"/datatables/relabun_baseline_extblanks.csv")
+write.csv(relab_baseline_extblanks,"/Data/relabun_baseline_extblanks.csv")
 ```
 
 #7. Genus Filter List - From Ext Blanks
@@ -169,7 +169,7 @@ for (a in subjectlist_baseline_extcontrol){
  
 }
 
-write.csv(observed_baseline_extcontrols,"/datatables/observed_baseline_extcontrols.csv")
+write.csv(observed_baseline_extcontrols,"/Data/observed_baseline_extcontrols.csv")
 
 #Average by SubjectID
 count =0
@@ -191,7 +191,7 @@ for (a in subjectlist_baseline_extcontrol){
  count =0
 }
 
-write.csv(observed_baseline_extcontrols,"/datatables/observed_baseline_extcontrols.csv")
+write.csv(observed_baseline_extcontrols,"/Data/observed_baseline_extcontrols.csv")
 
 #Average by Kit
 count =0
@@ -216,7 +216,7 @@ for (a in kit_list){
  count =0
 }
 
-write.csv(observed_baseline_extcontrols,"/datatables/observed_baseline_extcontrols.csv")
+write.csv(observed_baseline_extcontrols,"/Data/observed_baseline_extcontrols.csv")
 
 ```
 
@@ -235,7 +235,7 @@ for (a in subjectlist_baseline_extcontrol){
  }
  
 }
-write.csv(relab_baseline_extcontrols,"/datatables/relabun_baseline_extcontrols.csv")
+write.csv(relab_baseline_extcontrols,"/Data/relabun_baseline_extcontrols.csv")
 
 #Expected relative abundance
 for (a in subjectlist_baseline_extcontrol){
@@ -264,7 +264,7 @@ for (a in subjectlist_baseline_extcontrol){
  
 }
 
-write.csv(relab_baseline_extcontrols_expected,"/datatables/relab_baseline_extcontrols_expected.csv")
+write.csv(relab_baseline_extcontrols_expected,"/Data/relab_baseline_extcontrols_expected.csv")
 
 #Expected Average by SubjectID
 
@@ -300,7 +300,7 @@ for (a in subjectlist_baseline_extcontrol){
  }
 }
   
-write.csv(relab_baseline_extcontrols_expected,"/datatables/relab_baseline_extcontrols_expected.csv")
+write.csv(relab_baseline_extcontrols_expected,"/Data/relab_baseline_extcontrols_expected.csv")
 
 #Unexpected relative abundance
 for (a in subjectlist_baseline_extcontrol){
@@ -330,7 +330,7 @@ for (a in subjectlist_baseline_extcontrol){
  
 }
 
-write.csv(relab_baseline_extcontrols_unexpected,"/datatables/relab_baseline_extcontrols_unexpected.csv")
+write.csv(relab_baseline_extcontrols_unexpected,"/Data/relab_baseline_extcontrols_unexpected.csv")
 
 #Expected Average by SubjectID
 
@@ -367,7 +367,7 @@ for (a in subjectlist_baseline_extcontrol){
  }
 }
   
-write.csv(relab_baseline_extcontrols_unexpected,"/datatables/relab_baseline_extcontrols_unexpected.csv")
+write.csv(relab_baseline_extcontrols_unexpected,"/Data/relab_baseline_extcontrols_unexpected.csv")
 
 ```
 
@@ -389,7 +389,7 @@ for (a in subjectlist_baseline_extcontrol){
  }
 }
 
-write.csv(relab_baseline_extcontrols_percdiff,"/datatables/relab_baseline_extcontrols_percdiff.csv")
+write.csv(relab_baseline_extcontrols_percdiff,"/Data/relab_baseline_extcontrols_percdiff.csv")
 
 ```
 
