@@ -33,7 +33,7 @@ library(tibble)
 library(gridExtra)
 ```
 
-#Pre-Processing
+#Analysis
 ############### 
 #1.Create PhySeq Object
 ```{r}

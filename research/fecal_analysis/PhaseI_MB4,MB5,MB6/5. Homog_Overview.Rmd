@@ -34,7 +34,7 @@ library(gridExtra)
 library("../Data/Homog.table")
 ```
 
-#Pre-Processing
+#Analysis
 ############### 
 #1.Create PhySeq Object
 ```{r}
