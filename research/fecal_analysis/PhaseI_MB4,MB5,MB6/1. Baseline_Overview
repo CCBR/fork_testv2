@@ -1,0 +1,185 @@
+---
+title: "R Notebook"
+output: word_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#To Update
+```{r}
+project_name="Project_NP0084-MB4_5_pt6"
+manifest_name="NP0084-MB4_08_29_19_metadata.txt"
+failed_name = "samplelist_baseline_failed.txt"
+sample_depth = 20000
+```
+
+
+#Load required libraries
+############### 
+```{r}
+library("biom")
+library(data.table)
+library(ggplot2)
+library(tm)
+library(vegan)
+library("biom")
+library(tidyr)
+library(ggplot2)
+library(cowplot)
+library(scales)
+library(phyloseq)
+library(qiime2R)
+library(tibble)
+library(gridExtra)
+library("../Data.table")
+```
+
+#Pre-Processing
+############### 
+#1.Create PhySeq Object
+```{r}
+#Read OTUS
+otus <- read_qza(paste(project_location,"\\Output\\qza_results\\table_dada2_qza_merged_parts_final\\table_dada2_merged_final.qza",sep=""))
+
+#Read rooted tree
+tree <- read_qza(paste(project_location,"\\Output\\qza_results\\phylogeny_qza_results\\rooted_tree.qza",sep=""))
+
+#Read Greengenes taxonomy file
+taxonomy <- read_qza(paste(project_location,"\\Output\\qza_results\\taxonomy_qza_results\\taxonomy_greengenes.qza",sep=""))
+##Edit dtable
+tax_table<-do.call(rbind, strsplit(as.character(taxonomy$data$Taxon), "; "))
+  colnames(tax_table)<-c("Kingdom","Phylum","Class","Order","Family","Genus","Species")
+  rownames(tax_table)<-taxonomy$data$Feature.ID
+
+#read metadata
+metadata <-read.table(paste(project_location,"\\Input\\manifest_qiime2.tsv",sep=""),sep='\t', header=T, row.names=1, comment="")
+metadata<-metadata[-1,]#remove the second line that specifies the data type
+
+#Create phylo object
+physeq_complete<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree$data), tax_table(tax_table), sample_data(metadata))
+
+physeq_complete #verify results are as expected
+
+s<-summary(sample_data(physeq_complete))
+capture.output(s, file = "/Data/summary_prefilter.txt")
+```
+
+#2 Prune for bacteria only, Create prefilter summary files
+```{r}
+#Only bacteria
+physeq_filt <- physeq_complete %>%
+  subset_taxa(
+    Kingdom == "k__Bacteria" &
+    Family  != "k__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rickettsiales; f__mitochondria" &
+    Class   != "k__Bacteria; p__Cyanobacteria; c__Chloroplast"
+  )
+physeq_filt
+
+#Print summaries
+a<-summary(sample_data(physeq_filt)$Sample.Type)
+capture.output(a, file = "/Data/summary_sampletype_prefilter.txt")
+```
+
+#3. Determine read counts and plot
+```{r}
+# Make a data frame with a column for the read counts of each sample
+sample_sum_df <- data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
+colnames(sample_sum_df)
+
+# Histogram of sample read counts by sampletype
+p1<-ggplot(sample_sum_df, aes(x = sum, color=Sample.Type)) + 
+  geom_histogram(fill="white",binwidth = 2500) +
+  xlab("Read counts") +
+  ggtitle("Distribution of sample sequencing depth - Pre-Filtering")+
+  theme(axis.title.y = element_blank())
+
+# Histogram of sample read counts by subject
+p2<-ggplot(sample_sum_df, aes(x = sum, color=SubjectID)) + 
+  geom_histogram(fill="white",binwidth = 2500) +
+  xlab("Read counts") +
+  theme(axis.title.y = element_blank())
+
+#Save file
+file_name =("/Graphs/SeqDepth_prefilter.tiff")
+tiff(file_name, width=800)
+print(p1)
+dev.off()
+
+```
+
+#4. Filter taxa >.001 and samples with less than 1000 reads
+```{r}
+physeq_filt #note taxa number
+physeq_filt = filter_taxa(physeq_filt, function(x) mean(x) > 1e-2, TRUE)
+physeq_filt #note new taxa number and sample number
+
+
+physeq_filt = prune_samples(sample_sums(physeq_filt) > 10000, physeq_filt)
+physeq_filt #note new sample number
+```
+
+#5. Review filtered read counts and plot
+```{r}
+# Make a data frame with a column for the read counts of each sample
+sample_sum_df <- data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
+colnames(sample_sum_df)
+
+# Histogram of sample read counts by sampletype
+p1<-ggplot(sample_sum_df, aes(x = sum, color=Sample.Type)) + 
+  geom_histogram(fill="white",binwidth = 2500) +
+  xlab("Read counts") +
+  ggtitle("Distribution of sample sequencing depth - Post-Filtering") +
+  theme(axis.title.y = element_blank())
+
+# Histogram of sample read counts by sample type
+p2<-ggplot(sample_sum_df, aes(x = sum, color=SubjectID)) + 
+  geom_histogram(fill="white",binwidth = 2500) +
+  xlab("Read counts") +
+  theme(axis.title.y = element_blank())
+
+#Save file
+file_name =("/Graphs/SeqDepth_filter.tiff")
+tiff(file_name, width=800)
+print(p1)
+dev.off()
+
+#Print summaries
+s<-summary(sample_data(physeq_filt))
+capture.output(s, file = "/Data/summary_filter.txt")
+a<-summary(sample_data(physeq_filt)$SampleType)
+capture.output(a, file = "/Data/summary_sampletype_postfilter.txt")
+a<-summary(sample_data(physeq_filt)$Subject)
+capture.output(a, file = "/Data/summary_subject_postfilter.txt")
+```
+
+#6. Subset filtered data, sample to specified depth
+```{r}
+#Only samples
+physeq_filt_seqcontrols <- physeq_filt %>%
+  subset_samples(
+    Sample.Type == "SeqBlank" | Sample.Type=="SeqControl" 
+  )
+physeq_filt_seqcontrols #verify sample number
+
+#Only controls
+physeq_filt_extcontrols <- physeq_filt %>%
+  subset_samples(
+    Sample.Type == "ExtBlank" | Sample.Type=="ExtControl"
+  )
+physeq_filt_extcontrols #verify sample number
+
+#Only replicates
+physeq_filt_study <- physeq_filt %>%
+  subset_samples(
+    Sample.Type == "Study" 
+  )
+physeq_filt_study #verify sample number
+
+# Scale reads to even depth 
+physeq_scale <- physeq_filt %>% scale_reads(n=sample_depth) 
+physeq_filt_seqcontrols <- physeq_filt_seqcontrols %>% scale_reads(n=sample_depth) 
+physeq_filt_extcontrols <- physeq_filt_extcontrols %>% scale_reads(n=sample_depth) 
+physeq_filt_study <- physeq_filt_study %>% scale_reads(n=sample_depth) 
+
+```
+
