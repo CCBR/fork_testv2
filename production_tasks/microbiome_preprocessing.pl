@@ -45,7 +45,7 @@ use File::Copy;
 	###Testing
 	my $man_only = 2;
 	my $StudyAns = "Y";
-	my $date = "08_29_19";
+	my $date = "09_02_19";
 	my $ProjName = "NP0084-MB4"; 
 
 #Call subroutines

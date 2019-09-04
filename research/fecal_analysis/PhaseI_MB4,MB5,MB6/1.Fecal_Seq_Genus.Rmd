@@ -69,8 +69,6 @@ for (a in sample_list_complete){
 #5. OTU Counts by Control Type
 Determine genus count for each sample, average across control type
 ```{r}
-control_types
-
 #Create a missing list for non-annotated Genus
 missing_anno <- list()
 
