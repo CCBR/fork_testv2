@@ -4,37 +4,363 @@ output: word_document
 editor_options: 
   chunk_output_type: console
 ---
-Database information
-#Database Information
-**control_expect: table of the taxonomy for expected control frequencies
---control_artcol & control_zymoext: tables of taxonomy info for artificial colony and zymo extraction only
+#To Update
+```{r}
+project_name="Project_NP0084-MB4_5_pt6"
+manifest_name="NP0084-MB4_08_29_19_metadata.txt"
+failed_name = "samplelist_baseline_failed.txt"
+sample_depth = 20000
+```
 
-**samples_variables_complete - table of the variable information of all samples and controls
---samples_filtered: table of all samples/controls that passed QC, filtering off of samples_failed
---samples_variables_f: subset of samples_filtered, to only include only extraction controls 
-
-**samples_failed: table of samples that did not meet QC thresholds
-
-**samples_otu_complete: table of the OTUs from samples_filtered by genus
-
-**samples_variables_f: table of samples with counts of genus present that were expected and genus expected
---samples_obs_count_type: average count of genus present across all samples by control type
---samples_obs_count_kit: average count of genus present across all samples by kit
-
-**samples_obs_abund: percent abundance of zymo/ac samples
-
-**samples_obs_abund_vari: percent abundance of by control, by kit, percent differences of kit by control
-
-
-#1. Load required libraries
+#Load required libraries
+############### 
 ```{r}
 library("biom")
 library(data.table)
 library(ggplot2)
-library(qualityTools)
+library(tm)
+library(vegan)
+library("biom")
 library(tidyr)
+library(ggplot2)
+library(cowplot)
+library(scales)
+library(phyloseq)
+library(qiime2R)
+library(tibble)
+library(gridExtra)
+library("../Data.table")
 ```
 
+#Analysis
+###############
+#1. Taxonomy Reference - Expected frequencies
+```{r}
+#Read in controls taxonomy file, grouped by Genus
+control_expect <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Controls\\Taxonomy\\Taxonomy_Genus_2019.txt",sep="\t",header=TRUE)
+rownames(control_expect) <- unique(control_expect[,"Genus"])
+```
+
+#2. Load OTU and metadata tables
+```{r}
+#Create location link
+project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
+
+#Read in database with variable information
+metadata_baseline_complete <- read.table(paste(project_location,manifest_name,sep="\\"),sep="\t",header = TRUE)
+
+#Read in database of failed samples
+samplelist_baseline_failed <- read.table(paste(project_location,failed_name,sep="\\"),sep="\t",header = TRUE)
+
+otu_baseline_complete <- read.csv("/OTUs/otu_baseline_extontrols.csv", row.names = 1)
+#otu_baseline_complete <- t(otu_baseline_complete) #table has samples as columns, not rows
+```
+
+#3. Filtering of samples to include project set only
+```{r}
+#Remove failed samples from info database
+metadata_baseline_filtered <-subset(metadata_baseline_complete, !(SampleID %in% samplelist_baseline_failed$V1))
+nrow(metadata_baseline_complete) - nrow(samplelist_baseline_failed) ==nrow(metadata_baseline_filtered) #should be true
+
+#Only include Seq Controls
+control_types <- c("ExtControl","ExtBlank")
+metadata_baseline_filtered <- metadata_baseline_filtered[metadata_baseline_filtered$Sample.Type %in% control_types,]
+row.names(metadata_baseline_filtered) <- metadata_baseline_filtered$SampleID
+
+samplelist_baseline_filtered <- unique(metadata_baseline_filtered$SampleID)
+
+nrow(metadata_baseline_filtered)
+```
+
+#4. OTU Counts by sample
+Read in OTU information, and determine total OTUs
+```{r}
+otu_baseline_filtered <- subset(otu_baseline_complete, !(SampleID %in% samplelist_baseline_filtered$V1))
+genus_found <- colnames(otu_baseline_filtered)
+
+#For each sample, determine the total read counts
+for (a in samplelist_baseline_filtered){
+ #Set sum to 0
+ sum=0
+ 
+ #For each genus
+ for (b in genus_found){
+  
+  #Add the number of counts together
+  sum <- otu_baseline_filtered[a,b] + sum
+ }
+ 
+ #When complete, push the sum to a new "Total_OTUs" row
+ otu_baseline_filtered[a,"Total_OTUs"] <- sum
+}
+```
+
+#5 Relative Abundance - Blanks
+```{r}
+samplelist_baseline_water <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Source.Descrip == "Water"))
+samplelist_baseline_water <- (samplelist_baseline_water$SampleID)
+
+for (a in samplelist_baseline_water){
+ 
+ for (b in ncol(otu_baseline_filtered)-1){
+   relab <- otu_baseline_filtered[a,b]
+   
+   if(!(is.na(relab) | is.null(relab))){
+     relab_baseline_blanks[a,b] <- otu_baseline_filtered[a,b]/otu_baseline_filtered[a,"Total_OTUs"]
+   }
+
+ }
+ 
+}
+
+write.csv(relab_baseline_blanks,"/datatables/relabun_baseline_blanks.csv")
+
+```
+
+#6. Genus Filter List - From Seq Blanks
+```{r}
+genus_sequence_remove <- c("")
+
+```
+
+#7. Observed to Expected Counts - Seq Controls
+```{r}
+samplelist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
+
+subjectlist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
+subjectlist_baseline_seqcontrol <- unique(subjectlist_baseline_seqcontrol$SubjectID)
+
+observed_count =0
+
+#Individual Samples
+for (a in subjectlist_baseline_seqcontrol){
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+  
+ for (b in samplelist_baseline_seqcontrol){
+  subject.id <- metadata_baseline_filtered[b,"SubjectID"]
+  
+  if(a==subject.id){
+   
+   for (c in genus_temp){
+    otu_count <- otu_baseline_filtered[b,c]
+    
+    if(!(is.na(observed_count) | is.null(otu_count) | otu_count ==0)){
+     observed_count = observed_count+1
+    }
+    
+   }
+   
+  }
+  
+  observed_baseline_seqcontrols[b,"Observed"] <- observed_count
+  observed_baseline_seqcontrols[b,"Expected"] <- length(genus_temp)
+  observed_baseline_seqcontrol[b,"SubjectID"] <- subject.id
+  observed_count =0
+ 
+ }
+ 
+}
+
+write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
+
+#Average by SubjectID
+count =0
+for (a in subjectlist_baseline_seqcontrol){
+ for (b in samplelist_baseline_seqcontrol){
+  subject.id <- observed_baseline_seqcontrols[b,"SubjectID"]
+  
+  if(a=subject.id){
+   observed_count<-observed_baseline_seqcontrols[b,"Observed"]+observed_count
+   expected_count<-observed_baseline_seqcontrols[b,"Expected"]
+   count = count+1
+  }
+ }
+ observed_baseline_seqcontrols[a,"Observed"]<-observed_count/count
+ observed_baseline_seqcontrols[a,"Expected"]<-expected_count
+ observed_baseline_seqcontrol[a,"SubjectID"]<-a
+ count =0
+}
+
+write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
+
+```
+
+#8. Relative Abundance  - Seq Controls
+```{r}
+#Complete Relative Abundance
+for (a in subjectlist_baseline_seqcontrol){
+ 
+ for (b in ncol(otu_baseline_filtered)-1){
+   relab <- otu_baseline_filtered[a,b]
+   
+   if(!(is.na(relab) | is.null(relab))){
+     relab_baseline_seqcontrols[a,b] <- otu_baseline_filtered[a,b]/otu_baseline_filtered[a,"Total_OTUs"]
+   }
+
+ }
+ 
+}
+write.csv(relab_baseline_seqcontrols,"/datatables/relabun_baseline_seqcontrols.csv")
+
+#Expected relative abundance
+for (a in subjectlist_baseline_seqcontrol){
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+  
+ for (b in samplelist_baseline_seqcontrol){
+  subject.id <- metadata_baseline_filtered[b,"SubjectID"]
+  
+  if(a==subject.id){
+   
+   for (c in genus_temp){
+    rel_abund_observed <- relab_baseline_seqcontrols[b,c]
+    rel_abund_expected <- control_expect[c,a]
+    gram_stain <- control_expect[c,"Gram"]
+    
+    relab_baseline_seqcontrols_expected[b,paste(c,".Obs",sep="")]<-rel_abund_observed
+    relab_baseline_seqcontrols_expected[b,paste(c,".Exp",sep="")]<-rel_abund_expected
+    relab_baseline_seqcontrols_expected[b,"GramStain"]<-gram_stain
+    relab_baseline_seqcontrols_expected[b,"SubjectID"]<-a
+   }
+   
+  }
+
+ }
+ 
+}
+
+write.csv(relab_baseline_seqcontrols_expected,"/datatables/relab_baseline_seqcontrols_expected.csv")
+
+#Expected Average by SubjectID
+
+count=0
+observed_count=0
+
+for (a in subjectlist_baseline_seqcontrol){
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+ 
+ for (b in genus_temp){
+  
+  for (c in samplelist_baseline_seqcontrol){
+   
+   subject.id <- relab_baseline_seqcontrols_expected[b,"SubjectID"]
+   
+   if(a=subject.id){
+    observed_count<-relab_baseline_seqcontrols_expected[c,paste(b,".Obs",sep="")]+observed_count
+    expected_count<-relab_baseline_seqcontrols_expected[c,paste(b,".Exp",sep="")]
+    gram_stain <- relab_baseline_seqcontrols_expected[c,"GramStain"]
+    count = count+1
+    
+   }
+   
+  }
+  
+  relab_baseline_seqcontrols_expected[a,paste(b,".Obs",sep="")]<-observed_count/count
+  relab_baseline_seqcontrols_expected[a,paste(b,".Exp",sep="")]<-expected_count
+  relab_baseline_seqcontrols_expected[a,"GramStain"]<-gram_stain
+  relab_baseline_seqcontrols_expected[a,"SubjectID"]<-a
+  count=0
+  observed_count=0
+ }
+}
+  
+write.csv(relab_baseline_seqcontrols_expected,"/datatables/relab_baseline_seqcontrols_expected.csv")
+
+#Unexpected relative abundance
+for (a in subjectlist_baseline_seqcontrol){
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+ 
+ genus_found <- relab_baseline_seqcontrols$Genus
+ genus_temp <- subset(genus_found,!genus_temp$V1)
+  
+ for (b in samplelist_baseline_seqcontrol){
+  subject.id <- metadata_baseline_filtered[b,"SubjectID"]
+  
+  if(a==subject.id){
+   
+   for (c in genus_temp){
+    rel_abund_observed <- relab_baseline_seqcontrols[b,c]
+    gram_stain <- control_expect[c,"Gram"]
+    
+    relab_baseline_seqcontrols_unexpected[b,paste(c,".Obs",sep="")]<-rel_abund_observed
+    relab_baseline_seqcontrols_unexpected[b,"GramStain"]<-gram_stain
+    relab_baseline_seqcontrols_unexpected[b,"SubjectID"]<-a
+   }
+   
+  }
+
+ }
+ 
+}
+
+write.csv(relab_baseline_seqcontrols_unexpected,"/datatables/relab_baseline_seqcontrols_unexpected.csv")
+
+#Expected Average by SubjectID
+
+count=0
+observed_count=0
+
+for (a in subjectlist_baseline_seqcontrol){
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+ 
+ genus_found <- relab_baseline_seqcontrols$Genus
+ genus_temp <- subset(genus_found,!genus_temp$V1)
+ 
+ for (b in genus_temp){
+  
+  for (c in samplelist_baseline_seqcontrol){
+   
+   subject.id <- relab_baseline_seqcontrols_unexpected[b,"SubjectID"]
+   
+   if(a=subject.id){
+    observed_count<-relab_baseline_seqcontrols_unexpected[c,paste(b,".Obs",sep="")]+observed_count
+    gram_stain <- relab_baseline_seqcontrols_unexpected[c,"GramStain"]
+    count = count+1
+    
+   }
+   
+  }
+  
+  relab_baseline_seqcontrols_unexpected[a,paste(b,".Obs",sep="")]<-observed_count/count
+  relab_baseline_seqcontrols_unexpected[a,"GramStain"]<-gram_stain
+  relab_baseline_seqcontrols_unexpected[a,"SubjectID"]<-a
+  count=0
+  observed_count=0
+ }
+}
+  
+write.csv(relab_baseline_seqcontrols_unexpected,"/datatables/relab_baseline_seqcontrols_unexpected.csv")
+
+```
+
+#9 Relative Abundance % Difference
+```{r}
+for (a in subjectlist_baseline_seqcontrol){
+ 
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+  
+ for (b in genus_temp){
+  observed_count<-relab_baseline_seqcontrols_expected[a,paste(b,".Obs",sep="")]
+  expected_count<-relab_baseline_seqcontrols_expected[a,paste(b,".Exp",sep="")]
+  
+   if(!(is.na(observed_count)|is.null(observed_count)|is.na(observed_count)|is.null(observed_count)|observed_count=0|expected_count=0)){
+
+    relab_baseline_seqcontrols_percdiff[a,b]<- ((observed_count-expected_count)/expected_count)*100
+   }
+ }
+}
+
+write.csv(relab_baseline_seqcontrols_percdiff,"/datatables/relab_baseline_seqcontrols_percdiff.csv")
+
+```
+
+###########################################
+#Update
 #2. Taxonomy Reference - Expected frequencies
 ```{r}
 #Read in controls taxonomy file, grouped by Genus
