@@ -138,6 +138,7 @@ for (a in subjectlist_baseline_seqcontrol){
 write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
 
 #Average by SubjectID
+count =0
 for (a in subjectlist_baseline_seqcontrol){
  for (b in samplelist_baseline_seqcontrol){
   subject.id <- observed_baseline_seqcontrols[b,"SubjectID"]
@@ -151,6 +152,7 @@ for (a in subjectlist_baseline_seqcontrol){
  observed_baseline_seqcontrols[a,"Observed"]<-observed_count/count
  observed_baseline_seqcontrols[a,"Expected"]<-expected_count
  observed_baseline_seqcontrol[a,"SubjectID"]<-a
+ count =0
 }
 
 write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
