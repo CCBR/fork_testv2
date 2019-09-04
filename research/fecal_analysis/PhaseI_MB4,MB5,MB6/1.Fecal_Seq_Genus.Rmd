@@ -24,18 +24,18 @@ rownames(control_expect) <- unique(control_expect[,"Genus"])
 metadata_baseline_complete <- read.table("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084-MB4_5_pt6\\NP0084-MB4_08_29_19_metadata.txt",sep="\t",header = TRUE)
 
 #Read in database of failed samples
-samplelist_failed_baseline <- read.table("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084-MB4_5_pt6\\samplelist_failed_baseline.txt")
+samplelist_baseline_failed <- read.table("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084-MB4_5_pt6\\samplelist_baseline_failed.txt")
 
 #Remove failed samples from info database
-metadata_baseline_filtered <-subset(metadata_baseline_complete, !(SampleID %in% samplelist_failed_baseline$V1))
-nrow(metadata_baseline_complete) - nrow(samplelist_failed_baseline) ==nrow(metadata_baseline_filtered) #should be true
+metadata_baseline_filtered <-subset(metadata_baseline_complete, !(SampleID %in% samplelist_baseline_failed$V1))
+nrow(metadata_baseline_complete) - nrow(samplelist_baseline_failed) ==nrow(metadata_baseline_filtered) #should be true
 
 #Only include Seq Controls
 control_types <- c("SeqControl","SeqBlank")
 metadata_baseline_filtered <- metadata_baseline_filtered[metadata_baseline_filtered$Sample.Type %in% control_types,]
 row.names(metadata_baseline_filtered) <- metadata_baseline_filtered$SampleID
 
-samplelist_filtered <- unique(metadata_baseline_filtered$SampleID)
+samplelist_baseline_filtered <- unique(metadata_baseline_filtered$SampleID)
 
 nrow(metadata_baseline_filtered)
 ```
@@ -44,26 +44,95 @@ nrow(metadata_baseline_filtered)
 Read in OTU information, and determine total OTUs
 ```{r}
 #GreenGenes
-otu_complete <- read.csv("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084-MB4_5_pt6\\Output\\otu_relative_abundance_results\\qiime2_taxa_counts_genus_green.csv", row.names = 1)
+otu_baseline_complete <- read.csv("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084-MB4_5_pt6\\Output\\otu_relative_abundance_results\\qiime2_taxa_counts_genus_green.csv", row.names = 1)
+otu_baseline_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_green_abrf.csv", row.names = 1)
 
-#Create a list of all samples and all genus present in at least one sample
-sample_list_complete <- colnames(otu_complete)
-genus_found <- rownames(otu_complete)
+otu_baseline_complete <- t(otu_baseline_complete) #table has samples as columns, not rows
+otu_baseline_filtered <- subset(otu_baseline_complete, !(SampleID %in% samplelist_baseline_filtered$V1))
+genus_found <- colnames(otu_baseline_filtered)
 
 #For each sample, determine the total read counts
-for (a in sample_list_complete){
+for (a in samplelist_baseline_filtered){
  #Set sum to 0
  sum=0
  
  #For each genus
  for (b in genus_found){
+  
   #Add the number of counts together
-  sum <- otu_complete[b,a] + sum
+  sum <- otu_baseline_filtered[a,b] + sum
  }
  
  #When complete, push the sum to a new "Total_OTUs" row
- otu_complete["Total_OTUs",a] <- sum
+ otu_baseline_filtered[a,"Total_OTUs"] <- sum
 }
+```
+
+#5 Relative abundance blanks
+```{r}
+samplelist_baseline_water <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Source.Descrip == "Water"))
+samplelist_baseline_water <- (samplelist_baseline_water$SampleID)
+
+for (a in samplelist_baseline_water){
+ 
+ for (b in ncol(otu_baseline_filtered)-1){
+   relab <- otu_baseline_filtered[a,b]
+   
+   if(!(is.na(relab) | is.null(relab))){
+     relab_baseline_blanks[a,b] <- otu_baseline_filtered[a,b]
+   }
+
+ }
+ 
+}
+
+write.csv(relab_baseline_blanks,"/datatables/relab_baseline_blanks.csv")
+
+```
+
+#6. Genus Filter List - From Seq Blanks
+```{r}
+genus_sequence_remove <- c("")
+
+```
+
+#7. Observed to Expected Counts - Seq Controls
+```{r}
+samplelist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
+subjectlist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
+subjectlist_baseline_seqcontrol <- unique(subjectlist_baseline_seqcontrol$SubjectID)
+
+observed_count =0
+
+for (a in subjectlist_baseline_seqcontrol){
+ genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- genus_temp$Genus
+  
+ for (b in samplelist_baseline_seqcontrol){
+  sample.type <- metadata_baseline_filtered[b,"SubjectID"]
+  
+  if(a==sample.type){
+   
+   for (c in genus_temp){
+    otu_count <- otu_baseline_filtered[b,c]
+    
+    if(!(is.na(observed_count) | is.null(otu_count) | otu_count ==0)){
+     observed_count = observed_count+1
+    }
+    
+   }
+   
+  }
+  
+  observed_baseline_seqcontrols[b,"Observed"] <- observed_count
+  observed_baseline_seqcontrols[b,"Expected"] <- length(genus_temp)
+  observed_baseline_seqcontrol[b,"Sample.Type"] <- sample.type
+  observed_count =0
+ 
+ }
+ 
+}
+
 ```
 
 #5. OTU Counts by Control Type
@@ -76,7 +145,7 @@ missing_anno <- list()
 for (a in control_types){
  
  ##For each sample in filtered list
- for (b in samplelist_filtered){
+ for (b in samplelist_baseline_filtered){
   
   #Set count to 0
   count_present = 0
@@ -92,7 +161,7 @@ for (a in control_types){
    
    #For each genus is generated list, determine number of reads
    for (c in genus_temp){
-    value <- otu_complete[c,b]
+    value <- otu_baseline_complete[c,b]
   
     #If value is NA (meaning that the genus was not found in sample), add to the absent count
     #If reads are >0 then count_presence increases by 1
@@ -139,7 +208,7 @@ for (a in control_types){
  count=0
  
  #For each of the samples in the sample list
- for(b in samplelist_filtered){
+ for(b in samplelist_baseline_filtered){
   
   #Create control type groups
   valid <- metadata_baseline_filtered[b,"Type"]
@@ -179,14 +248,14 @@ samples_obs_abund = data.frame()
 
 #Determine which genus_expect to use
 ##Run through each sample
-for (a in samplelist_filtered){
+for (a in samplelist_baseline_filtered){
  
  #Check for each of the expected genus
  for (b in genus_expect){
   
   #Determine the reads for the genus, and the total reads for the sample
-  reads <- otu_complete[b,a]
-  total <- otu_complete["Total_OTUs",a]
+  reads <- otu_baseline_complete[b,a]
+  total <- otu_baseline_complete["Total_OTUs",a]
 
   #If value is NA (meaning that the genus was not found in sample), skip
   #If reads are >0 then add the read count to reads_total
@@ -229,8 +298,8 @@ for (a in control_types){
    for(c in sample_list_temp){
     
     #Add up the total percentages from samples_obs_abund [genus,sampleID]
-    reads <- otu_complete [b,c] + reads
-    total <- otu_complete["Total_OTUs",c] + total
+    reads <- otu_baseline_complete [b,c] + reads
+    total <- otu_baseline_complete["Total_OTUs",c] + total
    }
    
    #average of genus level by taking total number of reads of that genus divded by total number of reads for samples included
@@ -311,7 +380,7 @@ write.csv(samples_obs_abund_vari,"Data/seq_obs_abund_vari.csv")
 #10. OTU Percent - Analysis Unexp OTU Rel Abun by Control
 ```{r}
 #Create full list of genus present
-genus_present <- rownames(otu_complete)
+genus_present <- rownames(otu_baseline_complete)
 genus_expect<-as.character(genus_expect)
 
 #Create list of unexpected
@@ -340,9 +409,9 @@ for (a in control_types){
    #For each of the samples in the sample list
    for(c in sample_list_temp){
     
-    #Add total reads from otu_complete [genus,sampleID]
-    reads <- otu_complete [b,c] + reads
-    total <- otu_complete["Total_OTUs",c] + total
+    #Add total reads from otu_baseline_complete [genus,sampleID]
+    reads <- otu_baseline_complete [b,c] + reads
+    total <- otu_baseline_complete["Total_OTUs",c] + total
    }
    
    #Calc Rel abund (total number of reads / total number of reads)
