@@ -13,7 +13,8 @@ failed_name = "samplelist_baseline_failed.txt"
 sample_depth = 20000
 ```
 
-#1. Load required libraries
+#Load required libraries
+############### 
 ```{r}
 library("biom")
 library(data.table)
@@ -32,14 +33,16 @@ library(gridExtra)
 library("../Data.table")
 ```
 
-#2. Taxonomy Reference - Expected frequencies
+#Analysis
+###############
+#1. Taxonomy Reference - Expected frequencies
 ```{r}
 #Read in controls taxonomy file, grouped by Genus
 control_expect <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Controls\\Taxonomy\\Taxonomy_Genus_2019.txt",sep="\t",header=TRUE)
 rownames(control_expect) <- unique(control_expect[,"Genus"])
 ```
 
-#3. Filtering of samples to include project set only
+#2. Load OTU and metadata tables
 ```{r}
 #Create location link
 project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
@@ -50,6 +53,12 @@ metadata_baseline_complete <- read.table(paste(project_location,manifest_name,se
 #Read in database of failed samples
 samplelist_baseline_failed <- read.table(paste(project_location,failed_name,sep="\\"),sep="\t",header = TRUE)
 
+otu_baseline_complete <- read.csv("/OTUs/otu_baseline_seqcontrols.csv", row.names = 1)
+#otu_baseline_complete <- t(otu_baseline_complete) #table has samples as columns, not rows
+```
+
+#3. Filtering of samples to include project set only
+```{r}
 #Remove failed samples from info database
 metadata_baseline_filtered <-subset(metadata_baseline_complete, !(SampleID %in% samplelist_baseline_failed$V1))
 nrow(metadata_baseline_complete) - nrow(samplelist_baseline_failed) ==nrow(metadata_baseline_filtered) #should be true
@@ -67,11 +76,6 @@ nrow(metadata_baseline_filtered)
 #4. OTU Counts by sample
 Read in OTU information, and determine total OTUs
 ```{r}
-#GreenGenes
-otu_baseline_complete <- read.csv("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\Project_NP0084-MB4_5_pt6\\Output\\otu_relative_abundance_results\\qiime2_taxa_counts_genus_green.csv", row.names = 1)
-otu_baseline_complete <- read.csv("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Analysis\\ExpA_Run1&2\\TaxaCounts\\qiime2_taxa_counts_genus_green_abrf.csv", row.names = 1)
-
-otu_baseline_complete <- t(otu_baseline_complete) #table has samples as columns, not rows
 otu_baseline_filtered <- subset(otu_baseline_complete, !(SampleID %in% samplelist_baseline_filtered$V1))
 genus_found <- colnames(otu_baseline_filtered)
 
