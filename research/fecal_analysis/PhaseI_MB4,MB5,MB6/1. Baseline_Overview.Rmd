@@ -186,7 +186,6 @@ physeq_scale <- physeq_filt %>% scale_reads(n=sample_depth)
 physeq_filt_seqcontrols <- physeq_filt_seqcontrols %>% scale_reads(n=sample_depth) 
 physeq_filt_extcontrols <- physeq_filt_extcontrols %>% scale_reads(n=sample_depth) 
 physeq_filt_study <- physeq_filt_study %>% scale_reads(n=sample_depth) 
-
 ```
 
 #7 Alpha Diversity - All samples
@@ -205,11 +204,11 @@ dev.off()
 #8 Alpha Metrics
 ```{r}
 # Scale reads to even depth 
-physeq_scale <- physeq_filt_samples %>%
+physeq_scale <- physeq_filt %>%
   scale_reads(n=1000) 
 
 #Sequencing Batch
-p<- plot_richness(physeq_scale, x="RunID") + geom_boxplot() + theme(axis.text.x=element_blank())
+p<- plot_richness(physeq_scale, x="Run.ID") + geom_boxplot()
 file_name =("Graphs/Baseline/alpha_sequencingbatch.tiff")
 tiff(file_name, width=800)
 print(p)
