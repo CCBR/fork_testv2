@@ -37,6 +37,8 @@ library(gridExtra)
 ############### 
 #1.Create PhySeq Object
 ```{r}
+project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
+
 #Read OTUS
 otus <- read_qza(paste(project_location,"\\Output\\qza_results\\table_dada2_qza_merged_parts_final\\table_dada2_merged_final.qza",sep=""))
 
