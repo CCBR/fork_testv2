@@ -224,7 +224,7 @@ OTU1 = as(otu_table(physeq_filt_seqcontrols), "matrix")
 if(taxa_are_rows(physeq_filt_seqcontrols)){OTU1 <- t(OTU1)}
 # Coerce to data.frame
 OTUdf = as.data.frame(OTU1)
-write.csv(OTUdf,"/OTUs/otu_baseline_seqcontrols.csv")
+write.csv(OTUdf,"OTUs/otu_baseline_seqcontrols.csv")
 
 # Extract abundance matrix from the phyloseq object
 OTU1 = as(otu_table(physeq_filt_extcontrols), "matrix")
@@ -232,7 +232,7 @@ OTU1 = as(otu_table(physeq_filt_extcontrols), "matrix")
 if(taxa_are_rows(physeq_filt_extcontrols)){OTU1 <- t(OTU1)}
 # Coerce to data.frame
 OTUdf = as.data.frame(OTU1)
-write.csv(OTUdf,"/OTUs/otu_baseline_extcontrols.csv")
+write.csv(OTUdf,"OTUs/otu_baseline_extcontrols.csv")
 
 # Extract abundance matrix from the phyloseq object
 OTU1 = as(otu_table(physeq_filt_study), "matrix")
@@ -240,6 +240,6 @@ OTU1 = as(otu_table(physeq_filt_study), "matrix")
 if(taxa_are_rows(physeq_filt_study)){OTU1 <- t(OTU1)}
 # Coerce to data.frame
 OTUdf = as.data.frame(OTU1)
-write.csv(OTUdf,"/OTUs/otu_baseline_study.csv")
+write.csv(OTUdf,"OTUs/otu_baseline_study.csv")
 
 ```
