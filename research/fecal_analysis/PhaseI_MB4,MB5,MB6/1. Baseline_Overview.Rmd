@@ -82,7 +82,7 @@ physeq_filt
 
 #Print summaries
 a<-summary(sample_data(physeq_filt)$Sample.Type)
-capture.output(a, file = "/Data/Baseline/summary_sampletype_prefilter.txt")
+capture.output(a, file = "Data/Baseline/summary_sampletype_prefilter.txt")
 ```
 
 #3. Determine read counts and plot
@@ -150,11 +150,11 @@ dev.off()
 
 #Print summaries
 s<-summary(sample_data(physeq_filt))
-capture.output(s, file = "/Data/Baseline/summary_filter.txt")
+capture.output(s, file = "Data/Baseline/summary_filter.txt")
 a<-summary(sample_data(physeq_filt)$SampleType)
-capture.output(a, file = "/Data/Baseline/summary_sampletype_postfilter.txt")
+capture.output(a, file = "Data/Baseline/summary_sampletype_postfilter.txt")
 a<-summary(sample_data(physeq_filt)$Subject)
-capture.output(a, file = "/Data/Baseline/summary_subject_postfilter.txt")
+capture.output(a, file = "Data/Baseline/summary_subject_postfilter.txt")
 ```
 
 #6. Subset filtered data, sample to specified depth
