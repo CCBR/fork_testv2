@@ -31,6 +31,7 @@ library(phyloseq)
 library(qiime2R)
 library(tibble)
 library(gridExtra)
+source("sources/miseqR.R")
 ```
 
 #Analysis
