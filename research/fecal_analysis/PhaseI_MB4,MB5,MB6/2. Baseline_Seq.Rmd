@@ -51,16 +51,16 @@ project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",
 metadata_baseline_complete <- read.table(paste(project_location,manifest_name,sep="\\"),sep="\t",header = TRUE)
 
 #Read in database of failed samples
-samplelist_baseline_failed <- read.table(paste(project_location,failed_name,sep="\\"),sep="\t",header = TRUE)
+samplelist_baseline_failed <- read.table(paste(project_location,failed_name,sep="\\"),sep=",",header = TRUE)
 
-otu_baseline_complete <- read.csv("/OTUs/otu_baseline_seqcontrols.csv", row.names = 1)
-#otu_baseline_complete <- t(otu_baseline_complete) #table has samples as columns, not rows
+otu_baseline_complete <- read.csv("OTUs/otu_baseline_1.csv")
+colnames(otu_baseline_complete)[colnames(otu_baseline_complete)=="X"] <- "SampleID"
 ```
 
 #3. Filtering of samples to include project set only
 ```{r}
 #Remove failed samples from info database
-metadata_baseline_filtered <-subset(metadata_baseline_complete, !(SampleID %in% samplelist_baseline_failed$V1))
+metadata_baseline_filtered <-subset(metadata_baseline_complete, !(SampleID %in% samplelist_baseline_failed$x))
 nrow(metadata_baseline_complete) - nrow(samplelist_baseline_failed) ==nrow(metadata_baseline_filtered) #should be true
 
 #Only include Seq Controls
@@ -69,14 +69,12 @@ metadata_baseline_filtered <- metadata_baseline_filtered[metadata_baseline_filte
 row.names(metadata_baseline_filtered) <- metadata_baseline_filtered$SampleID
 
 samplelist_baseline_filtered <- unique(metadata_baseline_filtered$SampleID)
-
-nrow(metadata_baseline_filtered)
 ```
 
 #4. OTU Counts by sample
 Read in OTU information, and determine total OTUs
 ```{r}
-otu_baseline_filtered <- subset(otu_baseline_complete, !(SampleID %in% samplelist_baseline_filtered$V1))
+otu_baseline_filtered <- subset(otu_baseline_complete, !(SampleID %in% samplelist_baseline_failed$x))
 genus_found <- colnames(otu_baseline_filtered)
 
 #For each sample, determine the total read counts
