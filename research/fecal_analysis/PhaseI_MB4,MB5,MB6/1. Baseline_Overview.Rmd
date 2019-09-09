@@ -231,11 +231,29 @@ for (a in phylos_obs){
   OTUdf[b,"Genus"] <- tax_db[b,"Genus"]
  }
  
+ for (c in rownames(OTUdf)){
+  genus <- OTUdf[c,"Genus"]
+  if(!grepl("g__",genus)){
+    OTUdf[c,"Genus"]<-"HigherGenus"
+  }
+ }
+ 
  OTUdf<-aggregate(OTUdf[-ncol(OTUdf)],by=list(OTUdf$Genus),FUN="sum") #-64 to remove genus column, since it's not a col to sum
  OTUdf<-t(OTUdf) #transpose for downstream metadata matching
  colnames(OTUdf)<-OTUdf[1,]
  OTUdf<-OTUdf[-1,]
  
+ for (d in colnames(OTUdf)){ #standardize genus naming
+   if(grepl("g__",d)){
+    colname_update <- str_remove(d, "g__")
+    colname_update <- gsub("[","",colname_update,fixed=TRUE) #fixed = TRUE disables regex
+    colname_update <- gsub("]","",colname_update,fixed=TRUE)
+    colnames(OTUdf)[colnames(OTUdf)==d] <- colname_update
+   }
+ }
+ 
+ colnames(OTUdf)[colnames(OTUdf)==""] <- "Unknown" #blank column (originally was "g__") needs to be renamed
+
  filename<-paste("OTUs/otu_baseline_",count,".csv",sep="")
  write.csv(OTUdf,filename)
  count=count+1
