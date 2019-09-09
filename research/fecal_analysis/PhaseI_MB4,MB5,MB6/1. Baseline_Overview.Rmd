@@ -224,7 +224,6 @@ count=1
 for (a in phylos_obs){
  # Extract abundance matrix from the phyloseq object
  OTU1 <- as(otu_table(a), "matrix") #Need a matrix of OTU information
- #if(taxa_are_rows(a)){OTU1 <- t(OTU1)} # transpose database
  OTUdf <- as.data.frame(OTU1) # Coerce to data.frame
  tax_db <- as(tax_table(a), "matrix")#Need OTU to taxonomy database
  
@@ -233,7 +232,10 @@ for (a in phylos_obs){
  }
  
  OTUdf<-aggregate(OTUdf[-ncol(OTUdf)],by=list(OTUdf$Genus),FUN="sum") #-64 to remove genus column, since it's not a col to sum
- colnames(OTUdf)[colnames(OTUdf)=="Group.1"] <- "SampleID"
+ OTUdf<-t(OTUdf) #transpose for downstream metadata matching
+ colnames(OTUdf)<-OTUdf[1,]
+ OTUdf<-OTUdf[-1,]
+ 
  filename<-paste("OTUs/otu_baseline_",count,".csv",sep="")
  write.csv(OTUdf,filename)
  count=count+1
