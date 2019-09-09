@@ -103,21 +103,21 @@ for (a in samplelist_baseline_filtered){
 samplelist_baseline_water <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Source.Descrip == "Water"))
 samplelist_baseline_water <- (samplelist_baseline_water$SampleID)
 
+relabund_baseline_seqblanks<- data.frame()
+
 for (a in samplelist_baseline_water){
  
- for (b in ncol(otu_baseline_filtered)-1){
-   relab <- otu_baseline_filtered[a,b]
+ for (i in 1:(ncol(otu_baseline_filtered)-1)){
+  relab <- otu_baseline_filtered[a,i]
+  genus <- colnames(otu_baseline_filtered[i])
    
-   if(!(is.na(relab) | is.null(relab))){
-     relab_baseline_seqblanks[a,b] <- otu_baseline_filtered[a,b]/otu_baseline_filtered[a,"Total_OTUs"]
-   }
-
+  if(!(is.na(relab) | is.null(relab))){
+     relabund_baseline_seqblanks[a,genus] <- relab/otu_baseline_filtered[a,"Total_OTUs"]
+  }
  }
- 
 }
 
-write.csv(relab_baseline_seqblanks,"/datatables/relabun_seqbaseline_blanks.csv")
-
+write.csv(relabund_baseline_seqblanks,"Data/Baseline/relabun_seqbaseline_blanks.csv")
 ```
 
 #6. Genus Filter List - From Seq Blanks
