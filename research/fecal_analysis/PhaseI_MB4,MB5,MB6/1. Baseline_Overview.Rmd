@@ -32,6 +32,7 @@ library(qiime2R)
 library(tibble)
 library(gridExtra)
 source("sources/miseqR.R")
+library(tidyverse)
 ```
 
 #Analysis
@@ -222,37 +223,32 @@ phylos_obs <- list(physeq_filt_seqcontrols,physeq_filt_extcontrols,physeq_filt_s
 count=1
 
 for (a in phylos_obs){
- # Extract abundance matrix from the phyloseq object
- OTU1 <- as(otu_table(a), "matrix") #Need a matrix of OTU information
- OTUdf <- as.data.frame(OTU1) # Coerce to data.frame
- tax_db <- as(tax_table(a), "matrix")#Need OTU to taxonomy database
+ # Create a factor corresponding to the Genera
+ genfac = factor(tax_table(a)[, "Genus"])
+ # Tabulate the counts for each genera in each sample
+ gentab = apply(otu_table(a), MARGIN = 2, function(x) {
+    tapply(x, INDEX = genfac, FUN = sum, na.rm = TRUE, simplify = TRUE)
+ })
+ gentab<-as.data.frame(gentab)
  
- for (b in rownames(OTUdf)){ #Add genus name (or higher level of taxonomy) for each OTU
-  OTUdf[b,"Genus"] <- tax_db[b,"Genus"]
- }
- 
- for (c in rownames(OTUdf)){
-  genus <- OTUdf[c,"Genus"]
+ for (c in rownames(gentab)){
+  genus <- c
   if(!grepl("g__",genus)){
-    OTUdf[c,"Genus"]<-"HigherGenus"
+   gentab[c,"Genus"]<-"HigherGenus"
+  } else{
+   colname_update <-str_remove(c, "g__")
+   colname_update <- gsub("[","",colname_update,fixed=TRUE) #fixed = TRUE disables regex
+   colname_update <- gsub("]","",colname_update,fixed=TRUE)
+   gentab[c,"Genus"]<- colname_update
   }
  }
  
- OTUdf<-aggregate(OTUdf[-ncol(OTUdf)],by=list(OTUdf$Genus),FUN="sum") #-64 to remove genus column, since it's not a col to sum
- OTUdf<-t(OTUdf) #transpose for downstream metadata matching
- colnames(OTUdf)<-OTUdf[1,]
- OTUdf<-OTUdf[-1,]
+ gentab<-aggregate(gentab[-ncol(gentab)],by=list(gentab$Genus),FUN="sum") #- to remove genus column, since it's not a col to sum
+ gentab[1,1] <- "Unknown" #blank column (originally was "g__") needs to be renamed
+ gentab<-t(gentab) #transpose for downstream metadata matching
+ colnames(gentab)<-gentab[1,]
+ gentab<-gentab[-1,]
  
- for (d in colnames(OTUdf)){ #standardize genus naming
-   if(grepl("g__",d)){
-    colname_update <- str_remove(d, "g__")
-    colname_update <- gsub("[","",colname_update,fixed=TRUE) #fixed = TRUE disables regex
-    colname_update <- gsub("]","",colname_update,fixed=TRUE)
-    colnames(OTUdf)[colnames(OTUdf)==d] <- colname_update
-   }
- }
- 
- colnames(OTUdf)[colnames(OTUdf)==""] <- "Unknown" #blank column (originally was "g__") needs to be renamed
 
  filename<-paste("OTUs/otu_baseline_",count,".csv",sep="")
  write.csv(OTUdf,filename)
