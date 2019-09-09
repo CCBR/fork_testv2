@@ -152,7 +152,7 @@ dev.off()
 #Print summaries
 s<-summary(sample_data(physeq_filt))
 capture.output(s, file = "Data/Baseline/summary_filter.txt")
-a<-summary(sample_data(physeq_filt)$SampleType)
+a<-summary(sample_data(physeq_filt)$Sample.Type)
 capture.output(a, file = "Data/Baseline/summary_sampletype_postfilter.txt")
 a<-summary(sample_data(physeq_filt)$Subject)
 capture.output(a, file = "Data/Baseline/summary_subject_postfilter.txt")
@@ -218,28 +218,29 @@ dev.off()
 
 #9 Save data tables for downstream use
 ```{r}
-# Extract abundance matrix from the phyloseq object
-OTU1 = as(otu_table(physeq_filt_seqcontrols), "matrix")
-# transpose if necessary
-if(taxa_are_rows(physeq_filt_seqcontrols)){OTU1 <- t(OTU1)}
-# Coerce to data.frame
-OTUdf = as.data.frame(OTU1)
-write.csv(OTUdf,"OTUs/otu_baseline_seqcontrols.csv")
+phylos_obs <- list(physeq_filt_seqcontrols,physeq_filt_extcontrols,physeq_filt_study)
+count=1
 
-# Extract abundance matrix from the phyloseq object
-OTU1 = as(otu_table(physeq_filt_extcontrols), "matrix")
-# transpose if necessary
-if(taxa_are_rows(physeq_filt_extcontrols)){OTU1 <- t(OTU1)}
-# Coerce to data.frame
-OTUdf = as.data.frame(OTU1)
-write.csv(OTUdf,"OTUs/otu_baseline_extcontrols.csv")
+for (a in phylos_obs){
+ # Extract abundance matrix from the phyloseq object
+ OTU1 <- as(otu_table(a), "matrix") #Need a matrix of OTU information
+ #if(taxa_are_rows(a)){OTU1 <- t(OTU1)} # transpose database
+ OTUdf <- as.data.frame(OTU1) # Coerce to data.frame
+ tax_db <- as(tax_table(a), "matrix")#Need OTU to taxonomy database
+ 
+ for (b in rownames(OTUdf)){ #Add genus name (or higher level of taxonomy) for each OTU
+  OTUdf[b,"Genus"] <- tax_db[b,"Genus"]
+ }
+ 
+ OTUdf<-aggregate(OTUdf[-ncol(OTUdf)],by=list(OTUdf$Genus),FUN="sum") #-64 to remove genus column, since it's not a col to sum
+ colnames(OTUdf)[colnames(OTUdf)=="Group.1"] <- "SampleID"
+ filename<-paste("OTUs/otu_baseline_",count,".csv",sep="")
+ write.csv(OTUdf,filename)
+ count=count+1
+}
 
-# Extract abundance matrix from the phyloseq object
-OTU1 = as(otu_table(physeq_filt_study), "matrix")
-# transpose if necessary
-if(taxa_are_rows(physeq_filt_study)){OTU1 <- t(OTU1)}
-# Coerce to data.frame
-OTUdf = as.data.frame(OTU1)
-write.csv(OTUdf,"OTUs/otu_baseline_study.csv")
-
+#File ID's
+#1: Seq_controls
+#2: Ext_controls
+#3: Study
 ```

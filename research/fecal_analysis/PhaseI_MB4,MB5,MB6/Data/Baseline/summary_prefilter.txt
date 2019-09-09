@@ -6,35 +6,35 @@
  MSA-1003:  5   Study     :138   Biocollective:32     PC04924_A_05:  1    
  Stool_09:  5                    DZ35322      :27     PC04924_A_06:  1    
  (Other) :306                    (Other)      :77     (Other)     :376    
-                                Run.ID         Project.ID             Reciept             Sample.Descrip
- 180112_M01354_0104_000000000-BFN3F: 89   NP0084-MB4:180   0              : 39   ZymoExtMock     :75    
- 180112_M03599_0134_000000000-BFD9Y: 91   NP0084-MB5: 90   sFEMB-001-R-007: 26   Study           :71    
- 180328_M01354_0106_000000000-BFMHC: 90   NP0084-MB6:112   sFEMB-001-R-006: 23   ExtBlank        :60    
- 190617_M01354_0118_000000000-CHFG3:112                    sFEMB-001-R-008: 22   ArtificialColony:42    
-                                                           sFEMB-001-R-005: 21   Robogut         :35    
-                                                           sFEMB-001-R-010: 21   BioCollective   :32    
-                                                           (Other)        :230   (Other)         :67    
-    SubjectID   Sample.Aliquot       Ext.Company                            Ext.Kit         Ext.Kit.1  
- IE_Stool: 71   Min.   :  0    CGR         : 17   MagBead DNA Extraction Kit    :80   KingFisher :156  
- D6300   : 63   1st Qu.:  0    Qiagen      :236   MagAttract PowerMag PowerSoil :79   Manual     :131  
- D6306   : 12   Median :  1    ThermoFisher: 10   MagAttract PowerMag Microbiome:67   QIAcube HT : 21  
- D6310   : 12   Mean   : 23    ZymoBiomics : 80   QIAamp Modified               :39   QIASymphony: 35  
- MSA1001 :  9   3rd Qu.: 14    NA's        : 39   DSP Virus                     :35   NA's       : 39  
- (Other) :138   Max.   :227                       (Other)                       :43                    
- NA's    : 77                                     NA's                          :39                    
-        Homo.Method     Homo.Holder        Homo.Holder2   AFA1           AFA2         ExtractionBatch
- Plate Adaptor: 86   Plate    :228   Microbiome  : 77   Mode:logical   Mode:logical   1      :191    
- TissueLyzer  :156   Pro_Plate: 14   PowerSoil   : 79   NA's:382       NA's:382       2      :103    
- V Adaptor    :101   Tubes    :101   PowerSoilPro:  6                                 4      : 18    
- NA's         : 39   NA's     : 39   ZymoBiomics : 80                                 3      : 10    
-                                     NA's        :140                                 A2     :  1    
-                                                                                      (Other): 20    
-                                                                                      NA's   : 39    
-     Residual        Row         Column     
- Original:310   D      :61   Min.   :0.000  
- Residual: 33   A      :56   1st Qu.:1.000  
- NA's    : 39   C      :55   Median :1.000  
-                B      :50   Mean   :1.344  
-                E      :33   3rd Qu.:2.000  
-                (Other):88   Max.   :3.000  
-                NA's   :39   NA's   :39     
+                                Run.ID         Project.ID             Reciept   
+ 180112_M01354_0104_000000000-BFN3F: 89   NP0084-MB4:180   0              : 39  
+ 180112_M03599_0134_000000000-BFD9Y: 91   NP0084-MB5: 90   sFEMB-001-R-007: 26  
+ 180328_M01354_0106_000000000-BFMHC: 90   NP0084-MB6:112   sFEMB-001-R-006: 23  
+ 190617_M01354_0118_000000000-CHFG3:112                    sFEMB-001-R-008: 22  
+                                                           sFEMB-001-R-005: 21  
+                                                           sFEMB-001-R-010: 21  
+                                                           (Other)        :230  
+          Sample.Descrip    SubjectID   Sample.Aliquot       Ext.Company 
+ ZymoExtMock     :75     IE_Stool: 71   Min.   :  0    CGR         : 17  
+ Study           :71     D6300   : 63   1st Qu.:  0    Qiagen      :236  
+ ExtBlank        :60     D6306   : 12   Median :  1    ThermoFisher: 10  
+ ArtificialColony:42     D6310   : 12   Mean   : 23    ZymoBiomics : 80  
+ Robogut         :35     MSA1001 :  9   3rd Qu.: 14    NA's        : 39  
+ BioCollective   :32     (Other) :138   Max.   :227                      
+ (Other)         :67     NA's    : 77                                    
+                           Ext.Kit         Ext.Kit.1          Homo.Method     Homo.Holder 
+ MagBead DNA Extraction Kit    :80   KingFisher :156   Plate Adaptor: 86   Plate    :228  
+ MagAttract PowerMag PowerSoil :79   Manual     :131   TissueLyzer  :156   Pro_Plate: 14  
+ MagAttract PowerMag Microbiome:67   QIAcube HT : 21   V Adaptor    :101   Tubes    :101  
+ QIAamp Modified               :39   QIASymphony: 35   NA's         : 39   NA's     : 39  
+ DSP Virus                     :35   NA's       : 39                                      
+ (Other)                       :43                                                        
+ NA's                          :39                                                        
+       Homo.Holder2 ExtractionBatch     Residual        Row         Column     
+ Microbiome  : 77   1      :191     Original:310   D      :61   Min.   :0.000  
+ PowerSoil   : 79   2      :103     Residual: 33   A      :56   1st Qu.:1.000  
+ PowerSoilPro:  6   4      : 18     NA's    : 39   C      :55   Median :1.000  
+ ZymoBiomics : 80   3      : 10                    B      :50   Mean   :1.344  
+ NA's        :140   A2     :  1                    E      :33   3rd Qu.:2.000  
+                    (Other): 20                    (Other):88   Max.   :3.000  
+                    NA's   : 39                    NA's   :39   NA's   :39     
