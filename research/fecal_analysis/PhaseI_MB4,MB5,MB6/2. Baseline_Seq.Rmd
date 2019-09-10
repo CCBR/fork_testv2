@@ -7,9 +7,8 @@ editor_options:
 
 #To Update
 ```{r}
-project_name="Project_NP0084-MB4_5_pt6"
-manifest_name="NP0084-MB4_08_29_19_metadata.txt"
-failed_name = "samplelist_baseline_failed.txt"
+project_name="Project_NP0084-MB4_5_pt6_2"
+manifest_name="NP0084-metadata_Summary_1.csv"
 sample_depth = 20000
 ```
 
