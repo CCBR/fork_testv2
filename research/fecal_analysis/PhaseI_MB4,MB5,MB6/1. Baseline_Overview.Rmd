@@ -232,28 +232,22 @@ physeq_filt_extcontrols<-physeq_filt_extcontrols %>% scale_reads(n=sample_depth)
 physeq_filt_study<-physeq_filt_study %>% scale_reads(n=sample_depth) 
 ```
 
-#7 Alpha Diversity - All samples
-```{r}
-# Scale reads to even depth 
-physeq_scale<-physeq_filt %>% scale_reads(n=1000) 
-
-#Sample Type
-p<-plot_richness(physeq_scale, x="Sample.Type") + geom_boxplot()
-file_name =("Graphs/Baseline/sampletype_alphadiv.tiff")
-tiff(file_name, width=800)
-print(p)
-dev.off()
-```
-
-#8 Alpha Metrics
+#7 Alpha Diversity - All samples, Run ID
 ```{r}
 # Scale reads to even depth 
 physeq_scale<-physeq_filt %>%
   scale_reads(n=1000) 
 
+#Sample Type
+p<-plot_richness(physeq_scale, x="Sample.Type") + geom_boxplot()
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\alphadiv_sampletype.tiff",sep="")
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
 #Sequencing Batch
 p<-plot_richness(physeq_scale, x="Run.ID") + geom_boxplot()
-file_name =("Graphs/Baseline/alpha_sequencingbatch.tiff")
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\alphadiv_sequencingbatch.tiff",sep="")
 tiff(file_name, width=800)
 print(p)
 dev.off()
