@@ -49,22 +49,24 @@ project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",
 
 #Read in database with variable information
 metadata_baseline <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",manifest_name,sep=""),sep=",",header = TRUE)
+rownames(metadata_baseline)<-metadata_baseline$X
+metadata_baseline<-metadata_baseline[-1]
 
 otu_baseline_complete <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",otu_name,sep=""),sep=",",header = TRUE)
-colnames(otu_baseline_complete)[colnames(otu_baseline_complete)=="X"] <- "SampleID"
+rownames(otu_baseline_complete)<-otu_baseline_complete$X
+otu_baseline_complete<-otu_baseline_complete[-1]
+
+rownames(metadata_baseline)==rownames(otu_baseline_complete) #Should be true
 ```
 
 #3. OTU Counts by sample
 Read in OTU information, and determine total OTUs
 ```{r}
-otu_baseline_filtered <- subset(otu_baseline_complete, !(SampleID %in% samplelist_baseline_failed$x))
-row.names(otu_baseline_filtered)<-otu_baseline_filtered$SampleID
-otu_baseline_filtered<-otu_baseline_filtered[,-1]
-
-genus_found <- colnames(otu_baseline_filtered)
+genus_found<-colnames(otu_baseline_complete)
+samplelist_seqcontrols<-otu_baseline_complete$SampleID
 
 #For each sample, determine the total read counts
-for (a in samplelist_baseline_filtered){
+for (a in samplelist_seqcontrols){
  #Set sum to 0
  sum=0
  
@@ -73,11 +75,11 @@ for (a in samplelist_baseline_filtered){
   
   #Add the number of counts together
   print (b)
-  sum <- otu_baseline_filtered[a,b] + sum
+  sum <- otu_baseline_complete[a,b] + sum
  }
  
  #When complete, push the sum to a new "Total_OTUs" row
- otu_baseline_filtered[a,"Total_OTUs"] <- sum
+ otu_baseline_complete[a,"Total_OTUs"] <- sum
 }
 ```
 
