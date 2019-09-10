@@ -1,2 +1,0 @@
-Ext.Control Seq.Control       Study 
-        176          39         217 

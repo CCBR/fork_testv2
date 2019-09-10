@@ -43,13 +43,13 @@ for (a in project_name){
  project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",a,sep="")
 
  #Read OTUS
- otus <- read_qza(paste(project_location,"\\Output\\qza_results\\table_dada2_qza_merged_parts_final\\table_dada2_merged_final_filt.qza",sep=""))
+ otus<-read_qza(paste(project_location,"\\Output\\qza_results\\table_dada2_qza_merged_parts_final\\table_dada2_merged_final_filt.qza",sep=""))
  
  #Read rooted tree
- tree <- read_qza(paste(project_location,"\\Output\\qza_results\\phylogeny_qza_results\\rooted_tree.qza",sep=""))
+ tree<-read_qza(paste(project_location,"\\Output\\qza_results\\phylogeny_qza_results\\rooted_tree.qza",sep=""))
  
  #Read Greengenes taxonomy file
- taxonomy <- read_qza(paste(project_location,"\\Output\\qza_results\\taxonomy_qza_results\\taxonomy_greengenes.qza",sep=""))
+ taxonomy<-read_qza(paste(project_location,"\\Output\\qza_results\\taxonomy_qza_results\\taxonomy_greengenes.qza",sep=""))
  
  #Edit dtable
  tax_table<-do.call(rbind, strsplit(as.character(taxonomy$data$Taxon), "; "))
@@ -57,7 +57,7 @@ for (a in project_name){
    rownames(tax_table)<-taxonomy$data$Feature.ID
  
  #read metadata
- metadata <-read.table(paste(project_location,manifest_name[count],sep="\\"),sep='\t', header=T, row.names=1, comment="")
+ metadata<-read.table(paste(project_location,manifest_name[count],sep="\\"),sep='\t', header=T, row.names=1, comment="")
  
  #Create phylo object
  if(count==1){
@@ -70,9 +70,9 @@ for (a in project_name){
 }
 
 #Create filtered list of samples
-samplelist1_passed_q2 <- as.list(sample_names(sample_data(physeq_complete)))
-samplelist2_passed_q2 <- as.list(sample_names(sample_data(physeq_complete2)))
-interset <- intersect(samplelist1_passed_q2,samplelist2_passed_q2)
+samplelist1_passed_q2<-as.list(sample_names(sample_data(physeq_complete)))
+samplelist2_passed_q2<-as.list(sample_names(sample_data(physeq_complete2)))
+interset<-intersect(samplelist1_passed_q2,samplelist2_passed_q2)
 
 for (a in interset){ #Remove all duplicate samples
  physeq_complete2<-subset_samples(physeq_complete2,sample_names(physeq_complete2)!=a)
@@ -91,8 +91,8 @@ for (a in colnames(otu2)){
 }
 otu<-otu_table(otu,taxa_are_rows = TRUE)
 
-tax<- as.data.frame(tax_table(physeq_complete))
-tax2<- as.data.frame(tax_table(physeq_complete2))
+tax<-as.data.frame(tax_table(physeq_complete))
+tax2<-as.data.frame(tax_table(physeq_complete2))
 
 for (a in colnames(tax2)){
  for (b in rownames(tax2)){
@@ -102,8 +102,8 @@ for (a in colnames(tax2)){
 tax<-as.matrix(tax) #Convert to matrix - str that phyloseq requires
 tax<-tax_table(tax)
 
-sampledata<- as.data.frame(sample_data(physeq_complete))
-sampledata2<- as.data.frame(sample_data(physeq_complete2))
+sampledata<-as.data.frame(sample_data(physeq_complete))
+sampledata2<-as.data.frame(sample_data(physeq_complete2))
 
 for (a in colnames(sampledata2)){
  for (b in rownames(sampledata2)){
@@ -114,14 +114,13 @@ for (a in colnames(sampledata2)){
 physeq_complete<-phyloseq(otu,tax,sampledata) #merged phylo object
 
 s<-summary(sample_data(physeq_complete))
-capture.output(s, file = "Data/Baseline/summary_prefilter.txt")
-write.csv(sample_data(physeq_complete),"test.csv")
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_prefilter.txt",sep=""))
 ```
 
 #2 Prune for bacteria only, Create prefilter summary files
 ```{r}
 #Only bacteria
-physeq_filt <- physeq_complete %>%
+physeq_filt<-physeq_complete %>%
   subset_taxa(
     Kingdom == "k__Bacteria" &
     Family  != "k__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rickettsiales; f__mitochondria" &
@@ -141,7 +140,7 @@ physeq_filt = filter_taxa(physeq_filt, function(x) mean(x) > 1e-2, TRUE)
 physeq_filt #note new taxa number and sample number
 
 # Make a data frame with a column for the read counts of each sample
-sample_sum_df <- data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
+sample_sum_df<-data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
 colnames(sample_sum_df)
 
 # Histogram of sample read counts by sampletype
@@ -167,7 +166,7 @@ physeq_filt #note new sample number
 #5. Review filtered read counts and plot
 ```{r}
 # Make a data frame with a column for the read counts of each sample
-sample_sum_df <- data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
+sample_sum_df<-data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
 colnames(sample_sum_df)
 
 # Histogram of sample read counts by sampletype
@@ -201,40 +200,40 @@ capture.output(a, file = "Data/Baseline/summary_sourcedesc_postfilter.txt")
 #6. Subset filtered data, sample to specified depth
 ```{r}
 #Only samples
-physeq_filt_seqcontrols <- physeq_filt %>%
+physeq_filt_seqcontrols<-physeq_filt %>%
   subset_samples(
     Sample.Type=="Seq.Control" 
   )
 physeq_filt_seqcontrols #verify sample number
 
 #Only controls
-physeq_filt_extcontrols <- physeq_filt %>%
+physeq_filt_extcontrols<-physeq_filt %>%
   subset_samples(
     Sample.Type == "Ext.Blank" | Sample.Type=="Ext.Control"
   )
 physeq_filt_extcontrols #verify sample number
 
 #Only replicates
-physeq_filt_study <- physeq_filt %>%
+physeq_filt_study<-physeq_filt %>%
   subset_samples(
     Sample.Type == "Study" 
   )
 physeq_filt_study #verify sample number
 
 # Scale reads to even depth 
-physeq_scale <- physeq_filt %>% scale_reads(n=sample_depth) 
-physeq_filt_seqcontrols <- physeq_filt_seqcontrols %>% scale_reads(n=sample_depth) 
-physeq_filt_extcontrols <- physeq_filt_extcontrols %>% scale_reads(n=sample_depth) 
-physeq_filt_study <- physeq_filt_study %>% scale_reads(n=sample_depth) 
+physeq_scale<-physeq_filt %>% scale_reads(n=sample_depth) 
+physeq_filt_seqcontrols<-physeq_filt_seqcontrols %>% scale_reads(n=sample_depth) 
+physeq_filt_extcontrols<-physeq_filt_extcontrols %>% scale_reads(n=sample_depth) 
+physeq_filt_study<-physeq_filt_study %>% scale_reads(n=sample_depth) 
 ```
 
 #7 Alpha Diversity - All samples
 ```{r}
 # Scale reads to even depth 
-physeq_scale <- physeq_filt %>% scale_reads(n=1000) 
+physeq_scale<-physeq_filt %>% scale_reads(n=1000) 
 
 #Sample Type
-p<- plot_richness(physeq_scale, x="Sample.Type") + geom_boxplot()
+p<-plot_richness(physeq_scale, x="Sample.Type") + geom_boxplot()
 file_name =("Graphs/Baseline/sampletype_alphadiv.tiff")
 tiff(file_name, width=800)
 print(p)
@@ -244,11 +243,11 @@ dev.off()
 #8 Alpha Metrics
 ```{r}
 # Scale reads to even depth 
-physeq_scale <- physeq_filt %>%
+physeq_scale<-physeq_filt %>%
   scale_reads(n=1000) 
 
 #Sequencing Batch
-p<- plot_richness(physeq_scale, x="Run.ID") + geom_boxplot()
+p<-plot_richness(physeq_scale, x="Run.ID") + geom_boxplot()
 file_name =("Graphs/Baseline/alpha_sequencingbatch.tiff")
 tiff(file_name, width=800)
 print(p)
@@ -258,7 +257,7 @@ dev.off()
 
 #9 Save data tables for downstream use
 ```{r}
-phylos_obs <- list(physeq_filt_seqcontrols,physeq_filt_extcontrols,physeq_filt_study)
+phylos_obs<-list(physeq_filt_seqcontrols,physeq_filt_extcontrols,physeq_filt_study)
 count=1
 
 for (a in phylos_obs){
@@ -271,19 +270,19 @@ for (a in phylos_obs){
  gentab<-as.data.frame(gentab)
  
  for (c in rownames(gentab)){
-  genus <- c
+  genus<-c
   if(!grepl("g__",genus)){
    gentab[c,"Genus"]<-"HigherGenus"
   } else{
-   colname_update <-str_remove(c, "g__")
-   colname_update <- gsub("[","",colname_update,fixed=TRUE) #fixed = TRUE disables regex
-   colname_update <- gsub("]","",colname_update,fixed=TRUE)
-   gentab[c,"Genus"]<- colname_update
+   colname_update<-str_remove(c, "g__")
+   colname_update<-gsub("[","",colname_update,fixed=TRUE) #fixed = TRUE disables regex
+   colname_update<-gsub("]","",colname_update,fixed=TRUE)
+   gentab[c,"Genus"]<-colname_update
   }
  }
  
  gentab<-aggregate(gentab[-ncol(gentab)],by=list(gentab$Genus),FUN="sum") #- to remove genus column, since it's not a col to sum
- gentab[1,1] <- "Unknown" #blank column (originally was "g__") needs to be renamed
+ gentab[1,1]<-"Unknown" #blank column (originally was "g__") needs to be renamed
  gentab<-t(gentab) #transpose for downstream metadata matching
  colnames(gentab)<-gentab[1,]
  gentab<-gentab[-1,]

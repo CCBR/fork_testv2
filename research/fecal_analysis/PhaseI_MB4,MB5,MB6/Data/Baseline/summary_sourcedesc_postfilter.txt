@@ -1,6 +1,0 @@
-Biocollective        D63011         D6305         D6306     Ext.Blank       MSA1000 
-           27             2             5             5            30             4 
-      MSA1001       MSA1002       MSA1003       MSA1004       Robogut         Study 
-            5             5             4             1            80            98 
-     Zymo.Ext 
-           72 
