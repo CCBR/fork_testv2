@@ -287,6 +287,10 @@ for (a in phylos_obs){
  
  file_name =paste(project_location,"\\Output\\R\\OTUs\\otu_baseline_",count,".csv",sep="")
  write.csv(gentab,file_name)
+ 
+ metatab <- as.data.frame(sample_data(a))
+ file_name =paste(project_location,"\\Output\\R\\OTUs\\metadata_baseline_",count,".csv",sep="")
+ write.csv(metatab,file_name)
  count=count+1
 }
 
