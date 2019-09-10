@@ -126,16 +126,16 @@ physeq_filt<-physeq_complete %>%
     Family  != "k__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rickettsiales; f__mitochondria" &
     Class   != "k__Bacteria; p__Cyanobacteria; c__Chloroplast"
   )
-physeq_filt
 
 #Print summaries
-a<-summary(sample_data(physeq_filt)$Sample.Type)
-capture.output(a, file = "Data/Baseline/summary_sampletype_prefilter.txt")
+s<-summary(sample_data(physeq_filt)$Sample.Type)
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_prefilter_sample.type.txt",sep=""))
+s<-summary(sample_data(physeq_filt)$Sample.Cat)
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_prefilter_sample.cat.txt",sep=""))
 ```
 
 #3. Filter taxa >.001 ; Determine read counts and plot
 ```{r}
-physeq_filt #note taxa number
 physeq_filt = filter_taxa(physeq_filt, function(x) mean(x) > 1e-2, TRUE)
 physeq_filt #note new taxa number and sample number
 
@@ -144,14 +144,14 @@ sample_sum_df<-data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt
 colnames(sample_sum_df)
 
 # Histogram of sample read counts by sampletype
-p1<-ggplot(sample_sum_df, aes(x = sum, color=Sample.Type)) + 
-  geom_histogram(fill="white",binwidth = 2500) +
-  xlab("Read counts") +
-  ggtitle("Distribution of sample sequencing depth - Pre-Filtering")+
-  theme(axis.title.y = element_blank())
+p1<-ggplot(sample_sum_df, aes(x = sum, fill=Sample.Type)) + 
+  geom_histogram(binwidth = 2500) +
+  xlab("Sequencing Reads") +
+  ylab("Number of Samples") +
+  ggtitle("Distribution of Sample Sequencing Depth - Pre-Filtering")
 
 #Save file
-file_name =("Graphs/Baseline/SeqDepth_prefilter.tiff")
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\SeqDepth_prefilter.tiff",sep="")
 tiff(file_name, width=800)
 print(p1)
 dev.off()
