@@ -82,35 +82,7 @@ for (a in samplelist_seqcontrols){
 }
 ```
 
-#5 Relative Abundance - Blanks
-```{r}
-samplelist_baseline_water <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Source.Descrip == "Water"))
-samplelist_baseline_water <- (samplelist_baseline_water$SampleID)
-
-relabund_baseline_seqblanks<- data.frame()
-
-for (a in samplelist_baseline_water){
- 
- for (i in 1:(ncol(otu_baseline_filtered)-1)){
-  relab <- otu_baseline_filtered[a,i]
-  genus <- colnames(otu_baseline_filtered[i])
-   
-  if(!(is.na(relab) | is.null(relab))){
-     relabund_baseline_seqblanks[a,genus] <- relab/otu_baseline_filtered[a,"Total_OTUs"]
-  }
- }
-}
-
-write.csv(relabund_baseline_seqblanks,"Data/Baseline/relabun_seqbaseline_blanks.csv")
-```
-
-#6. Genus Filter List - From Seq Blanks
-```{r}
-genus_sequence_remove <- c("")
-
-```
-
-#7. Observed to Expected Counts - Seq Controls
+#4. Observed to Expected Counts - Seq Controls
 ```{r}
 samplelist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
 
