@@ -251,10 +251,9 @@ file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\alphadiv_seque
 tiff(file_name, width=800)
 print(p)
 dev.off()
-
 ```
 
-#9 Save data tables for downstream use
+#7 Save data tables for downstream use
 ```{r}
 phylos_obs<-list(physeq_filt_seqcontrols,physeq_filt_extcontrols,physeq_filt_study)
 count=1
@@ -286,9 +285,8 @@ for (a in phylos_obs){
  colnames(gentab)<-gentab[1,]
  gentab<-gentab[-1,]
  
-
- filename<-paste("OTUs/otu_baseline_",count,".csv",sep="")
- write.csv(gentab,filename)
+ file_name =paste(project_location,"\\Output\\R\\OTUs\\otu_baseline_",count,".csv",sep="")
+ write.csv(gentab,file_name)
  count=count+1
 }
 
