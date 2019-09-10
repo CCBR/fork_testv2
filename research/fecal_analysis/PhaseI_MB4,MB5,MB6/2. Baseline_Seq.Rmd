@@ -63,7 +63,7 @@ rownames(metadata_baseline)==rownames(otu_baseline_complete) #Should be true
 Read in OTU information, and determine total OTUs
 ```{r}
 genus_found<-colnames(otu_baseline_complete)
-samplelist_seqcontrols<-otu_baseline_complete$SampleID
+samplelist_seqcontrols<-rownames(otu_baseline_complete)
 
 #For each sample, determine the total read counts
 for (a in samplelist_seqcontrols){
@@ -74,7 +74,6 @@ for (a in samplelist_seqcontrols){
  for (b in genus_found){
   
   #Add the number of counts together
-  print (b)
   sum <- otu_baseline_complete[a,b] + sum
  }
  
