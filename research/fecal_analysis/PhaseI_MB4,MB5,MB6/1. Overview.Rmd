@@ -114,7 +114,7 @@ for (a in colnames(sampledata2)){
 physeq_complete<-phyloseq(otu,tax,sampledata) #merged phylo object
 
 s<-summary(sample_data(physeq_complete))
-capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_prefilter.txt",sep=""))
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Summary\\summary_prefilter.txt",sep=""))
 ```
 
 #2 Prune for bacteria only, Create prefilter summary files
@@ -129,9 +129,9 @@ physeq_filt<-physeq_complete %>%
 
 #Print summaries
 s<-summary(sample_data(physeq_filt)$Sample.Type)
-capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_prefilter_sample.type.txt",sep=""))
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Summary\\summary_prefilter_sample.type.txt",sep=""))
 s<-summary(sample_data(physeq_filt)$Sample.Cat)
-capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_prefilter_sample.cat.txt",sep=""))
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Summary\\summary_prefilter_sample.cat.txt",sep=""))
 ```
 
 #3. Filter taxa >.001 ; Determine read counts and plot
@@ -151,7 +151,7 @@ p1<-ggplot(sample_sum_df, aes(x = sum, fill=Sample.Type)) +
   ggtitle("Distribution of Sample Sequencing Depth - Pre-Filtering")
 
 #Save file
-file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\SeqDepth_prefilter.tiff",sep="")
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\SeqDepth_prefilter.tiff",sep="")
 tiff(file_name, width=800)
 print(p1)
 dev.off()
@@ -174,7 +174,7 @@ p1<-ggplot(sample_sum_df, aes(x = sum, fill=Sample.Type)) +
   ggtitle("Distribution of Sample Sequencing Depth - Post-Filtering")
   
 #Save file
-file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\SeqDepth_postfilter.tiff",sep="")
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\SeqDepth_postfilter.tiff",sep="")
 tiff(file_name, width=800)
 print(p1)
 dev.off()
@@ -186,20 +186,20 @@ p1<-ggplot(sample_sum_df, aes(x = sum, fill=Run.ID)) +
   ylab("Number of Samples") +
   ggtitle("Distribution of Sample Sequencing Depth - Post-Filtering")
 #Save file
-file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\SeqDepth_postfilter_runid.tiff",sep="")
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\SeqDepth_postfilter_runid.tiff",sep="")
 tiff(file_name, width=800)
 print(p1)
 dev.off()
 
 #Print summaries
 s<-summary(sample_data(physeq_filt))
-capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_postfilter.txt",sep=""))
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Summary\\summary_postfilter.txt",sep=""))
 
 s<-summary(sample_data(physeq_filt)$Sample.Type)
-capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_postfilter_sample.type.txt",sep=""))
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Summary\\summary_postfilter_sample.type.txt",sep=""))
 
 s<-summary(sample_data(physeq_filt)$Sample.Cat)
-capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_postfilter_sample.cat.txt",sep=""))
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Summary\\summary_postfilter_sample.cat.txt",sep=""))
 ```
 
 #5. Subset filtered data, sample to specified depth
@@ -240,14 +240,14 @@ physeq_scale<-physeq_filt %>%
 
 #Sample Type
 p<-plot_richness(physeq_scale, x="Sample.Type") + geom_boxplot()
-file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\alphadiv_sampletype.tiff",sep="")
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\alphadiv_sampletype.tiff",sep="")
 tiff(file_name, width=800)
 print(p)
 dev.off()
 
 #Sequencing Batch
 p<-plot_richness(physeq_scale, x="Run.ID") + geom_boxplot()
-file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\alphadiv_sequencingbatch.tiff",sep="")
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\alphadiv_sequencingbatch.tiff",sep="")
 tiff(file_name, width=800)
 print(p)
 dev.off()
@@ -285,11 +285,11 @@ for (a in phylos_obs){
  colnames(gentab)<-gentab[1,]
  gentab<-gentab[-1,]
  
- file_name =paste(project_location,"\\Output\\R\\OTUs\\otu_baseline_",count,".csv",sep="")
+ file_name =paste(project_location,"\\Output\\R\\OTUs\\otu_Summary_",count,".csv",sep="")
  write.csv(gentab,file_name)
  
  metatab <- as.data.frame(sample_data(a))
- file_name =paste(project_location,"\\Output\\R\\OTUs\\metadata_baseline_",count,".csv",sep="")
+ file_name =paste(project_location,"\\Output\\R\\OTUs\\metadata_Summary_",count,".csv",sep="")
  write.csv(metatab,file_name)
  count=count+1
 }
