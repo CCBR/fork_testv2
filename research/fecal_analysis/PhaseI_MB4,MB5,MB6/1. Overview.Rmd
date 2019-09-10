@@ -10,7 +10,7 @@ editor_options:
 project_name=c("Project_NP0084-MB4_5_pt6","Project_NP0084-MB4_5_pt6_2")
 manifest_name=c("NP0084-MB4_08_29_19_metadata.txt","NP0084-MB4_09_02_19_metadata.txt")
 
-sample_depth=20000
+sample_depth=100000
 ```
 
 #Load required libraries
@@ -32,6 +32,8 @@ library(tibble)
 library(gridExtra)
 source("sources/miseqR.R")
 library(tidyverse)
+source("sources/ggrare.R") #github library: https://rdrr.io/github/gauravsk/ranacapa/
+library(ggplot2)
 ```
 
 #Analysis
@@ -226,10 +228,24 @@ physeq_filt_study<-physeq_filt %>%
 physeq_filt_study #verify sample number
 
 # Scale reads to even depth 
+p1 <- ggrare(physeq_filt, step = 1000, color = "Sample.Type", se = FALSE)
+p1 <- p1 + facet_wrap(~Sample.Type)
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\Rarecurve_PreFiltering.tiff",sep="")
+tiff(file_name, width=800)
+print(p1)
+dev.off()
+ 
 physeq_scale<-physeq_filt %>% scale_reads(n=sample_depth) 
 physeq_filt_seqcontrols<-physeq_filt_seqcontrols %>% scale_reads(n=sample_depth) 
 physeq_filt_extcontrols<-physeq_filt_extcontrols %>% scale_reads(n=sample_depth) 
 physeq_filt_study<-physeq_filt_study %>% scale_reads(n=sample_depth) 
+
+p1 <- ggrare(physeq_scale, step = 1000, color = "Sample.Type", se = FALSE)
+p1 <- p1 + facet_wrap(~Sample.Type)
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\Rarecurve_PostFiltering.tiff",sep="")
+tiff(file_name, width=800)
+print(p1)
+dev.off()
 ```
 
 #6 Alpha Diversity - All samples, Run ID
