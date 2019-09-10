@@ -1,40 +1,48 @@
-   External.ID      Sample.Type        Source.Descrip     Source.PCR.Plate
- EB      : 31   ExtBlank  : 51   Water        :67     PC04924_A_01:  1    
- MSA-1001:  5   ExtControl: 96   Human        :54     PC04924_A_03:  1    
- MSA-1002:  5   SeqBlank  : 16   D6300        :45     PC04924_A_04:  1    
- MSA-1003:  5   SeqControl: 47   DZ35298      :29     PC04924_A_05:  1    
- Stool_09:  5   Study     :107   DZ35322      :26     PC04924_A_06:  1    
- Stool_50:  5                    Biocollective:24     PC04924_A_08:  1    
- (Other) :261                    (Other)      :72     (Other)     :311    
-                                Run.ID        Project.ID             Reciept   
- 180112_M01354_0104_000000000-BFN3F:76   NP0084-MB4:150   0              : 31  
- 180112_M03599_0134_000000000-BFD9Y:74   NP0084-MB5: 77   sFEMB-001-R-007: 25  
- 180328_M01354_0106_000000000-BFMHC:77   NP0084-MB6: 90   sFEMB-001-R-008: 21  
- 190617_M01354_0118_000000000-CHFG3:90                    sFEMB-001-R-006: 20  
-                                                          sFEMB-001-R-010: 20  
-                                                          sFEMB-001-R-005: 18  
-                                                          (Other)        :182  
-          Sample.Descrip    SubjectID   Sample.Aliquot        Ext.Company 
- ZymoExtMock     :55     IE_Stool: 54   Min.   :  0.0   CGR         : 10  
- Study           :54     D6300   : 45   1st Qu.:  0.0   Qiagen      :205  
- ExtBlank        :51     D6306   : 12   Median :  1.0   ThermoFisher:  7  
- ArtificialColony:41     D6310   : 10   Mean   : 18.9   ZymoBiomics : 64  
- Robogut         :29     MSA1001 :  8   3rd Qu.:  9.0   NA's        : 31  
- MSA             :26     (Other) :121   Max.   :223.0                     
- (Other)         :61     NA's    : 67                                     
-                           Ext.Kit         Ext.Kit.1          Homo.Method     Homo.Holder 
- MagAttract PowerMag PowerSoil :72   KingFisher :142   Plate Adaptor: 67   Plate    :196  
- MagBead DNA Extraction Kit    :64   Manual     :109   TissueLyzer  :142   Pro_Plate: 13  
- MagAttract PowerMag Microbiome:63   QIAcube HT : 16   V Adaptor    : 77   Tubes    : 77  
- QIAamp Modified               :37   QIASymphony: 19   NA's         : 31   NA's     : 31  
- Dneasy PowerSoil Pro          :24   NA's       : 31                                      
- (Other)                       :26                                                        
- NA's                          :31                                                        
-       Homo.Holder2 ExtractionBatch     Residual        Row         Column     
- Microbiome  : 70   1      :158     Original:257   D      :57   Min.   :0.000  
- PowerSoil   : 72   2      : 88     Residual: 29   C      :49   1st Qu.:1.000  
- PowerSoilPro:  3   4      : 15     NA's    : 31   A      :44   Median :1.000  
- ZymoBiomics : 64   3      :  9                    B      :36   Mean   :1.336  
- NA's        :108   A2     :  1                    E      :27   3rd Qu.:2.000  
-                    (Other): 15                    (Other):73   Max.   :3.000  
-                    NA's   : 31                    NA's   :31   NA's   :31     
+           External.ID       Sample.Type          Sample.Cat       Source.Descrip
+ 0               : 31   Ext.Control:132   Stool        :98   Study        :98    
+ Extraction Blank: 20   Seq.Control: 31   D6300        :55   Robogut      :80    
+ ExtractionBlank : 10   Study      :175   DZ35298      :50   Zymo.Ext     :72    
+ BioC_119065     :  5                     Water        :30   Ext.Blank    :30    
+ Stool_50        :  5                     DZ35322      :25   Biocollective:27    
+ (Other)         :227                     BioCollective:21   D6305        : 5    
+ NA's            : 40                     (Other)      :59   (Other)      :26    
+     Source.PCR.Plate                                Run.ID         Project.ID 
+ PC04924_A_01:  1     180112_M01354_0104_000000000-BFN3F: 68   NP0084-MB4:135  
+ PC04924_A_03:  1     180112_M03599_0134_000000000-BFD9Y: 67   NP0084-MB5: 73  
+ PC04924_A_06:  1     180328_M01354_0106_000000000-BFMHC: 73   NP0084-MB6:130  
+ PC04924_A_08:  1     190617_M01354_0118_000000000-CHFG3:130                   
+ PC04924_A_09:  1                                                              
+ (Other)     :291                                                              
+ NA's        : 42                                                              
+            Reciept      SubjectID  Sample.Aliquot         Ext.Company 
+ 0              : 31   IE     :98   Min.   :  0.00   0           : 31  
+ sFEMB-001-R-007: 25   0      :62   1st Qu.:  2.00   Qiagen      :246  
+ sFEMB-001-R-008: 21   D6300  :53   Median : 19.00   ThermoFisher: 10  
+ sFEMB-001-R-006: 20   DZ35298:50   Mean   : 36.03   ZymoResearch: 51  
+ sFEMB-001-R-010: 20   D6310  :15   3rd Qu.: 47.00                     
+ (Other)        :181   119065 : 5   Max.   :229.00                     
+ NA's           : 40   (Other):55                                      
+                           Ext.Kit         Ext.Kit.1          Homo.Method  Homo.Holder
+ MagAttract PowerSoil DNA Kit  :81   0          : 31   0            : 31   0    : 31  
+ MagAttract PowerMicrobiome Kit:76   KingFisher :142   Plate Adaptor: 14   Plate:167  
+ 96 MagBead DNA Extraction Kit :51   None       : 88   TissueLyzer  :142   Tubes:140  
+ QIAamp with Modifications     :37   QIACube HT : 16   Vertical     :111              
+ DNeasy PowerSoil Pro kit      :33   QIASymphony: 19   NA's         : 40              
+ 0                             :31   NA's       : 42                                  
+ (Other)                       :29                                                    
+    Homo.Holder2             Residual        Row         Column      Ext.Robotics
+ 0        : 31   0               : 31   A      :57   Min.   :0.000   None: 17    
+ None     :252   None            :289   C      :53   1st Qu.:1.000   NA's:321    
+ Pro Plate: 13   Residuals of R03:  8   D      :53   Median :1.000               
+ NA's     : 42   Residuls of R05 :  7   B      :44   Mean   :1.178               
+                 NA's            :  3   0      :31   3rd Qu.:2.000               
+                                        E      :27   Max.   :3.000               
+                                        (Other):73                               
+ Homo.Type    AFA1       AFA2    
+ None: 19   None: 22   None: 22  
+ NA's:319   NA's:316   NA's:316  
+                                 
+                                 
+                                 
+                                 
+                                 

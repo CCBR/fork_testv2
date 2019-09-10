@@ -1,2 +1,2 @@
-  ExtBlank ExtControl   SeqBlank SeqControl      Study 
-        60        117         17         50        138 
+Ext.Control Seq.Control       Study 
+        176          39         217 

@@ -144,13 +144,6 @@
 "SC253847-PC04925-E-09","Stool_8","Study","Stool","Study","PC04925_E_09","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","sFEMB-001-R-011","IE",8,"Qiagen","DSP Virus","QIASymphony","Vertical","Tubes","None","None","E",1,NA,NA,NA,NA
 "SC253849-PC04925-F-09","Stool_29","Study","Stool","Study","PC04925_F_09","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","sFEMB-001-R-011","IE",29,"Qiagen","DSP Virus","QIASymphony","Vertical","Tubes","None","None","G",1,NA,NA,NA,NA
 "SC253852-PC04925-G-09","Stool_15","Study","Stool","Study","PC04925_G_09","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","sFEMB-001-R-011","IE",15,"Qiagen","DSP Virus","QIASymphony","Vertical","Tubes","None","None","B",2,NA,NA,NA,NA
-"SC261515-PC04925-H-11","Quarantined","0","0","0","PC04925_H_11","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261516-PC04925-H-10","Quarantined","0","0","0","PC04925_H_10","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261517-PC04925-B-11","Quarantined","0","0","0","PC04925_B_11","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261518","Quarantined","0","0","0","PC04925_C_10","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261522-PC04925-F-11","Quarantined","0","0","0","PC04925_F_11","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261523-PC04925-G-10","Quarantined","0","0","0","PC04925_G_10","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261524-PC04925-H-09","Quarantined","0","0","0","PC04925_H_09","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
 "SC261525-PC04925-D-10","ExtractionBlank","Ext.Control","Water","Ext.Blank","PC04925_D_10","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","sFEMB-001-R-013","0",0,"Qiagen","MagAttract PowerSoil DNA Kit","KingFisher","TissueLyzer","Plate","None","None","A",1,NA,NA,NA,NA
 "SC261526-PC04925-C-11","Stool_50","Study","Stool","Study","PC04925_C_11","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","sFEMB-001-R-013","IE",50,"Qiagen","MagAttract PowerSoil DNA Kit","KingFisher","TissueLyzer","Plate","None","None","B",1,NA,NA,NA,NA
 "SC261527","Stool_54","Study","Stool","Study","PC04925_B_10","180112_M03599_0134_000000000-BFD9Y","NP0084-MB4","sFEMB-001-R-013","IE",54,"Qiagen","MagAttract PowerSoil DNA Kit","KingFisher","TissueLyzer","Plate","None","None","C",1,NA,NA,NA,NA
@@ -209,11 +202,6 @@
 "SC253202-PC07578-F-08","Extraction Blank","Ext.Control","Water","Ext.Blank","PC07578_F_08","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","sFEMB-001-R-010","0",0,"Qiagen","QIAamp with Modifications","None","Vertical","Tubes","None","None","B",2,NA,NA,NA,NA
 "SC253845","DZ35298 0013_02","Study","DZ35298","Robogut","PC07578_C_09","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","sFEMB-001-R-011","DZ35298",13,"Qiagen","DSP Virus","QIASymphony","Vertical","Tubes","None","None","C",1,NA,NA,NA,NA
 "SC253846","DZ35298 0032_02","Study","DZ35298","Robogut","PC07578_D_09","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","sFEMB-001-R-011","DZ35298",32,"Qiagen","DSP Virus","QIASymphony","Vertical","Tubes","None","None","D",1,NA,NA,NA,NA
-"SC261516-PC07578-H-10","Quarantined","0","0","0","PC07578_H_10","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261517-PC07578-F-01","Quarantined","0","0","0","PC07578_F_01","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261522-PC07578-F-11","Quarantined","0","0","0","PC07578_F_11","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261523-PC07578-G-10","Quarantined","0","0","0","PC07578_G_10","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
-"SC261524-PC07578-H-09","Quarantined","0","0","0","PC07578_H_09","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","0","0",0,"0","0","0","0","0","0","0","0",0,NA,NA,NA,NA
 "SC261525-PC07578-D-10","ExtractionBlank","Ext.Control","Water","Ext.Blank","PC07578_D_10","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","sFEMB-001-R-013","0",0,"Qiagen","MagAttract PowerSoil DNA Kit","KingFisher","TissueLyzer","Plate","None","None","A",1,NA,NA,NA,NA
 "SC261526-PC07578-C-11","Stool_50","Study","Stool","Study","PC07578_C_11","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","sFEMB-001-R-013","IE",50,"Qiagen","MagAttract PowerSoil DNA Kit","KingFisher","TissueLyzer","Plate","None","None","B",1,NA,NA,NA,NA
 "SC261528-PC07578-E-11","DZ35298 0047_02","Study","DZ35298","Robogut","PC07578_E_11","180328_M01354_0106_000000000-BFMHC","NP0084-MB5","sFEMB-001-R-013","DZ35298",47,"Qiagen","MagAttract PowerSoil DNA Kit","KingFisher","TissueLyzer","Plate","None","None","D",1,NA,NA,NA,NA
