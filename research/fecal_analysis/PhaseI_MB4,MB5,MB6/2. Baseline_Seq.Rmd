@@ -8,7 +8,8 @@ editor_options:
 #To Update
 ```{r}
 project_name="Project_NP0084-MB4_5_pt6_2"
-manifest_name="NP0084-metadata_Summary_1.csv"
+manifest_name="metadata_Summary_1.csv"
+otu_name="otu_Summary_1.csv"
 sample_depth = 20000
 ```
 
@@ -47,30 +48,13 @@ rownames(control_expect) <- unique(control_expect[,"Genus"])
 project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
 
 #Read in database with variable information
-metadata_baseline_complete <- read.table(paste(project_location,manifest_name,sep="\\"),sep="\t",header = TRUE)
+metadata_baseline <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",manifest_name,sep=""),sep=",",header = TRUE)
 
-#Read in database of failed samples
-samplelist_baseline_failed <- read.table(paste(project_location,failed_name,sep="\\"),sep=",",header = TRUE)
-
-otu_baseline_complete <- read.csv("OTUs/otu_baseline_1.csv")
+otu_baseline_complete <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",otu_name,sep=""),sep=",",header = TRUE)
 colnames(otu_baseline_complete)[colnames(otu_baseline_complete)=="X"] <- "SampleID"
 ```
 
-#3. Filtering of samples to include project set only
-```{r}
-#Remove failed samples from info database
-metadata_baseline_filtered <-subset(metadata_baseline_complete, !(SampleID %in% samplelist_baseline_failed$x))
-nrow(metadata_baseline_complete) - nrow(samplelist_baseline_failed) ==nrow(metadata_baseline_filtered) #should be true
-
-#Only include Seq Controls
-control_types <- c("SeqControl","SeqBlank")
-metadata_baseline_filtered <- metadata_baseline_filtered[metadata_baseline_filtered$Sample.Type %in% control_types,]
-row.names(metadata_baseline_filtered) <- metadata_baseline_filtered$SampleID
-
-samplelist_baseline_filtered <- unique(metadata_baseline_filtered$SampleID)
-```
-
-#4. OTU Counts by sample
+#3. OTU Counts by sample
 Read in OTU information, and determine total OTUs
 ```{r}
 otu_baseline_filtered <- subset(otu_baseline_complete, !(SampleID %in% samplelist_baseline_failed$x))
