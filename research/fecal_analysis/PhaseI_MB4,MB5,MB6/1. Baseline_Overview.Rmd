@@ -7,12 +7,11 @@ editor_options:
 
 #To Update
 ```{r}
-project_name="Project_NP0084-MB4_5_pt6"
-manifest_name="NP0084-MB4_08_29_19_metadata.txt"
-failed_name = "samplelist_baseline_failed.txt"
-sample_depth = 20000
-```
+project_name=c("Project_NP0084-MB4_5_pt6","Project_NP0084-MB4_5_pt6_2")
+manifest_name=c("NP0084-MB4_08_29_19_metadata.txt","NP0084-MB4_09_02_19_metadata.txt")
 
+sample_depth=20000
+```
 
 #Load required libraries
 ############### 
@@ -39,36 +38,84 @@ library(tidyverse)
 ############### 
 #1.Create PhySeq Object
 ```{r}
-project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
+count=1
+for (a in project_name){
+ project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",a,sep="")
 
-#Read OTUS
-otus <- read_qza(paste(project_location,"\\Output\\qza_results\\table_dada2_qza_merged_parts_final\\table_dada2_merged_final_filt.qza",sep=""))
-
-#Read rooted tree
-tree <- read_qza(paste(project_location,"\\Output\\qza_results\\phylogeny_qza_results\\rooted_tree.qza",sep=""))
-
-#Read Greengenes taxonomy file
-taxonomy <- read_qza(paste(project_location,"\\Output\\qza_results\\taxonomy_qza_results\\taxonomy_greengenes.qza",sep=""))
-##Edit dtable
-tax_table<-do.call(rbind, strsplit(as.character(taxonomy$data$Taxon), "; "))
-  colnames(tax_table)<-c("Kingdom","Phylum","Class","Order","Family","Genus","Species")
-  rownames(tax_table)<-taxonomy$data$Feature.ID
-
-#read metadata
-metadata <-read.table(paste(project_location,manifest_name,sep="\\"),sep='\t', header=T, row.names=1, comment="")
+ #Read OTUS
+ otus <- read_qza(paste(project_location,"\\Output\\qza_results\\table_dada2_qza_merged_parts_final\\table_dada2_merged_final_filt.qza",sep=""))
+ 
+ #Read rooted tree
+ tree <- read_qza(paste(project_location,"\\Output\\qza_results\\phylogeny_qza_results\\rooted_tree.qza",sep=""))
+ 
+ #Read Greengenes taxonomy file
+ taxonomy <- read_qza(paste(project_location,"\\Output\\qza_results\\taxonomy_qza_results\\taxonomy_greengenes.qza",sep=""))
+ 
+ #Edit dtable
+ tax_table<-do.call(rbind, strsplit(as.character(taxonomy$data$Taxon), "; "))
+   colnames(tax_table)<-c("Kingdom","Phylum","Class","Order","Family","Genus","Species")
+   rownames(tax_table)<-taxonomy$data$Feature.ID
+ 
+ #read metadata
+ metadata <-read.table(paste(project_location,manifest_name[count],sep="\\"),sep='\t', header=T, row.names=1, comment="")
+ 
+ #Create phylo object
+ if(count==1){
+  physeq_complete<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree$data), tax_table(tax_table), sample_data(metadata))
+ 
+ } else{
+  physeq_complete2<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree$data), tax_table(tax_table), sample_data(metadata))
+  }
+ count=count+1
+}
 
 #Create filtered list of samples
-samplelist_passed_q2 <- as.list(sample_names(otu_table(otus$data,taxa_are_rows = T)))
-samples_missing_q2 <- setdiff(row.names(metadata),samplelist_passed_q2)
-write.csv(samples_missing_q2,paste(project_location,"samplelist_baseline_failed.txt",sep="\\"))
+samplelist1_passed_q2 <- as.list(sample_names(sample_data(physeq_complete)))
+samplelist2_passed_q2 <- as.list(sample_names(sample_data(physeq_complete2)))
+interset <- intersect(samplelist1_passed_q2,samplelist2_passed_q2)
 
-#Create phylo object
-physeq_complete<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree$data), tax_table(tax_table), sample_data(metadata))
+for (a in interset){ #Remove all duplicate samples
+ physeq_complete2<-subset_samples(physeq_complete2,sample_names(physeq_complete2)!=a)
+}
+ 
+physeq_complete<-subset_samples(physeq_complete,External.ID!="Quarantined")#Remove quarantined samples
 
-physeq_complete #verify results are as expected
+#Create merges of OTU, Tax, Sample for final phylo object
+otu<-as.data.frame(otu_table(physeq_complete))
+otu2<-as.data.frame(otu_table(physeq_complete2))
+
+for (a in colnames(otu2)){
+ for (b in rownames(otu2)){
+  otu[b,a]<-otu2[b,a]
+ }
+}
+otu<-otu_table(otu,taxa_are_rows = TRUE)
+
+tax<- as.data.frame(tax_table(physeq_complete))
+tax2<- as.data.frame(tax_table(physeq_complete2))
+
+for (a in colnames(tax2)){
+ for (b in rownames(tax2)){
+  tax[b,a]<-tax2[b,a]
+ }
+}
+tax<-as.matrix(tax) #Convert to matrix - str that phyloseq requires
+tax<-tax_table(tax)
+
+sampledata<- as.data.frame(sample_data(physeq_complete))
+sampledata2<- as.data.frame(sample_data(physeq_complete2))
+
+for (a in colnames(sampledata2)){
+ for (b in rownames(sampledata2)){
+  sampledata[b,a]<-sampledata2[b,a]
+ }
+}
+
+physeq_complete<-phyloseq(otu,tax,sampledata) #merged phylo object
 
 s<-summary(sample_data(physeq_complete))
 capture.output(s, file = "Data/Baseline/summary_prefilter.txt")
+write.csv(sample_data(physeq_complete),"test.csv")
 ```
 
 #2 Prune for bacteria only, Create prefilter summary files

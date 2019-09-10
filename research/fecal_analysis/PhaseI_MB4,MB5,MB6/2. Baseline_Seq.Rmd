@@ -30,7 +30,6 @@ library(phyloseq)
 library(qiime2R)
 library(tibble)
 library(gridExtra)
-library("../Data.table")
 library(tidyverse)
 ```
 
@@ -90,6 +89,7 @@ for (a in samplelist_baseline_filtered){
  for (b in genus_found){
   
   #Add the number of counts together
+  print (b)
   sum <- otu_baseline_filtered[a,b] + sum
  }
  
