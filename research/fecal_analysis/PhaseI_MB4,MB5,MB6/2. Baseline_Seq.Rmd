@@ -82,46 +82,34 @@ for (a in samplelist_seqcontrols){
 }
 ```
 
-#4. Observed to Expected Counts - Seq Controls
+#4. Observed to Expected Counts
 ```{r}
-samplelist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
-
-subjectlist_baseline_seqcontrol <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Sample.Type == "SeqControl"))
-subjectlist_baseline_seqcontrol <- unique(subjectlist_baseline_seqcontrol$SubjectID)
-
+samplelist_seqcontrols<-rownames(otu_baseline_complete)
 observed_count =0
+observed_baseline_seqcontrols<- data.frame()
 
 #Individual Samples
-for (a in subjectlist_baseline_seqcontrol){
- genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
- genus_temp <- genus_temp$Genus
-  
- for (b in samplelist_baseline_seqcontrol){
-  subject.id <- metadata_baseline_filtered[b,"SubjectID"]
-  
-  if(a==subject.id){
-   
-   for (c in genus_temp){
-    otu_count <- otu_baseline_filtered[b,c]
-    
-    if(!(is.na(observed_count) | is.null(otu_count) | otu_count ==0)){
-     observed_count = observed_count+1
-    }
-    
-   }
-   
-  }
-  
-  observed_baseline_seqcontrols[b,"Observed"] <- observed_count
-  observed_baseline_seqcontrols[b,"Expected"] <- length(genus_temp)
-  observed_baseline_seqcontrol[b,"SubjectID"] <- subject.id
-  observed_count =0
+for (a in samplelist_seqcontrols){
+ control_type <- as.String(metadata_baseline[a,"Source.Descrip"])
+ genus_temp <- control_expect[,c("Gram",control_type)]
+ genus_temp <- row.names(subset(genus_temp,!(genus_temp[,control_type]=="A")))
  
+ for (b in genus_temp){
+  otu_count <- otu_baseline_complete[a,b]
+  
+  if(!(is.na(observed_count) || is.null(otu_count) || otu_count ==0)){
+    observed_count = observed_count+1
+  }
+    
  }
  
+ observed_baseline_seqcontrols[a,"Observed"] <- observed_count
+ observed_baseline_seqcontrols[a,"Expected"] <- length(genus_temp)
+ observed_baseline_seqcontrols[a,"Source.Descrip"] <- metadata_baseline[a,"Source.Descrip"]
+ observed_count =0
 }
 
-write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
+write.csv(observed_baseline_seqcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_seqcontrols.csv",sep=""))
 
 #Average by SubjectID
 count =0
