@@ -157,44 +157,49 @@ print(p1)
 dev.off()
 ```
 
-#4. Filter samples with less than 10000 reads
+#4. Filter samples with less than 10000 reads: Review filtered read counts and plot
 ```{r}
 physeq_filt = prune_samples(sample_sums(physeq_filt) > 10000, physeq_filt)
 physeq_filt #note new sample number
-```
 
-#5. Review filtered read counts and plot
-```{r}
 # Make a data frame with a column for the read counts of each sample
 sample_sum_df<-data.frame(sum = sample_sums(physeq_filt),sample_data(physeq_filt))
 colnames(sample_sum_df)
 
-# Histogram of sample read counts by sampletype
-p1<-ggplot(sample_sum_df, aes(x = sum, color=Sample.Type)) + 
-  geom_histogram(fill="white",binwidth = 2500) +
-  xlab("Read counts") +
-  ggtitle("Distribution of sample sequencing depth - Post-Filtering") +
-  theme(axis.title.y = element_blank())
-
 # Histogram of sample read counts by sample type
-p2<-ggplot(sample_sum_df, aes(x = sum, color=Sample.Cat)) + 
-  geom_histogram(fill="white",binwidth = 2500) +
-  xlab("Read counts") +
-  theme(axis.title.y = element_blank())
-
+p1<-ggplot(sample_sum_df, aes(x = sum, fill=Sample.Type)) + 
+  geom_histogram(binwidth = 2500) +
+  xlab("Sequencing Reads") +
+  ylab("Number of Samples") +
+  ggtitle("Distribution of Sample Sequencing Depth - Post-Filtering")
+  
 #Save file
-file_name =("Graphs/Baseline/SeqDepth_filter.tiff")
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\SeqDepth_postfilter.tiff",sep="")
+tiff(file_name, width=800)
+print(p1)
+dev.off()
+
+# Histogram of sample read counts by Run id - explain two clusters
+p1<-ggplot(sample_sum_df, aes(x = sum, fill=Run.ID)) + 
+  geom_histogram(binwidth = 2500) +
+  xlab("Sequencing Reads") +
+  ylab("Number of Samples") +
+  ggtitle("Distribution of Sample Sequencing Depth - Post-Filtering")
+#Save file
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Baseline\\SeqDepth_postfilter_runid.tiff",sep="")
 tiff(file_name, width=800)
 print(p1)
 dev.off()
 
 #Print summaries
 s<-summary(sample_data(physeq_filt))
-capture.output(s, file = "Data/Baseline/summary_filter.txt")
-a<-summary(sample_data(physeq_filt)$Sample.Type)
-capture.output(a, file = "Data/Baseline/summary_sampletype_postfilter.txt")
-a<-summary(sample_data(physeq_filt)$Source.Descrip)
-capture.output(a, file = "Data/Baseline/summary_sourcedesc_postfilter.txt")
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_postfilter.txt",sep=""))
+
+s<-summary(sample_data(physeq_filt)$Sample.Type)
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_postfilter_sample.type.txt",sep=""))
+
+s<-summary(sample_data(physeq_filt)$Sample.Cat)
+capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Baseline\\summary_postfilter_sample.cat.txt",sep=""))
 ```
 
 #6. Subset filtered data, sample to specified depth
