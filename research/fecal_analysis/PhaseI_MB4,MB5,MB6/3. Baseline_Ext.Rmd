@@ -6,10 +6,10 @@ editor_options:
 ---
 #To Update
 ```{r}
-project_name="Project_NP0084-MB4_5_pt6"
-manifest_name="NP0084-MB4_08_29_19_metadata.txt"
-failed_name = "samplelist_baseline_failed.txt"
-sample_depth = 20000
+project_name="Project_NP0084-MB4_5_pt6_2"
+manifest_name="metadata_Summary_2.csv"
+otu_name="otu_Summary_2.csv"
+sample_depth= 20000
 ```
 
 #Load required libraries
@@ -25,11 +25,11 @@ library(tidyr)
 library(ggplot2)
 library(cowplot)
 library(scales)
-library(phyloext)
+library(phyloseq)
 library(qiime2R)
 library(tibble)
 library(gridExtra)
-library("../Data.table")
+library(tidyverse)
 ```
 
 #Analysis
