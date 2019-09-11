@@ -81,6 +81,76 @@ for (a in samplelist_extcontrols){
 }
 ```
 
+#4. Observed to Expected Counts
+```{r}
+samplelist_extcontrols <- subset(metadata_baseline,Sample.Cat!="Ext.Blank") #Remove EB's since they have no expected values
+samplelist_extcontrols <- rownames(samplelist_extcontrols)
+observed_count=0
+observed_baseline_extcontrols<- data.frame()
+
+#Individual Samples
+for (a in samplelist_extcontrols){
+ control_type <- as.String(metadata_baseline[a,"Source.Descrip"])
+ genus_temp <- control_expect[,c("Gram",control_type)]
+ genus_temp <- row.names(subset(genus_temp,!(genus_temp[,control_type]=="A")))
+ 
+ for (b in genus_temp){
+  otu_count <- otu_baseline_complete[a,b]
+  
+  if(!(is.na(observed_count) || is.null(otu_count) || otu_count==0)){
+    observed_count= observed_count+1
+  }
+    
+ }
+ 
+ observed_baseline_extcontrols[a,"Observed"] <- observed_count
+ observed_baseline_extcontrols[a,"Expected"] <- length(genus_temp)
+ observed_baseline_extcontrols[a,"Source.Descrip"] <- metadata_baseline[a,"Source.Descrip"]
+ observed_baseline_extcontrols[a,"Ext.Kit"] <- metadata_baseline[a,"Ext.Kit"]
+ observed_count=0
+}
+
+write.csv(observed_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_extcontrols.csv",sep=""))
+
+#temp<-observed_baseline_extcontrols
+observed_baseline_extcontrols<-temp
+
+#Average by Source.Descrip and Ext.Kit
+observed_count=0
+count=0
+source_list<-unique(observed_baseline_extcontrols$Source.Descrip)
+kit_list <- unique(observed_baseline_extcontrols$Ext.Kit)
+
+for (a in kit_list){
+ for (b in source_list){
+  for (c in samplelist_extcontrols){
+   control_type <- as.String(metadata_baseline[c,"Source.Descrip"])
+   kit_type <- as.String(metadata_baseline[c,"Ext.Kit"])
+   
+   if(a==kit_type & b==control_type ){
+    observed_count<-observed_baseline_extcontrols[c,"Observed"]+observed_count
+    expected_count<-observed_baseline_extcontrols[c,"Expected"]
+    count=count+1
+
+    
+    sample_name <- paste(b,a,sep="_")
+    observed_baseline_extcontrols[sample_name,"Source.Descrip"]<-metadata_baseline[c,"Source.Descrip"]
+    observed_baseline_extcontrols[sample_name,"Ext.Kit"]<-metadata_baseline[c,"Ext.Kit"]
+    observed_baseline_extcontrols[sample_name,"Observed"]<-observed_count/count
+    observed_baseline_extcontrols[sample_name,"Expected"]<-expected_count
+   }
+  }
+  
+  observed_count=0
+  count=0
+ }
+}
+
+tail(observed_baseline_extcontrols)
+
+write.csv(observed_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_extcontrols.csv",sep=""))
+```
+
 #5. Genus Filter List - From ext Blanks
 ```{r}
 genus_extuence_remove <- c("")
