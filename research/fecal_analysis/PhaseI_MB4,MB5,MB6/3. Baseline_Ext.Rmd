@@ -151,32 +151,43 @@ tail(observed_baseline_extcontrols)
 write.csv(observed_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_extcontrols.csv",sep=""))
 ```
 
-#5. Genus Filter List - From ext Blanks
+#5. Relative Abundance  - Ext Controls
 ```{r}
-genus_extuence_remove <- c("")
+relabun_baseline_extcontrols<-data.frame()
 
-```
+#Complete Relative Abundance
+samplelist_extcontrols<-rownames(otu_baseline_complete)
+genus_list <- colnames(otu_baseline_complete)
+genus_list<-genus_list[-(length(genus_list))]
+genus_list<-append(genus_list,rownames(control_expect))
+kit_list <- unique(observed_baseline_extcontrols$Ext.Kit)
 
-#6 Relative Abundance - Blanks
-```{r}
-samplelist_baseline_water <- subset(metadata_baseline_filtered, (metadata_baseline_filtered$Source.Descrip == "Water"))
-samplelist_baseline_water <- (samplelist_baseline_water$SampleID)
-
-for (a in samplelist_baseline_water){
- 
- for (b in ncol(otu_baseline_filtered)-1){
-   relab <- otu_baseline_filtered[a,b]
+for (a in kit_list){
+ for (b in samplelist_extcontrols){
+  for (c in genus_list){
    
-   if(!(is.na(relab) | is.null(relab))){
-     relab_baseline_extblanks[a,b] <- otu_baseline_filtered[a,b]/otu_baseline_filtered[a,"Total_OTUs"]
-     relab_baseline_extblanks[a,"Ext.Kit"] <- metadata_baseline_filtered[a,"Ext.Kit"]
+   relabun <- otu_baseline_complete[b,c]
+   
+   if(!(is.na(relabun) || is.null(relabun) || relabun==0)){
+    relabun_baseline_extcontrols[b,"Source.Descrip"]<-as.character(metadata_baseline[b,"Source.Descrip"])
+    relabun_baseline_extcontrols[b,"Ext.Kit"]<-as.character(metadata_baseline[b,"Ext.Kit"])
+    relabun_baseline_extcontrols[b,c] <- otu_baseline_complete[b,c]/otu_baseline_complete[b,"Total_OTUs"]
+    
    }
-
+   control_type<-as.character(metadata_baseline[b,"Source.Descrip"])
+   if(control_type!="Water"){
+    sample_name<-paste(control_type,a,sep="_")
+    relabun_baseline_extcontrols[sample_name,c]<-as.character(control_expect[c,control_type])
+    relabun_baseline_extcontrols[sample_name,"Source.Descrip"]<-control_type
+    relabun_baseline_extcontrols[sample_name,"Ext.Kit"]<-as.character(metadata_baseline[b,"Ext.Kit"])
+   }
+  }
  }
- 
 }
 
-write.csv(relab_baseline_extblanks,"/Data/relabun_baseline_extblanks.csv")
+relabun_baseline_extcontrols[is.na(relabun_baseline_extcontrols)]=0 #replace na's with 0
+relabun_baseline_extcontrols[relabun_baseline_extcontrols=="A"]=0 #replace A's with 0
+write.csv(relabun_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols.csv",sep=""))
 ```
 
 #7. Genus Filter List - From Ext Blanks

@@ -161,6 +161,28 @@ file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\SeqDepth_prefil
 tiff(file_name, width=800)
 print(p1)
 dev.off()
+
+#Read counts of blanks only
+physeq_filt_blanks <- physeq_filt %>%
+  subset_samples(
+    Source.Descrip == "Water" 
+  )
+# Make a data frame with a column for the read counts of each sample
+sample_sum_df<-data.frame(sum = sample_sums(physeq_filt_blanks),sample_data(physeq_filt_blanks))
+colnames(sample_sum_df)
+
+# Histogram of sample read counts by sampletype
+p1<-ggplot(sample_sum_df, aes(x = sum, fill=Ext.Kit)) + 
+  geom_histogram(binwidth = 2500) +
+  xlab("Sequencing Reads") +
+  ylab("Number of Samples") +
+  ggtitle("Distribution of Sample Sequencing Depth - Pre-Filtering")
+
+#Save file
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\SeqDepth_prefilter_blanks.tiff",sep="")
+tiff(file_name, width=800)
+print(p1)
+dev.off()
 ```
 
 #4. Filter samples with less than 10000 reads: Review filtered read counts and plot
@@ -271,6 +293,13 @@ file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\alphadiv_sequen
 tiff(file_name, width=800)
 print(p)
 dev.off()
+
+p<-plot_richness(physeq_scale, x="Ext.Kit") + geom_boxplot()
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\alphadiv_extractionkit.tiff",sep="")
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
 ```
 
 #7 Save data tables for downstream use
