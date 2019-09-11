@@ -165,29 +165,6 @@ relabun_baseline_seqcontrols[relabun_baseline_seqcontrols=="A"]=0 #replace A's w
 write.csv(relabun_baseline_seqcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_seqcontrols.csv",sep=""))
 ```
 
-#9 Relative Abundance % Difference
-```{r}
-for (a in subjectlist_baseline_seqcontrol){
- 
- genus_temp <- subset(control_expect, !(control_expect[,a]== "A"))
- genus_temp <- genus_temp$Genus
-  
- for (b in genus_temp){
-  observed_count<-relab_baseline_seqcontrols_expected[a,paste(b,".Obs",sep="")]
-  expected_count<-relab_baseline_seqcontrols_expected[a,paste(b,".Exp",sep="")]
-  
-   if(!(is.na(observed_count)|is.null(observed_count)|is.na(observed_count)|is.null(observed_count)|observed_count=0|expected_count=0)){
-
-    relab_baseline_seqcontrols_percdiff[a,b]<- ((observed_count-expected_count)/expected_count)*100
-   }
- }
-}
-
-write.csv(relab_baseline_seqcontrols_percdiff,"/datatables/relab_baseline_seqcontrols_percdiff.csv")
-
-```
-
-###############to update###############
 #11 Plot graph - Actual to Expected - IntraControl Variability
 For each kit, show variability, and map
 ```{r}
