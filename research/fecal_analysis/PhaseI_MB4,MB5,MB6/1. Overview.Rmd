@@ -114,8 +114,10 @@ for (a in colnames(sampledata2)){
  }
 }
 
-random_tree = rtree(ntaxa(physeq_complete3), rooted=TRUE, tip.label=taxa_names(physeq_complete3))
+physeq_complete<-phyloseq(otu,tax,sampledata) #merged phylo object
+random_tree = rtree(ntaxa(physeq_complete), rooted=TRUE, tip.label=taxa_names(physeq_complete))
 physeq_complete<-phyloseq(otu,tax,sampledata,random_tree) #merged phylo object
+
 
 s<-summary(sample_data(physeq_complete))
 capture.output(s, file = paste(project_location,"\\Output\\R\\Data\\Summary\\summary_prefilter.txt",sep=""))
