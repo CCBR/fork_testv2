@@ -44,16 +44,18 @@ rownames(control_expect) <- unique(control_expect[,"Genus"])
 #2. Load OTU and metadata tables
 ```{r}
 #Create location link
-project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
+project_location= paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
 
 #Read in database with variable information
-metadata_baseline_complete <- read.table(paste(project_location,manifest_name,sep="\\"),sep="\t",header = TRUE)
+metadata_baseline <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",manifest_name,sep=""),sep=",",header= TRUE)
+rownames(metadata_baseline)<-metadata_baseline$X
+metadata_baseline<-metadata_baseline[-1]
 
-#Read in database of failed samples
-samplelist_baseline_failed <- read.table(paste(project_location,failed_name,sep="\\"),sep="\t",header = TRUE)
+otu_baseline_complete <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",otu_name,sep=""),sep=",",header= TRUE)
+rownames(otu_baseline_complete)<-otu_baseline_complete$X
+otu_baseline_complete<-otu_baseline_complete[-1]
 
-otu_baseline_complete <- read.csv("/OTUs/otu_baseline_extontrols.csv", row.names = 1)
-#otu_baseline_complete <- t(otu_baseline_complete) #table has samples as columns, not rows
+rownames(metadata_baseline)==rownames(otu_baseline_complete) #Should be true
 ```
 
 #3. Filtering of samples to include project set only
