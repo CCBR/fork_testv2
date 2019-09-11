@@ -10,7 +10,7 @@ editor_options:
 project_name="Project_NP0084-MB4_5_pt6_2"
 manifest_name="metadata_Summary_1.csv"
 otu_name="otu_Summary_1.csv"
-sample_depth = 20000
+sample_depth= 20000
 ```
 
 #Load required libraries
@@ -45,14 +45,14 @@ rownames(control_expect) <- unique(control_expect[,"Genus"])
 #2. Load OTU and metadata tables
 ```{r}
 #Create location link
-project_location = paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
+project_location= paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
 
 #Read in database with variable information
-metadata_baseline <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",manifest_name,sep=""),sep=",",header = TRUE)
+metadata_baseline <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",manifest_name,sep=""),sep=",",header= TRUE)
 rownames(metadata_baseline)<-metadata_baseline$X
 metadata_baseline<-metadata_baseline[-1]
 
-otu_baseline_complete <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",otu_name,sep=""),sep=",",header = TRUE)
+otu_baseline_complete <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",otu_name,sep=""),sep=",",header= TRUE)
 rownames(otu_baseline_complete)<-otu_baseline_complete$X
 otu_baseline_complete<-otu_baseline_complete[-1]
 
@@ -85,7 +85,7 @@ for (a in samplelist_seqcontrols){
 #4. Observed to Expected Counts
 ```{r}
 samplelist_seqcontrols<-rownames(otu_baseline_complete)
-observed_count =0
+observed_count=0
 observed_baseline_seqcontrols<- data.frame()
 
 #Individual Samples
@@ -97,8 +97,8 @@ for (a in samplelist_seqcontrols){
  for (b in genus_temp){
   otu_count <- otu_baseline_complete[a,b]
   
-  if(!(is.na(observed_count) || is.null(otu_count) || otu_count ==0)){
-    observed_count = observed_count+1
+  if(!(is.na(observed_count) || is.null(otu_count) || otu_count==0)){
+    observed_count= observed_count+1
   }
     
  }
@@ -106,189 +106,70 @@ for (a in samplelist_seqcontrols){
  observed_baseline_seqcontrols[a,"Observed"] <- observed_count
  observed_baseline_seqcontrols[a,"Expected"] <- length(genus_temp)
  observed_baseline_seqcontrols[a,"Source.Descrip"] <- metadata_baseline[a,"Source.Descrip"]
- observed_count =0
+ observed_count=0
 }
 
 write.csv(observed_baseline_seqcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_seqcontrols.csv",sep=""))
 
-#Average by SubjectID
-count =0
-for (a in subjectlist_baseline_seqcontrol){
- for (b in samplelist_baseline_seqcontrol){
-  subject.id <- observed_baseline_seqcontrols[b,"SubjectID"]
-  
-  if(a=subject.id){
+#Average by Source.Descrip
+observed_count=0
+count=0
+source_list<-unique(observed_baseline_seqcontrols$Source.Descrip)
+
+for (a in source_list){
+ for (b in samplelist_seqcontrols){
+  control_type <- as.String(metadata_baseline[b,"Source.Descrip"])
+  if(a==control_type){
    observed_count<-observed_baseline_seqcontrols[b,"Observed"]+observed_count
    expected_count<-observed_baseline_seqcontrols[b,"Expected"]
-   count = count+1
+   count=count+1
   }
  }
  observed_baseline_seqcontrols[a,"Observed"]<-observed_count/count
  observed_baseline_seqcontrols[a,"Expected"]<-expected_count
- observed_baseline_seqcontrol[a,"SubjectID"]<-a
- count =0
+ observed_baseline_seqcontrols[a,"Source.Descrip"]<-a
+ observed_count=0
+ count=0
 }
 
-write.csv(observed_baseline_seqcontrols,"/datatables/observed_baseline_seqcontrols.csv")
-
+write.csv(observed_baseline_seqcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_seqcontrols.csv",sep=""))
 ```
 
-#8. Relative Abundance  - Seq Controls
+#5. Relative Abundance  - Seq Controls
 ```{r}
+relabun_baseline_seqcontrols<-data.frame()
+
 #Complete Relative Abundance
-for (a in subjectlist_baseline_seqcontrol){
- 
- for (b in ncol(otu_baseline_filtered)-1){
-   relab <- otu_baseline_filtered[a,b]
-   
-   if(!(is.na(relab) | is.null(relab))){
-     relab_baseline_seqcontrols[a,b] <- otu_baseline_filtered[a,b]/otu_baseline_filtered[a,"Total_OTUs"]
-   }
+samplelist_seqcontrols<-rownames(otu_baseline_complete)
+genus_list <- colnames(otu_baseline_complete)
+genus_list<-genus_list[-(length(genus_list))]
+genus_list<-append(genus_list,rownames(control_expect))
 
- }
- 
-}
-write.csv(relab_baseline_seqcontrols,"/datatables/relabun_baseline_seqcontrols.csv")
-
-#Expected relative abundance
-for (a in subjectlist_baseline_seqcontrol){
- genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
- genus_temp <- genus_temp$Genus
+for (a in samplelist_seqcontrols){
+ for (b in genus_list){
   
- for (b in samplelist_baseline_seqcontrol){
-  subject.id <- metadata_baseline_filtered[b,"SubjectID"]
+  relabun <- otu_baseline_complete[a,b]
   
-  if(a==subject.id){
-   
-   for (c in genus_temp){
-    rel_abund_observed <- relab_baseline_seqcontrols[b,c]
-    rel_abund_expected <- control_expect[c,a]
-    gram_stain <- control_expect[c,"Gram"]
-    
-    relab_baseline_seqcontrols_expected[b,paste(c,".Obs",sep="")]<-rel_abund_observed
-    relab_baseline_seqcontrols_expected[b,paste(c,".Exp",sep="")]<-rel_abund_expected
-    relab_baseline_seqcontrols_expected[b,"GramStain"]<-gram_stain
-    relab_baseline_seqcontrols_expected[b,"SubjectID"]<-a
-   }
-   
+  if(!(is.na(relabun) || is.null(relabun) || relabun==0)){
+   relabun_baseline_seqcontrols[a,b] <- otu_baseline_complete[a,b]/otu_baseline_complete[a,"Total_OTUs"]
+   relabun_baseline_seqcontrols[a,"Source.Descrip"]<-as.character(metadata_baseline[a,"Source.Descrip"])
   }
-
- }
- 
-}
-
-write.csv(relab_baseline_seqcontrols_expected,"/datatables/relab_baseline_seqcontrols_expected.csv")
-
-#Expected Average by SubjectID
-
-count=0
-observed_count=0
-
-for (a in subjectlist_baseline_seqcontrol){
- genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
- genus_temp <- genus_temp$Genus
- 
- for (b in genus_temp){
-  
-  for (c in samplelist_baseline_seqcontrol){
-   
-   subject.id <- relab_baseline_seqcontrols_expected[b,"SubjectID"]
-   
-   if(a=subject.id){
-    observed_count<-relab_baseline_seqcontrols_expected[c,paste(b,".Obs",sep="")]+observed_count
-    expected_count<-relab_baseline_seqcontrols_expected[c,paste(b,".Exp",sep="")]
-    gram_stain <- relab_baseline_seqcontrols_expected[c,"GramStain"]
-    count = count+1
-    
-   }
-   
-  }
-  
-  relab_baseline_seqcontrols_expected[a,paste(b,".Obs",sep="")]<-observed_count/count
-  relab_baseline_seqcontrols_expected[a,paste(b,".Exp",sep="")]<-expected_count
-  relab_baseline_seqcontrols_expected[a,"GramStain"]<-gram_stain
-  relab_baseline_seqcontrols_expected[a,"SubjectID"]<-a
-  count=0
-  observed_count=0
+  control_type<-as.character(metadata_baseline[a,"Source.Descrip"])
+  relabun_baseline_seqcontrols[control_type,b]<-as.character(control_expect[b,control_type])
+  relabun_baseline_seqcontrols[control_type,"Source.Descrip"]<-control_type
  }
 }
-  
-write.csv(relab_baseline_seqcontrols_expected,"/datatables/relab_baseline_seqcontrols_expected.csv")
 
-#Unexpected relative abundance
-for (a in subjectlist_baseline_seqcontrol){
- genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
- genus_temp <- genus_temp$Genus
- 
- genus_found <- relab_baseline_seqcontrols$Genus
- genus_temp <- subset(genus_found,!genus_temp$V1)
-  
- for (b in samplelist_baseline_seqcontrol){
-  subject.id <- metadata_baseline_filtered[b,"SubjectID"]
-  
-  if(a==subject.id){
-   
-   for (c in genus_temp){
-    rel_abund_observed <- relab_baseline_seqcontrols[b,c]
-    gram_stain <- control_expect[c,"Gram"]
-    
-    relab_baseline_seqcontrols_unexpected[b,paste(c,".Obs",sep="")]<-rel_abund_observed
-    relab_baseline_seqcontrols_unexpected[b,"GramStain"]<-gram_stain
-    relab_baseline_seqcontrols_unexpected[b,"SubjectID"]<-a
-   }
-   
-  }
-
- }
- 
-}
-
-write.csv(relab_baseline_seqcontrols_unexpected,"/datatables/relab_baseline_seqcontrols_unexpected.csv")
-
-#Expected Average by SubjectID
-
-count=0
-observed_count=0
-
-for (a in subjectlist_baseline_seqcontrol){
- genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
- genus_temp <- genus_temp$Genus
- 
- genus_found <- relab_baseline_seqcontrols$Genus
- genus_temp <- subset(genus_found,!genus_temp$V1)
- 
- for (b in genus_temp){
-  
-  for (c in samplelist_baseline_seqcontrol){
-   
-   subject.id <- relab_baseline_seqcontrols_unexpected[b,"SubjectID"]
-   
-   if(a=subject.id){
-    observed_count<-relab_baseline_seqcontrols_unexpected[c,paste(b,".Obs",sep="")]+observed_count
-    gram_stain <- relab_baseline_seqcontrols_unexpected[c,"GramStain"]
-    count = count+1
-    
-   }
-   
-  }
-  
-  relab_baseline_seqcontrols_unexpected[a,paste(b,".Obs",sep="")]<-observed_count/count
-  relab_baseline_seqcontrols_unexpected[a,"GramStain"]<-gram_stain
-  relab_baseline_seqcontrols_unexpected[a,"SubjectID"]<-a
-  count=0
-  observed_count=0
- }
-}
-  
-write.csv(relab_baseline_seqcontrols_unexpected,"/datatables/relab_baseline_seqcontrols_unexpected.csv")
-
+relabun_baseline_seqcontrols[is.na(relabun_baseline_seqcontrols)]=0 #replace na's with 0
+relabun_baseline_seqcontrols[relabun_baseline_seqcontrols=="A"]=0 #replace A's with 0
+write.csv(relabun_baseline_seqcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_seqcontrols.csv",sep=""))
 ```
 
 #9 Relative Abundance % Difference
 ```{r}
 for (a in subjectlist_baseline_seqcontrol){
  
- genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
+ genus_temp <- subset(control_expect, !(control_expect[,a]== "A"))
  genus_temp <- genus_temp$Genus
   
  for (b in genus_temp){
@@ -340,17 +221,17 @@ for (a in control_types){
      }
    }
   
-    graph_title <- paste (a,": Intracontrol Variablity",sep = "")
+    graph_title <- paste (a,": Intracontrol Variablity",sep= "")
 
     #Plot Data
     graph_new <- ggplot(data=temp,mapping=aes(x=Obs_Per,y=Exp_Per,color=Sample))+
      geom_point()+ #Can add points to graph
-     geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+     geom_smooth(method= "lm",se=FALSE)+ #Add a smooth line
      labs(title=graph_title, x="Observed Rel. Abundance", y= "Expected Rel. Abundance")+
-     geom_text(mapping=aes(x=Obs_Per,y=Exp_Per,label=Genus),check_overlap = TRUE)
+     geom_text(mapping=aes(x=Obs_Per,y=Exp_Per,label=Genus),check_overlap= TRUE)
      
     
-    plot_list[[i]] = graph_new
+    plot_list[[i]]= graph_new
     i=i+1
 }
 
@@ -361,7 +242,7 @@ for (i in 1:length(control_types)){
  a <- control_types[i]
  
  #Save the file
- file_name = paste("Data/Graphs/Intracontrol Variability_",a, ".tiff", sep="")
+ file_name= paste("Data/Graphs/Intracontrol Variability_",a, ".tiff", sep="")
  tiff(file_name)
  print(plot_list[[i]])
  dev.off()
@@ -401,12 +282,12 @@ for (a in control_types){
 #Plot graph
 graph_new<- ggplot(data=temp,mapping=aes(x=Obs_Per,y=Exp_Per,color=Type))+
  #geom_point()+ #Can add points to graph
- geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+ geom_smooth(method= "lm",se=FALSE)+ #Add a smooth line
  labs(title="Sequencing Control Comparison", x="Observed Rel. Abundance", y= "Expected Rel. Abundance")
 graph_new
 write.csv(temp,"temp2.csv")
 
-file_name =("Data/Graphs/Kit Differences_ZE.tiff")
+file_name=("Data/Graphs/Kit Differences_ZE.tiff")
 tiff(file_name)
 print(graph_new)
 dev.off()
