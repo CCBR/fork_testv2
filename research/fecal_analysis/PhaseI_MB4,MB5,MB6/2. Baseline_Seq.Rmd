@@ -165,7 +165,7 @@ relabun_baseline_seqcontrols[relabun_baseline_seqcontrols=="A"]=0 #replace A's w
 write.csv(relabun_baseline_seqcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_seqcontrols.csv",sep=""))
 ```
 
-#11 Plot graph - Actual to Expected - IntraControl Variability
+#6 Plot graph - Actual to Expected - IntraControl Variability
 For each kit, show variability, and map
 ```{r}
 #Create list for plots, start counter
