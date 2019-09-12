@@ -269,23 +269,15 @@ for (i in 1:(length(control_types))){
 
 #7 Relative Abundance % Difference
 ```{r}
-for (a in subjectlist_baseline_extcontrol){
- 
- genus_temp <- subset(control_expect, !(control_expect[,a] == "A"))
- genus_temp <- genus_temp$Genus
-  
- for (b in genus_temp){
-  observed_count<-relab_baseline_extcontrols_expected[a,paste(b,".Obs",sep="")]
-  expected_count<-relab_baseline_extcontrols_expected[a,paste(b,".Exp",sep="")]
-  
-   if(!(is.na(observed_count)|is.null(observed_count)|is.na(observed_count)|is.null(observed_count)|observed_count=0|expected_count=0)){
+#convert rows to numeric values
+ relabun_baseline_extcontrols_otoe$RelAbun_Obs<-as.numeric(as.character(relabun_baseline_extcontrols_otoe$RelAbun_Obs))
+ relabun_baseline_extcontrols_otoe$RelAbun_Exp<-as.numeric(as.character(relabun_baseline_extcontrols_otoe$RelAbun_Exp))
 
-    relab_baseline_extcontrols_percdiff[a,b]<- ((observed_count-expected_count)/expected_count)*100
-   }
- }
+for (a in rownames(relabun_baseline_extcontrols_otoe)){
+ relabun_baseline_extcontrols_otoe[a,"PDiff"]<-((relabun_baseline_extcontrols_otoe[a,"RelAbun_Obs"]-relabun_baseline_extcontrols_otoe[a,"RelAbun_Exp"])/relabun_baseline_extcontrols_otoe[a,"RelAbun_Exp"])*100
 }
 
-write.csv(relab_baseline_extcontrols_percdiff,"/Data/relab_baseline_extcontrols_percdiff.csv")
+write.csv(relabun_baseline_extcontrols_otoe,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols_otoe.csv",sep=""))
 
 ```
 
