@@ -17,7 +17,6 @@ sample_depth= 20000
 ```{r}
 library("biom")
 library(data.table)
-library(ggplot2)
 library(tm)
 library(vegan)
 library("biom")
@@ -191,21 +190,21 @@ relabun_baseline_extcontrols[relabun_baseline_extcontrols=="A"]=0 #replace A's w
 write.csv(relabun_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols.csv",sep=""))
 
 #Create rel abun df to graph observed to expected frequencies
-count=1
 samplelist_extcontrols_nowater <- subset(metadata_baseline,Source.Descrip!="Water") #only include controls
 samplelist_extcontrols_nowater <- rownames(samplelist_extcontrols_nowater)
 relabun_baseline_extcontrols_otoe<-data.frame()
+count=1
 
 for (a in samplelist_extcontrols_nowater){
  for (b in genus_list){
-  control_type<-metadata_baseline[a,"Source.Descrip"]
+  control_type<-as.character(metadata_baseline[a,"Source.Descrip"])
   
   relabun_ob <- relabun_baseline_extcontrols[a,b]
-  relabun_ex <- relabun_baseline_extcontrols[control_type,b]
+  relabun_ex <- as.character(control_expect[b,control_type])
   sample_name  <- a
   genus_temp <- b
-  
-  if(relabun_ex!=0){ #Only need genus that are expected for comparisons
+
+  if(!is.null(relabun_ex) && relabun_ex!="A" && !is.na(relabun_ex)){ #Only need genus that are expected for comparisons
    relabun_baseline_extcontrols_otoe[count,"SampleID"]<-sample_name
    relabun_baseline_extcontrols_otoe[count,"RelAbun_Obs"]<-relabun_ob
    relabun_baseline_extcontrols_otoe[count,"RelAbun_Exp"]<-relabun_ex
@@ -229,54 +228,46 @@ control_types <- unique(relabun_baseline_extcontrols_otoe$Source.Descrip)
 i=1
 
 for (a in control_types){
-   #Create genus list of specfic control
-   genus_temp <- control_expect[!is.na(control_expect[,a]),]
-   genus_temp <- (genus_temp[,"Genus"])
-   
-   for (b in kit_types){
-    temp<-data.frame()
-    count=1
-    
-    ###Create database
-    temp2 <- subset(samples_variables_f,Kit==b & Type==a & O.R=="Original")
-    
-    #Subset, and create a sample list
-    sample_list <- unique(temp2$NephID)
-    sample_list
-    
-    #For each Genus in list, determine the samples value
-    for (c in genus_temp){
-     
-     #For each of the samples in the sample list
-     for(d in sample_list){
-      temp[count,"Genus"]<-c
-      temp[count,"Obs_Per"]<- samples_obs_abund[c,d]
-      temp[count,"Sample"]<-d
-      temp[count,"Exp_Per"]<-control_expect[c,a]
-      count=count+1
-     }
-    }
-    
-    graph_title <- paste (a,": Variablity for ",b,sep = "")
+ temp<-subset(relabun_baseline_extcontrols_otoe,Source.Descrip==a) #subset to include only one control at a time
+ temp$RelAbun_Obs<-as.numeric(as.character(temp$RelAbun_Obs))
+ temp$RelAbun_Exp<-as.numeric(as.character(temp$RelAbun_Exp))
 
-    #Plot Data
-    graph_new <- ggplot(data=temp,mapping=aes(x=Obs_Per,y=Exp_Per,color=Sample))+
-     geom_point()+ #Can add points to graph
-     geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
-     labs(title=graph_title, x="Observed Rel. Abundance", y= "Expected Rel. Abundance")+
-     geom_text(mapping=aes(x=Obs_Per,y=Exp_Per,label=Genus),check_overlap = TRUE)+
-     xlim(0,.25) + ylim(0.04,.2)
-    
-    plot_list[[i]] = graph_new
-    i=i+1
-   }
+ graph_title <- paste ("Rel Abun Ob to Exp Variablity for ",a,sep = "")
+ 
+ #Plot Data
+ graph_new <- ggplot(data=temp,mapping=aes(x=RelAbun_Obs,y=RelAbun_Exp,color=Ext.Kit)) + 
+  geom_point()+ #Can add points to graph
+  geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+  labs(title=graph_title, x="Observed Rel Abun", y= "Expected Rel. Abun")+
+ # geom_text(mapping=aes(x=RelAbun_Obs,y=RelAbun_Exp,label=Genus),check_overlap = TRUE)+
+  xlim(0,.25) + ylim(0.04,.2)
+ 
+ plot_list[[i]] = graph_new
+ i=i+1
 }
+
+
+#Save all plots
+count=1
+
+for (i in 1:(length(control_types))){
+ 
+ #ID which control is being run
+ a <- control_types[count]
+ 
+ #Save the file
+ file_name = paste(project_location,"\\Output\\R\\Graphs\\Baseline\\Variability_",a,".tiff", sep="")
+ tiff(file_name)
+ print(plot_list[[i]])
+ dev.off()
+ 
+ count = count+1
+} 
 
 
 ```
 
-
-#9 Relative Abundance % Difference
+#7 Relative Abundance % Difference
 ```{r}
 for (a in subjectlist_baseline_extcontrol){
  
