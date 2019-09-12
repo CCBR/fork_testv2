@@ -190,6 +190,31 @@ relabun_baseline_extcontrols[is.na(relabun_baseline_extcontrols)]=0 #replace na'
 relabun_baseline_extcontrols[relabun_baseline_extcontrols=="A"]=0 #replace A's with 0
 write.csv(relabun_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols.csv",sep=""))
 
+#Create rel abun df to graph observed to expected frequencies
+count=1
+relabun_baseline_extcontrols_otoe<-data.frame()
+
+for (a in samplelist_extcontrols){
+ for (b in genus_list){
+  control_type<-metadata_baseline[a,"Source.Descrip"]
+  
+  relabun_ob <- relabun_baseline_extcontrols[a,b]
+  relabun_ex <- relabun_baseline_extcontrols[control_type,b]
+  sample_name  <- a
+  genus_temp <- b
+  
+  if(relabun_ex!=0){ #Only need genus that are expected for comparisons
+   relabun_baseline_extcontrols_otoe[count,"SampleID"]<-sample_name
+   relabun_baseline_extcontrols_otoe[count,"RelAbun_Obs"]<-relabun_ob
+   relabun_baseline_extcontrols_otoe[count,"RelAbun_Exp"]<-relabun_ex
+   relabun_baseline_extcontrols_otoe[count,"Genus"]<-genus_temp
+   relabun_baseline_extcontrols_otoe[count,"Ext.Kit"]<-relabun_baseline_extcontrols[a,"Ext.Kit"]
+   relabun_baseline_extcontrols_otoe[count,"Source.Descrip"]<-relabun_baseline_extcontrols[a,"Source.Descrip"]
+   count=count+1
+  }
+  
+ }
+}
 
 ```
 
