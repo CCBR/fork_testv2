@@ -294,8 +294,16 @@ tiff(file_name, width=800)
 print(p)
 dev.off()
 
+#Extraction Kit
 p<-plot_richness(physeq_scale, x="Ext.Kit") + geom_boxplot()
 file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\alphadiv_extractionkit.tiff",sep="")
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
+#Homo Method
+p<-plot_richness(physeq_scale, x="Homo.Method") + geom_boxplot()
+file_name =paste(project_location,"\\Output\\R\\Graphs\\Summary\\alphadiv_homomethod.tiff",sep="")
 tiff(file_name, width=800)
 print(p)
 dev.off()
