@@ -189,6 +189,8 @@ for (a in kit_list){
 relabun_baseline_extcontrols[is.na(relabun_baseline_extcontrols)]=0 #replace na's with 0
 relabun_baseline_extcontrols[relabun_baseline_extcontrols=="A"]=0 #replace A's with 0
 write.csv(relabun_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols.csv",sep=""))
+
+
 ```
 
 #9. Relative Abundance  - ext Controls
