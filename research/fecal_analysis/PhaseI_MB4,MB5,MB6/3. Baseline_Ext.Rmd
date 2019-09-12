@@ -176,7 +176,7 @@ for (a in kit_list){
    }
    control_type<-as.character(metadata_baseline[b,"Source.Descrip"])
    if(control_type!="Water"){
-    sample_name<-paste(control_type,a,sep="_")
+    sample_name<-paste(control_type,"_Expected",sep="")
     kit_name <- a
     relabun_baseline_extcontrols[sample_name,c]<-as.character(control_expect[c,control_type])
     relabun_baseline_extcontrols[sample_name,"Source.Descrip"]<-control_type
