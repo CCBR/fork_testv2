@@ -4,6 +4,284 @@ output: word_document
 editor_options: 
   chunk_output_type: console
 ---
+#To Update
+```{r}
+project_name="Project_NP0084-MB4_5_pt6_2"
+manifest_name="metadata_Summary_2.csv"
+otu_name="otu_Summary_2.csv"
+sample_depth= 20000
+```
+
+#Load required libraries
+############### 
+```{r}
+library("biom")
+library(data.table)
+library(tm)
+library(vegan)
+library("biom")
+library(tidyr)
+library(ggplot2)
+library(cowplot)
+library(scales)
+library(phyloseq)
+library(qiime2R)
+library(tibble)
+library(gridExtra)
+library(tidyverse)
+```
+
+#Analysis
+###############
+#1. Taxonomy Reference - Expected frequencies
+```{r}
+#Read in controls taxonomy file, grouped by Genus
+control_expect <- read.table("T:\\DCEG\\CGF\\TechTransfer\\Microbiome\\Extraction\\Optimization\\Fecal\\Fresh Fecal Optimization_2017.08\\Phase I\\Controls\\Taxonomy\\Taxonomy_Genus_2019.txt",sep="\t",header=TRUE)
+rownames(control_expect) <- unique(control_expect[,"Genus"])
+```
+
+#2. Load OTU and metadata tables
+```{r}
+#Create location link
+project_location= paste("T:\\DCEG\\Projects\\Microbiome\\CGR_MB\\MicroBiome\\",project_name,sep="")
+
+#Read in database with variable information
+metadata_baseline <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",manifest_name,sep=""),sep=",",header= TRUE)
+rownames(metadata_baseline)<-metadata_baseline$X
+metadata_baseline<-metadata_baseline[-1]
+
+otu_baseline_complete <- read.table(paste(project_location,"\\Output\\R\\OTUs\\",otu_name,sep=""),sep=",",header= TRUE)
+rownames(otu_baseline_complete)<-otu_baseline_complete$X
+otu_baseline_complete<-otu_baseline_complete[-1]
+
+rownames(metadata_baseline)==rownames(otu_baseline_complete) #Should be true
+```
+
+#3. OTU Counts by sample
+Read in OTU information, and determine total OTUs
+```{r}
+genus_found<-colnames(otu_baseline_complete)
+samplelist_extcontrols<-rownames(otu_baseline_complete)
+
+#For each sample, determine the total read counts
+for (a in samplelist_extcontrols){
+ #Set sum to 0
+ sum=0
+ 
+ #For each genus
+ for (b in genus_found){
+  
+  #Add the number of counts together
+  sum <- otu_baseline_complete[a,b] + sum
+ }
+ 
+ #When complete, push the sum to a new "Total_OTUs" row
+ otu_baseline_complete[a,"Total_OTUs"] <- sum
+}
+```
+
+#4. Observed to Expected Counts
+```{r}
+samplelist_extcontrols <- subset(metadata_baseline,Sample.Cat!="Ext.Blank") #Remove EB's since they have no expected values
+samplelist_extcontrols <- rownames(samplelist_extcontrols)
+observed_count=0
+observed_baseline_extcontrols<- data.frame()
+
+#Individual Samples
+for (a in samplelist_extcontrols){
+ control_type <- as.String(metadata_baseline[a,"Source.Descrip"])
+ genus_temp <- control_expect[,c("Gram",control_type)]
+ genus_temp <- row.names(subset(genus_temp,!(genus_temp[,control_type]=="A")))
+ 
+ for (b in genus_temp){
+  otu_count <- otu_baseline_complete[a,b]
+  
+  if(!(is.na(observed_count) || is.null(otu_count) || otu_count==0)){
+    observed_count= observed_count+1
+  }
+    
+ }
+ 
+ observed_baseline_extcontrols[a,"Observed"] <- observed_count
+ observed_baseline_extcontrols[a,"Expected"] <- length(genus_temp)
+ observed_baseline_extcontrols[a,"Source.Descrip"] <- metadata_baseline[a,"Source.Descrip"]
+ observed_baseline_extcontrols[a,"Ext.Kit"] <- metadata_baseline[a,"Ext.Kit"]
+ observed_count=0
+}
+
+write.csv(observed_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_extcontrols.csv",sep=""))
+
+#temp<-observed_baseline_extcontrols
+observed_baseline_extcontrols<-temp
+
+#Average by Source.Descrip and Ext.Kit
+observed_count=0
+count=0
+source_list<-unique(observed_baseline_extcontrols$Source.Descrip)
+kit_list <- unique(observed_baseline_extcontrols$Ext.Kit)
+
+for (a in kit_list){
+ for (b in source_list){
+  for (c in samplelist_extcontrols){
+   control_type <- as.String(metadata_baseline[c,"Source.Descrip"])
+   kit_type <- as.String(metadata_baseline[c,"Ext.Kit"])
+   
+   if(a==kit_type & b==control_type ){
+    observed_count<-observed_baseline_extcontrols[c,"Observed"]+observed_count
+    expected_count<-observed_baseline_extcontrols[c,"Expected"]
+    count=count+1
+
+    
+    sample_name <- paste(b,a,sep="_")
+    observed_baseline_extcontrols[sample_name,"Source.Descrip"]<-metadata_baseline[c,"Source.Descrip"]
+    observed_baseline_extcontrols[sample_name,"Ext.Kit"]<-metadata_baseline[c,"Ext.Kit"]
+    observed_baseline_extcontrols[sample_name,"Observed"]<-observed_count/count
+    observed_baseline_extcontrols[sample_name,"Expected"]<-expected_count
+   }
+  }
+  
+  observed_count=0
+  count=0
+ }
+}
+
+tail(observed_baseline_extcontrols)
+
+write.csv(observed_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_extcontrols.csv",sep=""))
+```
+
+#5. Relative Abundance  - Ext Controls
+```{r}
+relabun_baseline_extcontrols<-data.frame()
+
+#Complete Relative Abundance
+samplelist_extcontrols<-rownames(otu_baseline_complete)
+genus_list <- colnames(otu_baseline_complete)
+genus_list<-genus_list[-(length(genus_list))]
+genus_list<-append(genus_list,rownames(control_expect))
+kit_list <- unique(observed_baseline_extcontrols$Ext.Kit)
+
+for (a in kit_list){
+ for (b in samplelist_extcontrols){
+  for (c in genus_list){
+   
+   relabun <- otu_baseline_complete[b,c]
+   
+   if(!(is.na(relabun) || is.null(relabun) || relabun==0)){
+    relabun_baseline_extcontrols[b,"Source.Descrip"]<-as.character(metadata_baseline[b,"Source.Descrip"])
+    relabun_baseline_extcontrols[b,"Ext.Kit"]<-as.character(metadata_baseline[b,"Ext.Kit"])
+    relabun_baseline_extcontrols[b,c] <- otu_baseline_complete[b,c]/otu_baseline_complete[b,"Total_OTUs"]
+    
+   }
+   control_type<-as.character(metadata_baseline[b,"Source.Descrip"])
+   if(control_type!="Water"){
+    sample_name<-paste(control_type,"_Expected",sep="")
+    kit_name <- a
+    relabun_baseline_extcontrols[sample_name,c]<-as.character(control_expect[c,control_type])
+    relabun_baseline_extcontrols[sample_name,"Source.Descrip"]<-control_type
+    relabun_baseline_extcontrols[sample_name,"Ext.Kit"]<-kit_name
+   }
+  }
+ }
+}
+
+relabun_baseline_extcontrols[is.na(relabun_baseline_extcontrols)]=0 #replace na's with 0
+relabun_baseline_extcontrols[relabun_baseline_extcontrols=="A"]=0 #replace A's with 0
+write.csv(relabun_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols.csv",sep=""))
+
+#Create rel abun df to graph observed to expected frequencies
+samplelist_extcontrols_nowater <- subset(metadata_baseline,Source.Descrip!="Water") #only include controls
+samplelist_extcontrols_nowater <- rownames(samplelist_extcontrols_nowater)
+relabun_baseline_extcontrols_otoe<-data.frame()
+count=1
+
+for (a in samplelist_extcontrols_nowater){
+ for (b in genus_list){
+  control_type<-as.character(metadata_baseline[a,"Source.Descrip"])
+  
+  relabun_ob <- relabun_baseline_extcontrols[a,b]
+  relabun_ex <- as.character(control_expect[b,control_type])
+  sample_name  <- a
+  genus_temp <- b
+
+  if(!is.null(relabun_ex) && relabun_ex!="A" && !is.na(relabun_ex)){ #Only need genus that are expected for comparisons
+   relabun_baseline_extcontrols_otoe[count,"SampleID"]<-sample_name
+   relabun_baseline_extcontrols_otoe[count,"RelAbun_Obs"]<-relabun_ob
+   relabun_baseline_extcontrols_otoe[count,"RelAbun_Exp"]<-relabun_ex
+   relabun_baseline_extcontrols_otoe[count,"Genus"]<-genus_temp
+   relabun_baseline_extcontrols_otoe[count,"Ext.Kit"]<-relabun_baseline_extcontrols[a,"Ext.Kit"]
+   relabun_baseline_extcontrols_otoe[count,"Source.Descrip"]<-relabun_baseline_extcontrols[a,"Source.Descrip"]
+   count=count+1
+  }
+  
+ }
+}
+
+write.csv(relabun_baseline_extcontrols_otoe,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols_otoe.csv",sep=""))
+
+```
+
+#6 Graph Rel Abun E to O by Control
+```{r}
+plot_list <- list()
+control_types <- unique(relabun_baseline_extcontrols_otoe$Source.Descrip)
+i=1
+
+for (a in control_types){
+ temp<-subset(relabun_baseline_extcontrols_otoe,Source.Descrip==a) #subset to include only one control at a time
+ temp$RelAbun_Obs<-as.numeric(as.character(temp$RelAbun_Obs))
+ temp$RelAbun_Exp<-as.numeric(as.character(temp$RelAbun_Exp))
+
+ graph_title <- paste ("Rel Abun Ob to Exp Variablity for ",a,sep = "")
+ 
+ #Plot Data
+ graph_new <- ggplot(data=temp,mapping=aes(x=RelAbun_Obs,y=RelAbun_Exp,color=Ext.Kit)) + 
+  geom_point()+ #Can add points to graph
+  geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
+  labs(title=graph_title, x="Observed Rel Abun", y= "Expected Rel. Abun")+
+ # geom_text(mapping=aes(x=RelAbun_Obs,y=RelAbun_Exp,label=Genus),check_overlap = TRUE)+
+  xlim(0,.25) + ylim(0.04,.2)
+ 
+ plot_list[[i]] = graph_new
+ i=i+1
+}
+
+
+#Save all plots
+count=1
+
+for (i in 1:(length(control_types))){
+ 
+ #ID which control is being run
+ a <- control_types[count]
+ 
+ #Save the file
+ file_name = paste(project_location,"\\Output\\R\\Graphs\\Baseline\\Variability_",a,".tiff", sep="")
+ tiff(file_name)
+ print(plot_list[[i]])
+ dev.off()
+ 
+ count = count+1
+} 
+
+
+```
+
+#7 Relative Abundance % Difference
+```{r}
+#convert rows to numeric values
+ relabun_baseline_extcontrols_otoe$RelAbun_Obs<-as.numeric(as.character(relabun_baseline_extcontrols_otoe$RelAbun_Obs))
+ relabun_baseline_extcontrols_otoe$RelAbun_Exp<-as.numeric(as.character(relabun_baseline_extcontrols_otoe$RelAbun_Exp))
+
+for (a in rownames(relabun_baseline_extcontrols_otoe)){
+ relabun_baseline_extcontrols_otoe[a,"PDiff"]<-((relabun_baseline_extcontrols_otoe[a,"RelAbun_Obs"]-relabun_baseline_extcontrols_otoe[a,"RelAbun_Exp"])/relabun_baseline_extcontrols_otoe[a,"RelAbun_Exp"])*100
+}
+
+write.csv(relabun_baseline_extcontrols_otoe,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols_otoe.csv",sep=""))
+
+```
+################
+
 #1. Load required libraries
 ```{r}
 library("biom")
