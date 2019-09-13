@@ -7,8 +7,8 @@ editor_options:
 #To Update
 ```{r}
 project_name="Project_NP0084-MB4_5_pt6_2"
-manifest_name="metadata_Summary_2.csv"
-otu_name="otu_Summary_2.csv"
+manifest_name="metadata_Summary_3.csv"
+otu_name="otu_Summary_3.csv"
 sample_depth= 20000
 ```
 
@@ -61,10 +61,10 @@ rownames(metadata_baseline)==rownames(otu_baseline_complete) #Should be true
 Read in OTU information, and determine total OTUs
 ```{r}
 genus_found<-colnames(otu_baseline_complete)
-samplelist_extcontrols<-rownames(otu_baseline_complete)
+samplelist_study<-rownames(otu_baseline_complete)
 
 #For each sample, determine the total read counts
-for (a in samplelist_extcontrols){
+for (a in samplelist_study){
  #Set sum to 0
  sum=0
  
@@ -82,13 +82,13 @@ for (a in samplelist_extcontrols){
 
 #4. Observed to Expected Counts
 ```{r}
-samplelist_extcontrols <- subset(metadata_baseline,Sample.Cat!="Ext.Blank") #Remove EB's since they have no expected values
-samplelist_extcontrols <- rownames(samplelist_extcontrols)
+samplelist_study <- subset(metadata_baseline,Sample.Cat!="Ext.Blank") #Remove EB's since they have no expected values
+samplelist_study <- rownames(metadata_baseline)
 observed_count=0
 observed_baseline_extcontrols<- data.frame()
 
 #Individual Samples
-for (a in samplelist_extcontrols){
+for (a in samplelist_study){
  control_type <- as.String(metadata_baseline[a,"Source.Descrip"])
  genus_temp <- control_expect[,c("Gram",control_type)]
  genus_temp <- row.names(subset(genus_temp,!(genus_temp[,control_type]=="A")))
@@ -122,7 +122,7 @@ kit_list <- unique(observed_baseline_extcontrols$Ext.Kit)
 
 for (a in kit_list){
  for (b in source_list){
-  for (c in samplelist_extcontrols){
+  for (c in samplelist_study){
    control_type <- as.String(metadata_baseline[c,"Source.Descrip"])
    kit_type <- as.String(metadata_baseline[c,"Ext.Kit"])
    
@@ -155,14 +155,14 @@ write.csv(observed_baseline_extcontrols,paste(project_location,"\\Output\\R\\Dat
 relabun_baseline_extcontrols<-data.frame()
 
 #Complete Relative Abundance
-samplelist_extcontrols<-rownames(otu_baseline_complete)
+samplelist_study<-rownames(otu_baseline_complete)
 genus_list <- colnames(otu_baseline_complete)
 genus_list<-genus_list[-(length(genus_list))]
 genus_list<-append(genus_list,rownames(control_expect))
 kit_list <- unique(observed_baseline_extcontrols$Ext.Kit)
 
 for (a in kit_list){
- for (b in samplelist_extcontrols){
+ for (b in samplelist_study){
   for (c in genus_list){
    
    relabun <- otu_baseline_complete[b,c]
@@ -190,12 +190,12 @@ relabun_baseline_extcontrols[relabun_baseline_extcontrols=="A"]=0 #replace A's w
 write.csv(relabun_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols.csv",sep=""))
 
 #Create rel abun df to graph observed to expected frequencies
-samplelist_extcontrols_nowater <- subset(metadata_baseline,Source.Descrip!="Water") #only include controls
-samplelist_extcontrols_nowater <- rownames(samplelist_extcontrols_nowater)
+samplelist_study_nowater <- subset(metadata_baseline,Source.Descrip!="Water") #only include controls
+samplelist_study_nowater <- rownames(samplelist_study_nowater)
 relabun_baseline_extcontrols_otoe<-data.frame()
 count=1
 
-for (a in samplelist_extcontrols_nowater){
+for (a in samplelist_study_nowater){
  for (b in genus_list){
   control_type<-as.character(metadata_baseline[a,"Source.Descrip"])
   
