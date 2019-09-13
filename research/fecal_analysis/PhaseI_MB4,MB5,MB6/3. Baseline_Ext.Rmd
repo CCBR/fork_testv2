@@ -78,6 +78,7 @@ for (a in samplelist_extcontrols){
  #When complete, push the sum to a new "Total_OTUs" row
  otu_baseline_complete[a,"Total_OTUs"] <- sum
 }
+write.csv(otu_baseline_complete,"test.csv")
 ```
 
 #4. Observed to Expected Counts
@@ -191,7 +192,7 @@ for (a in kit_list){
 
 relabun_baseline_extcontrols[is.na(relabun_baseline_extcontrols)]=0 #replace na's with 0
 relabun_baseline_extcontrols[relabun_baseline_extcontrols=="A"]=0 #replace A's with 0
-write.csv(relabun_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols.csv",sep=""))
+write.csv(relabun_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols2.csv",sep=""))
 
 #Create rel abun df to graph observed to expected frequencies
 samplelist_extcontrols_nowater <- subset(metadata_baseline,Source.Descrip!="Water") #only include controls
