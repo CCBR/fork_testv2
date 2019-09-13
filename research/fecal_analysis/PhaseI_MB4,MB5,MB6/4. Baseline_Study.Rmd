@@ -114,65 +114,7 @@ relabun_baseline_study[relabun_baseline_study=="A"]=0 #replace A's with 0
 write.csv(relabun_baseline_study,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_study.csv",sep=""))
 ```
 
-#6 Graph Rel Abun E to O by Control
-```{r}
-plot_list <- list()
-control_types <- unique(relabun_baseline_extcontrols_otoe$Source.Descrip)
-i=1
 
-for (a in control_types){
- temp<-subset(relabun_baseline_extcontrols_otoe,Source.Descrip==a) #subset to include only one control at a time
- temp$RelAbun_Obs<-as.numeric(as.character(temp$RelAbun_Obs))
- temp$RelAbun_Exp<-as.numeric(as.character(temp$RelAbun_Exp))
-
- graph_title <- paste ("Rel Abun Ob to Exp Variablity for ",a,sep = "")
- 
- #Plot Data
- graph_new <- ggplot(data=temp,mapping=aes(x=RelAbun_Obs,y=RelAbun_Exp,color=Ext.Kit)) + 
-  geom_point()+ #Can add points to graph
-  geom_smooth(method = "lm",se=FALSE)+ #Add a smooth line
-  labs(title=graph_title, x="Observed Rel Abun", y= "Expected Rel. Abun")+
- # geom_text(mapping=aes(x=RelAbun_Obs,y=RelAbun_Exp,label=Genus),check_overlap = TRUE)+
-  xlim(0,.25) + ylim(0.04,.2)
- 
- plot_list[[i]] = graph_new
- i=i+1
-}
-
-
-#Save all plots
-count=1
-
-for (i in 1:(length(control_types))){
- 
- #ID which control is being run
- a <- control_types[count]
- 
- #Save the file
- file_name = paste(project_location,"\\Output\\R\\Graphs\\Baseline\\Variability_",a,".tiff", sep="")
- tiff(file_name)
- print(plot_list[[i]])
- dev.off()
- 
- count = count+1
-} 
-
-
-```
-
-#7 Relative Abundance % Difference
-```{r}
-#convert rows to numeric values
- relabun_baseline_extcontrols_otoe$RelAbun_Obs<-as.numeric(as.character(relabun_baseline_extcontrols_otoe$RelAbun_Obs))
- relabun_baseline_extcontrols_otoe$RelAbun_Exp<-as.numeric(as.character(relabun_baseline_extcontrols_otoe$RelAbun_Exp))
-
-for (a in rownames(relabun_baseline_extcontrols_otoe)){
- relabun_baseline_extcontrols_otoe[a,"PDiff"]<-((relabun_baseline_extcontrols_otoe[a,"RelAbun_Obs"]-relabun_baseline_extcontrols_otoe[a,"RelAbun_Exp"])/relabun_baseline_extcontrols_otoe[a,"RelAbun_Exp"])*100
-}
-
-write.csv(relabun_baseline_extcontrols_otoe,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_extcontrols_otoe.csv",sep=""))
-
-```
 ################
 
 #1. Load required libraries
