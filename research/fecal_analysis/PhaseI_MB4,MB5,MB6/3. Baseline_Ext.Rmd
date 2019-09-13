@@ -96,7 +96,7 @@ for (a in samplelist_extcontrols){
  for (b in genus_temp){
   otu_count <- otu_baseline_complete[a,b]
   
-  if(!(is.na(observed_count) || is.null(otu_count) || otu_count==0)){
+  if(!(is.na(otu_count) || is.null(otu_count) || otu_count==0)){
     observed_count= observed_count+1
   }
     
@@ -115,9 +115,6 @@ for (a in samplelist_extcontrols){
 }
 
 write.csv(observed_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_extcontrols.csv",sep=""))
-
-#temp<-observed_baseline_extcontrols
-observed_baseline_extcontrols<-temp
 
 #Average by Source.Descrip and Ext.Kit
 observed_count=0
@@ -142,6 +139,9 @@ for (a in kit_list){
     observed_baseline_extcontrols[sample_name,"Ext.Kit"]<-metadata_baseline[c,"Ext.Kit"]
     observed_baseline_extcontrols[sample_name,"Observed"]<-observed_count/count
     observed_baseline_extcontrols[sample_name,"Expected"]<-expected_count
+    observed_baseline_extcontrols[a,"Homo.Method"] <- metadata_baseline[c,"Homo.Method"]
+    observed_baseline_extcontrols[a,"Afa.1"] <- metadata_baseline[c,"Afa.1"]
+    observed_baseline_extcontrols[a,"Afa.2"] <- metadata_baseline[c,"Afa.2"]
    }
   }
   
@@ -149,8 +149,6 @@ for (a in kit_list){
   count=0
  }
 }
-
-tail(observed_baseline_extcontrols)
 
 write.csv(observed_baseline_extcontrols,paste(project_location,"\\Output\\R\\Data\\Baseline\\observed_baseline_extcontrols.csv",sep=""))
 ```
@@ -176,11 +174,12 @@ for (a in kit_list){
     relabun_baseline_extcontrols[b,"Source.Descrip"]<-as.character(metadata_baseline[b,"Source.Descrip"])
     relabun_baseline_extcontrols[b,"Ext.Kit"]<-as.character(metadata_baseline[b,"Ext.Kit"])
     relabun_baseline_extcontrols[b,c] <- otu_baseline_complete[b,c]/otu_baseline_complete[b,"Total_OTUs"]
+    relabun_baseline_extcontrols[b,"Homo.Method"] <- metadata_baseline[b,"Homo.Method"]
     
    }
    control_type<-as.character(metadata_baseline[b,"Source.Descrip"])
    if(control_type!="Water"){
-    sample_name<-paste(control_type,"_Expected",sep="")
+    sample_name<-paste(control_type,"_Expected",sep="") #Add control information to compare expected frequencies
     kit_name <- a
     relabun_baseline_extcontrols[sample_name,c]<-as.character(control_expect[c,control_type])
     relabun_baseline_extcontrols[sample_name,"Source.Descrip"]<-control_type
