@@ -114,6 +114,73 @@ relabun_baseline_study[relabun_baseline_study=="A"]=0 #replace A's with 0
 write.csv(relabun_baseline_study,paste(project_location,"\\Output\\R\\Data\\Baseline\\relabun_baseline_study.csv",sep=""))
 ```
 
+#PCOA plots
+```{r}
+otu<-otu_table(physeq_filt_study)
+tax<-tax_table(physeq_filt_study)
+random_tree<-random_tree<-rtree(ntaxa(physeq_filt_study), rooted=TRUE, tip.label=taxa_names(physeq_filt_study))
+sdata<- sample_data(metadata_baseline)
+temp<-phyloseq(otu,tax,sdata,random_tree)
+
+#######################
+## Bray-Curtis
+#######################
+physeq_pcoa <- ordinate(
+  physeq = temp, 
+  method = "PCoA", 
+  distance = "bray"
+)
+## Plot by Source.Descrip
+p<- plot_ordination(
+  physeq = temp,
+  ordination = physeq_pcoa,
+  color = "Source.Descrip",
+  title = "PCoA of Source Descrip (Bray-Curtis)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff", "darkorchid3", "magenta")
+  ) +
+  geom_point(aes(color = Source.Descrip), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5)
+file_name =(paste(project_location,"\\Output\\R\\Graphs\\Baseline\\bray_baseline_study_sourcedescrip.tiff"))
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
+## Plot by Ext.Kit
+p<- plot_ordination(
+  physeq = temp,
+  ordination = physeq_pcoa,
+  color = "Ext.Kit",
+  title = "PCoA of Ext.Kit (Bray-Curtis)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff", "darkorchid3", "magenta")
+  ) +
+  geom_point(aes(color = Ext.Kit), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5)
+file_name =(paste(project_location,"\\Output\\R\\Data\\Baseline\\bray_baseline_study_extkit.tiff"))
+tiff(file_name, width=800)
+print(p)
+dev.off()
+
+## Plot by Homo.Method
+p<- plot_ordination(
+  physeq = temp,
+  ordination = physeq_pcoa,
+  color = "Homo.Method",
+  title = "PCoA of Homo.Method (Bray-Curtis)"
+) + 
+  scale_color_manual(values = c("#a65628", "red", "#ffae19",
+    "#4daf4a", "#1919ff", "darkorchid3", "magenta")
+  ) +
+  geom_point(aes(color = Homo.Method), alpha = 0.7, size = 6) +
+  geom_point(colour = "grey90", size = 1.5)
+file_name =(paste(project_location,"\\Output\\R\\Data\\Baseline\\bray_baseline_study_homomethod.tiff"))
+tiff(file_name, width=800)
+print(p)
+dev.off()
+```
 
 #8 - Plot Interkit Sample Variability
 ```{r}

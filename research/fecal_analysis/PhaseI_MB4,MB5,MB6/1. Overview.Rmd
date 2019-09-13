@@ -350,7 +350,7 @@ for (a in phylos_obs){
  
  metatab <- as.data.frame(sample_data(a))
  file_name =paste(project_location,"\\Output\\R\\OTUs\\metadata_Summary_",count,".csv",sep="")
- write.csv(metatab,file_name)
+ #write.csv(metatab,file_name)
  count=count+1
 }
 
