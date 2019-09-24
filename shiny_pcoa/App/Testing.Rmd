@@ -1,0 +1,15 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+data_val_ori <- read.table("T:\\DCEG\\CGF\\Laboratory\\Projects\\MR-0501\\NP0501-MB1\\QC Data\\qiime\\outputs_QIIME\\graphs\\pcoa_binomial.txt")
+
+data_clean <-data_val_ori[,c(1,8:10)]
+data_clean
+ncol(data_clean)
+nrow(data_clean)
+dim(data_val_ori)[1]
+```

@@ -1,0 +1,780 @@
+---
+title: "R Notebook"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Creates two pages, with diferent sidebars
+###########################################################################
+```{r}
+fluidPage(
+  navbarPage("App Title",
+             tabPanel("Input",
+             sidebarLayout(
+               sidebarPanel(
+                 fileInput("file","Upload the file", multiple=TRUE),
+                 helpText("Default max. file size is 5MB"),
+                 tags$hr(),
+                 h5(helpText("Select the read.table parameters below")),
+                 checkboxInput(inputId = 'header', label = 'Header', value = FALSE),
+                 checkboxInput(inputId = "stringAsFactors", "stringAsFactors", FALSE),
+                 br(),
+                 radioButtons(inputId = 'sep', label = 'Separator', choices = c(Comma=',',Tab='\t', Space=''), selected = ',')
+               ),
+               mainPanel(
+                 uiOutput("tb")
+              )
+             )
+            ),
+            tabPanel("Analysis",
+            sidebarLayout(
+              sidebarPanel(
+                fileInput("file","Upload the file", multiple=TRUE),
+                helpText("Default max. file size is 5MB"),
+                tags$hr(),
+                h5(helpText("DO THINGS the read.table parameters below")),
+                checkboxInput(inputId = 'header', label = 'Header', value = FALSE),
+                checkboxInput(inputId = "stringAsFactors", "stringAsFactors", FALSE),
+                br(),
+                radioButtons(inputId = 'sep', label = 'Separator', choices = c(Comma=',',Tab='\t', Space=''), selected = ',')
+              ),
+              mainPanel(
+                uiOutput("tb")
+              )
+            )
+            ) 
+ 
+  )
+)
+```
+
+
+3d interactive pcoa plot for shiny
+###########################################################################
+```{r}
+library(rgl)
+library(car)
+library(shiny)
+
+cars$time <- cars$dist/cars$speed
+
+fluidPage(
+  
+  rglwidgetOutput("plot",  width = 800, height = 600)
+)
+
+
+library(rgl)
+library(car)
+library(shiny)
+
+cars$time <- cars$dist/cars$speed
+
+function(input, output) {
+  
+  output$plot <- renderRglwidget({
+    open3d(useNULL=TRUE)
+    scatter3d(x=cars$speed, y=cars$dist, z=cars$time, surface=FALSE, ellipsoid = TRUE)
+    par3d(mouseMode = "trackball")
+    rglwidget()
+  })
+}   
+
+```
+
+
+functioning single file input
+###########################################################################
+```{r}
+library(rgl)
+library(car)
+library(shiny)
+
+fluidPage(
+  titlePanel("File Input"),
+  sidebarLayout(
+    sidebarPanel(
+      fileInput("file","Upload the file", multiple=TRUE),
+      helpText("Default max. file size is 5MB"),
+      tags$hr(),
+      h5(helpText("Select the read.table parameters below")),
+      checkboxInput(inputId = 'header', label = 'Header', value = FALSE),
+      checkboxInput(inputId = "stringAsFactors", "stringAsFactors", FALSE),
+      br(),
+      radioButtons(inputId = 'sep', label = 'Separator', choices = c(Comma=',',Tab='\t', Space=''), selected = ',')
+    ),
+    mainPanel(
+      uiOutput("tb")
+      
+    )
+  )
+)
+
+
+function(input,output){
+  
+  # This reactive function will take the inputs from UI.R and use them for read.table() to read the data from the file. It returns the dataset in the form of a dataframe.
+  # file$datapath -> gives the path of the file
+  data <- reactive({
+    file1 <- input$file
+    if(is.null(file1)){return()} 
+    read.table(file=file1$datapath, sep=input$sep, header = input$header, stringsAsFactors = input$stringAsFactors)
+    
+  })
+  
+  # this reactive output contains the summary of the dataset and display the summary in table format
+  output$filedf <- renderTable({
+    if(is.null(data())){return ()}
+    input$file
+  })
+  
+  # This reactive output contains the dataset and display the dataset in table format
+  output$table <- renderTable({
+    if(is.null(data())){return ()}
+    data()
+  })
+  
+  # the following renderUI is used to dynamically generate the tabsets when the file is loaded. Until the file is loaded, app will not show the tabset.
+  output$tb <- renderUI({
+    if(is.null(data())){return()}
+    else
+      tabsetPanel(tabPanel("File Summary", tableOutput("filedf")), tabPanel("Data", tableOutput("table")))
+  })
+}
+```
+
+functioning Labels as checkboxes
+###########################################################################
+```{r}
+
+library(rgl)
+library(car)
+library(shiny)
+library("RColorBrewer")
+library(leaflet)
+
+function(input,output, session){
+  
+  ########################################################################
+  #############################Input Files Page###########################
+  
+  # Takes the input file of pCOA data, saving it to the data_vals matrix 
+  data_vals <- reactive({
+    file <- input$file
+    if (is.null(file))
+      return(NULL)
+    pcoa_full <- read.table(file=input$file$datapath)
+  })
+  
+  # Takes the input file of categories labels, saving it to the data_labels matrix
+  data_labels <- reactive({
+    file2 <- input$file2
+    if (is.null(file2))
+      return(NULL)
+    pcoa_labs <- read.table(file=input$file2$datapath, header=TRUE, colClasses = "factor")
+  })  
+  
+  #Display the summary for the PCOA and Lables files provided by the user
+  output$filepcoa <- renderTable({
+    if(is.null(data_vals())){return ()}
+    input$file
+  })
+  output$filelabels <- renderTable({
+    if(is.null(data_vals())){return ()}
+    input$file2
+  })
+  output$tb <- renderUI({
+    if(is.null(data_vals())){return()}
+    else
+      tabsetPanel(
+        tabPanel("File Input Summary", tableOutput("filepcoa"),tableOutput("filelabels"))
+      )
+  })
+  
+  ########################################################################
+  #############################pCOA Plots Page###########################
+  
+  #Create Checkboxes from the column names of the data_lables file, update the page
+  observe({
+    req(input$file2)
+    dsnames <- names(data_labels())
+    cb_options <- list()
+    cb_options[dsnames] <- dsnames
+    updateCheckboxGroupInput(session, "inCheckboxGroup",
+                             label = "Check Box Group",
+                             choices = cb_options,
+                             selected = "")
+  })
+  
+  #Create palette of colors
+  palette(c(brewer.pal(n=12, name = "Paired"),brewer.pal(n=12, name = "Set3"),brewer.pal(n=11, name = "Spectral")))
+  
+  observe({
+    #Assign top three pCOA values to plot
+    pc1 <- data_vals()[,2]
+    pc2 <- data_vals()[,3]
+    pc3 <- data_vals()[,4]
+    
+    #Create the color grouping by the label selected. If none are selected return TreatmentGroup    
+    if(is.null(input$inCheckboxGroup)) return("TreatmentGroup")
+    else{
+      group_select <- data_labels()[,input$inCheckboxGroup]
+    }
+    
+    #Return the PCOA plot when label has been selected
+    output$plot <- renderRglwidget({
+      scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                axis.col = c("white", "white", "white"), bg="black")
+      par3d(mouseMode = "trackball")
+      rglwidget()
+    })
+    
+    #Return the PCOA legend when label has been selected
+    output$legend <- renderPlot({
+      unilabs <- sort(unique(group_select))
+      plot.new()
+      legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+    })
+  })
+  
+}
+
+
+fluidPage(
+  
+  ##Create two navigation pages, 1) Input files | 2) pCOA Plots
+  navbarPage("Microbime QC Testing",
+             tabPanel("Input Files",
+                      
+                      #Sidebar to include the input files (data and labels) and generate a file summary. 
+                      #Once upload is completed summary is displayed and pCOA plot generated upon selection of the action button.
+                      sidebarLayout(
+                        sidebarPanel(
+                          helpText("NOTE: File should be a txt file"),
+                          fileInput("file","Upload the pCOA_data_file"),
+                          
+                          helpText("NOTE: File should be a txt file with headers"),
+                          fileInput("file2","Upload the labels_file"),
+                          
+                          actionButton("goButton", "Generate pCOA Plot")
+                        ),
+                        mainPanel = (
+                          uiOutput("tb")
+                        )
+                      )
+             ),
+             tabPanel("pCOA Plots",
+                      h4("Choose Grouping Category"),
+                      fluidRow(
+                        column(2,
+                               checkboxGroupInput("inCheckboxGroup",
+                                                  "Checkbox group:",
+                                                  c("label 1" = "option1",
+                                                    "label 2" = "option2"))
+                        )
+                      ),
+                      fluidRow(
+                        column(6,
+                               rglwidgetOutput("plot",  width = 800, height = 800)
+                        ),
+                        column(5,
+                               plotOutput("legend", width = 400, height=800)
+                        )
+                      )
+             )
+  )
+)
+```
+
+functioning action buttons for data labels
+###########################################################################
+```{r}
+library(rgl)
+library(car)
+library(shiny)
+library("RColorBrewer")
+library(leaflet)
+
+#######################################################################################
+###                                      NOTES                                      ###
+#######################################################################################
+##This code is written to take in the generated pCOA weighted unifrac values and generate
+##a pCOA plot using the top three values. It will also allow users to upload a labels 
+##document, which will allow for additional visualization of categorical labels.
+
+#######################################################################################
+###                                      Code                                      ###
+#######################################################################################
+
+function(input,output){
+  
+  # Takes the input file of pCOA data, saving it to the data_vals matrix AND an input file of categories
+  # saving it to the data_labels matrix
+  data_vals <- reactive({
+      file <- input$file
+      if (is.null(file))
+        return(NULL)
+      pcoa_full <- read.table(file=input$file$datapath)
+  }) 
+  data_labels <- reactive({
+    file2 <- input$file2
+    if (is.null(file2))
+      return(NULL)
+      pcoa_labs <- read.table(file=input$file2$datapath, header=TRUE, colClasses = "factor")
+  })  
+  
+  #Display the summary for the file information provided by the user
+  output$filepcoa <- renderTable({
+      if(is.null(data_vals())){return ()}
+      input$file
+  })
+  output$tb <- renderUI({
+    if(is.null(data_vals())){return()}
+    else
+      tabsetPanel(tabPanel("File Summary", tableOutput("filepcoa")))
+  })
+
+  #When the active button has been selected, generates a pCOA plot for the user to manipulate
+  observeEvent(input$goButton, {
+      
+    #Create palette of colors
+    palette(c(brewer.pal(n=12, name = "Paired"),brewer.pal(n=12, name = "Set3"),brewer.pal(n=11, name = "Spectral")))
+      
+    #Assign top three pCOA values to plot
+    pc1 <- data_vals()[,2]
+    pc2 <- data_vals()[,3]
+    pc3 <- data_vals()[,4]
+      
+    #Change Output based on User Action Button initiation. Groups by chosen characteristic, sorts and colors unique
+    #factors and print outs legend to webbrowser
+    
+    ##Treatement Groups
+    observeEvent(input$Button_TreatmentGroup, {
+      group_select = data_labels()[,"TreatmentGroup"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+    ##Extraction Date
+    observeEvent(input$Button_ExtDate, {
+      group_select = data_labels()[,"ExtDate"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })  
+    
+    ##Library Prep Date
+    observeEvent(input$Button_LibDate, {
+      group_select = data_labels()[,"LibDate"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+    
+    ##Extraction Batch
+    observeEvent(input$Button_ExtractionBatch, {
+      group_select = data_labels()[,"ExtractionBatch"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+    
+    #QIAsymphony
+    observeEvent(input$Button_QIAsymph, {
+      group_select = data_labels()[,"QIAsymph"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })  
+    })
+    
+    ##AssayPlate
+    observeEvent(input$Button_AssayPlate, {
+      group_select = data_labels()[,"AssayPlate"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+    
+    #Sequence Run ID
+    observeEvent(input$Button_SeqRunID, {
+      group_select = data_labels()[,"SeqRunID"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+    
+    #Row
+    observeEvent(input$Button_Row, {
+      group_select = data_labels()[,"Row"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+    
+    ##Column
+    observeEvent(input$Button_Column, {
+      group_select = data_labels()[,"Column"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })  
+    
+    ##Reagent Lot
+    observeEvent(input$Button_LotReag, {
+      group_select = data_labels()[,"Lot_Reag"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })  
+    
+    ##Enzyme Lot
+    observeEvent(input$Button_LotEnz, {
+      group_select = data_labels()[,"Lot_Enz"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })  
+    
+    ##LotATL
+    observeEvent(input$Button_LotATL, {
+      group_select = data_labels()[,"Lot_ATL"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+    
+    ##MGB Lot
+    observeEvent(input$Button_LotMGB, {
+      group_select = data_labels()[,"Lot_MGB"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+    
+    ##Master Mix Lot
+    observeEvent(input$Button_LotMM, {
+      group_select = data_labels()[,"Lot_MM"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+    
+    ##Primer Lot
+    observeEvent(input$Button_LotPrimer, {
+      group_select = data_labels()[,"Lot_Primer"]
+      output$plot <- renderRglwidget({
+        open3d(useNULL=TRUE)
+        scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, groups = group_select, pch=5, surface.col = palette(), cex=5,
+                  axis.col = c("white", "white", "white"), bg="black")
+        par3d(mouseMode = "trackball")
+        rglwidget()
+      })
+      output$legend <- renderPlot({
+        unilabs <- sort(unique(group_select))
+        plot.new()
+        legend("topleft",title="Color Legend",legend=unilabs,col=palette(),pch=16, cex=1.5)
+      })
+    })
+
+  })
+}
+
+library(rgl)
+library(car)
+library(shiny)
+library("RColorBrewer")
+
+#######################################################################################
+###                                      NOTES                                      ###
+#######################################################################################
+##This code is written to take in the generated pCOA weighted unifrac values and generate
+##a pCOA plot using the top three values. It will also allow users to upload a labels 
+##document, which will allow for additional visualization of categorical labels.
+
+#######################################################################################
+###                                      Code                                      ###
+#######################################################################################
+fluidPage(
+  
+  ##Create two navigation pages, 1) Input files | 2) pCOA Plots
+  navbarPage("Microbime QC Testing",
+    tabPanel("Input Files",
+                      
+      #Sidebar to include the input files (data and labels) and generate a file summary. 
+      #Once upload is completed summary is displayed and pCOA plot generated upon selection of the action button.
+      sidebarLayout(
+        sidebarPanel(
+          helpText("NOTE: File should be a txt file"),
+          fileInput("file","Upload the pCOA_data_file"),
+                            
+          helpText("NOTE: File should be a txt file with headers"),
+          fileInput("file2","Upload the labels_file"),
+                            
+          actionButton("goButton", "Generate pCOA Plot")
+        ),
+        mainPanel = (
+        uiOutput("tb")
+        )
+      )
+    ),
+    tabPanel("pCOA Plots",
+      h4("Choose Grouping Category"),
+      fluidRow(
+        column(2,
+          actionButton("Button_TreatmentGroup", "Treatment Groups"), 
+          br(),   
+          actionButton("Button_ExtDate", "ExtDate"),
+          br(),
+          actionButton("Button_LibDate", "LibDate"),
+          br(),
+          actionButton("Button_ExtractionBatch", "ExtractionBatch"),
+          br(),
+          actionButton("Button_QIAsymph", "QIAsymph")
+        ),
+        column(2,
+          actionButton("Button_AssayPlate", "AssayPlate"),
+          br(),
+          actionButton("Button_SeqRunID", "SeqRunID"),
+          br(),
+          actionButton("Button_Row", "Row"),
+          br(),
+          actionButton("Button_Column", "Column")
+        ),
+        column(2,
+          actionButton("Button_LotReag", "Reagent Cartridge Lot"),
+          br(),
+          actionButton("Button_LotEnz", "Enzyme Cartridge Lot"),
+          br(),
+          actionButton("Button_LotATL", "ATL Lot")
+        ),
+        column(2,
+          actionButton("Button_LotMGB", "MGB Lot"),
+          br(),
+          actionButton("Button_LotMM", "Master Mix Lot"),
+          br(),
+          actionButton("Button_LotPrimer", "Primer Plate Lot")
+        )
+      ),
+      fluidRow(
+        column(6,
+          rglwidgetOutput("plot",  width = 800, height = 800)
+        ),
+        column(5,
+          plotOutput("legend", height=800)
+        )
+      )
+    )
+  )
+)
+```
+
+
+viewing a printout of the data tables
+###########################################################################
+```{r}
+server
+  output$filedata <- renderTable({
+    if(is.null(data_labels())){return ()}
+    data_labels()
+  })
+  
+  output$tabledata <- renderUI({
+    if(is.null(data_labels())){return()}
+    else
+      tabsetPanel(
+        tabPanel("File Input Summary", tableOutput("filedata"))
+      )
+  })
+  
+  UI
+  
+                          column(12, uiOutput('tabledata'))
+
+```
+
+Input file - old nephele output, functioning
+###########################################################################
+```{r}
+#Takes the input file of pCOA data, saving it to the data_vals matrix 
+ data_vals <- reactive({
+  file <- input$file
+  if (is.null(file))
+   return(NULL)
+  
+  #Skip the first 9 lines of the PCOA data table, read in the table. 
+  #Removes the last two lines that includes the Biplot and Site data 
+  #Chooses the sample ID and top 3 pCOA values 
+  #Updates all col classes to numeric for evaluation
+  #Renames the col1 to StudyID, col2 to pcOA1, col3 to pCOA2, col4 to pCOA3 for later matching
+  
+  data_val_ori <- read.table(skip=9,fill=TRUE, file=input$file$datapath)
+  colschoose <- dim(data_val_ori)[1]-2
+  data_clean <- data_val_ori[1:colschoose,1:4]
+  data_clean$V2 <- as.numeric(data_clean$V2)
+  names(data_clean)[1] <- "StudyID"
+   names(data_clean)[2] <- "pCOA1"
+   names(data_clean)[3] <- "pCOA2"
+   names(data_clean)[4] <- "pCOA3"
+  return(data_clean)
+ })
+
+```
+
+Labels 
+```{r}
+full_data <- read.table("C:\\Program Files\\Git\\Coding\\MicrobiomeAnalysis\\pcoa_mb\\Data\\pcoa_weighted_unifrac_rarefaction_10000_0.txt",skip=9,fill=TRUE)
+data_labels <- read.table("C:\\Program Files\\Git\\Coding\\MicrobiomeAnalysis\\pcoa_mb\\Data\\NP0452-MB6_Nephele_Labels_10000.txt",fill=TRUE,header = TRUE,  colClasses = "factor")
+colnames(full_data)[1]<-"StudyID"
+
+colschoose <- dim(full_data)[1]-2
+data_clean <- full_data[1:colschoose,1:4]
+combined_data<-merge.data.frame(data_clean[,1:4], data_labels, by="StudyID")
+head(combined_data)
+combined_data$V2 <- as.numeric(as.character(combined_data$V2))
+
+
+pc1<-combined_data[,2]
+pc2<-combined_data[,3]
+pc3<-combined_data[,4]
+
+selection <- "StudyID"
+group_select <- combined_data[,6]
+
+scatter3d(x=pc1, y=pc2, z=pc3, surface=FALSE, 
+                groups = group_select, pch=5, surface.col = palette(), cex=5,
+                #axis.col = c("white", "white", "white"), bg="black", 
+        labels = as.character(combined_data[,5]), id.n=nrow(combined_data)
+          )
+
+Identify3d(x=pc1,y=pc2,z=pc3,labels=rownames(combined_data))
+```
+
+
+ 
