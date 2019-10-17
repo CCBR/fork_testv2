@@ -53,35 +53,33 @@ if [ ! -f ${tax_file_qza} ]; then
   eval $cmd
 fi
 
-# #Extract referece reads
-# #NOTE: Using the primer reads we can optimze by extracing reads from the reference
-# #DB based on matches to the primer pair, and then slicing in 120 bases. Will be tested in
-# #tandom to "non-optimzed" method
-#
-# #NOTE: The --p-trunc-len parameter used to trim reference sequences if query sequences
-# #are trimmed to this same length or shorter. Paired-end sequences that successfully join will typically be variable in length.
-# #For classification of paired-end reads and untrimmed single-end reads, Q2 recommends training a classifier on sequences that
-# #have been extracted at the appropriate primer sites, but are not trimmed.
-#
-# #NOTE: The example command  uses the min-length and max-length parameters to exclude simulated amplicons
-# # that are far outside of the anticipated length distribution using those primers. #Such amplicons are likely non-target hits
-# #and should be excluded. The min-length parameter is applied _after_ the trim-left and trunc-len parameters, and max-length _before_,
-# #so be sure to set appropriate settings to prevent valid sequences from being filtered out.
-#
-# ref_seq_qza="${training_dir}ref-seqs.qza"
-#
-# if [ ! -f ${ref_seq_qza} ]; then
-#   cmd="qiime feature-classifier extract-reads \
-#       --i-sequences ${fasta_file_qza} \
-#       --p-f-primer GTGCCAGCMGCCGCGGTAA \
-#       --p-r-primer GGACTACHVGGGTWTCTAAT \
-#       --p-trunc-len 120 \
-#       --p-min-length 100 \
-#       --p-max-length 400 \
-#       --o-reads ${ref_seqs_qza}"
-#   echo $cmd
-#   eval $cmd
-# fi
+#Extract referece reads
+#NOTE: Using the primer reads we can optimze by extracing reads from the reference
+#DB based on matches to the primer pair, and then slicing in 120 bases. Will be tested in
+#tandom to "non-optimzed" method
+
+#NOTE: The --p-trunc-len parameter used to trim reference sequences if query sequences
+#are trimmed to this same length or shorter. Paired-end sequences that successfully join will typically be variable in length.
+#For classification of paired-end reads and untrimmed single-end reads, Q2 recommends training a classifier on sequences that
+#have been extracted at the appropriate primer sites, but are not trimmed.
+
+#NOTE: The example command  uses the min-length and max-length parameters to exclude simulated amplicons
+# that are far outside of the anticipated length distribution using those primers. Such amplicons are likely non-target hits
+#and should be excluded. This is not an option in this version, but is for future Version
+#      --p-min-length 100 \      --p-max-length 400 \
+
+ref_seq_qza="${training_dir}ref-seqs.qza"
+
+if [ ! -f ${ref_seq_qza} ]; then
+  cmd="qiime feature-classifier extract-reads \
+      --i-sequences ${fasta_file_qza} \
+      --p-f-primer GTGCCAGCMGCCGCGGTAA \
+      --p-r-primer GGACTACHVGGGTWTCTAAT \
+      --p-trunc-len 120 \
+      --o-reads ${ref_seq_qza}"
+  echo $cmd
+  eval $cmd
+fi
 #
 # #Train the classifier
 # classifier_qza="${training_dir}classifier.qza"
