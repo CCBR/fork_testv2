@@ -1,0 +1,6 @@
+test_name	v1path	v1filename	v2path	v2filename	target_files
+features_filtered	table_dada2_qza_merged_parts_final	table_dada2_merged_final_filt.qza	denoising/feature_tables	merged_filtered.qza	feature-table.biom
+seq	repseqs_dada2_qza_merged_parts_final	repseqs_dada2_merged_final.qza	denoising/sequence_tables	merged.qza	dna-sequences.fasta
+bray_curtis	core_metrics_results	bray_curtis_distance_matrix.qza	diversity_core_metrics	bray-curtis_dist.qza	distance-matrix.tsv
+tax_gg	taxonomy_qza_results	taxonomy_greengenes.qza	taxonomic_classification	classify-sklearn_gg-13-8-99-nb-classifier.qza	taxonomy.tsv
+tax_silva	taxonomy_qza_results	taxonomy_silva.qza	taxonomic_classification	classify-sklearn_silva-119-99-nb-classifier.qza	taxonomy.tsv
