@@ -7,7 +7,11 @@ Pipeline information:
   - 2017.11_v1.0 was completed using the v1.0 tagged version of the 16S microbiome pipeline. Each step (1-5) was run on the interactive node. This data was originally run in T:\DCEG\Projects\Microbiome\Analysis\Project_NP0493-MB2\2017.11_v1.0, and was later copied to this directory.
   - 2017.11_v2.0 was completed using the v2.0 tagged version of the 16S microbiome pipeline. The config.yml and run_pipeline.sh files were edited, and the Snakemake workflow submitted to the cluster on the interactive node. This data was run in this directory.
 
-Concordance testing:
+Usage:
+ - Edit compare_files.txt to include which files should be compared
+ - Edit concord_testing.py path_exec to point to pathway of output to compare; update the path_vers to point to the two comparison directories
+
+Concordance file Selection:
   - Complete directory structure of QIIME2 output files (QZA/QZV) and their unzipped components, that could be compared in a diff:
   ├── denoising
   │   ├── feature_tables

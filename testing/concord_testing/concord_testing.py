@@ -25,8 +25,8 @@ for i in range(0,len(include_list)):
 versions=['v1','v2']
 
 #Flags
-move_files='N'
-analyze_files='N'
+move_files='Y'
+analyze_files='Y'
 
 #Functions
 def file_manage(x):
