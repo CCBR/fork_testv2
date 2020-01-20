@@ -1,0 +1,27 @@
+This information related to acceptance testing procedure #2: Run sample concordance tests.
+
+Data information:
+  - Test data was selected from production project NP0493-MB2. This dataset is a tumor/normal 16S microbiome project, which included 153 sequenced samples (6 blanks, 2 sequencing controls).
+
+Pipeline information:
+  - 2017.11_v1.0 was completed using the v1.0 tagged version of the 16S microbiome pipeline. Each step (1-5) was run on the interactive node. This data was originally run in T:\DCEG\Projects\Microbiome\Analysis\Project_NP0493-MB2\2017.11_v1.0, and was later copied to this directory.
+  - 2017.11_v2.0 was completed using the v2.0 tagged version of the 16S microbiome pipeline. The config.yml and run_pipeline.sh files were edited, and the Snakemake workflow submitted to the cluster on the interactive node. This data was run in this directory.
+
+Concordance testing:
+  - Concordance between the two versions was determined by reviewing the following output files:
+    - Feature table (after filtering)
+		- v1.0: Output/qza_results/table_dada2_qza_merged_parts_final/table_dada2_merged_final.filt.qza
+		- v2.0: denoising/feature_tables/merged_filtered.qza
+    - Sequencing table
+		- v1.0: Output/qza_results/repseqs_dada2_qza_merged_parts_final/repseqs_dada2_merged_final.qza
+		- v2.0: denoising/sequence_tables/merged.qza
+    - Diversity
+		- v1.0: Output/qza_results/core_metrics_results/bray_curtis_distance_matrix.qza
+		- v2.0: diversity_core_metrics/bray-curtis_dist.qza
+    - Taxonomy
+		- v1.0:
+			-Output/qza_results/taxonomy_qza_results/taxonomy_greengenes.qza
+			-Output/qza_results/taxonomy_qza_results/taxonomy_silva.qza
+		- v2.0:
+			-taxonomic_classification/classify-sklearn_gg-13-8-99-nb-classifier.qza
+			-taxonomic_classification/classify-sklearn_silva-119-99-nb-classifier.qza

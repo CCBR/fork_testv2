@@ -1,0 +1,7 @@
+test_name	v1path	v1filename	v2path	v2filename	target_files	Reasoning
+flowcell	qza_results/demux_qza_split_parts	paired_end_demux_1.qza	denoising/feature_tables	191120_M01354_0125_000000000-CMC9K.qza	feature-table.biom	computation - individual unzipping of all fastq files
+merge-seq	qzv_results/repseqs_dada2_qzv_merged_parts_final	repseqs_dada2_merged_final.qzv	denoising/sequence_tables	merged.qzv	sequences.fasta	fasta comparison not helpful
+mask-msa	qza_results/phylogeny_qza_results	masked_aligned_rep_seqs.qza	phylogenetics	masked_msa.qza	aligned-dna-sequences.fasta	fasta comparison not helpful
+msa	qza_results/phylogeny_qza_results	aligned_rep_seqs.qza	phylogenetics	msa.qza	aligned-dna-sequences.fasta	fasta comparison not helpful
+merg-descrip	qzv_results/repseqs_dada2_qzv_merged_parts_final	repseqs_dada2_merged_final.qzv	denoising/sequence_tables	merged.qzv	descriptive_stats.tsv	Not included in v1
+merge-sum	qzv_results/repseqs_dada2_qzv_merged_parts_final	repseqs_dada2_merged_final.qzv	denoising/sequence_tables	merged.qzv	seven_number_summary.tsv	Not included in v1

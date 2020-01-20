@@ -1,6 +1,32 @@
-test_name	v1path	v1filename	v2path	v2filename	target_files
-features_filtered	table_dada2_qza_merged_parts_final	table_dada2_merged_final_filt.qza	denoising/feature_tables	merged_filtered.qza	feature-table.biom
-seq	repseqs_dada2_qza_merged_parts_final	repseqs_dada2_merged_final.qza	denoising/sequence_tables	merged.qza	dna-sequences.fasta
-bray_curtis	core_metrics_results	bray_curtis_distance_matrix.qza	diversity_core_metrics	bray-curtis_dist.qza	distance-matrix.tsv
-tax_gg	taxonomy_qza_results	taxonomy_greengenes.qza	taxonomic_classification	classify-sklearn_gg-13-8-99-nb-classifier.qza	taxonomy.tsv
-tax_silva	taxonomy_qza_results	taxonomy_silva.qza	taxonomic_classification	classify-sklearn_silva-119-99-nb-classifier.qza	taxonomy.tsv
+test_name	v1path	v1filename	v2path	v2filename	target_files	DiffExpected
+merg-f	qza_results/table_dada2_qza_merged_parts_final	table_dada2_merged_final_filt.qza	denoising/feature_tables	merged_filtered.qza	feature-table.biom	None
+merg-f-feat	qzv_results/table_dada2_qzv_merged_parts_final	table_dada2_merged_final.qzv	denoising/feature_tables	merged_filtered.qzv	feature-frequency-detail.csv	None
+merg-f-samp	qzv_results/table_dada2_qzv_merged_parts_final	table_dada2_merged_final.qzv	denoising/feature_tables	merged_filtered.qzv	sample-frequency-detail.csv	None
+merg	qza_results/table_dada2_qza_merged_parts_final	table_dada2_merged_final.qza	denoising/feature_tables	merged.qza	feature-table.biom	None
+bc-dist	qza_results/core_metrics_results	bray_curtis_distance_matrix.qza	diversity_core_metrics	bray-curtis_dist.qza	distance-matrix.tsv	Yes
+bc-pcoa	qza_results/core_metrics_results	bray_curtis_pcoa_results.qza	diversity_core_metrics	bray-curtis_pcoa.qza	ordination.txt	Yes
+even	qza_results/core_metrics_results	evenness_vector.qza	diversity_core_metrics	evenness.qza	alpha-diversity.tsv	Yes
+faith	qza_results/core_metrics_results	faith_pd_vector.qza	diversity_core_metrics	faith.qza	alpha-diversity.tsv	Yes
+jac-dist	qza_results/core_metrics_results	jaccard_distance_matrix.qza	diversity_core_metrics	jaccard_dist.qza	distance-matrix.tsv	Yes
+jac-pcoa	qza_results/core_metrics_results	jaccard_pcoa_results.qza	diversity_core_metrics	jaccard_pcoa.qza	ordination.txt	Yes
+obs	qza_results/core_metrics_results	observed_otus_vector.qza	diversity_core_metrics	observed.qza	alpha-diversity.tsv	Yes
+rare-faith	qzv_results/rarefaction_qzv_results	rarefaction.qzv	diversity_core_metrics	rarefaction.qzv	faith_pd.csv	Yes
+rare-obs	qzv_results/rarefaction_qzv_results	rarefaction.qzv	diversity_core_metrics	rarefaction.qzv	observed_otus.csv	Yes
+rare-shan	qzv_results/rarefaction_qzv_results	rarefaction.qzv	diversity_core_metrics	rarefaction.qzv	shannon.csv	Yes
+rare-feat	qza_results/core_metrics_results	rarefied_table.qza	diversity_core_metrics	rareifed_table.qza	feature-table.biom	None
+shannon	qza_results/core_metrics_results	shannon_vector.qza	diversity_core_metrics	shannon.qza	alpha-diversity.tsv	Yes
+unw-dist	qza_results/core_metrics_results	unweighted_unifrac_distance_matrix.qza	diversity_core_metrics	unweighted_dist.qza	distance-matrix.tsv	Yes
+unw-pcoa	qza_results/core_metrics_results	unweighted_unifrac_pcoa_results.qza	diversity_core_metrics	unweighted_pcoa.qza	ordination.txt	Yes
+w-dist	qza_results/core_metrics_results	weighted_unifrac_distance_matrix.qza	diversity_core_metrics	weighted_dist.qza	distance-matrix.tsv	Yes
+w-pcoa	qza_results/core_metrics_results	weighted_unifrac_pcoa_results.qza	diversity_core_metrics	weighted_pcoa.qza	ordination.txt	Yes
+imp-count	qzv_results/demux_qzv_split_parts	paired_end_demux_1.qzv	import_and_demultiplex	191120_M01354_0125_000000000-CMC9K.qzv	per-sample-fastq-counts.csv	None
+root	qza_results/phylogeny_qza_results	rooted_tree.qza	phylogenetics	rooted_tree.qza	tree.nwk	Yes
+unroot	qza_results/phylogeny_qza_results	unrooted_tree.qza	phylogenetics	unrooted_tree.qza	tree.nwk	Yes
+gg-bar-l1	qzv_results/taxonomy_qzv_results	taxonomy_greengenes_bar_plots.qzv	taxonomic_classification	barplots_classify-sklearn_gg-13-8-99-nb-classifier.qzv	level-1.csv	
+sil-bar-l1	qzv_results/taxonomy_qzv_results	taxonomy_silva_bar_plots.qzv	taxonomic_classification	barplots_classify-sklearn_silva-119-99-nb-classifier.qzv	level-1.csv	
+gg-bar-l5	qzv_results/taxonomy_qzv_results	taxonomy_greengenes_bar_plots.qzv	taxonomic_classification	barplots_classify-sklearn_gg-13-8-99-nb-classifier.qzv	level-5.csv	
+sil-bar-l5	qzv_results/taxonomy_qzv_results	taxonomy_silva_bar_plots.qzv	taxonomic_classification	barplots_classify-sklearn_silva-119-99-nb-classifier.qzv	level-5.csv	
+gg-tax	qza_results/taxonomy_qza_results	taxonomy_greengenes.qza	taxonomic_classification	classify-sklearn_gg-13-8-99-nb-classifier.qza	taxonomy.tsv	
+sil-tax	qza_results/taxonomy_qza_results	taxonomy_silva.qza	taxonomic_classification	classify-sklearn_silva-119-99-nb-classifier.qza	taxonomy.tsv	
+gg-met	qzv_results/taxonomy_qzv_results	taxonomy_greengenes.qzv	taxonomic_classification	classify-sklearn_gg-13-8-99-nb-classifier.qzv	metadata.tsv	
+sil-met	qzv_results/taxonomy_qzv_results	taxonomy_silva.qzv	taxonomic_classification	classify-sklearn_silva-119-99-nb-classifier.qzv	metadata.tsv	

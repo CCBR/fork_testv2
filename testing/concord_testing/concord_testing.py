@@ -7,7 +7,7 @@ import numpy as np
 
 #Directory paths
 path_exec="/DCEG/CGF/Bioinformatics/Production/Microbiome/testing/2.0_acceptance/sample_concordance_tests"
-path_vers=["/2017.11/2017.11_v1.0/Output/qza_results","/2017.11/2017.11_v2.0"]
+path_vers=["/2017.11/2017.11_v1.0/Output","/2017.11/2017.11_v2.0"]
 inputfile="compare_files.txt"
 
 import pandas as pd 
@@ -20,7 +20,7 @@ test_name=df.ix[:,0].tolist()
 versions=['v1','v2']
 
 #Flags
-move_files='N'
+move_files='Y'
 analyze_files='Y'
 
 #Functions
