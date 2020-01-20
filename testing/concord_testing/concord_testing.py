@@ -15,13 +15,18 @@ import pandas as pd
 # reading comparison file 
 df = pd.read_csv(inputfile, sep="\t",header=0) 
 
-#src and destination file names
-test_name=df.ix[:,0].tolist()
+#include test names based off flag
+include_list=df.ix[:,1].tolist()
+test_name=[]
+for i in range(0,len(include_list)):
+	if include_list[i]=='Y':
+		#test_name=df.ix[:,0].tolist()
+		test_name.append(df.ix[i,0])
 versions=['v1','v2']
 
 #Flags
-move_files='Y'
-analyze_files='Y'
+move_files='N'
+analyze_files='N'
 
 #Functions
 def file_manage(x):
@@ -29,8 +34,8 @@ def file_manage(x):
 	for i in range(0,len(versions)):
 		path_out=path_exec+'/Output/'+versions[i]
 		
-		subpath=df.loc[df.test_name == x, versions[i]+'path'].values[0]
-		filename=df.loc[df.test_name == x, versions[i]+'filename'].values[0]
+		subpath=df.loc[df.test_name == x, versions[i]+'_path'].values[0]
+		filename=df.loc[df.test_name == x, versions[i]+'_file'].values[0]
 		path_unzip=path_exec+path_vers[i]+'/'+subpath+'/'+filename
 		
 		#Unzip QZA/QVA files

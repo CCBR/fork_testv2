@@ -1,4 +1,4 @@
-test_name	include	v1path	v1filename	v2path	v2filename	target_files	DiffExpected
+test_name	include	v1_path	v1_file	v2_path	v2_file	target_files	Expected_diffs
 merg-f	Y	qza_results/table_dada2_qza_merged_parts_final	table_dada2_merged_final_filt.qza	denoising/feature_tables	merged_filtered.qza	feature-table.biom	None
 merg-f-feat	Y	qzv_results/table_dada2_qzv_merged_parts_final	table_dada2_merged_final.qzv	denoising/feature_tables	merged_filtered.qzv	feature-frequency-detail.csv	None
 merg-f-samp	Y	qzv_results/table_dada2_qzv_merged_parts_final	table_dada2_merged_final.qzv	denoising/feature_tables	merged_filtered.qzv	sample-frequency-detail.csv	None
