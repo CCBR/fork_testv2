@@ -1,0 +1,19 @@
+#Config file for QC code
+
+out_dir: '/DCEG/Projects/Microbiome/Analysis/Project_NP0493-MB2/2017.11_v2.0'
+qiime_dir: '/DCEG/Projects/Microbiome/Analysis/Project_NP0493-MB2/2017.11_v2.0'
+exec_dir: '/DCEG/CGF/Bioinformatics/Production/Sam/report/QIIME_pipeline/report'
+manifest_dir: '/DCEG/CGF/Bioinformatics/Production/Microbiome/testing/report/Example_Project_NP0493-MB2' #must be named manifest_qiime2.tsv
+
+seq_depth: 10000
+sample_depth: 20000
+include_reps: 'N'
+ProjectID: 'NP0493-MB1, NP0493-MB2'
+pipeline_ver: 'QIIME 2017.11.v2'
+extract_CGR: 'N' #Y or N for whether extraction was done at CGR
+pcr_CGR: 'Y' #Y or N for whether PCR was done at CGR
+
+var_list: #metadata categories that are included in manifest file as column headers
+    - TumorAttribute
+    - CollectionMethod
+    - Primaryphenotype

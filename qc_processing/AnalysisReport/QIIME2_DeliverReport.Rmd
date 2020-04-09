@@ -1,0 +1,50 @@
+---
+title: "Deliverable Report"
+output:
+  word_document: default
+editor_options: 
+  chunk_output_type: console
+params:
+  out_dir: import_yaml$out_dir
+  exec_dir: import_yaml$exec_dir
+  ProjectID: import_yaml$ProjectID
+  pipeline_ver: import_yaml$pipeline_ver
+  manifest_dir: import_yaml$manifest_dir
+---
+
+# Project Information
+Project: `r params$ProjectID`
+
+CGR Analysis Pipeline Version: `r params$pipeline_ver`
+
+# SUMMARY
+
+* The project directory files are stored here: `r params$out_dir`. 
+
+* A QC report was generated, with quality metric information, stored here: `r paste(params$out_dir,"/report",sep="")`. 
+
+# FILES TO REVIEW
+
+* Sample-Information Manifest File:
+    -	`r paste(params$out_dir,"/manifests/manifest_qiime2.tsv",sep="")`
+* FASTQ Files
+    -	`r paste(params$out_dir,"/fastqs/",sep="")`
+* In addition a number of QIIME2 QZV files were generated, that can be visualized at: https://view.qiime2.org.
+    - Sample Frequency Overview:
+        - `r paste(params$out_dir,"/denosing/feature_tables/merged_filtered.qza",sep="")`
+    - Rarefaction Results:
+        - `r paste(params$out_dir,"/diversity_core_metrics/rarefaction.qzv",sep="")`
+    - Alpha Diversity Results:
+        - `r paste(params$out_dir,"/diversity_core_metrics/alpha_diversity_metadata.qzv",sep="")`
+    - Beta Diversity Results:
+        - `r paste(params$out_dir,"/diversity_core_metrics/",sep="")`
+            - bray_curtis_emperor.qzv
+            - jaccard_emperor.qzv
+            - weighted_unifrac_emperor.qzv
+            - unweighted_unifrac_emperor.qzv
+    - Taxonomy Results (both Greengenes and Silva were used as reference databases):
+        - `r paste(params$out_dir,"/taxonomic_classification/",sep="")`
+            - GreenGenes Barplots: barplots_classify-sklearn_gg-13-8-99-nb-classifier.qzv
+            - GreenGenes Summary: classify-sklearn_gg-13-8-99-nb-classifier.qzv
+            - Silva Barplots: barplots_classify-sklearn_silva-119-99-nb-classifier.qzv
+            - Silva Summary: classify-sklearn_silva-119-99-nb-classifier.qzv

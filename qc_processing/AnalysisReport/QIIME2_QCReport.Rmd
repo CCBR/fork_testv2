@@ -1,0 +1,385 @@
+---
+title: "QC Report"
+output:
+  word_document: default
+editor_options: 
+  chunk_output_type: console
+params:
+  out_dir: import_yaml$out_dir
+  qiime_dir: import_yaml$qiime_dir
+  exec_dir: import_yaml$exec_dir
+  seq_depth: import_yaml$seq_depth
+  sample_depth: import_yaml$sample_depth
+  include_reps: import_yaml$include_reps
+  var_list: import_yaml$var_list
+  ProjectID: import_yaml$ProjectID
+  pipeline_ver: import_yaml$pipeline_ver
+  extract_CGR: import_yaml$extract_CGR
+  pcr_CGR: import_yaml$pcr_CGR
+  manifest_dir: import_yaml$manifest_dir
+---
+
+```{r Load Libraries, include=FALSE}
+#Source
+source(paste(params$exec_dir,"/sources/qiime2R.R",sep="")) #http://deneflab.github.io/MicrobeMiseq/
+source(paste(params$exec_dir,"/sources/miseqR.R",sep="")) #http://deneflab.github.io/MicrobeMiseq/
+source(paste(params$exec_dir,"/sources/ggrare.R",sep="")) #github library: https://rdrr.io/github/gauravsk/ranacapa/
+```
+
+```{r ID paths, include=FALSE}
+graph_loc=(paste(params$out_dir,"/report/Graphs/",sep=""))
+data_loc=(paste(params$out_dir,"/report/Data/",sep=""))
+```
+
+```{r Create PhySeq Object, include=FALSE}
+#Reference
+#https://github.com/jbisanz/qiime2R
+
+#Read in files
+otus <- read_qza(paste(params$qiime_dir,"/denoising/feature_tables/merged_filtered.qza",sep=""))
+tree <- read_qza(paste(params$qiime_dir,"/phylogenetics/rooted_tree.qza",sep=""))
+taxonomy <- read_qza(paste(params$qiime_dir,"/taxonomic_classification/classify-sklearn_gg-13-8-99-nb-classifier.qza",sep=""))
+metadata <-read.table(paste(params$manifest_dir,"/manifest_qiime2.tsv",sep=""),sep='\t', header=T, row.names=1, comment="")
+metadata<-metadata[-1,]#remove the second line that specifies the data type
+
+#Split the taxonomy file into readable levels for taxonomic assignment
+tax_table<-do.call(rbind, strsplit(as.character(taxonomy$data$Taxon), "; "))
+  colnames(tax_table)<-c("Kingdom","Phylum","Class","Order","Family","Genus","Species")
+  rownames(tax_table)<-taxonomy$data$Feature.ID
+
+#Create phylo object and output initial summary info for production QC to review
+physeq_complete<-phyloseq(otu_table(otus$data, taxa_are_rows = T), phy_tree(tree$data), tax_table(tax_table), sample_data(metadata))
+```
+
+```{r Prune non-bacterial species, include=FALSE}
+#Exclude all data that is not bacteria
+physeq_filt <- physeq_complete %>%
+  subset_taxa(
+    Kingdom == "k__Bacteria" &
+    Family  != "k__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rickettsiales; f__mitochondria" &
+    Class   != "k__Bacteria; p__Cyanobacteria; c__Chloroplast"
+  )
+
+#Only non-bacterial data
+physeq_nonbact <- physeq_complete %>%
+  subset_taxa(
+    Kingdom != "k__Bacteria"
+  )
+
+#Create non-bacterial plot
+p<-plot_bar(physeq_nonbact,fill="Kingdom") + 
+ ggtitle("Non-Bacterial Abundance Levels") + 
+ theme(axis.text.x = element_blank())
+
+#Save plot function
+save_plot<-function(location,filename,plot){
+ jpeg(paste(location,filename,sep=""), width=500)
+ print(plot)
+ dev.off()
+}
+
+save_plot(graph_loc,"nonbacterial.jpeg",p)
+```
+
+```{r Pre-filter summaries, include=FALSE}
+#Save summary function
+save_summaries<-function(phyobj,filt,location,filename){
+ 
+ if(filt==""){
+  s<-summary(sample_data(phyobj))
+ } else{
+  s<-summary(sample_data(phyobj)[,filt])
+ }
+ capture.output(s, file = paste(location,filename,sep=""))
+}
+
+#Pre-filter information
+save_summaries(physeq_complete,"",data_loc,"summary_prefilter.txt")
+save_summaries(physeq_complete,"SampleType",data_loc,"summary_prefilter_sampletype.txt")
+
+# Create histogram function
+save_histogram<-function(phyobj,filtlab,graph_loc,filename){
+ #Make a data frame with a column for the read counts of each sample
+ sample_sum_df <- data.frame(sum = sample_sums(phyobj),sample_data(phyobj))
+ 
+ # Histogram of sample read counts by sampletype
+ p<-ggplot(sample_sum_df, aes(x = sum)) + 
+   geom_histogram(binwidth = 2000,color="black",aes(fill=SampleType)) +
+   geom_vline(aes(xintercept=median(sum,na.rm=T)),color="red",size=2)+
+   xlab("Read Counts") +
+   ggtitle(paste("Distribution of Sample Sequencing Depth - ",filtlab,sep="")) +
+   theme(axis.title.y = element_blank())
+
+ save_plot(graph_loc,filename,p)
+}
+ 
+save_histogram(physeq_filt,"Pre-Filtering",graph_loc,"prefilt_seqdepth.jpeg")
+
+```
+
+```{r Filter Taxa, include=FALSE}
+#filter taxa that is represented in >.001 of samples as this is likely background noise
+#filter samples that have less than seq_depth (default is 10000) reads as this is our standard seq threshold
+physeq_filt = filter_taxa(physeq_filt, function(x) mean(x) > 1e-2, TRUE) 
+physeq_filt = prune_samples(sample_sums(physeq_filt) > params$seq_depth, physeq_filt)
+```
+
+```{r Post-filter Summaries, include=FALSE}
+save_summaries(physeq_filt,"",data_loc,"summary_postfilt.txt")
+save_summaries(physeq_filt,"SampleType",data_loc,"summary_postfilt_sampletype.txt")
+
+save_histogram(physeq_filt,"Post-Filtering",graph_loc,"postfilt_seqdepth.jpeg")
+```
+
+```{r Scale and Subset data, include=FALSE}
+#Create rarefaction curve
+rare_curves<-function(phyobject,coloroption,facetchoice,filename){
+ p <- ggrare(phyobject, step = 1000, color = coloroption, se = FALSE)
+ 
+ if(facetchoice!=""){
+  p1 <- p1 + facet_wrap(~get(facetchoice))
+ }
+ 
+ jpeg(paste(graph_loc,filename,sep=""), width=500)
+ print(p)
+ dev.off()
+}
+
+# Scale reads to even depth that user can vary by project
+rare_curves(physeq_filt,"SampleType","","prescale_rarecurve.jpeg")
+physeq_scale <- physeq_filt %>% scale_reads(n=params$sample_depth) 
+rare_curves(physeq_scale,"SampleType","","postscale_rarecurve.jpeg")
+
+```
+
+```{r Plot PCOA Data, include=FALSE}
+pcoa_gen<-function(phyobj,distmeas,samples,filt,location,filename){
+ 
+ #If samples only, subset
+ if(samples=="Y"){
+  physeq_filt <- phyobj %>%
+  subset_samples(
+    SampleType == "Study" 
+  )
+  
+  # Scale reads to even depth that user can vary by project
+  physeq_scale <- physeq_filt %>% scale_reads(n=params$sample_depth) 
+   
+  physeq_scale <- physeq_filt %>% scale_reads(n=params$sample_depth) 
+  sample_data(physeq_scale)$SampleType <- factor(
+    sample_data(physeq_scale)$SampleType, 
+    levels = unique(sample_data(physeq_scale)$SampleType)
+  )
+  
+  phyobj <- physeq_scale
+ }
+
+ #Generate PCOA plot
+ physeq_pcoa <- ordinate(
+  physeq = phyobj, 
+  method = "PCoA", 
+  distance = distmeas
+ )
+ 
+ #Subset by filter
+ physeq_pcoa_sub<-as.data.frame((physeq_pcoa$vectors[,1:5])) #select PC1-PC5
+ temp<-append("Run.ID",filt)
+ physeq_pcoa_sub<-merge(physeq_pcoa_sub,metadata[,temp],by=0)
+ p<-ggpairs(physeq_pcoa_sub,columns=2:6,
+         mapping= ggplot2::aes(colour=get(filt)),
+         title=paste(distmeas,filt,sep=" : "))
+ 
+ save_plot(location,filename,p)
+}
+
+# Bray-Curtis
+pcoa_gen(physeq_scale,"bray","N","SampleType", graph_loc, "bray_sampletype_all.jpeg")
+if(params$extract_CGR=='Y'){pcoa_gen(physeq_scale,"bray","Y","ExtractionID", graph_loc, "bray_extbatch_samples.jpeg")}
+if(params$pcr_CGR=='Y'){pcoa_gen(physeq_scale,"bray","Y","Source.PCRPlate", graph_loc, "bray_pcrbatch_samples.jpeg")}
+pcoa_gen(physeq_scale,"bray","Y","Run.ID", graph_loc, "bray_seqbatch_samples.jpeg")
+
+
+# Weighted Unifrac
+pcoa_gen(physeq_scale,"wunifrac","N","SampleType", graph_loc, "wunifrac_sampletype_all.jpeg")
+if(params$extract_CGR=='Y'){pcoa_gen(physeq_scale,"wunifrac","Y","ExtractionID", graph_loc, "wunifrac_extbatch_samples.jpeg")}
+if(params$pcr_CGR=='Y'){pcoa_gen(physeq_scale,"wunifrac","Y","Source.PCRPlate", graph_loc, "wunifrac_pcrbatch_samples.jpeg")}
+pcoa_gen(physeq_scale,"wunifrac","Y","Run.ID", graph_loc, "wunifrac_seqbatch_samples.jpeg")
+```
+
+```{r Alpha Diversity, include=FALSE}
+#Reference
+#https://joey711.github.io/phyloseq/plot_bar-examples.html
+
+#Plotting standard alpha diversity metrics
+plot_alphadiv_std<-function(vari,labels,location,filename){
+ if(labels=="Y"){
+  p<- plot_richness(physeq_scale, x=vari, 
+                  measures=c("Observed", "ACE", "Shannon", "Simpson", "InvSimpson", "Fisher")) + 
+ geom_boxplot()
+ } else{
+   p<- plot_richness(physeq_scale, x=vari, 
+                  measures=c("Observed", "ACE", "Shannon", "Simpson", "InvSimpson", "Fisher")) + 
+  geom_boxplot() + 
+  theme(axis.text.x=element_blank())
+ }
+save_plot(location,filename,p)
+}
+
+plot_alphadiv_std("SampleType","Y",graph_loc,"alphadiv_sampletype.jpeg")
+if(params$extract_CGR=='Y'){plot_alphadiv_std("ExtractionID","N",graph_loc,"alphadiv_extbatch.jpeg")}
+if(params$pcr_CGR=='Y'){plot_alphadiv_std("Source.PCRPlate","N",graph_loc,"alphadiv_pcrbatch.jpeg")}
+plot_alphadiv_std("Run.ID","N",graph_loc,"alphadiv_seqbatch.jpeg")
+
+#Plotting variable alpha diversity metrics
+plot_alphadiv_vari<-function(phyobj,var_list,location){
+ plot_list = list()
+ 
+ #Print individual graphs
+ for (i in 1:length(var_list)){
+  filename<-paste("alphadiv_",var_list[i],".jpeg",sep="")
+  p<- plot_richness(phyobj, x=var_list[i],
+                    measures=c("Observed", "ACE", "Shannon", "Simpson", "InvSimpson", "Fisher")) +
+   geom_boxplot()
+  plot_list[[i]] <- p
+  jpeg(paste(graph_loc,filename,sep=""), width=500)
+  print(p)
+  dev.off()
+ }
+ return(plot_list)
+}
+
+plot_print<-plot_alphadiv_vari(physeq_scale,params$var_list,graph_loc)
+```
+
+```{r Save workspace, include=FALSE}
+save.image(paste(params$out_dir,"/report/workspace_",Sys.Date(),".RData",sep=""))
+```
+# Analysis Information
+Project: `r params$ProjectID`
+
+CGR Analysis Pipeline Version: `r params$pipeline_ver`
+
+# Pruning, filtering, rarefying
+## Parameters Summary
+After filtering to a minimum of `r params$seq_depth` reads, only taxa with a mean absolute abundance greater than 0.1% were included. Rarefying was performed to `r params$sample_depth` mapped reads, to more clearly cluster samples according to biological origin, by downsampling (drawing without replacement) so that all samples had the same total count. This allows for comparisons of samples, or groups, with large differences in average library size (the maximum was over 54,000 reads), thereby lowering the false discovery rate. Citations related to the analysis are listed here:
+
+* Rarefying: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5335496/
+* Measurements of richness: https://onlinelibrary.wiley.com/doi/full/10.1046/j.1461-0248.2001.00230.x
+
+## Raw data
+Sample types for this project included: `r unique(sample_data(physeq_complete)$SampleType)`. Prior to processing, the following number of samples by sample type were observed:
+```{r Sample Table prefilt, echo=FALSE, results='asis'}
+kable(table(sample_data(physeq_complete)$SampleType),col.names=c("SampleType","Total Count"))
+```
+
+Prior to pruning for only taxa in the Bacteria kingdom (excluding those in the chloroplast class and mitochondrial family), these abundance levels were observed: 
+
+![]`r paste("(",graph_loc,"nonbacterial.jpeg)",sep="")`
+
+Prior to sample filtering the sequencing depth for all samples, with IQR (median) value indicated in red, was observed:
+
+![]`r paste("(",graph_loc,"prefilt_seqdepth.jpeg)",sep="")`
+
+Prior to scaling samples, the following rarefaction curve was observed:
+
+![]`r paste("(",graph_loc,"prescale_rarecurve.jpeg)",sep="")`
+
+## Handled Data
+The filtered cohort included by the following variables, provided as metadata: `r colnames(sample_data(physeq_complete))`. After pruning and filtering, the following number of samples by sample type were observed: 
+```{r Sample Table postfilt, echo=FALSE, results='asis'}
+kable(table(sample_data(physeq_filt)$SampleType),col.names=c("SampleType","Total Count"))
+```
+
+After sample filtering the sequencing depth for all samples, with IQR (median) value indicated in red, was observed:
+
+![]`r paste("(",graph_loc,"postfilt_seqdepth.jpeg)",sep="")`
+
+After scaling samples, the following rarefaction curve was observed:
+
+![]`r paste("(",graph_loc,"postscale_rarecurve.jpeg)",sep="")`
+
+## Alpha Diversity
+Several alpha metrics are included: Observed, Abundance-based Coverage Estimator (ACE), Shannon, Simpson, Inverse Simpson Index (InvSimpson), and Fisher. The Y-axis represents the unit for each of the individual metrics, which varies. 
+
+* Observed represents the number of observed species for each class, whereas ACE estimate the richness of the samples by incorporating data from species with fewer than 10 instances. 
+* Both the Shannon and Simpson indexes are diversity indices, where the Shannon Index is more sensitive to species richness and the Simpson Index is more sensitive to species evenness. Shannon Index calculates the predictability of species in a sample, with less diverse species having a higher predictability score. 
+* The Simpson Diversity Index represents the probability that two randomly chosen individuals belong to difference species. In both Simpson indices, as species richness and evenness increase, so diversity increases, as well as their values. The Inverse Simpson Index is an indication of the richness in a community with uniform evenness that would have the same level of diversity. 
+* The Fisher diversity index is a logarithmic calculation that determines the number of species predicted to have an iterative (1-n) number of individuals within the sample.
+
+Citations for these tools can be found here: 
+
+* Chao1 and ACE: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC93182/ 
+* Shannon index: https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/shannon.htm
+* Simpson index: https://geographyfieldwork.com/Simpson'sDiversityIndex.htm, https://www.nature.com/articles/s41598-018-36355-7?WT.feed_name=subjects_computational-biology-and-bioinformatics
+
+These diversity metrics were performed at the sample type level, as well as by extraction and sequencing batches, to ensure consistency between processing.
+
+### By Sample Type
+This image shows alpha diversity metrics by sample type:
+
+![]`r paste("(",graph_loc,"alphadiv_sampletype.jpeg)",sep="")`
+
+### Processing QC:
+Viewing the dataset by extraction, pcr, and sequencing batches, helps to ensure consistency between processing. 
+
+#### Results by Extraction Batch (all samples):
+`r if(params$extract_CGR=='N'){"Samples were not extracted at CGR, and therefore data could not be generated."}`
+![]`r if(params$extract_CGR=='Y'){paste("(",graph_loc,"alphadiv_extbatch.jpeg)",sep="")}`
+
+#### Results by PCR Batch (all samples):
+Each column represents one PCR batch.
+`r if(params$pcr_CGR=='N'){"Samples were not amplified at CGR, and therefore data could not be generated."}`
+![]`r if(params$pcr_CGR=='Y'){paste("(",graph_loc,"alphadiv_pcrbatch.jpeg)",sep="")}`
+
+#### Results by Sequencing Batch (all samples):
+Each column represents one sequencing run.
+
+![]`r paste("(",graph_loc,"alphadiv_seqbatch.jpeg)",sep="")`
+
+### Project Specific Variables
+Additional project specific variable alpha diversity metrics are shown below, as requested:
+```{r ProjSpecificVariables, echo=FALSE, warning=FALSE, fig.height=4, fig.width=7}
+#Print graphs into file
+ for (i in 1:length(params$var_list)){
+   suppressWarnings(print(plot_print[[i]]))
+ }
+```
+
+## Beta Diversity - pCOA Plots
+Beta diversity was measured using both quantitative (weighted UniFrac and Bray-Curtis and weighted UniFrac) and qualitative measures (unweighted UniFrac and Binomial). Quantitative measures are ideally suited to revealing community differences that are due to changes in relative taxon abundance (e.g., when a particular set of taxa flourish because a limiting nutrient source becomes abundant). Quantitative measures are shown below . 
+
+### Bray Curtis
+Bray-Curtis dissimilarity creates a matrix of the differences in microbial abundances between two samples. A 0 indicates that the samples share the same species at the same abundances, whereas a 1 indicates that both samples have completely different species and abundances. The top 5 PCoA dimensions are illustrated, with a central histogram of PC vector for each of these five types and correlation values (across all samples and by variable).
+
+#### Results by Sample Type (all samples):
+
+![]`r paste("(",graph_loc,"bray_sampletype_all.jpeg)",sep="")`
+
+#### Results by Extraction Batch (study samples only):
+`r if(params$extract_CGR=='N'){"Samples were not extracted at CGR, and therefore data could not be generated."}`
+![]`r if(params$extract_CGR=='Y'){paste("(",graph_loc,"bray_extbatch_samples.jpeg)",sep="")}`
+
+#### Results by PCR Batch (study samples only):
+`r if(params$pcr_CGR=='N'){"Samples were not extracted at CGR, and therefore data could not be generated."}`
+![]`r if(params$pcr_CGR=='Y'){paste("(",graph_loc,"bray_pcrbatch_samples.jpeg)",sep="")}`
+
+#### Results by Sequencing Batch (study samples only):
+![]`r paste("(",graph_loc,"bray_seqbatch_samples.jpeg)",sep="")`
+
+### Weighted Unifrac
+The UniFrac measures the phylogenetic distance between sets of taxa in a phylogenetic tree as the fraction of the branch length of the tree that leads to descendants from either one environment. It differs from dissimilarity measures such as Bray-Curtis, in that it incorporates information on the relative relatedness of community members by incorporating phylogenetic distances between observed organisms in the computation. Finally, the weighted UniFrac metric accounts for the relative abundance of each of the taxa within the communities.  The top 5 PCoA dimensions are illustrated, with a central histogram of PC vector for each of these five types and correlation values (across all samples and by variable).
+
+#### Results by Sample Type (all samples):
+
+![]`r paste("(",graph_loc,"wunifrac_sampletype_all.jpeg)",sep="")`
+
+#### Results by Extraction Batch (study samples only):
+`r if(params$extract_CGR=='N'){"Samples were not extracted at CGR, and therefore data could not be generated."}`
+![]`r if(params$extract_CGR=='Y'){paste("(",graph_loc,"wunifrac_extbatch_samples.jpeg)",sep="")}`
+
+#### Results by PCR Batch (study samples only):
+`r if(params$pcr_CGR=='N'){"Samples were not extracted at CGR, and therefore data could not be generated."}`
+![]`r if(params$pcr_CGR=='Y'){paste("(",graph_loc,"wunifrac_pcrbatch_samples.jpeg)",sep="")}`
+
+#### Results by Sequencing Batch (study samples only):
+![]`r paste("(",graph_loc,"wunifrac_seqbatch_samples.jpeg)",sep="")`
